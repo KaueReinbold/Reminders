@@ -5,7 +5,10 @@ namespace Reminders.Data.Context
 {
     public class RemindersDbContext : DbContext
     {
-        public RemindersDbContext(DbContextOptions<RemindersDbContext> options) : base(options) { }
+        public RemindersDbContext(DbContextOptions<RemindersDbContext> options) : base(options)
+        {
+            Database.EnsureCreated();
+        }
 
         public DbSet<ReminderEntity> Reminders { get; set; }
 

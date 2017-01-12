@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Reminders.Domain.Contract
 {
-
-    public interface IRepositoryReminders<T> 
+    public interface IRepositoryReminders<T>
     {
-
+        void Insert(T entity);
+        void Update(T entity);
+        void Delete(T entity);
         IEnumerable<T> GetAll();
-
         T Find(int key);
-
-        void Update(T obj);
-
-        void Insert(T obj);
-
-        void Delete(Func<T, bool> predicate);
     }
-
 }

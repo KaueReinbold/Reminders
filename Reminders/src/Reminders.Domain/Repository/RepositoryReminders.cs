@@ -1,14 +1,12 @@
-﻿using Reminders.Data.Context;
+﻿
+using Microsoft.EntityFrameworkCore;
+using Reminders.Data.Context;
 using Reminders.Domain.Contract;
-using Reminders.Domain.Repository;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Reminders.Domain.Repository
 {
-    public class RepositoryReminders<T> : IRepositoryReminders<T>
+    public class RepositoryReminders<T> : IRepositoryReminders<T> where T : class
     {
 
         private RemindersDbContext _context;
@@ -18,29 +16,31 @@ namespace Reminders.Domain.Repository
             _context = context;
         }
 
-        public void Delete(Func<T, bool> predicate)
+        public void Insert(T entity)
         {
-            throw new NotImplementedException();
+            _context.Set<T>().Add(entity);
+            _context.SaveChanges();
         }
 
+        public void Update(T entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void Delete(T entity)
+        {
+            _context.Entry(entity).State = EntityState.Deleted;
+            _context.SaveChanges();
+        }
         public T Find(int key)
         {
-            throw new NotImplementedException();
+            return _context.Set<T>().Find(key);
         }
 
         public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Insert(T obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(T obj)
-        {
-            throw new NotImplementedException();
+            return _context.Set<T>();
         }
     }
 }
