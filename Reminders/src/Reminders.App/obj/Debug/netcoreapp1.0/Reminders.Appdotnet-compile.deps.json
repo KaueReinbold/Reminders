@@ -2836,6 +2836,7 @@
       },
       "Reminders.Domain/1.0.0": {
         "dependencies": {
+          "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
           "NETStandard.Library": "1.6.1",
           "Reminders.Data": "1.0.0"
         },
@@ -5568,6 +5569,7 @@
       },
       "Reminders.Domain/1.0.0": {
         "dependencies": {
+          "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
           "NETStandard.Library": "1.6.1",
           "Reminders.Data": "1.0.0"
         },

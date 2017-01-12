@@ -4269,7 +4269,8 @@
         "type": "project",
         "framework": ".NETStandard,Version=v1.6",
         "dependencies": {
-          "NETStandard.Library": "1.6.0",
+          "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
+          "NETStandard.Library": "1.6.1",
           "Reminders.Data": "1.0.0"
         },
         "compile": {
@@ -10873,13 +10874,13 @@
     },
     "Reminders.Data/1.0.0": {
       "type": "project",
-      "path": "../Reminders.Data/Reminders.Data/project.json",
-      "msbuildProject": "../Reminders.Data/Reminders.Data/Reminders.Data.xproj"
+      "path": "../Reminders.Data/project.json",
+      "msbuildProject": "../Reminders.Data/Reminders.Data.xproj"
     },
     "Reminders.Domain/1.0.0": {
       "type": "project",
-      "path": "../Reminders.Domain/Reminders.Domain/project.json",
-      "msbuildProject": "../Reminders.Domain/Reminders.Domain/Reminders.Domain.xproj"
+      "path": "../Reminders.Domain/project.json",
+      "msbuildProject": "../Reminders.Domain/Reminders.Domain.xproj"
     }
   },
   "projectFileDependencyGroups": {
