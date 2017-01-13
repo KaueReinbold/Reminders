@@ -10,11 +10,12 @@ using Reminders.App.Helpers;
 
 namespace Reminders.App.Controllers
 {
+    [Route("/Reminder")]
     public class ReminderController : Controller
     {
-        private HelperReminder _helper;
+        private BusinessReminder _helper;
 
-        public ReminderController(HelperReminder helper)
+        public ReminderController(BusinessReminder helper)
         {
             _helper = helper;
         }

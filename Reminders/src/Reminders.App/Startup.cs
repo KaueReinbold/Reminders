@@ -43,7 +43,7 @@ namespace Reminders.App
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-            services.AddScoped(typeof(HelperReminder));
+            services.AddScoped(typeof(BusinessReminder));
 
             services.AddMvc();
         }
@@ -75,25 +75,7 @@ namespace Reminders.App
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Reminder}/{action=Index}/{id?}");
-
-                routes.MapRoute(
-                    name: "create",
-                    template: "{controller=Reminder}/{action=Create}/{id?}");
-
-                routes.MapRoute(
-                    name: "delete",
-                    template: "{controller=Reminder}/{action=Delete}/{id?}");
-
-                routes.MapRoute(
-                    name: "edit",
-                    template: "{controller=Reminder}/{action=Edit}/{id?}");
-
-                routes.MapRoute(
-                    name: "details",
-                    template: "{controller=Reminder}/{action=Details}/{id?}");
             });
-
-            // DbInitializerReminder.Initialize(context);
         }
     }
 }
