@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Reminders.Domain.Contract;
-using Reminders.Data.Entity;
+﻿using Microsoft.AspNetCore.Mvc;
 using Reminders.App.Models;
-using Reminders.App.Helpers;
+using Reminders.App.Business;
 
 namespace Reminders.App.Controllers
 {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Reminders.App.Helpers;
+using Reminders.App.Business;
 using Reminders.Data.Context;
 using Reminders.Domain;
 using Reminders.Domain.Contract;

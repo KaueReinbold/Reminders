@@ -1,13 +1,11 @@
-﻿using Reminders.App.HelpersContract;
+﻿using Reminders.App.BusinessContract;
 using Reminders.App.Models;
 using Reminders.Data.Entity;
 using Reminders.Domain.Contract;
-using Reminders.Domain.Repository;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
-namespace Reminders.App.Helpers
+namespace Reminders.App.Business
 {
     public class BusinessReminder : IBusinessReminder
     {

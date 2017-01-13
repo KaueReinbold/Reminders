@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Reminders.Data.Context;
 using Reminders.Domain.Contract;
 using System.Collections.Generic;
