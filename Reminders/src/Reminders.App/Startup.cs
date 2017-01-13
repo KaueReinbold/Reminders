@@ -65,16 +65,32 @@ namespace Reminders.App
 
             app.UseApplicationInsightsExceptionTelemetry();
 
-            app.UseStaticFiles();           
+            app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Reminder}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                    name: "create",
+                    template: "{controller=Reminder}/{action=Create}/{id?}");
+
+                routes.MapRoute(
+                    name: "delete",
+                    template: "{controller=Reminder}/{action=Delete}/{id?}");
+
+                routes.MapRoute(
+                    name: "edit",
+                    template: "{controller=Reminder}/{action=Edit}/{id?}");
+
+                routes.MapRoute(
+                    name: "details",
+                    template: "{controller=Reminder}/{action=Details}/{id?}");
             });
 
-           // DbInitializerReminder.Initialize(context);
+            // DbInitializerReminder.Initialize(context);
         }
     }
 }

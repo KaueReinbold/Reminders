@@ -18,20 +18,29 @@ namespace Reminders.Domain.Repository
 
         public void Insert(T entity)
         {
-            _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+            using (_context)
+            {
+                _context.Set<T>().Add(entity);
+                _context.SaveChanges();
+            }
         }
 
         public void Update(T entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChanges();
+            using (_context)
+            {
+                _context.Entry(entity).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
         }
 
         public void Delete(T entity)
         {
-            _context.Entry(entity).State = EntityState.Deleted;
-            _context.SaveChanges();
+            using (_context)
+            {
+                _context.Entry(entity).State = EntityState.Deleted;
+                _context.SaveChanges();
+            }
         }
         public T Find(int key)
         {

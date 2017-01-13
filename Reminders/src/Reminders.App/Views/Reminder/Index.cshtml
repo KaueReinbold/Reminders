@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Reminders.App.Models.ReminderViewModel>
+
+@{
+    ViewData["Title"] = "Lista de lembretes";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-action="Create">Criar novo lembrete</a>
+</p>
+@if (Model.Count() > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LimitDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsDone)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LimitDate)
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(modelItem => item.IsDone)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ID">Deletar</a> |
+                        <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h4>Nenhum lembrete cadastrado</h4>
+}
