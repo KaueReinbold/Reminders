@@ -1,6 +1,7 @@
 ## Aplicativo de Lembretes.
 
-	Aplicativo para cadastro e listagem de lembretes. Cada lembrete é composto de título, descrição, data limite e status concluído.
+	Aplicativo para cadastro e listagem de lembretes. 
+	Cada lembrete é composto de título, descrição, data limite e status concluído.
 
 ## Objetivo técnico.
   
