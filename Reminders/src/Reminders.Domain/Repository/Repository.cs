@@ -6,12 +6,14 @@ using System.Collections.Generic;
 
 namespace Reminders.Domain.Repository
 {
-    public class RepositoryReminders<T> : IRepositoryReminders<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
 
         private RemindersDbContext _context;
 
-        public RepositoryReminders(RemindersDbContext context)
+        public Repository() { }
+
+        public Repository(RemindersDbContext context)
         {
             _context = context;
         }

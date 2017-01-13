@@ -2,7 +2,7 @@
 
 namespace Reminders.Domain.Contract
 {
-    public interface IRepositoryReminders<T>
+    public interface IRepository<T>
     {
         void Insert(T entity);
         void Update(T entity);

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Reminders.App.Helpers;
 using Reminders.Data.Context;
 using Reminders.Domain;
 using Reminders.Domain.Contract;
@@ -40,7 +41,9 @@ namespace Reminders.App
             services.AddDbContext<RemindersDbContext>(options =>
                         options.UseSqlServer(Configuration.GetConnectionString("StringConnectionReminders")));
 
-            services.AddScoped(typeof(IRepositoryReminders<>), typeof(RepositoryReminders<>));
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+            services.AddScoped(typeof(HelperReminder));
 
             services.AddMvc();
         }
