@@ -7,19 +7,18 @@ using Reminders.Domain.Contract;
 using Reminders.Data.Entity;
 using Reminders.App.Models;
 
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Reminders.App.Controllers
 {
     public class ReminderController : Controller
     {
         private readonly IRepositoryReminders<ReminderEntity> _repository;
+        
         public ReminderController(IRepositoryReminders<ReminderEntity> repository)
         {
             _repository = repository;
         }
 
-        // GET: /<controller>/
+        // GET: Reminder
         public IActionResult Index()
         {
             var reminders = _repository.GetAll().ToList();
@@ -41,13 +40,13 @@ namespace Reminders.App.Controllers
             return View(remindersViewModel);
         }
 
-        // GET: ReminderViewModels/Create
+        // GET: Reminder/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ReminderViewModels/Create
+        // POST: Reminder/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(ReminderViewModel reminderViewModel)
@@ -70,7 +69,7 @@ namespace Reminders.App.Controllers
             return View(reminderViewModel);
         }
 
-        // GET: ReminderViewModels/Delete/{id}
+        // GET: Reminder/Delete/{id}
         public IActionResult Delete(int id)
         {
             var reminder = _repository.Find(id);
@@ -87,7 +86,7 @@ namespace Reminders.App.Controllers
             return View(reminderViewModel);
         }
 
-        // POST: ReminderViewModels/Delete/{id}
+        // POST: Reminder/Delete/{id}
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -97,7 +96,7 @@ namespace Reminders.App.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: ReminderViewModels/Edit/[id}
+        // GET: Reminder/Edit/[id}
         public IActionResult Edit(int id)
         {
             var reminder = _repository.Find(id);
@@ -114,7 +113,7 @@ namespace Reminders.App.Controllers
             return View(reminderViewModel);
         }
 
-        // POST: ReminderViewModels/Edit/{id}
+        // POST: Reminder/Edit/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, ReminderViewModel reminderViewModel)
@@ -143,7 +142,7 @@ namespace Reminders.App.Controllers
             return View(reminderViewModel);
         }
 
-        // GET: ReminderViewModels/Details/5
+        // GET: Reminder/Details/{id}
         public IActionResult Details(int id)
         {
             var reminder = _repository.Find(id);
