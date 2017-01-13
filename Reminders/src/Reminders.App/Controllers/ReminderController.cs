@@ -6,36 +6,23 @@ using Microsoft.AspNetCore.Mvc;
 using Reminders.Domain.Contract;
 using Reminders.Data.Entity;
 using Reminders.App.Models;
+using Reminders.App.Helpers;
 
 namespace Reminders.App.Controllers
 {
     public class ReminderController : Controller
     {
-        private readonly IRepositoryReminders<ReminderEntity> _repository;
-        
-        public ReminderController(IRepositoryReminders<ReminderEntity> repository)
+        private HelperReminder _helper;
+
+        public ReminderController(HelperReminder helper)
         {
-            _repository = repository;
+            _helper = helper;
         }
 
         // GET: Reminder
         public IActionResult Index()
         {
-            var reminders = _repository.GetAll().ToList();
-            var remindersViewModel = new List<ReminderViewModel>();
-
-            reminders.ForEach(r =>
-            {
-                var reminder = new ReminderViewModel
-                {
-                    ID = r.ID,
-                    Title = r.Title,
-                    Description = r.Description,
-                    LimitDate = r.LimitDate,
-                    IsDone = r.IsDone
-                };
-                remindersViewModel.Add(reminder);
-            });
+            var remindersViewModel = _helper.GetAll();
 
             return View(remindersViewModel);
         }
@@ -53,15 +40,7 @@ namespace Reminders.App.Controllers
         {
             if (ModelState.IsValid)
             {
-                var reminder = new ReminderEntity
-                {
-                    Title = reminderViewModel.Title,
-                    Description = reminderViewModel.Description,
-                    LimitDate = reminderViewModel.LimitDate,
-                    IsDone = reminderViewModel.IsDone
-                };
-
-                _repository.Insert(reminder);
+                _helper.Insert(reminderViewModel);
 
                 return RedirectToAction("Index");
             }
@@ -72,16 +51,7 @@ namespace Reminders.App.Controllers
         // GET: Reminder/Delete/{id}
         public IActionResult Delete(int id)
         {
-            var reminder = _repository.Find(id);
-
-            var reminderViewModel = new ReminderViewModel
-            {
-                ID = reminder.ID,
-                Title = reminder.Title,
-                Description = reminder.Description,
-                LimitDate = reminder.LimitDate,
-                IsDone = reminder.IsDone
-            };
+            var reminderViewModel = _helper.Find(id);
 
             return View(reminderViewModel);
         }
@@ -91,24 +61,15 @@ namespace Reminders.App.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var reminder = _repository.Find(id);
-            _repository.Delete(reminder);
+            _helper.Delete(id);
+
             return RedirectToAction("Index");
         }
 
         // GET: Reminder/Edit/[id}
         public IActionResult Edit(int id)
         {
-            var reminder = _repository.Find(id);
-
-            var reminderViewModel = new ReminderViewModel
-            {
-                ID = reminder.ID,
-                Title = reminder.Title,
-                Description = reminder.Description,
-                LimitDate = reminder.LimitDate,
-                IsDone = reminder.IsDone
-            };
+            var reminderViewModel = _helper.Find(id);
 
             return View(reminderViewModel);
         }
@@ -116,45 +77,22 @@ namespace Reminders.App.Controllers
         // POST: Reminder/Edit/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, ReminderViewModel reminderViewModel)
+        public IActionResult Edit(ReminderViewModel reminderViewModel)
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var reminder = new ReminderEntity
-                    {
-                        ID = id,
-                        Title = reminderViewModel.Title,
-                        Description = reminderViewModel.Description,
-                        LimitDate = reminderViewModel.LimitDate,
-                        IsDone = reminderViewModel.IsDone
-                    };
+                _helper.Update(reminderViewModel);
 
-                    _repository.Update(reminder);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
                 return RedirectToAction("Index");
             }
+
             return View(reminderViewModel);
         }
 
         // GET: Reminder/Details/{id}
         public IActionResult Details(int id)
         {
-            var reminder = _repository.Find(id);
-
-            var reminderViewModel = new ReminderViewModel
-            {
-                ID = reminder.ID,
-                Title = reminder.Title,
-                Description = reminder.Description,
-                LimitDate = reminder.LimitDate,
-                IsDone = reminder.IsDone
-            };
+            var reminderViewModel = _helper.Find(id);
 
             return View(reminderViewModel);
         }
