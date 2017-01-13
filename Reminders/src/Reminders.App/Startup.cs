@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Reminders.App.Business;
 using Reminders.Data.Context;
-using Reminders.Domain;
 using Reminders.Domain.Contract;
 using Reminders.Domain.Repository;
+using Reminders.App.Business;
+using Reminders.App.BusinessContract;
 
 namespace Reminders.App
 {
@@ -43,7 +43,7 @@ namespace Reminders.App
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-            services.AddScoped(typeof(BusinessReminder));
+            services.AddScoped(typeof(IBusinessReminder), typeof(BusinessReminder));
 
             services.AddMvc();
         }

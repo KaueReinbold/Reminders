@@ -36,11 +36,10 @@
             @Html.DisplayFor(model => model.IsDone)
         </dd>
     </dl>
-
-    <form asp-action="Delete">
+    <form asp-action="Delete" asp-route-id="@Model.ID">
         <div class="form-actions no-color">
             <input type="submit" value="Deletar" class="btn btn-danger" /> |
-            <a asp-action="Index">Voltar a Listagem</a>
+            <a asp-action="">Voltar a Listagem</a>
         </div>
     </form>
 </div>

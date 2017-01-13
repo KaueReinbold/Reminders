@@ -18,7 +18,16 @@ namespace Reminders.App
                 .UseStartup<Startup>()
                 .Build();
 
+            try
+            {
             host.Run();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

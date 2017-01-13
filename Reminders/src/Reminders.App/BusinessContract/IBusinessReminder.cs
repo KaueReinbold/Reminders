@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Reminders.App.BusinessContract
 {
-    interface IBusinessReminder
+    public interface IBusinessReminder
     {
-        void Insert(ReminderViewModel reminderViewModel);
-        void Update(ReminderViewModel reminderViewModel);
-        void Delete(int key);
+        bool Insert(ReminderViewModel reminderViewModel);
+        bool Update(ReminderViewModel reminderViewModel);
+        bool Delete(int key);
         List<ReminderViewModel> GetAll();
         ReminderViewModel Find(int key);
     }

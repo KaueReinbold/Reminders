@@ -2,6 +2,7 @@
 using Reminders.App.Models;
 using Reminders.Data.Entity;
 using Reminders.Domain.Contract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,79 +11,125 @@ namespace Reminders.App.Business
     public class BusinessReminder : IBusinessReminder
     {
         private IRepository<ReminderEntity> _repository;
+
         public BusinessReminder(IRepository<ReminderEntity> repository)
         {
             _repository = repository;
         }
-        public void Insert(ReminderViewModel reminderViewModel)
+
+        public bool Insert(ReminderViewModel reminderViewModel)
         {
-
-            var reminder = new ReminderEntity
+            try
             {
-                Title = reminderViewModel.Title,
-                Description = reminderViewModel.Description,
-                LimitDate = reminderViewModel.LimitDate,
-                IsDone = reminderViewModel.IsDone
-            };
+                var reminder = new ReminderEntity
+                {
+                    Title = reminderViewModel.Title,
+                    Description = reminderViewModel.Description,
+                    LimitDate = reminderViewModel.LimitDate.Value,
+                    IsDone = reminderViewModel.IsDone
+                };
 
-            _repository.Insert(reminder);
+                _repository.Insert(reminder);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public void Update(ReminderViewModel reminderViewModel)
+        public bool Update(ReminderViewModel reminderViewModel)
         {
-            var reminder = new ReminderEntity
+            try
             {
-                ID = reminderViewModel.ID,
-                Title = reminderViewModel.Title,
-                Description = reminderViewModel.Description,
-                LimitDate = reminderViewModel.LimitDate,
-                IsDone = reminderViewModel.IsDone
-            };
+                var reminder = new ReminderEntity
+                {
+                    ID = reminderViewModel.ID,
+                    Title = reminderViewModel.Title,
+                    Description = reminderViewModel.Description,
+                    LimitDate = reminderViewModel.LimitDate.Value,
+                    IsDone = reminderViewModel.IsDone
+                };
 
-            _repository.Update(reminder);
+                _repository.Update(reminder);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public void Delete(int key)
+        public bool Delete(int key)
         {
-            var reminder = _repository.Find(key);
-            _repository.Delete(reminder);
+            try
+            {
+                var reminder = _repository.Find(key);
+
+                _repository.Delete(reminder);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
 
         public ReminderViewModel Find(int key)
         {
-            var reminder = _repository.Find(key);
-
-            var reminderViewModel = new ReminderViewModel
+            try
             {
-                ID = reminder.ID,
-                Title = reminder.Title,
-                Description = reminder.Description,
-                LimitDate = reminder.LimitDate,
-                IsDone = reminder.IsDone
-            };
+                var reminder = _repository.Find(key);
 
-            return reminderViewModel;
+                var reminderViewModel = new ReminderViewModel
+                {
+                    ID = reminder.ID,
+                    Title = reminder.Title,
+                    Description = reminder.Description,
+                    LimitDate = reminder.LimitDate,
+                    IsDone = reminder.IsDone
+                };
+
+                return reminderViewModel;
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
 
         public List<ReminderViewModel> GetAll()
         {
-            var reminders = _repository.GetAll().ToList();
-            var remindersViewModel = new List<ReminderViewModel>();
-
-            reminders.ForEach(r =>
+            try
             {
-                var reminder = new ReminderViewModel
-                {
-                    ID = r.ID,
-                    Title = r.Title,
-                    Description = r.Description,
-                    LimitDate = r.LimitDate,
-                    IsDone = r.IsDone
-                };
-                remindersViewModel.Add(reminder);
-            });
+                var reminders = _repository.GetAll().ToList();
+                var remindersViewModel = new List<ReminderViewModel>();
 
-            return remindersViewModel;
+                reminders.ForEach(r =>
+                {
+                    var reminder = new ReminderViewModel
+                    {
+                        ID = r.ID,
+                        Title = r.Title,
+                        Description = r.Description,
+                        LimitDate = r.LimitDate,
+                        IsDone = r.IsDone
+                    };
+                    remindersViewModel.Add(reminder);
+                });
+
+                return remindersViewModel;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
     }

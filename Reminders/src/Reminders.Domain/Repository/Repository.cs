@@ -10,8 +10,6 @@ namespace Reminders.Domain.Repository
 
         private RemindersDbContext _context;
 
-        public Repository() { }
-
         public Repository(RemindersDbContext context)
         {
             _context = context;

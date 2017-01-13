@@ -1,93 +1,123 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Reminders.App.Models;
-using Reminders.App.Business;
+using Reminders.App.BusinessContract;
 
 namespace Reminders.App.Controllers
 {
-    [Route("/Reminder")]
     public class ReminderController : Controller
     {
-        private BusinessReminder _helper;
+        private IBusinessReminder _business;
 
-        public ReminderController(BusinessReminder helper)
+        public ReminderController(IBusinessReminder helper)
         {
-            _helper = helper;
+            _business = helper;
         }
 
         // GET: Reminder
+        [Route("")]
+        [Route("Reminder")]
+        [Route("Reminder/Index")]
         public IActionResult Index()
         {
-            var remindersViewModel = _helper.GetAll();
+            var remindersViewModel = _business.GetAll();
+
+            if (remindersViewModel == null)
+                return RedirectToAction("Index", new { Message = "Ocorreu um erro ao executar a ação." });
 
             return View(remindersViewModel);
         }
 
         // GET: Reminder/Create
+        [Route("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Reminder/Create
+        [Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(ReminderViewModel reminderViewModel)
         {
             if (ModelState.IsValid)
             {
-                _helper.Insert(reminderViewModel);
+                var result = _business.Insert(reminderViewModel);
 
-                return RedirectToAction("Index");
+                if (result)
+                    return RedirectToAction("");
+                else
+                    return RedirectToAction("Create", new { Message = "Ocorreu um erro ao executar a ação." });
             }
 
             return View(reminderViewModel);
         }
 
-        // GET: Reminder/Delete/{id}
-        public IActionResult Delete(int id)
-        {
-            var reminderViewModel = _helper.Find(id);
-
-            return View(reminderViewModel);
-        }
-
-        // POST: Reminder/Delete/{id}
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
-        {
-            _helper.Delete(id);
-
-            return RedirectToAction("Index");
-        }
-
         // GET: Reminder/Edit/[id}
+        [Route("Edit")]
         public IActionResult Edit(int id)
         {
-            var reminderViewModel = _helper.Find(id);
+            var reminderViewModel = _business.Find(id);
+
+            if (reminderViewModel == null)
+                return RedirectToAction("", new { Message = "Ocorreu um erro ao executar a ação." });
 
             return View(reminderViewModel);
         }
 
         // POST: Reminder/Edit/{id}
+        [Route("Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(ReminderViewModel reminderViewModel)
         {
             if (ModelState.IsValid)
             {
-                _helper.Update(reminderViewModel);
+                var result = _business.Update(reminderViewModel);
 
-                return RedirectToAction("Index");
+                if (result)
+                    return RedirectToAction("");
+                else
+                    return RedirectToAction("Edit", new { Message = "Ocorreu um erro ao executar a ação." });
             }
 
             return View(reminderViewModel);
         }
 
+        // GET: Reminder/Delete/{id}
+        [Route("Delete")]
+        public IActionResult Delete(int id)
+        {
+            var reminderViewModel = _business.Find(id);
+
+            if (reminderViewModel == null)
+                return RedirectToAction("", new { Message = "Ocorreu um erro ao executar a ação." });
+
+            return View(reminderViewModel);
+        }
+
+        // POST: Reminder/Delete/{id}
+        [Route("Delete")]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var result = _business.Delete(id);
+
+            if (result)
+                return RedirectToAction("");
+            else
+                return RedirectToAction("Delete", new { Message = "Ocorreu um erro ao executar a ação." });
+        }
+
         // GET: Reminder/Details/{id}
+        [Route("Details")]
         public IActionResult Details(int id)
         {
-            var reminderViewModel = _helper.Find(id);
+            var reminderViewModel = _business.Find(id);
+
+            if (reminderViewModel == null)
+                return RedirectToAction("", new { Message = "Ocorreu um erro ao executar a ação." });
 
             return View(reminderViewModel);
         }
