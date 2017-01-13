@@ -18,4 +18,4 @@
 ## Como configurar
 
   Será necessário ter uma instancia do SQL Server disponível para utilização. 
-  O usuário do SQL Server deverá ter permissão para criar base de dados, pois o aplicativo criara a base assim que a aplicação compilar pela primeira vez. A string de conexão devera ser colocada no aquivo "appsettings.json" na chave "StringConnectionReminders" do projeto "Reminders.App".
+  O usuário do SQL Server deverá ter permissão para criar base de dados, pois o aplicativo criara a base assim que a aplicação compilar pela primeira vez. A string de conexão devera ser colocada no arquivo "appsettings.json" na chave "StringConnectionReminders" do projeto "Reminders.App".
