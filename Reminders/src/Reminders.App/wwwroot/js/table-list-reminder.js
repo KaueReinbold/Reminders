@@ -68,7 +68,7 @@
     );
 
     $(saveDoneReminder).click(function (event) {
-        DoneReminder(idReminderForDone.value, idReminderDone.value, function (data, status) {
+        $.post("Reminder/DoneReminder", { id: idReminderForDone.value, isDone: idReminderDone.value }, function (data, status) {
             $(modal).modal('toggle');
             location.reload();
         });
