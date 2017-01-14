@@ -1,42 +1,31 @@
 ﻿@model Reminders.App.Models.ReminderViewModel
 
 @{
-    ViewData["Title"] = "Detalhes";
+    ViewData["Title"] = "Detalhes Lembrete";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<div>
-    <h4>Detalhes do Lembrete</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LimitDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LimitDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsDone)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsDone)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Editar</a> |
-    <a asp-action="">Voltar a Listagem</a>
-</div>
+<fieldset>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <strong>@Html.DisplayNameFor(model => model.Title):</strong>
+        @Html.DisplayFor(model => model.Title)
+    </div>
+    <div class="form-group">
+        <strong> @Html.DisplayNameFor(model => model.Description):</strong>
+        @Html.DisplayFor(model => model.Description)
+    </div>
+    <div class="form-group">
+        <strong>@Html.DisplayNameFor(model => model.LimitDate):</strong>
+        @Html.DisplayFor(model => model.LimitDate)
+    </div>
+    <div class="form-group">
+        <strong>@Html.DisplayNameFor(model => model.IsDone):</strong>
+        @Html.DisplayFor(model => model.IsDone)
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-info">Editar</a>
+        <a asp-action="" class="btn btn-default">Voltar</a>
+    </div>
+</fieldset>

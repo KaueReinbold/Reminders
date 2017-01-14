@@ -43,20 +43,18 @@ namespace Reminders.App.Business
         {
             try
             {
-                var reminder = new ReminderEntity
-                {
-                    ID = reminderViewModel.ID,
-                    Title = reminderViewModel.Title,
-                    Description = reminderViewModel.Description,
-                    LimitDate = reminderViewModel.LimitDate.Value,
-                    IsDone = reminderViewModel.IsDone
-                };
+                var reminder = _repository.Find(reminderViewModel.ID);
+
+                reminder.Title = reminderViewModel.Title;
+                reminder.Description = reminderViewModel.Description;
+                reminder.LimitDate = reminderViewModel.LimitDate.Value;
+                reminder.IsDone = reminderViewModel.IsDone;
 
                 _repository.Update(reminder);
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -108,7 +106,7 @@ namespace Reminders.App.Business
         {
             try
             {
-                var reminders = _repository.GetAll().ToList();
+                var reminders = _repository.GetAll().OrderBy(r => r.Title).ToList();
                 var remindersViewModel = new List<ReminderViewModel>();
 
                 reminders.ForEach(r =>
@@ -126,7 +124,7 @@ namespace Reminders.App.Business
 
                 return remindersViewModel;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }

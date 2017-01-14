@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Reminders.Data.Context;
 using Reminders.Domain.Contract;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Reminders.Domain.Repository
 {
@@ -48,7 +50,7 @@ namespace Reminders.Domain.Repository
 
         public IEnumerable<T> GetAll()
         {
-            return _context.Set<T>();
+            return _context.Set<T>().ToList();
         }
     }
 }

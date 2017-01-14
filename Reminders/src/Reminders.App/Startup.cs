@@ -9,6 +9,7 @@ using Reminders.Domain.Contract;
 using Reminders.Domain.Repository;
 using Reminders.App.Business;
 using Reminders.App.BusinessContract;
+using Microsoft.AspNetCore.Localization;
 
 namespace Reminders.App
 {
@@ -65,6 +66,11 @@ namespace Reminders.App
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("pt-BR")
+            });
 
             app.UseApplicationInsightsExceptionTelemetry();
 

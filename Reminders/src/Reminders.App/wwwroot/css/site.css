@@ -36,3 +36,33 @@ textarea {
     display: none
   }
 }
+
+.select-head-table{
+    cursor: pointer
+}
+
+table {
+    border: solid 1px #d2cfcf
+}
+
+table td{
+    text-align:center; 
+    vertical-align:middle;
+}
+
+table thead tr th{
+    background-color: lightgray;
+    padding: 10px 10px 10px 10px!important;
+    text-align:center; 
+    vertical-align:middle;
+}
+
+.action-table{
+    padding: 10px 10px 10px 10px!important;
+}
+
+#searchTable{
+    padding-top: 10px;
+    margin-top: 10px;
+    margin-bottom: -5px;
+}

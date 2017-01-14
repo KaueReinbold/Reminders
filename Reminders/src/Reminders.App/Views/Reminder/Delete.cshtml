@@ -4,42 +4,29 @@
     ViewData["Title"] = "Deletar Lembrete";
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<h3>Você deseja deletar esse Lembrete?</h3>
-<div>
-    <h4>Deleter lembrete</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LimitDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LimitDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsDone)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsDone)
-        </dd>
-    </dl>
+<h2><strong>Você deseja deletar esse lembrete?</strong></h2>
+<fieldset>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <strong>@Html.DisplayNameFor(model => model.Title):</strong>
+        @Html.DisplayFor(model => model.Title)
+    </div>
+    <div class="form-group">
+        <strong> @Html.DisplayNameFor(model => model.Description):</strong>
+        @Html.DisplayFor(model => model.Description)
+    </div>
+    <div class="form-group">
+        <strong>@Html.DisplayNameFor(model => model.LimitDate):</strong>
+        @Html.DisplayFor(model => model.LimitDate)
+    </div>
+    <div class="form-group">
+        <strong>@Html.DisplayNameFor(model => model.IsDone):</strong>
+        @Html.DisplayFor(model => model.IsDone)
+    </div>
     <form asp-action="Delete" asp-route-id="@Model.ID">
         <div class="form-actions no-color">
-            <input type="submit" value="Deletar" class="btn btn-danger" /> |
-            <a asp-action="">Voltar a Listagem</a>
+            <input type="submit" value="Deletar" class="btn btn-danger" />  
+            <a asp-action="" class="btn btn-default">Voltar</a>
         </div>
     </form>
-</div>
+</fieldset>
