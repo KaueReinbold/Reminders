@@ -10,6 +10,8 @@ using Reminders.Domain.Repository;
 using Reminders.App.Business;
 using Reminders.App.BusinessContract;
 using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace Reminders.App
 {
@@ -67,10 +69,18 @@ namespace Reminders.App
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseRequestLocalization(new RequestLocalizationOptions
+            var enUsCulture = new CultureInfo("pt-BR");
+            var localizationOptions = new RequestLocalizationOptions()
             {
-                DefaultRequestCulture = new RequestCulture("pt-BR")
-            });
+                SupportedCultures = new List<CultureInfo>(){ enUsCulture },
+                SupportedUICultures = new List<CultureInfo>() { enUsCulture },
+                DefaultRequestCulture = new RequestCulture(enUsCulture),
+                FallBackToParentCultures = false,
+                FallBackToParentUICultures = false,
+                RequestCultureProviders = null
+            };
+
+            app.UseRequestLocalization(localizationOptions);
 
             app.UseApplicationInsightsExceptionTelemetry();
 

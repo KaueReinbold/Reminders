@@ -77,8 +77,8 @@ function SortTableDate(asc, column) {
     $("#tbodyReminders ").find("tr").sort(function (itemA, itemB) {
         var textA = $($("td", itemA)[column]).text().split("/");
         var textB = $($("td", itemB)[column]).text().split("/");
-        var textADate = new Date(textA[0], textA[1], textA[2]);
-        var textBDate = new Date(textB[0], textB[1], textB[2]);
+        var textADate = new Date(textA[2], textA[1], textA[0]);
+        var textBDate = new Date(textB[2], textB[1], textB[0]);
         if (textADate < textBDate) return asc ? -1 : 1;
         else if (textADate > textBDate) return asc ? 1 : -1;
         return 0;
