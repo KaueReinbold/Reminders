@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Reminders.App.Models
 {
+    /// <summary>
+    /// ViewModel class that contains data validations and entity properties.
+    /// </summary>
     public class ReminderViewModel
     {
         public int ID { get; set; }

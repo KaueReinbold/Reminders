@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace Reminders.App.Business
 {
+    /// <summary>
+    /// Class of interaction between ViewModel and Entity.
+    /// </summary>
     public class BusinessReminder : IBusinessReminder
     {
         private IRepository<ReminderEntity> _repository;

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Reminders.App.BusinessContract
 {
+    /// <summary>
+    /// Interaction contract between ViewModel and Entity.
+    /// </summary>
     public interface IBusinessReminder
     {
         bool Insert(ReminderViewModel reminderViewModel);

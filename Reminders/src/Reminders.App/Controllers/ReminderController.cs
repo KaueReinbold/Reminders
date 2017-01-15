@@ -8,9 +8,9 @@ namespace Reminders.App.Controllers
     {
         private IBusinessReminder _business;
 
-        public ReminderController(IBusinessReminder helper)
+        public ReminderController(IBusinessReminder business)
         {
-            _business = helper;
+            _business = business;
         }
 
         // GET: Reminder

@@ -2,6 +2,9 @@
 
 namespace Reminders.Data.Entity
 {
+    /// <summary>
+    /// Class that represents the Reminder entity.
+    /// </summary>
     public class ReminderEntity
     {
         public int ID { get; set; }

@@ -7,6 +7,10 @@ using System.Linq;
 
 namespace Reminders.Domain.Repository
 {
+    /// <summary>
+    /// Application Repository Settings.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Repository<T> : IRepository<T> where T : class
     {
 
