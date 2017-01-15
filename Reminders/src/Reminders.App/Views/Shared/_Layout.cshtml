@@ -30,6 +30,7 @@
             </div>
         </div>
     </div>
+    <span id="message" class="label message"><label></label></span>
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -41,7 +42,9 @@
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/ajax.controller.js" asp-append-version="true"></script>
+        <script src="~/js/table-index.reminders.js" asp-append-version="true"></script>
+        <script src="~/js/util.reminders.js" asp-append-version="true"></script>
+        <script src="~/js/server.reminders.js" asp-append-version="true"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">

@@ -6,6 +6,7 @@
 /// <reference path="js/ajax.controller.js" />
 /// <reference path="js/site.js" />
 /// <reference path="js/table-list-reminder.js" />
+/// <reference path="js/util.reminders.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
 /// <reference path="lib/bootstrap/dist/js/npm.js" />
 /// <reference path="lib/jquery/dist/jquery.js" />

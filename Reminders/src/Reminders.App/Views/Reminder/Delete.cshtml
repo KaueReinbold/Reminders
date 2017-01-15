@@ -1,10 +1,10 @@
 ﻿@model Reminders.App.Models.ReminderViewModel
 
 @{
-    ViewData["Title"] = "Deletar Lembrete";
+    ViewData["Title"] = "Excluir Lembrete";
 }
 
-<h2><strong>Você deseja deletar esse lembrete?</strong></h2>
+<h2><strong>Tem certeza que você deseja excluir esse lembrete?</strong></h2>
 <fieldset>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
@@ -25,8 +25,8 @@
     </div>
     <form asp-action="Delete" asp-route-id="@Model.ID">
         <div class="form-actions no-color">
-            <input type="submit" value="Deletar" class="btn btn-danger" />  
             <a asp-action="" class="btn btn-default">Voltar</a>
+            <input type="submit" value="Excluir" class="btn btn-danger" />  
         </div>
     </form>
 </fieldset>

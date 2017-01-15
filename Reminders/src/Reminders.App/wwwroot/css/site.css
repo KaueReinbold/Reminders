@@ -74,6 +74,25 @@ table {
     height: 30px;
 }
 
-.title-reminder-navbar{
+.title-reminder-navbar {
     padding-left: 50px;
+}
+
+
+.hideHeadModal {
+    display: none;
+}
+
+.hideTextModal {
+    display: none;
+}
+
+.message label{
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.message{
+    position: absolute;
+    width: 100%;
 }

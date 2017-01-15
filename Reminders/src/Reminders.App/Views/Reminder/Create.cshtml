@@ -1,7 +1,7 @@
 ﻿@model Reminders.App.Models.ReminderViewModel
 
 @{
-    ViewData["Title"] = "Criar Lembrete";
+    ViewData["Title"] = "Cadastrar Lembrete";
 }
 <h2>@ViewData["Title"]</h2>
 <fieldset class="form-group row">
@@ -10,12 +10,12 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Title" class=""></label>
-            <input asp-for="Title" type="text" class="form-control" placeholder="Digite o titulo do lembrete..."/>
+            <input asp-for="Title" type="text" class="form-control" placeholder="Digite o titulo do lembrete..." maxlength="150"/>
             <span asp-validation-for="Title" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="Description" class=""></label>
-            <textarea asp-for="Description" class="form-control" rows="5" placeholder="Digite detalhes adicionais do lembrete..."></textarea>
+            <textarea asp-for="Description" class="form-control" rows="5" placeholder="Digite detalhes adicionais do lembrete..." maxlength="500"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -24,13 +24,9 @@
             <span asp-validation-for="LimitDate" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <input asp-for="IsDone" />
-            <label asp-for="IsDone"></label>
-        </div>
-        <div class="form-group">
             <div class="">
-                <input type="submit" value="Salvar" class="btn btn-success" />
                 <a asp-action="" class="btn btn-default">Voltar</a>
+                <input type="submit" value="Salvar" class="btn btn-success" />
             </div>
         </div>
     </form>

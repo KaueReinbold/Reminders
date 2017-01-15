@@ -22,7 +22,7 @@ namespace Reminders.App.Controllers
             var remindersViewModel = _business.GetAll();
 
             if (remindersViewModel == null)
-                return RedirectToAction("Index", new { Message = "Ocorreu um erro ao executar a ação." });
+                return RedirectToAction("Index", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
 
             return View(remindersViewModel);
         }
@@ -45,9 +45,9 @@ namespace Reminders.App.Controllers
                 var result = _business.Insert(reminderViewModel);
 
                 if (result)
-                    return RedirectToAction("");
+                    return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessCreateMessage") });
                 else
-                    return RedirectToAction("Create", new { Message = "Ocorreu um erro ao executar a ação." });
+                    return RedirectToAction("Create", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
             }
 
             return View(reminderViewModel);
@@ -60,7 +60,7 @@ namespace Reminders.App.Controllers
             var reminderViewModel = _business.Find(id);
 
             if (reminderViewModel == null)
-                return RedirectToAction("", new { Message = "Ocorreu um erro ao executar a ação." });
+                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
 
             return View(reminderViewModel);
         }
@@ -76,9 +76,9 @@ namespace Reminders.App.Controllers
                 var result = _business.Update(reminderViewModel);
 
                 if (result)
-                    return RedirectToAction("");
+                    return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessEditMessage") });
                 else
-                    return RedirectToAction("Edit", new { Message = "Ocorreu um erro ao executar a ação." });
+                    return RedirectToAction("Edit", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
             }
 
             return View(reminderViewModel);
@@ -91,7 +91,7 @@ namespace Reminders.App.Controllers
             var reminderViewModel = _business.Find(id);
 
             if (reminderViewModel == null)
-                return RedirectToAction("", new { Message = "Ocorreu um erro ao executar a ação." });
+                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
 
             return View(reminderViewModel);
         }
@@ -105,9 +105,9 @@ namespace Reminders.App.Controllers
             var result = _business.Delete(id);
 
             if (result)
-                return RedirectToAction("");
+                return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessDeleteMessage") });
             else
-                return RedirectToAction("Delete", new { Message = "Ocorreu um erro ao executar a ação." });
+                return RedirectToAction("Delete", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
         }
 
         // GET: Reminder/Details/{id}
@@ -117,7 +117,7 @@ namespace Reminders.App.Controllers
             var reminderViewModel = _business.Find(id);
 
             if (reminderViewModel == null)
-                return RedirectToAction("", new { Message = "Ocorreu um erro ao executar a ação." });
+                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
 
             return View(reminderViewModel);
         }

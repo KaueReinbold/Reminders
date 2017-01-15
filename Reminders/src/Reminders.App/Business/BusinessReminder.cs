@@ -5,6 +5,7 @@ using Reminders.Domain.Contract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace Reminders.App.Business
 {
@@ -33,7 +34,7 @@ namespace Reminders.App.Business
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -70,7 +71,7 @@ namespace Reminders.App.Business
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -95,7 +96,7 @@ namespace Reminders.App.Business
                 return reminderViewModel;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }

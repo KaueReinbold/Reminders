@@ -1,7 +1,7 @@
 ﻿@model Reminders.App.Models.ReminderViewModel
 
 @{
-    ViewData["Title"] = "Detalhes Lembrete";
+    ViewData["Title"] = "Detalhes do Lembrete";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -25,7 +25,7 @@
         @Html.DisplayFor(model => model.IsDone)
     </div>
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-info">Editar</a>
         <a asp-action="" class="btn btn-default">Voltar</a>
+        <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-info">Editar</a>
     </div>
 </fieldset>
