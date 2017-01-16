@@ -55,11 +55,25 @@
             }
         });
 
-    if (typeof (saveDoneReminder) !== "undefined")
-        $(saveDoneReminder).click(function (event) {
-            PostDoneReminder(idReminderForDone.value, idReminderDone.value, function () {
-                $(modal).modal('toggle');
-                location.href = location.origin;
+    if (typeof (deleteReminderAction) !== "undefined")
+        $(deleteReminderAction).click(function (event) {
+            actionDelete.value = event.target.getAttribute("idReminder");
+            event.preventDefault();
+            event.stopPropagation();
+            $(modalDelete).modal();
+        });
+
+    if (typeof (deleteReminder) !== "undefined")
+        $(deleteReminder).click(function (event) {
+            PostDeleteReminder(actionDelete.value, function (result) {
+                $(modalDelete).modal('toggle');
+                if (result.type === 0) {
+                    result.type = "Success";
+                } else if (result.type === 1) {
+                    result.type = "Error";
+                }
+
+                location.href = location.origin + "?Type=" + result.type + "&Message=" + result.message;
             });
         });
 }

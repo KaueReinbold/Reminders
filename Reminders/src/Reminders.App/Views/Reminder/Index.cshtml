@@ -5,6 +5,7 @@
 }
 <input type="hidden" id="idReminderForDone" value="0" />
 <input type="hidden" id="idReminderDone" value="false" />
+<input type="hidden" id="actionDelete" value="" />
 <br />
 <p>
     <a asp-action="Create" class="btn btn-success">Cadastrar novo lembrete</a>
@@ -45,7 +46,7 @@
                         @Html.CheckBoxFor(modelItem => item.IsDone, new { idReminder = item.ID })
                     </td>
                     <td>
-                        <a class="action-table" asp-action="Delete" asp-route-id="@item.ID"><span class="glyphicon glyphicon-trash" title="Excluir"></span></a>
+                        <a id="deleteReminderAction" class="action-table"><span idReminder="@item.ID" class="glyphicon glyphicon-trash" title="Excluir"></span></a>
                         <a class="action-table" asp-action="Edit" asp-route-id="@item.ID"><span class="glyphicon glyphicon-edit" title="Editar"></span></a>
                         <a class="action-table" asp-action="Details" asp-route-id="@item.ID"><span class="glyphicon glyphicon-tasks" title="Visualizar"></span></a>
                     </td>
@@ -60,3 +61,4 @@ else
     <h4>Nenhum lembrete cadastrado.</h4>
 }
 @Html.Partial("~/Views/Partials/_DoneReminderPartialView.cshtml")
+@Html.Partial("~/Views/Partials/_DeleteReminderPartialView.cshtml")

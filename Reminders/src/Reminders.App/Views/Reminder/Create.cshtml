@@ -24,6 +24,10 @@
             <span asp-validation-for="LimitDate" class="text-danger"></span>
         </div>
         <div class="form-group">
+            <input asp-for="IsDone" />
+            <label asp-for="IsDone"></label>
+        </div>
+        <div class="form-group">
             <div class="">
                 <a asp-action="" class="btn btn-default">Voltar</a>
                 <input type="submit" value="Salvar" class="btn btn-success" />

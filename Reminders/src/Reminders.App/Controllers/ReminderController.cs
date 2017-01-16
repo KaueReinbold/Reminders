@@ -85,30 +85,16 @@ namespace Reminders.App.Controllers
             return View(reminderViewModel);
         }
 
-        // GET: Reminder/Delete/{id}
-        [Route("Delete")]
-        public IActionResult Delete(int id)
-        {
-            var reminderViewModel = _business.Find(id);
-
-            if (reminderViewModel == null)
-                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
-
-            return View(reminderViewModel);
-        }
-
         // POST: Reminder/Delete/{id}
-        [Route("Delete")]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        public JsonResult Delete(int id)
         {
             var result = _business.Delete(id);
 
             if (result)
-                return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessDeleteMessage") });
+                return Json(new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessDeleteMessage") });
             else
-                return RedirectToAction("Delete", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
+                return Json(new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
         }
 
         // GET: Reminder/Details/{id}

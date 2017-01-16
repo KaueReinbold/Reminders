@@ -1,6 +1,5 @@
 ﻿function ConfigureMessage() {
     location.search.replace("?", "").split("&").forEach(function (item) {
-        if ($("table").length === 0) { return; };
         var obj = item.split("=");
         var status = "";
         var message = "";
@@ -29,6 +28,8 @@
         $("#message").addClass(classLabel);
         $("#message > label").text(decodeURIComponent(message));
         $("#message").slideDown("slow");
-        setTimeout(function () { $("#message").slideUp("slow") }, 2000);
+        setTimeout(function () {
+            $("#message").slideUp("slow");
+        }, 2000);
     });
 }
