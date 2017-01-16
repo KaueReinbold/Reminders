@@ -84,6 +84,18 @@ namespace Reminders.App.Controllers
 
             return View(reminderViewModel);
         }
+        
+        // GET: Reminder/Details/{id}
+        [Route("Details")]
+        public IActionResult Details(int id)
+        {
+            var reminderViewModel = _business.Find(id);
+
+            if (reminderViewModel == null)
+                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
+
+            return View(reminderViewModel);
+        }
 
         // POST: Reminder/Delete/{id}
         [HttpPost]
@@ -97,30 +109,25 @@ namespace Reminders.App.Controllers
                 return Json(new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
         }
 
-        // GET: Reminder/Details/{id}
-        [Route("Details")]
-        public IActionResult Details(int id)
-        {
-            var reminderViewModel = _business.Find(id);
-
-            if (reminderViewModel == null)
-                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
-
-            return View(reminderViewModel);
-        }
-
         // POST Reminder/DoneReminder/{id}
         [HttpPost]
-        public bool DoneReminder(int? id, bool isDone)
+        public JsonResult DoneReminder(int id, bool isDone)
         {
-            var reminder = _business.Find(id.Value);
+            var reminder = _business.Find(id);
 
             if (reminder == null)
-                return false;
+                return Json(new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
 
             reminder.IsDone = isDone;
 
-            return _business.Update(reminder);
+            var result = _business.Update(reminder);
+
+            if (isDone && result)
+                return Json(new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessDoneMessage") });
+            else if (!isDone && result)
+                return Json(new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessEnableMessage") });
+            else
+                return Json(new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
         }
     }
 }
