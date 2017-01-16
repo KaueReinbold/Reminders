@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Reminders.App.Models;
 using Reminders.App.BusinessContract;
+using Reminders.App.Enum;
 
 namespace Reminders.App.Controllers
 {
