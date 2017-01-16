@@ -55,6 +55,14 @@
             }
         });
 
+    if (typeof (saveDoneReminder) !== "undefined")
+        $(saveDoneReminder).click(function (event) {
+            PostDoneReminder(idReminderForDone.value, idReminderDone.value, function () {
+                $(modal).modal('toggle');
+                location.href = location.origin;
+            });
+        });
+
     if (typeof (deleteReminderAction) !== "undefined")
         $(deleteReminderAction).click(function (event) {
             actionDelete.value = event.target.getAttribute("idReminder");

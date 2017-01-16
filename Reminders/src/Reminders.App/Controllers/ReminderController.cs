@@ -113,16 +113,14 @@ namespace Reminders.App.Controllers
         [HttpPost]
         public bool DoneReminder(int? id, bool isDone)
         {
-            if (id.HasValue)
-            {
-                var reminder = _business.Find(id.Value);
+            var reminder = _business.Find(id.Value);
 
-                reminder.IsDone = isDone;
-
-                return _business.Update(reminder);
-            }
-            else
+            if (reminder == null)
                 return false;
+
+            reminder.IsDone = isDone;
+
+            return _business.Update(reminder);
         }
     }
 }
