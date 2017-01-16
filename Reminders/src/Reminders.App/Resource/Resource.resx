@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -126,7 +126,13 @@
   <data name="SuccessDeleteMessage" xml:space="preserve">
     <value>Lembrete excluido com sucesso.</value>
   </data>
+  <data name="SuccessDoneMessage" xml:space="preserve">
+    <value>Lembre concluído com sucesso.</value>
+  </data>
   <data name="SuccessEditMessage" xml:space="preserve">
     <value>Lembrete editado com sucesso.</value>
+  </data>
+  <data name="SuccessEnableMessage" xml:space="preserve">
+    <value>Lembre desmarcado como concluído com sucesso.</value>
   </data>
 </root>
