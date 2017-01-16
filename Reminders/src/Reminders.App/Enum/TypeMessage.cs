@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Reminders.App.Enum
 {
+    /// <summary>
+    /// Enum with the type of messages.
+    /// </summary>
     enum TypeMessage
     {
         Success,
