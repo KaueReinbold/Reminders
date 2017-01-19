@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Reminders.App.Models
+namespace Reminders.Domain.Models
 {
-    /// <summary>
-    /// ViewModel class that contains data validations and entity properties.
-    /// </summary>
-    public class ReminderViewModel
+    public class ReminderModel
     {
         public int ID { get; set; }
 

@@ -1,19 +1,20 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Reminders.Data.Context;
-using Reminders.Domain.Contract;
 using Reminders.Domain.Repository;
-using Microsoft.AspNetCore.Localization;
-using System.Globalization;
-using System.Collections.Generic;
+using Reminders.Domain.Contract;
 using Reminders.Domain.BusinessContract;
 using Reminders.Domain.Business;
+using Reminders.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
-namespace Reminders.App
+namespace Reminders.Api
 {
     public class Startup
     {
@@ -22,24 +23,27 @@ namespace Reminders.App
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            if (env.IsDevelopment())
+            if (env.IsEnvironment("Development"))
             {
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
             }
+
+            builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
 
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
+
+            services.AddMvc();
 
             services.AddDbContext<RemindersDbContext>(options =>
                         options.UseSqlServer(Configuration.GetConnectionString("StringConnectionReminders")));
@@ -48,10 +52,11 @@ namespace Reminders.App
 
             services.AddScoped(typeof(IBusinessReminder), typeof(BusinessReminder));
 
-            services.AddMvc();
+            services.AddSwaggerGen();
+
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -59,39 +64,13 @@ namespace Reminders.App
 
             app.UseApplicationInsightsRequestTelemetry();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
-            var enUsCulture = new CultureInfo("pt-BR");
-            var localizationOptions = new RequestLocalizationOptions()
-            {
-                SupportedCultures = new List<CultureInfo>(){ enUsCulture },
-                SupportedUICultures = new List<CultureInfo>() { enUsCulture },
-                DefaultRequestCulture = new RequestCulture(enUsCulture),
-                FallBackToParentCultures = false,
-                FallBackToParentUICultures = false,
-                RequestCultureProviders = null
-            };
-
-            app.UseRequestLocalization(localizationOptions);
-
             app.UseApplicationInsightsExceptionTelemetry();
+            
+            app.UseMvc();
 
-            app.UseStaticFiles();
+            app.UseSwagger();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Reminder}/{action=Index}/{id?}");
-            });
+            app.UseSwaggerUi();
         }
     }
 }

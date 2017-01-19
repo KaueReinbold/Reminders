@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Reminders.App.Models;
-using Reminders.App.BusinessContract;
 using Reminders.App.Enum;
+using Reminders.Domain.Models;
+using Reminders.Domain.BusinessContract;
 
 namespace Reminders.App.Controllers
 {
@@ -39,11 +39,11 @@ namespace Reminders.App.Controllers
         [Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ReminderViewModel reminderViewModel)
+        public IActionResult Create(ReminderModel reminderModel)
         {
             if (ModelState.IsValid)
             {
-                var result = _business.Insert(reminderViewModel);
+                var result = _business.Insert(reminderModel);
 
                 if (result)
                     return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessCreateMessage") });
@@ -51,30 +51,30 @@ namespace Reminders.App.Controllers
                     return RedirectToAction("Create", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
             }
 
-            return View(reminderViewModel);
+            return View(reminderModel);
         }
 
         // GET: Reminder/Edit/[id}
         [Route("Edit")]
         public IActionResult Edit(int id)
         {
-            var reminderViewModel = _business.Find(id);
+            var ReminderModel = _business.Find(id);
 
-            if (reminderViewModel == null)
+            if (ReminderModel == null)
                 return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
 
-            return View(reminderViewModel);
+            return View(ReminderModel);
         }
 
         // POST: Reminder/Edit/{id}
         [Route("Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(ReminderViewModel reminderViewModel)
+        public IActionResult Edit(ReminderModel reminderModel)
         {
             if (ModelState.IsValid)
             {
-                var result = _business.Update(reminderViewModel);
+                var result = _business.Update(reminderModel);
 
                 if (result)
                     return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessEditMessage") });
@@ -82,19 +82,19 @@ namespace Reminders.App.Controllers
                     return RedirectToAction("Edit", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
             }
 
-            return View(reminderViewModel);
+            return View(reminderModel);
         }
         
         // GET: Reminder/Details/{id}
         [Route("Details")]
         public IActionResult Details(int id)
         {
-            var reminderViewModel = _business.Find(id);
+            var ReminderModel = _business.Find(id);
 
-            if (reminderViewModel == null)
+            if (ReminderModel == null)
                 return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
 
-            return View(reminderViewModel);
+            return View(ReminderModel);
         }
 
         // POST: Reminder/Delete/{id}
