@@ -5,9 +5,9 @@
         .module('reminderApp')
         .controller('indexController', indexController);
 
-    indexController.$inject = ['$scope'];
+    indexController.$inject = ['$scope', 'query'];
 
-    function indexController($scope) {
+    function indexController($scope, query) {
         /* jshint validthis:true */
         var vm = this;
         vm.title = 'indexController';

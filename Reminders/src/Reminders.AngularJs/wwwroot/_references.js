@@ -1,6 +1,7 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="js/app/api/comando.js" />
 /// <reference path="js/app/api/consulta.js" />
+/// <reference path="js/app/api/reminder/reminder.query.factory.js" />
 /// <reference path="js/app/api/server.js" />
 /// <reference path="js/app/app.js" />
 /// <reference path="js/app/controllers/reminder/create.controller.js" />

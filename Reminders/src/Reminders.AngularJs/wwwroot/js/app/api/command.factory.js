@@ -3,8 +3,8 @@
 
     angular
         .module('reminderApp')
-            .factory('Comando', function ($injector) {
-                var moduleName = 'mdComando';
+            .factory('command', function ($injector) {
+                var moduleName = 'mdCommand';
                 var mod = angular.module(moduleName);
                 var contents = mod._invokeQueue;
                 var out = {};

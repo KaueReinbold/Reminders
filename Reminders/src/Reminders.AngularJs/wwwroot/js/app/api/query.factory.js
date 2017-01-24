@@ -3,8 +3,8 @@
 
     angular
         .module('reminderApp')
-            .factory('Consulta', function ($injector) {
-                var moduleName = 'mdConsulta';
+            .factory('query', function ($injector) {
+                var moduleName = 'mdQuery';
                 var mod = angular.module(moduleName);
                 var contents = mod._invokeQueue;
                 var out = {};
