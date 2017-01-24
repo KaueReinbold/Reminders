@@ -126,13 +126,7 @@
   <data name="SuccessDeleteMessage" xml:space="preserve">
     <value>Lembrete excluido com sucesso.</value>
   </data>
-  <data name="SuccessDoneMessage" xml:space="preserve">
-    <value>Lembre concluído com sucesso.</value>
-  </data>
   <data name="SuccessEditMessage" xml:space="preserve">
     <value>Lembrete editado com sucesso.</value>
-  </data>
-  <data name="SuccessEnableMessage" xml:space="preserve">
-    <value>Lembre desmarcado como concluído com sucesso.</value>
   </data>
 </root>

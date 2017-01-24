@@ -87,29 +87,11 @@ namespace Reminders.App.Resource {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Lembre concluído com sucesso..
-        /// </summary>
-        public static string SuccessDoneMessage {
-            get {
-                return ResourceManager.GetString("SuccessDoneMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///    Looks up a localized string similar to Lembrete editado com sucesso..
         /// </summary>
         public static string SuccessEditMessage {
             get {
                 return ResourceManager.GetString("SuccessEditMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to Lembre desmarcado como concluído com sucesso..
-        /// </summary>
-        public static string SuccessEnableMessage {
-            get {
-                return ResourceManager.GetString("SuccessEnableMessage", resourceCulture);
             }
         }
     }

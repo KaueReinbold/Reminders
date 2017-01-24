@@ -57,15 +57,9 @@
 
     if (typeof (saveDoneReminder) !== "undefined")
         $(saveDoneReminder).click(function (event) {
-            PostDoneReminder(idReminderForDone.value, idReminderDone.value, function (result) {
+            PostDoneReminder(idReminderForDone.value, idReminderDone.value, function () {
                 $(modal).modal('toggle');
-                if (result.type === 0) {
-                    result.type = "Success";
-                } else if (result.type === 1) {
-                    result.type = "Error";
-                }
-
-                location.href = location.origin + "?Type=" + result.type + "&Message=" + result.message;
+                location.href = location.origin;
             });
         });
 
