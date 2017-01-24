@@ -18,6 +18,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Reminders.Domain", "src\Rem
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Reminders.Api", "src\Reminders.Api\Reminders.Api.xproj", "{EDC2FCD8-C677-49C1-944E-E1A65967CD95}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Reminders.AngularJs", "src\Reminders.AngularJs\Reminders.AngularJs.xproj", "{A0A71B38-5232-4336-A1B7-47CFF6A3470B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{EDC2FCD8-C677-49C1-944E-E1A65967CD95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDC2FCD8-C677-49C1-944E-E1A65967CD95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDC2FCD8-C677-49C1-944E-E1A65967CD95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0A71B38-5232-4336-A1B7-47CFF6A3470B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0A71B38-5232-4336-A1B7-47CFF6A3470B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0A71B38-5232-4336-A1B7-47CFF6A3470B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A71B38-5232-4336-A1B7-47CFF6A3470B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,5 +55,6 @@ Global
 		{2BBBB49A-6357-4DD4-8585-299748AE0FE8} = {6569A004-6A3F-4D34-A9E2-1770B0C1BAEC}
 		{6BE6357B-85CB-4D57-8D74-8BA837E4C967} = {6569A004-6A3F-4D34-A9E2-1770B0C1BAEC}
 		{EDC2FCD8-C677-49C1-944E-E1A65967CD95} = {6569A004-6A3F-4D34-A9E2-1770B0C1BAEC}
+		{A0A71B38-5232-4336-A1B7-47CFF6A3470B} = {6569A004-6A3F-4D34-A9E2-1770B0C1BAEC}
 	EndGlobalSection
 EndGlobal

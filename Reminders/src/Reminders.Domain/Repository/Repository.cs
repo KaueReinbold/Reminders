@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Reminders.Data.Context;
 using Reminders.Domain.Contract;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
