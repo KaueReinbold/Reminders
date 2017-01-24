@@ -7,11 +7,11 @@ using Microsoft.Extensions.Logging;
 using Reminders.Data.Context;
 using Reminders.Domain.Contract;
 using Reminders.Domain.Repository;
-using Reminders.App.Business;
-using Reminders.App.BusinessContract;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using System.Collections.Generic;
+using Reminders.Domain.BusinessContract;
+using Reminders.Domain.Business;
 
 namespace Reminders.App
 {

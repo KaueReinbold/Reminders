@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Reminders.App.Models;
-using Reminders.App.BusinessContract;
-using Reminders.App.Enum;
+using Microsoft.AspNetCore.Mvc;
+using Reminders.Domain.Models;
+using Reminders.Domain.BusinessContract;
+using Reminders.Domain.Resource;
+using Reminders.Domain.Enum;
 
 namespace Reminders.App.Controllers
 {
@@ -23,7 +24,7 @@ namespace Reminders.App.Controllers
             var remindersViewModel = _business.GetAll();
 
             if (remindersViewModel == null)
-                return RedirectToAction("Index", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
+                return RedirectToAction("Index", new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
 
             return View(remindersViewModel);
         }
@@ -39,50 +40,62 @@ namespace Reminders.App.Controllers
         [Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ReminderViewModel reminderViewModel)
+        public IActionResult Create(ReminderModel reminderModel)
         {
             if (ModelState.IsValid)
             {
-                var result = _business.Insert(reminderViewModel);
+                var result = _business.Insert(reminderModel);
 
                 if (result)
-                    return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessCreateMessage") });
+                    return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.ResourceManager.GetString("SuccessCreateMessage") });
                 else
-                    return RedirectToAction("Create", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
+                    return RedirectToAction("Create", new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
             }
 
-            return View(reminderViewModel);
+            return View(reminderModel);
         }
 
         // GET: Reminder/Edit/[id}
         [Route("Edit")]
         public IActionResult Edit(int id)
         {
-            var reminderViewModel = _business.Find(id);
+            var ReminderModel = _business.Find(id);
 
-            if (reminderViewModel == null)
-                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
+            if (ReminderModel == null)
+                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
 
-            return View(reminderViewModel);
+            return View(ReminderModel);
         }
 
         // POST: Reminder/Edit/{id}
         [Route("Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(ReminderViewModel reminderViewModel)
+        public IActionResult Edit(ReminderModel reminderModel)
         {
             if (ModelState.IsValid)
             {
-                var result = _business.Update(reminderViewModel);
+                var result = _business.Update(reminderModel);
 
                 if (result)
-                    return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessEditMessage") });
+                    return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.ResourceManager.GetString("SuccessEditMessage") });
                 else
-                    return RedirectToAction("Edit", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
+                    return RedirectToAction("Edit", new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
             }
 
-            return View(reminderViewModel);
+            return View(reminderModel);
+        }
+        
+        // GET: Reminder/Details/{id}
+        [Route("Details")]
+        public IActionResult Details(int id)
+        {
+            var ReminderModel = _business.Find(id);
+
+            if (ReminderModel == null)
+                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
+
+            return View(ReminderModel);
         }
 
         // POST: Reminder/Delete/{id}
@@ -92,35 +105,30 @@ namespace Reminders.App.Controllers
             var result = _business.Delete(id);
 
             if (result)
-                return Json(new { Type = TypeMessage.Success, Message = Resource.Resource.ResourceManager.GetString("SuccessDeleteMessage") });
+                return Json(new { Type = TypeMessage.Success, Message = Resource.ResourceManager.GetString("SuccessDeleteMessage") });
             else
-                return Json(new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
-        }
-
-        // GET: Reminder/Details/{id}
-        [Route("Details")]
-        public IActionResult Details(int id)
-        {
-            var reminderViewModel = _business.Find(id);
-
-            if (reminderViewModel == null)
-                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.Resource.ResourceManager.GetString("ErrorGenericMessage") });
-
-            return View(reminderViewModel);
+                return Json(new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
         }
 
         // POST Reminder/DoneReminder/{id}
         [HttpPost]
-        public bool DoneReminder(int? id, bool isDone)
+        public JsonResult DoneReminder(int id, bool isDone)
         {
-            var reminder = _business.Find(id.Value);
+            var reminder = _business.Find(id);
 
             if (reminder == null)
-                return false;
+                return Json(new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
 
             reminder.IsDone = isDone;
 
-            return _business.Update(reminder);
+            var result = _business.Update(reminder);
+
+            if (isDone && result)
+                return Json(new { Type = TypeMessage.Success, Message = Resource.ResourceManager.GetString("SuccessDoneMessage") });
+            else if (!isDone && result)
+                return Json(new { Type = TypeMessage.Success, Message = Resource.ResourceManager.GetString("SuccessEnableMessage") });
+            else
+                return Json(new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
         }
     }
 }

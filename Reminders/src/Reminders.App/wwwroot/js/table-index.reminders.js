@@ -1,4 +1,4 @@
-﻿function RegisterEvents() {
+function RegisterEvents() {
     if (typeof (searchTable) !== "undefined")
         $(searchTable).keyup(function (element) {
             var value = $(this).val().toUpperCase().trim();
@@ -57,9 +57,15 @@
 
     if (typeof (saveDoneReminder) !== "undefined")
         $(saveDoneReminder).click(function (event) {
-            PostDoneReminder(idReminderForDone.value, idReminderDone.value, function () {
+            PostDoneReminder(idReminderForDone.value, idReminderDone.value, function (result) {
                 $(modal).modal('toggle');
-                location.href = location.origin;
+                if (result.type === 0) {
+                    result.type = "Success";
+                } else if (result.type === 1) {
+                    result.type = "Error";
+                }
+
+                location.href = location.origin + "?Type=" + result.type + "&Message=" + result.message;
             });
         });
 
