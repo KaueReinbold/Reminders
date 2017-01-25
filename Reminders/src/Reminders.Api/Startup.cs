@@ -50,7 +50,12 @@ namespace Reminders.Api
 
             services.AddScoped(typeof(IBusinessReminder), typeof(BusinessReminder));
 
-            services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()));
+            services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
 
             services.AddSwaggerGen();
 
@@ -66,13 +71,13 @@ namespace Reminders.Api
 
             app.UseApplicationInsightsExceptionTelemetry();
             
-            app.UseMvc();
-
             app.UseCors("AllowAll");
 
             app.UseSwagger();
 
             app.UseSwaggerUi();
+
+            app.UseMvc();
         }
     }
 }

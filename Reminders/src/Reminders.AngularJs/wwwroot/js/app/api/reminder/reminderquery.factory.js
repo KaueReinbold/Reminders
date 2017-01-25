@@ -9,13 +9,17 @@
 
     function reminderquery(server) {
         
-        function getRequest(data, successCallback, errorCallback) {
-            server.getRequest("Reminder", data, successCallback, errorCallback);
+        function getReminders(successCallback, errorCallback) {
+            server.getRequest("Reminder", null, successCallback, errorCallback);
         }
-                
+        
+        function getReminder(data, successCallback, errorCallback) {
+            server.getRequest("Reminder/" + data.id, null, successCallback, errorCallback);
+        }
 
         return {
-            getRequest: getRequest
+            getReminders: getReminders,
+            getReminder: getReminder
         };
     }
 })();

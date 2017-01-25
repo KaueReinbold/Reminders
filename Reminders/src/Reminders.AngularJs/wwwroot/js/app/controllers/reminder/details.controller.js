@@ -5,15 +5,34 @@
         .module('reminderApp')
         .controller('detailsController', detailsController);
 
-    detailsController.$inject = ['$location']; 
+    detailsController.$inject = ['$location', 'query', 'command', 'reminderrepository'];
 
-    function detailsController($location) {
-        /* jshint validthis:true */
+    function detailsController($location, query, command, reminderrepository) {
+
         var vm = this;
+
         vm.title = 'detailsController';
 
-        activate();
+        vm.reminder = {};
 
-        function activate() { }
+        function success(data) {
+            vm.reminder = data;
+        }
+
+        function error(data) {
+            console.log(data);
+        }
+
+        function activate() {
+
+            vm.reminder = reminderrepository.getReminder();
+
+            if (vm.reminder.id)
+                query.getReminder(vm.reminder, success, error);
+            else
+                $location.path("Index");
+        }
+
+        activate();
     }
 })();

@@ -1,4 +1,4 @@
-﻿<div>
+﻿<div ng-controller="indexController as vm">
     <input type="hidden" id="idReminderForDone" value="0" />
     <input type="hidden" id="idReminderDone" value="false" />
     <input type="hidden" id="actionDelete" value="" />
@@ -8,4 +8,42 @@
     </p>
     <input type="text" name="searchItems" value="" placeholder="Filtrar os lembretes..." id="searchTable" class="form-control" />
     <br />
+    <h4 ng-show="vm.reminders.length === 0">Nenhum lembrete cadastrado.</h4>
+    <table class="table table-striped" ng-hide="vm.reminders.length === 0">
+        <thead id="theadReminders">
+            <tr class="select-head-table">
+                <th>
+                    Titulo
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </th>
+                <th>
+                    Data Limite
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </th>
+                <th>
+                    Concluido
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyReminders">
+            <tr ng-repeat="reminder in vm.reminders">
+                <td>
+                    {{reminder.title}}
+                </td>
+                <td>
+                    {{reminder.limitDate | date:'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    <input type="checkbox" ng-model="reminder.isDone" ng-click="vm.doneReminder(reminder)" />
+                </td>
+                <td>
+                    <a class="action-table" ng-click="vm.deleteReminder(reminder)" href=""><span class="glyphicon glyphicon-trash" title="Excluir"></span></a>
+                    <a class="action-table" ng-click="vm.editReminder(reminder)" href=""><span class="glyphicon glyphicon-edit" title="Editar"></span></a>
+                    <a class="action-table" ng-click="vm.detailsReminder(reminder)" href=""><span class="glyphicon glyphicon-tasks" title="Visualizar"></span></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

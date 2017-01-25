@@ -5,9 +5,9 @@
         .module('mdCommand')
         .factory('remindercommand', remindercommand);
 
-    remindercommand.$inject = ['$http'];
+    remindercommand.$inject = ['server'];
 
-    function remindercommand($http) {
+    function remindercommand(server) {
         
         function postRequest(data, successCallback, errorCallback) {
             server.postRequest("Reminder", data, successCallback, errorCallback);
