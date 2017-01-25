@@ -14,9 +14,9 @@
         function getRequest(action, data, successCallback, errorCallback) {
             var req = {
                 method: 'GET',
-                url: baseUrl + '/' + action,
+                url: baseUrl + action,
                 headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
+                    'Content-Type': 'application/json; charset=utf-8'
                 },
                 data: data ? data : null
             };
@@ -27,11 +27,11 @@
                     errorCallback(error);
             });
         }
-                
+
         function postRequest(action, data, successCallback, errorCallback) {
             var req = {
                 method: 'POST',
-                url: baseUrl + '/' + action,
+                url: baseUrl + action,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                 },
@@ -48,7 +48,7 @@
         function putRequest(action, data, successCallback, errorCallback) {
             var req = {
                 method: 'PUT',
-                url: baseUrl + '/' + action,
+                url: baseUrl + action,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                 },
@@ -65,7 +65,7 @@
         function deleteRequest(action, data, successCallback, errorCallback) {
             var req = {
                 method: 'DELETE',
-                url: baseUrl + '/' + action,
+                url: baseUrl + action,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                 },
@@ -78,7 +78,7 @@
                     errorCallback(error);
             });
         }
-        
+
         return {
             getRequest: getRequest,
             postRequest: postRequest,

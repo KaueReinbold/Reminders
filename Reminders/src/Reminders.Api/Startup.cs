@@ -9,6 +9,8 @@ using Reminders.Domain.BusinessContract;
 using Reminders.Domain.Business;
 using Reminders.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace Reminders.Api
 {
@@ -48,6 +50,8 @@ namespace Reminders.Api
 
             services.AddScoped(typeof(IBusinessReminder), typeof(BusinessReminder));
 
+            services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()));
+
             services.AddSwaggerGen();
 
         }
@@ -63,6 +67,8 @@ namespace Reminders.Api
             app.UseApplicationInsightsExceptionTelemetry();
             
             app.UseMvc();
+
+            app.UseCors("AllowAll");
 
             app.UseSwagger();
 

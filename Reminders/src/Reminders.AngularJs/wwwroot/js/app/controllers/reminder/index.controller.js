@@ -5,15 +5,22 @@
         .module('reminderApp')
         .controller('indexController', indexController);
 
-    indexController.$inject = ['$scope', 'query'];
+    indexController.$inject = ['$scope', 'query', 'command'];
 
-    function indexController($scope, query) {
+    function indexController($scope, query, command) {
         /* jshint validthis:true */
         var vm = this;
         vm.title = 'indexController';
 
-        activate();
+        
+        function success(data) {
+            console.log(data);
+        }
 
-        function activate() { }
+        function error(data) {
+            console.log(data);
+        }
+
+        query.getRequest(null, success, error);
     }
 })();
