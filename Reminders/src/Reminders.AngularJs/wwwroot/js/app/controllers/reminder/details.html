@@ -1,3 +1,22 @@
-﻿<div>
-    Details
-</div>
+﻿<h2>Detalhes do Lembrete</h2>
+<fieldset>
+    <div class="form-group">
+        <strong>Titulo:</strong>
+        {{vm.reminder.title}}
+    </div>
+    <div class="form-group">
+        <strong>Descrição:</strong>
+        {{vm.reminder.description}}
+    </div>
+    <div class="form-group">
+        <strong>Data Limite:</strong>
+        {{vm.reminder.limitDate | date:'dd/MM/yyyy'}}
+    </div>
+    <div class="form-group">
+        <strong>Concluido:</strong>
+        <input type="checkbox" ng-model="vm.reminder.isDone" disabled="disabled" />
+    </div>
+    <div>
+        <a href="/" class="btn btn-default">Voltar</a>
+    </div>
+</fieldset>

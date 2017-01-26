@@ -5,15 +5,38 @@
         .module('reminderApp')
         .controller('editController', editController);
 
-    editController.$inject = ['$location']; 
+    editController.$inject = ['$location', 'query', 'command', 'reminderrepository', 'util'];
 
-    function editController($location) {
-        /* jshint validthis:true */
+    function editController($location, query, command, reminderrepository, util) {
+
         var vm = this;
+
         vm.title = 'editController';
 
-        activate();
+        vm.reminder = {};
 
-        function activate() { }
+        function success(data) {
+            vm.reminder = util.findAndConvertDateObject(data);
+        }
+
+        function error(data) {
+            console.log(data);
+        }
+
+        function saveReminder() {
+
+        }
+
+        function activate() {
+                       
+            vm.reminder = reminderrepository.getReminder();
+
+            if (vm.reminder.id)
+                query.getReminder(vm.reminder, success, error);
+            else
+                $location.path("Index");
+        }
+
+        activate();
     }
 })();

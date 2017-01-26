@@ -9,22 +9,25 @@
             $routeProvider.
                 when('/', {
                     templateUrl: 'js/app/controllers/reminder/index.html',
-                    controller: 'indexController'
+                    controller: 'indexController as vm'
                 }).
                 when('/Create', {
                     templateUrl: 'js/app/controllers/reminder/create.html',
-                    controller: 'createController'
+                    controller: 'createController as vm'
                 }).
                 when('/Details', {
                     templateUrl: 'js/app/controllers/reminder/details.html',
-                    controller: 'detailsController'
+                    controller: 'detailsController as vm'
                 }).
                 when('/Edit', {
                     templateUrl: 'js/app/controllers/reminder/edit.html',
-                    controller: 'editController'
+                    controller: 'editController as vm'
                 }).
                 otherwise({ redirectTo: '/' });
 
-            $locationProvider.html5Mode({ enabled: false });
+            $locationProvider.html5Mode({
+                enabled: true,
+                requireBase: false
+            });
         }]);
 })();

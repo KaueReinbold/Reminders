@@ -5,9 +5,9 @@
         .module('reminderApp')
         .controller('indexController', indexController);
 
-    indexController.$inject = ['$location', 'query', 'command', 'reminderrepository'];
+    indexController.$inject = ['$location', 'query', 'command', 'reminderrepository', 'util'];
 
-    function indexController($location, query, command, reminderrepository) {
+    function indexController($location, query, command, reminderrepository, util) {
 
         var vm = this;
 
@@ -20,7 +20,7 @@
         vm.detailsReminder = detailsReminder;
 
         function success(data) {
-            vm.reminders = data;
+            vm.reminders = util.findAndConvertDateObject(data);
         }
 
         function error(data) {
@@ -40,7 +40,8 @@
         }
 
         function editReminder(reminder) {
-
+            reminderrepository.setReminder(reminder);
+            $location.path("Edit");
         }
 
         function detailsReminder(reminder) {

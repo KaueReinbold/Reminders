@@ -5,15 +5,29 @@
         .module('reminderApp')
         .controller('createController', createController);
 
-    createController.$inject = ['$location']; 
+    createController.$inject = ['$location', 'query', 'command', 'reminderrepository'];
 
-    function createController($location) {
-        /* jshint validthis:true */
+    function createController($location, query, command, reminderrepository) {
+        
         var vm = this;
+
         vm.title = 'createController';
 
-        activate();
+        vm.reminder = {};
 
-        function activate() { }
+        function success(data) {
+            vm.reminder = data;
+        }
+
+        function error(data) {
+            console.log(data);
+        }
+
+        function activate() {
+
+            
+        }
+
+        activate();
     }
 })();
