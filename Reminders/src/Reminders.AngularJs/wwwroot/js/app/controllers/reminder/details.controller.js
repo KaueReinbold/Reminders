@@ -31,7 +31,7 @@
             if (vm.reminder.id)
                 query.getReminder(vm.reminder, success, error);
             else
-                $location.path("Index");
+                $location.path("");
         }
 
         activate();

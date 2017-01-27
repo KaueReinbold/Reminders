@@ -1,8 +1,8 @@
 ﻿<br />
 <p>
-    <a href="#/Create" class="btn btn-success">Cadastrar novo lembrete</a>
+    <a href="/Create" class="btn btn-success">Cadastrar novo lembrete</a>
 </p>
-<input type="text" name="searchItems" value="" placeholder="Filtrar os lembretes..." class="form-control" ng-keyup="vm.filterTable()" ng-model="vm.keyFilter" />
+<input ng-hide="vm.reminders.length === 0" type="text" name="searchItems" value="" placeholder="Filtrar os lembretes..." class="form-control" ng-keyup="vm.filterTable()" ng-model="vm.keyFilter" />
 <br />
 <h4 ng-show="vm.reminders.length === 0">Nenhum lembrete cadastrado.</h4>
 <table class="table table-striped" ng-hide="vm.reminders.length === 0">

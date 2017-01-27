@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Diagnostics;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace Reminders.AngularJs
 {
@@ -56,6 +59,33 @@ namespace Reminders.AngularJs
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseExceptionHandler(options =>
+            {
+                options.Run(async context =>
+                {
+                    var ex = context.Features.Get<IExceptionHandlerFeature>();
+                    // handle
+                    await Task.FromResult(0);
+                });
+            });
+
+            app.UseStatusCodePages(new StatusCodePagesOptions()
+            {
+                HandleAsync = (ctx) =>
+                {
+                    var requestPath = ctx.HttpContext.Response.HttpContext.Request.Path;
+                    var requestBase = ctx.HttpContext.Response.HttpContext.Request.PathBase;
+
+                    if (ctx.HttpContext.Response.StatusCode == 404)
+                    {
+                        var resquestRedirect = string.Format("{0}/#{1}", requestBase, requestPath);
+                        ctx.HttpContext.Response.Redirect(resquestRedirect);
+                    }
+
+                    return Task.FromResult(0);
+                }
+            });
 
             app.UseApplicationInsightsExceptionTelemetry();
 

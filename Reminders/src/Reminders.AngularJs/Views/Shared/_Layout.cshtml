@@ -22,7 +22,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a href="#/" class="navbar-brand title-reminder-navbar">
+                <a href="/" class="navbar-brand title-reminder-navbar">
                     <img class="imgReminder" src="~/images/contract_2.png" alt="Reminders" />
                     Lembretes
                 </a>
@@ -73,6 +73,10 @@
         </script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"
                 asp-fallback-src="~/lib/angular/angular.min.js"
+                asp-fallback-test="window.angular">
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"
+                asp-fallback-src="~/lib/angular/angular-route.min.js"
                 asp-fallback-test="window.angular">
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>

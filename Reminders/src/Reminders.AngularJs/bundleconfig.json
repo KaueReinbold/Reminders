@@ -11,6 +11,21 @@
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
+      "wwwroot/js/app/app.module.js",
+      "wwwroot/js/app/route.config.js",
+      "wwwroot/js/app/api/command.factory.js",
+      "wwwroot/js/app/api/query.factory.js",
+      "wwwroot/js/app/api/server.factory.js",
+      "wwwroot/js/app/factory/repository.factory.js",
+      "wwwroot/js/app/factory/util.factory.js",
+      "wwwroot/js/app/api/reminder/reminderquery.factory.js",
+      "wwwroot/js/app/api/reminder/remindercommand.factory.js",
+      "wwwroot/js/app/controllers/main.controller.js",
+      "wwwroot/js/app/controllers/reminder/index.controller.js",
+      "wwwroot/js/app/controllers/reminder/create.controller.js",
+      "wwwroot/js/app/controllers/reminder/details.controller.js",
+      "wwwroot/js/app/controllers/reminder/edit.controller.js",
+      "wwwroot/js/app/directive/modal.directive.js",
       "wwwroot/js/site.js"
     ],
     // Optionally specify minification options

@@ -25,7 +25,7 @@
             $scope.$parent.mc.showMessage(data);
             
             if (data.type === 0)
-                $location.path("Index");
+                $location.path("");
         }
 
         function error(data) {
@@ -47,7 +47,7 @@
             if (vm.reminder.id)
                 query.getReminder(vm.reminder, successLoad, error);
             else
-                $location.path("Index");
+                $location.path("");
         }
 
         activate();

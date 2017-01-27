@@ -10,7 +10,6 @@
 /// <reference path="js/app/controllers/reminder/details.controller.js" />
 /// <reference path="js/app/controllers/reminder/edit.controller.js" />
 /// <reference path="js/app/controllers/reminder/index.controller.js" />
-/// <reference path="js/app/directive/modal.directive.js" />
 /// <reference path="js/app/factory/repository.factory.js" />
 /// <reference path="js/app/factory/util.factory.js" />
 /// <reference path="js/app/route.config.js" />
