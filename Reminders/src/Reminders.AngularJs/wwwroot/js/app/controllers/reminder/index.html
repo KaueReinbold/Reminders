@@ -1,33 +1,30 @@
-﻿<input type="hidden" id="idReminderForDone" value="0" />
-<input type="hidden" id="idReminderDone" value="false" />
-<input type="hidden" id="actionDelete" value="" />
-<br />
+﻿<br />
 <p>
     <a href="#/Create" class="btn btn-success">Cadastrar novo lembrete</a>
 </p>
-<input type="text" name="searchItems" value="" placeholder="Filtrar os lembretes..." class="form-control" />
+<input type="text" name="searchItems" value="" placeholder="Filtrar os lembretes..." class="form-control" ng-keyup="vm.filterTable()" ng-model="vm.keyFilter" />
 <br />
 <h4 ng-show="vm.reminders.length === 0">Nenhum lembrete cadastrado.</h4>
 <table class="table table-striped" ng-hide="vm.reminders.length === 0">
     <thead id="theadReminders">
         <tr class="select-head-table">
-            <th>
+            <th ng-click="vm.orderBy('title')">
                 Titulo
-                <span class="glyphicon glyphicon-chevron-down"></span>
+                <span ng-show="vm.order === 'title'" class="glyphicon" ng-class="!vm.asc ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'"></span>
             </th>
-            <th>
+            <th ng-click="vm.orderBy('limitDate')">
                 Data Limite
-                <span class="glyphicon glyphicon-chevron-down"></span>
+                <span ng-show="vm.order === 'limitDate'" class="glyphicon" ng-class="!vm.asc ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'"></span>
             </th>
-            <th>
+            <th ng-click="vm.orderBy('isDone')">
                 Concluido
-                <span class="glyphicon glyphicon-chevron-down"></span>
+                <span ng-show="vm.order === 'isDone'" class="glyphicon" ng-class="!vm.asc ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'"></span>
             </th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody id="tbodyReminders">
-        <tr ng-repeat="reminder in vm.reminders">
+        <tr ng-repeat="reminder in vm.reminders | filter:filterTable ">
             <td>
                 {{reminder.title}}
             </td>
@@ -35,14 +32,14 @@
                 {{reminder.limitDate | date:'dd/MM/yyyy'}}
             </td>
             <td>
-                <input type="checkbox" ng-model="reminder.isDone" ng-click="vm.doneReminder(reminder)" />
+                <input type="checkbox" ng-model="reminder.isDone" ng-click="vm.showModalDone(reminder)" />
             </td>
             <td>
-                <a class="action-table" ng-click="showModalDelete(event, reminder)" href=""><span class="glyphicon glyphicon-trash" title="Excluir"></span></a>
+                <a class="action-table" ng-click="vm.showModalDelete(reminder)" href=""><span class="glyphicon glyphicon-trash" title="Excluir"></span></a>
                 <a class="action-table" ng-click="vm.editReminder(reminder)" href=""><span class="glyphicon glyphicon-edit" title="Editar"></span></a>
                 <a class="action-table" ng-click="vm.detailsReminder(reminder)" href=""><span class="glyphicon glyphicon-tasks" title="Visualizar"></span></a>
             </td>
         </tr>
     </tbody>
 </table>
-<modal-delete></modal-delete>
+<modal></modal>

@@ -74,13 +74,13 @@ function RegisterEvents() {
             actionDelete.value = event.target.getAttribute("idReminder");
             event.preventDefault();
             event.stopPropagation();
-            $(modalDelete).modal();
+            $(modal).modal();
         });
 
     if (typeof (deleteReminder) !== "undefined")
         $(deleteReminder).click(function (event) {
             PostDeleteReminder(actionDelete.value, function (result) {
-                $(modalDelete).modal('toggle');
+                $(modal).modal('toggle');
                 if (result.type === 0) {
                     result.type = "Success";
                 } else if (result.type === 1) {

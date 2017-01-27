@@ -20,7 +20,8 @@
         }
 
         function error(data) {
-            console.log(data);
+            $(modal).modal('toggle');
+            $scope.$parent.mc.showMessage(data);
         }
 
         function activate() {

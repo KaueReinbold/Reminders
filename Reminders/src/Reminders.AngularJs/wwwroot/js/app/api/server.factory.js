@@ -21,7 +21,7 @@
             $http(req).then(function (data) {
                 successCallback(data.data);
             }, function (error) {
-                errorCallback(error);
+                errorCallback(error.data);
             });
         }
 
@@ -35,7 +35,7 @@
             $http(req).then(function (data) {
                 successCallback(data.data);
             }, function (error) {
-                errorCallback(error);
+                errorCallback(error.data);
             });
         }
 
@@ -49,7 +49,7 @@
             $http(req).then(function (data) {
                 successCallback(data.data);
             }, function (error) {
-                errorCallback(error);
+                errorCallback(error.data);
             });
         }
 
@@ -63,7 +63,7 @@
             $http(req).then(function (data) {
                 successCallback(data.data);
             }, function (error) {
-                errorCallback(error);
+                errorCallback(error.data);
             });
         }
 
