@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Reminders.AngularJs</title>
+    <title>Lembretes</title>
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -15,21 +15,25 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    <link rel="shortcut icon" href="~/images/contract.png" type="image/x-icon" />
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
-<body>
+<body ng-controller="mainController as mc">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a href="/" class="navbar-brand title-reminder-navbar">
+                <a href="#/" class="navbar-brand title-reminder-navbar">
                     <img class="imgReminder" src="~/images/contract_2.png" alt="Reminders" />
                     Lembretes
                 </a>
             </div>
         </div>
     </div>
+    <span id="message" class="label message" ng-class="mc.messageObj.classCss"><label>{{mc.messageObj.message}}</label></span>
     <div class="container body-content">
-        @RenderBody()
+        <div ng-view>
+            @RenderBody()
+        </div>
         <hr />
         <footer>
             <p>&copy; 2017 - Lembretes</p>
@@ -46,14 +50,16 @@
         <script src="~/js/app/api/command.factory.js"></script>
         <script src="~/js/app/api/query.factory.js"></script>
         <script src="~/js/app/api/server.factory.js"></script>
-        <script src="~/js/app/factory/reminderrepository.factory.js"></script>
+        <script src="~/js/app/factory/repository.factory.js"></script>
         <script src="~/js/app/factory/util.factory.js"></script>
         <script src="~/js/app/api/reminder/reminderquery.factory.js"></script>
         <script src="~/js/app/api/reminder/remindercommand.factory.js"></script>
+        <script src="~/js/app/controllers/main.controller.js"></script>
         <script src="~/js/app/controllers/reminder/index.controller.js"></script>
         <script src="~/js/app/controllers/reminder/create.controller.js"></script>
         <script src="~/js/app/controllers/reminder/details.controller.js"></script>
         <script src="~/js/app/controllers/reminder/edit.controller.js"></script>
+        <script src="~/js/app/directive/modaldelete.directive.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">

@@ -9,22 +9,22 @@
 
     function remindercommand(server) {
         
-        function postRequest(data, successCallback, errorCallback) {
+        function postReminder(data, successCallback, errorCallback) {
             server.postRequest("Reminder", data, successCallback, errorCallback);
         }
 
-        function putRequest(data, successCallback, errorCallback) {
+        function putReminder(data, successCallback, errorCallback) {
             server.putRequest("Reminder", data, successCallback, errorCallback);
         }
 
-        function deleteRequest(data, successCallback, errorCallback) {
-            server.deleteRequest("Reminder", data, successCallback, errorCallback);
+        function deleteReminder(data, successCallback, errorCallback) {
+            server.deleteRequest("Reminder/" + data, null, successCallback, errorCallback);
         }
 
         return {
-            postRequest: postRequest,
-            putRequest: putRequest,
-            deleteRequest: deleteRequest
+            postReminder: postReminder,
+            putReminder: putReminder,
+            deleteReminder: deleteReminder
         };
     }
 })();

@@ -3,9 +3,9 @@
 
     angular
         .module('reminderApp')
-        .factory('reminderrepository', reminderrepository);
+        .factory('repository', repository);
 
-    function reminderrepository() {
+    function repository() {
 
         var _reminder = {};
 

@@ -5,9 +5,9 @@
         .module('reminderApp')
         .controller('detailsController', detailsController);
 
-    detailsController.$inject = ['$location', 'query', 'command', 'reminderrepository'];
+    detailsController.$inject = ['$location', 'query', 'command', 'repository'];
 
-    function detailsController($location, query, command, reminderrepository) {
+    function detailsController($location, query, command, repository) {
 
         var vm = this;
 
@@ -25,7 +25,7 @@
 
         function activate() {
 
-            vm.reminder = reminderrepository.getReminder();
+            vm.reminder = repository.getReminder();
 
             if (vm.reminder.id)
                 query.getReminder(vm.reminder, success, error);
