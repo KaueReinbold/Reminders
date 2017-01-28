@@ -9,25 +9,25 @@ Objetivo do aplicativo é demostrar o conhecimento em construção de projetos w
 	
 ## Características técnicas 
 	
-### Backend | Asp.Net Core 
+### Backend - Asp.Net Core 
 
 *Reminders.Domain e Reminders.Data*
 - São utilizados patterns MVVM e Repository.
 - Foi utilizado o mapeamento de objetos relacionais Microsoft Entity Framework.
 - Para persistência de dados é utilizado o banco de dados SQL Server.
 
-### Frontend | Asp.Net Core MVC [Acesse o App](http://reminderscoreapp.azurewebsites.net/)
+### Frontend - Asp.Net Core MVC [Acesse o App](http://reminderscoreapp.azurewebsites.net/)
   
 *Reminders.App*
 - Neste aplicativo é utilizado a estrutura MVC da plataforma Asp.Net Core.
 - Aplicativo responsivo utilizando Bootstrap Framework.
 
-### Frontend | Asp.Net Core Web Api [Acesse a Web Api](http://reminderscoreapi.azurewebsites.net/swagger/ui/)
+### Frontend - Asp.Net Core Web Api [Acesse a Web Api](http://reminderscoreapi.azurewebsites.net/swagger/ui/)
 
 *Reminders.Api*
 - Neste aplicativo é utilizado a estrutura MVC da plataforma Asp.Net Core com as configurações Web.Api.
 
-### Frontend | AngularJs [Acesse o App com AngularJs](http://remindersangular.azurewebsites.net/)
+### Frontend - AngularJs [Acesse o App com AngularJs](http://remindersangular.azurewebsites.net/)
 	
 *Reminders.AngularJs*
 - Neste aplicativo é utilizado a framework AngularJs.
