@@ -9,7 +9,7 @@ Objetivo do aplicativo é demostrar o conhecimento em construção de projetos w
 	
 ## Características técnicas 
 	
-### Backend - Asp.Net Core 
+### Backend - Asp.Net Core Class Library
 
 > *Reminders.Domain e Reminders.Data*
 - São utilizados patterns MVVM e Repository.
