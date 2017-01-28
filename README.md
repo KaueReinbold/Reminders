@@ -33,7 +33,7 @@ Objetivo do aplicativo é demostrar o conhecimento em construção de projetos w
 - Neste aplicativo é utilizado a framework AngularJs.
 - Aplicativo responsivo utilizando Bootstrap Framework.
 	
-## Como configurar
+## Como configurar (Local)
 
 - Será necessário ter uma instancia do SQL Server disponível para utilização. 
 - O usuário do SQL Server deverá ter permissão para criar base de dados, pois o aplicativo criara a base assim que a aplicação compilar pela primeira vez. 
