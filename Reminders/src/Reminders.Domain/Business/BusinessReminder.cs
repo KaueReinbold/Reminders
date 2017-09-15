@@ -36,7 +36,7 @@ namespace Reminders.Domain.Business
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -57,7 +57,7 @@ namespace Reminders.Domain.Business
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -73,7 +73,7 @@ namespace Reminders.Domain.Business
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -98,7 +98,7 @@ namespace Reminders.Domain.Business
                 return ReminderModel;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -127,7 +127,7 @@ namespace Reminders.Domain.Business
 
                 return remindersViewModel;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }

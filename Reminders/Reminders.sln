@@ -1,24 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6569A004-6A3F-4D34-A9E2-1770B0C1BAEC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1AB73120-BE58-4098-8B49-D167E1881C67}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Reminders.App", "src\Reminders.App\Reminders.App.xproj", "{9D713F60-ACE5-4D89-A0C2-8C0B572571CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.App", "src\Reminders.App\Reminders.App.csproj", "{9D713F60-ACE5-4D89-A0C2-8C0B572571CC}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Reminders.Data", "src\Reminders.Data\Reminders.Data.xproj", "{2BBBB49A-6357-4DD4-8585-299748AE0FE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Data", "src\Reminders.Data\Reminders.Data.csproj", "{2BBBB49A-6357-4DD4-8585-299748AE0FE8}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Reminders.Domain", "src\Reminders.Domain\Reminders.Domain.xproj", "{6BE6357B-85CB-4D57-8D74-8BA837E4C967}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Domain", "src\Reminders.Domain\Reminders.Domain.csproj", "{6BE6357B-85CB-4D57-8D74-8BA837E4C967}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Reminders.Api", "src\Reminders.Api\Reminders.Api.xproj", "{EDC2FCD8-C677-49C1-944E-E1A65967CD95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Api", "src\Reminders.Api\Reminders.Api.csproj", "{EDC2FCD8-C677-49C1-944E-E1A65967CD95}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Reminders.AngularJs", "src\Reminders.AngularJs\Reminders.AngularJs.xproj", "{A0A71B38-5232-4336-A1B7-47CFF6A3470B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.AngularJs", "src\Reminders.AngularJs\Reminders.AngularJs.csproj", "{A0A71B38-5232-4336-A1B7-47CFF6A3470B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,5 +53,8 @@ Global
 		{6BE6357B-85CB-4D57-8D74-8BA837E4C967} = {6569A004-6A3F-4D34-A9E2-1770B0C1BAEC}
 		{EDC2FCD8-C677-49C1-944E-E1A65967CD95} = {6569A004-6A3F-4D34-A9E2-1770B0C1BAEC}
 		{A0A71B38-5232-4336-A1B7-47CFF6A3470B} = {6569A004-6A3F-4D34-A9E2-1770B0C1BAEC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {09B206E0-6807-40F6-86CC-23DE56DA790C}
 	EndGlobalSection
 EndGlobal
