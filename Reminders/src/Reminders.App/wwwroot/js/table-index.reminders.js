@@ -39,8 +39,8 @@ function RegisterEvents() {
             element.target.setAttribute("asc-order", !asc);
         });
 
-    if (typeof (item_IsDone) !== "undefined")
-        $(item_IsDone).click(function (event) {
+    if (typeof (item_is_done) !== "undefined")
+        $(item_is_done).click(function (event) {
             idReminderForDone.value = event.target.getAttribute("idReminder");
             idReminderDone.value = event.target.checked;
             event.preventDefault();

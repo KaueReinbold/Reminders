@@ -7,10 +7,10 @@ namespace Reminders.Data.Entity
     /// </summary>
     public class ReminderEntity
     {
-        public int ID { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public DateTime LimitDate { get; set; }
-        public bool IsDone { get; set; }
+        public int id { get; set; }
+        public string title { get; set; }
+        public string description { get; set; }
+        public DateTime limit_date { get; set; }
+        public bool is_done { get; set; }
     }
 }

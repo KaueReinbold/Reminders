@@ -5,5 +5,5 @@
 
     ConfigureMessage();
 
-    if ($('#LimitDate')[0]) LimitDate.value = new Date().toDateInputValue();
+    if ($('#limit_date')[0]) limit_date.value = new Date().toDateInputValue();
 });

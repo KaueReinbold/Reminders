@@ -18,15 +18,15 @@
         <thead id="theadReminders">
             <tr class="select-head-table">
                 <th name="title" asc-order="true">
-                    @Html.DisplayNameFor(model => model.Title)
+                    @Html.DisplayNameFor(model => model.title)
                     <span name="title" id="arrowtitle" class="glyphicon glyphicon-chevron-down"></span>
                 </th>
                 <th name="limitDate" asc-order="true">
-                    @Html.DisplayNameFor(model => model.LimitDate)
+                    @Html.DisplayNameFor(model => model.limit_date)
                     <span name="limitDate" id="arrowlimitDate" class="glyphicon glyphicon-chevron-down"></span>
                 </th>
                 <th name="isDone" asc-order="true">
-                    @Html.DisplayNameFor(model => model.IsDone)
+                    @Html.DisplayNameFor(model => model.id)
                     <span name="isDone" id="arrowisDone" class="glyphicon glyphicon-chevron-down"></span>
                 </th>
                 <th>Ações</th>
@@ -37,18 +37,18 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Title)
+                        @Html.DisplayFor(modelItem => item.title)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.LimitDate)
+                        @Html.DisplayFor(modelItem => item.limit_date)
                     </td>
                     <td>
-                        @Html.CheckBoxFor(modelItem => item.IsDone, new { idReminder = item.ID })
+                        @Html.CheckBoxFor(modelItem => item.is_done, new { idReminder = item.id })
                     </td>
                     <td>
-                        <a id="deleteReminderAction" href="#" class="action-table"><span idReminder="@item.ID" class="glyphicon glyphicon-trash" title="Excluir"></span></a>
-                        <a class="action-table" asp-action="Edit" asp-route-id="@item.ID"><span class="glyphicon glyphicon-edit" title="Editar"></span></a>
-                        <a class="action-table" asp-action="Details" asp-route-id="@item.ID"><span class="glyphicon glyphicon-tasks" title="Visualizar"></span></a>
+                        <a id="deleteReminderAction" href="#" class="action-table"><span idReminder="@item.id" class="glyphicon glyphicon-trash" title="Excluir"></span></a>
+                        <a class="action-table" asp-action="Edit" asp-route-id="@item.id"><span class="glyphicon glyphicon-edit" title="Editar"></span></a>
+                        <a class="action-table" asp-action="Details" asp-route-id="@item.id"><span class="glyphicon glyphicon-tasks" title="Visualizar"></span></a>
                     </td>
                 </tr>
             }

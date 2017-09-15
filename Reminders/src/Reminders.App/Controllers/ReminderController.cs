@@ -119,7 +119,7 @@ namespace Reminders.App.Controllers
             if (reminder == null)
                 return Json(new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
 
-            reminder.IsDone = isDone;
+            reminder.is_done = isDone;
 
             var result = _business.Update(reminder);
 

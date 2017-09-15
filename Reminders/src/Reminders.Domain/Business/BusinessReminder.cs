@@ -26,10 +26,10 @@ namespace Reminders.Domain.Business
             {
                 var reminder = new ReminderEntity
                 {
-                    Title = ReminderModel.Title,
-                    Description = ReminderModel.Description,
-                    LimitDate = ReminderModel.LimitDate.Value,
-                    IsDone = ReminderModel.IsDone
+                    title = ReminderModel.title,
+                    description = ReminderModel.description,
+                    limit_date = ReminderModel.limit_date.Value,
+                    is_done = ReminderModel.is_done
                 };
 
                 _repository.Insert(reminder);
@@ -46,12 +46,12 @@ namespace Reminders.Domain.Business
         {
             try
             {
-                var reminder = _repository.Find(ReminderModel.ID);
+                var reminder = _repository.Find(ReminderModel.id);
 
-                reminder.Title = ReminderModel.Title;
-                reminder.Description = ReminderModel.Description;
-                reminder.LimitDate = ReminderModel.LimitDate.Value;
-                reminder.IsDone = ReminderModel.IsDone;
+                reminder.title = ReminderModel.title;
+                reminder.description = ReminderModel.description;
+                reminder.limit_date = ReminderModel.limit_date.Value;
+                reminder.is_done = ReminderModel.is_done;
 
                 _repository.Update(reminder);
 
@@ -88,11 +88,11 @@ namespace Reminders.Domain.Business
 
                 var ReminderModel = new ReminderModel
                 {
-                    ID = reminder.ID,
-                    Title = reminder.Title,
-                    Description = reminder.Description,
-                    LimitDate = reminder.LimitDate,
-                    IsDone = reminder.IsDone
+                    id = reminder.id,
+                    title = reminder.title,
+                    description = reminder.description,
+                    limit_date = reminder.limit_date,
+                    is_done = reminder.is_done
                 };
 
                 return ReminderModel;
@@ -109,18 +109,18 @@ namespace Reminders.Domain.Business
         {
             try
             {
-                var reminders = _repository.GetAll().OrderBy(r => r.Title).ToList();
+                var reminders = _repository.GetAll().OrderBy(r => r.title).ToList();
                 var remindersViewModel = new List<ReminderModel>();
 
                 reminders.ForEach(r =>
                 {
                     var reminder = new ReminderModel
                     {
-                        ID = r.ID,
-                        Title = r.Title,
-                        Description = r.Description,
-                        LimitDate = r.LimitDate,
-                        IsDone = r.IsDone
+                        id = r.id,
+                        title = r.title,
+                        description = r.description,
+                        limit_date = r.limit_date,
+                        is_done = r.is_done
                     };
                     remindersViewModel.Add(reminder);
                 });

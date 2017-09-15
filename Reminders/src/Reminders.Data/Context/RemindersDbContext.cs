@@ -17,7 +17,7 @@ namespace Reminders.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ReminderEntity>().ToTable("tbReminder");
+            modelBuilder.Entity<ReminderEntity>().ToTable("tb_reminder");
         }
     }
 }
