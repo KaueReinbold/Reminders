@@ -86,7 +86,7 @@ namespace Reminders.Domain.Business
             {
                 var reminder = _repository.Find(key);
 
-                var ReminderModel = new ReminderModel
+                var reminderModel = new ReminderModel
                 {
                     id = reminder.id,
                     title = reminder.title,
@@ -95,7 +95,7 @@ namespace Reminders.Domain.Business
                     is_done = reminder.is_done
                 };
 
-                return ReminderModel;
+                return reminderModel;
 
             }
             catch (Exception)
