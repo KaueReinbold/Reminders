@@ -33,8 +33,7 @@ namespace Reminders.App.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
-            ModelState.Clear();
-            return View(new ReminderModel());
+            return View();
         }
 
         // POST: Reminder/Create
@@ -49,15 +48,14 @@ namespace Reminders.App.Controllers
 
                 if (result)
                 {
-                    ViewData["StatusMessage"] = Resource.ResourceManager.GetString("SuccessCreateMessage");
-                    ViewData["StatusMessageStatus"] = TypeMessage.Success;
-                    ModelState.Clear();
-                    reminderModel = new ReminderModel();
+                    ViewBag.StatusMessage = Resource.ResourceManager.GetString("SuccessCreateMessage");
+                    ViewBag.StatusMessageStatus = TypeMessage.Success;
+                    return RedirectToAction("Create");
                 }
                 else
                 {
-                    ViewData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
-                    ViewData["StatusMessageStatus"] = TypeMessage.Error;
+                    ViewBag.StatusMessage = Resource.ResourceManager.GetString("ErrorGenericMessage");
+                    ViewBag.StatusMessageStatus = TypeMessage.Error;
                 }
             }
 

@@ -17,7 +17,7 @@ namespace Reminders.App
 
             try
             {
-            host.Run();
+                host.Run();
 
             }
             catch (Exception)

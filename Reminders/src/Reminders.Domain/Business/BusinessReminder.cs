@@ -1,10 +1,10 @@
 ﻿using Reminders.Domain.BusinessContract;
-using Reminders.Data.Entity;
 using Reminders.Domain.Contract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Reminders.Domain.Models;
+using Reminders.Data.Entity;
 
 namespace Reminders.Domain.Business
 {
