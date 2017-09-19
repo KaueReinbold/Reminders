@@ -49,6 +49,15 @@ namespace Reminders.App
             services.AddScoped(typeof(IBusinessReminder), typeof(BusinessReminder));
 
             services.AddMvc();
+
+            // Adds a default in-memory implementation of IDistributedCache.
+            services.AddDistributedMemoryCache();
+            //services.AddSession(options =>
+            //{
+            //    // Set a short timeout for easy testing.
+            //    options.IdleTimeout = TimeSpan.FromSeconds(10);
+            //    options.CookieHttpOnly = true;
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +65,8 @@ namespace Reminders.App
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            //app.UseSession();
 
             app.UseApplicationInsightsRequestTelemetry();
 
@@ -72,7 +83,7 @@ namespace Reminders.App
             var enUsCulture = new CultureInfo("pt-BR");
             var localizationOptions = new RequestLocalizationOptions()
             {
-                SupportedCultures = new List<CultureInfo>(){ enUsCulture },
+                SupportedCultures = new List<CultureInfo>() { enUsCulture },
                 SupportedUICultures = new List<CultureInfo>() { enUsCulture },
                 DefaultRequestCulture = new RequestCulture(enUsCulture),
                 FallBackToParentCultures = false,

@@ -33,6 +33,8 @@ namespace Reminders.App.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
+            ViewData["StatusMessage"] = TempData["StatusMessage"] as string;
+            ViewData["StatusMessageStatus"] = TempData["StatusMessageStatus"] as string;
             return View();
         }
 
@@ -48,14 +50,14 @@ namespace Reminders.App.Controllers
 
                 if (result)
                 {
-                    ViewBag.StatusMessage = Resource.ResourceManager.GetString("SuccessCreateMessage");
-                    ViewBag.StatusMessageStatus = TypeMessage.Success;
+                    TempData["StatusMessage"] = Resource.ResourceManager.GetString("SuccessCreateMessage");
+                    TempData["StatusMessageStatus"] = TypeMessage.Success;
                     return RedirectToAction("Create");
                 }
                 else
                 {
-                    ViewBag.StatusMessage = Resource.ResourceManager.GetString("ErrorGenericMessage");
-                    ViewBag.StatusMessageStatus = TypeMessage.Error;
+                    TempData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
+                    TempData["StatusMessageStatus"] = TypeMessage.Error;
                 }
             }
 
@@ -70,8 +72,8 @@ namespace Reminders.App.Controllers
 
             if (ReminderModel == null)
             {
-                ViewData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
-                ViewData["StatusMessageStatus"] = TypeMessage.Error;
+                TempData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
+                TempData["StatusMessageStatus"] = TypeMessage.Error;
             }
 
             return View(ReminderModel);
