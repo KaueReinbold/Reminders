@@ -1,10 +1,10 @@
 ﻿using Reminders.Domain.BusinessContract;
-using Reminders.Data.Entity;
 using Reminders.Domain.Contract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Reminders.Domain.Models;
+using Reminders.Data.Entity;
 
 namespace Reminders.Domain.Business
 {
@@ -86,7 +86,7 @@ namespace Reminders.Domain.Business
             {
                 var reminder = _repository.Find(key);
 
-                var ReminderModel = new ReminderModel
+                var reminderModel = new ReminderModel
                 {
                     id = reminder.id,
                     title = reminder.title,
@@ -95,7 +95,7 @@ namespace Reminders.Domain.Business
                     is_done = reminder.is_done
                 };
 
-                return ReminderModel;
+                return reminderModel;
 
             }
             catch (Exception)

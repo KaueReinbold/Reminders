@@ -47,9 +47,16 @@ namespace Reminders.App.Controllers
                 var result = _business.Insert(reminderModel);
 
                 if (result)
-                    return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.ResourceManager.GetString("SuccessCreateMessage") });
+                {
+                    ViewBag.StatusMessage = Resource.ResourceManager.GetString("SuccessCreateMessage");
+                    ViewBag.StatusMessageStatus = TypeMessage.Success;
+                    return RedirectToAction("Create");
+                }
                 else
-                    return RedirectToAction("Create", new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
+                {
+                    ViewBag.StatusMessage = Resource.ResourceManager.GetString("ErrorGenericMessage");
+                    ViewBag.StatusMessageStatus = TypeMessage.Error;
+                }
             }
 
             return View(reminderModel);
@@ -62,7 +69,10 @@ namespace Reminders.App.Controllers
             var ReminderModel = _business.Find(id);
 
             if (ReminderModel == null)
-                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
+            {
+                ViewData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
+                ViewData["StatusMessageStatus"] = TypeMessage.Error;
+            }
 
             return View(ReminderModel);
         }
@@ -78,14 +88,22 @@ namespace Reminders.App.Controllers
                 var result = _business.Update(reminderModel);
 
                 if (result)
-                    return RedirectToAction("", new { Type = TypeMessage.Success, Message = Resource.ResourceManager.GetString("SuccessEditMessage") });
+                {
+                    ViewData["StatusMessage"] = Resource.ResourceManager.GetString("SuccessEditMessage");
+                    ViewData["StatusMessageStatus"] = TypeMessage.Success;
+                }
                 else
-                    return RedirectToAction("Edit", new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
+                {
+                    ViewData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
+                    ViewData["StatusMessageStatus"] = TypeMessage.Error;
+                }
+
+                return View();
             }
 
             return View(reminderModel);
         }
-        
+
         // GET: Reminder/Details/{id}
         [Route("Details")]
         public IActionResult Details(int id)
