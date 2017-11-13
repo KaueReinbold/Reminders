@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+   var status = (TempData["StatusMessageStatus"] != null) ? (int)TempData["StatusMessageStatus"] : -1;
+   var message = TempData["StatusMessage"];
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -16,7 +20,7 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
     <link rel="shortcut icon" href="~/images/contract.png" type="image/x-icon" />
-    @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
+    @*@Html.ApplicationInsightsJavaScript(TelemetryConfiguration)*@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -31,6 +35,7 @@
     </div>
     <span id="message" class="label message"><label></label></span>
     <div class="container body-content">
+        <div class="alert @(status == 0 ? "alert-success" : status > -1 ? "alert-danger" : "")" role="alert">@message</div>
         @RenderBody()
         <hr />
         <footer>

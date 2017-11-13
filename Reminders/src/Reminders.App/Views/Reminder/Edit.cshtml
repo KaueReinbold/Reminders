@@ -2,12 +2,9 @@
 
 @{
     ViewData["Title"] = "Editar Lembrete";
-    var status = (ViewData["StatusMessageStatus"] != null) ? (int)ViewData["StatusMessageStatus"] : -1;
-    var message = ViewData["StatusMessage"];
 }
 <h2>@ViewData["Title"]</h2>
 <fieldset class="form-group row">
-    <p class="@(status == 0 ? "text-success" : "text-danger")">@message</p>
     <form asp-action="Edit" class="col-lg-12">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="id" />

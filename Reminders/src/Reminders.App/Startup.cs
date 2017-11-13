@@ -48,6 +48,8 @@ namespace Reminders.App
 
             services.AddScoped(typeof(IBusinessReminder), typeof(BusinessReminder));
 
+            services.AddSession();
+
             services.AddMvc();
 
             // Adds a default in-memory implementation of IDistributedCache.
@@ -66,7 +68,7 @@ namespace Reminders.App
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            //app.UseSession();
+            app.UseSession();
 
             app.UseApplicationInsightsRequestTelemetry();
 

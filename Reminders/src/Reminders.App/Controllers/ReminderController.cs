@@ -3,6 +3,7 @@ using Reminders.Domain.Models;
 using Reminders.Domain.BusinessContract;
 using Reminders.Domain.Resource;
 using Reminders.Domain.Enum;
+using Reminders.Domain.Framework;
 
 namespace Reminders.App.Controllers
 {
@@ -32,9 +33,7 @@ namespace Reminders.App.Controllers
         // GET: Reminder/Create
         [Route("Create")]
         public IActionResult Create()
-        {
-            ViewData["StatusMessage"] = TempData["StatusMessage"] as string;
-            ViewData["StatusMessageStatus"] = TempData["StatusMessageStatus"] as string;
+        {            
             return View();
         }
 
@@ -50,9 +49,11 @@ namespace Reminders.App.Controllers
 
                 if (result)
                 {
+
                     TempData["StatusMessage"] = Resource.ResourceManager.GetString("SuccessCreateMessage");
                     TempData["StatusMessageStatus"] = TypeMessage.Success;
-                    return RedirectToAction("Create");
+
+                    return RedirectToAction("Index");
                 }
                 else
                 {
@@ -74,6 +75,8 @@ namespace Reminders.App.Controllers
             {
                 TempData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
                 TempData["StatusMessageStatus"] = TypeMessage.Error;
+
+                return Index();
             }
 
             return View(ReminderModel);
@@ -91,16 +94,16 @@ namespace Reminders.App.Controllers
 
                 if (result)
                 {
-                    ViewData["StatusMessage"] = Resource.ResourceManager.GetString("SuccessEditMessage");
-                    ViewData["StatusMessageStatus"] = TypeMessage.Success;
+                    TempData["StatusMessage"] = Resource.ResourceManager.GetString("SuccessEditMessage");
+                    TempData["StatusMessageStatus"] = TypeMessage.Success;
                 }
                 else
                 {
-                    ViewData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
-                    ViewData["StatusMessageStatus"] = TypeMessage.Error;
+                    TempData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
+                    TempData["StatusMessageStatus"] = TypeMessage.Error;
                 }
 
-                return View();
+                return RedirectToAction("Index");
             }
 
             return View(reminderModel);
