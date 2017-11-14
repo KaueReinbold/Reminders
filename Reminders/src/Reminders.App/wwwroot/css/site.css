@@ -100,3 +100,9 @@ table {
 .text-success .reminder-message {
     margin: 0px 15px 10px !important;
 }
+
+.alert-message {
+    position: absolute;
+    padding: 10px 86rem;
+    width: 100%;
+}

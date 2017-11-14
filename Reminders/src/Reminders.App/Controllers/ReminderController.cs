@@ -4,6 +4,7 @@ using Reminders.Domain.BusinessContract;
 using Reminders.Domain.Resource;
 using Reminders.Domain.Enum;
 using Reminders.Domain.Framework;
+using Newtonsoft.Json;
 
 namespace Reminders.App.Controllers
 {
@@ -33,7 +34,7 @@ namespace Reminders.App.Controllers
         // GET: Reminder/Create
         [Route("Create")]
         public IActionResult Create()
-        {            
+        {
             return View();
         }
 
@@ -73,8 +74,11 @@ namespace Reminders.App.Controllers
 
             if (ReminderModel == null)
             {
-                TempData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
-                TempData["StatusMessageStatus"] = TypeMessage.Error;
+                Response.Cookies.Append("StatusMessage", JsonConvert.SerializeObject(new
+                {
+                    type_message = TypeMessage.Error,
+                    text_message = Resource.ResourceManager.GetString("ErrorGenericMessage")
+                }));
 
                 return Index();
             }

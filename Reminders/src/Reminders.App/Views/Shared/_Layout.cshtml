@@ -1,6 +1,6 @@
 ﻿@{
-   var status = (TempData["StatusMessageStatus"] != null) ? (int)TempData["StatusMessageStatus"] : -1;
-   var message = TempData["StatusMessage"];
+    var status = (TempData["StatusMessageStatus"] != null) ? (int)TempData["StatusMessageStatus"] : -1;
+    var message = TempData["StatusMessage"];
 }
 <!DOCTYPE html>
 <html>
@@ -23,6 +23,13 @@
     @*@Html.ApplicationInsightsJavaScript(TelemetryConfiguration)*@
 </head>
 <body>
+
+    <div id="messageNotification" style="display: @(status == -1 ? "none" : "block")">
+        <div class="@(status == 0 ? "alert-success" : status > -1 ? "alert-danger" : "") alert-message" role="alert">
+            @message
+        </div>
+    </div>
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -35,7 +42,6 @@
     </div>
     <span id="message" class="label message"><label></label></span>
     <div class="container body-content">
-        <div class="alert @(status == 0 ? "alert-success" : status > -1 ? "alert-danger" : "")" role="alert">@message</div>
         @RenderBody()
         <hr />
         <footer>
