@@ -1,41 +1,48 @@
-## Aplicativo de Lembretes
+## Reminders App
 
-Aplicativo para cadastro e listagem de lembretes. 
-Cada lembrete é composto de título, descrição, data limite e status concluído.
+Application to register and list reminders.
+Each reminder has a Title, Description, Date Limit and Status. 
 
-## Objetivo técnico
+## Technical Objective
 
-Objetivo do aplicativo é demostrar o conhecimento em construção de projetos web.
+This application was develop with Asp.Net Core MVC, Asp.Net Core API and AngularJs layer. The propos is show the knowledge using this tecnologies.
 	
-## Características técnicas 
+## Technical Details 
 	
 ### Backend - Asp.Net Core Class Library
 
-> *Reminders.Domain e Reminders.Data*
-- São utilizados patterns MVVM e Repository.
-- Foi utilizado o mapeamento de objetos relacionais Microsoft Entity Framework.
-- Para persistência de dados é utilizado o banco de dados SQL Server.
+> *Reminders.Domain and Reminders.Data*
+- Patterns: MVVM and Repository.
+- Object Relational Mapping (ORM): Microsoft Entity Framework.
+- Databse: SQL Server.
 
-### Backend - Asp.Net Core Web Api - [Acesse a Web Api](http://reminderscoreapi.azurewebsites.net/swagger/ui/)
+### Backend - Asp.Net Core Web Api
+<!---
+### Backend - Asp.Net Core Web Api - [Access this link - Core Web Api](http://reminderscoreapi.azurewebsites.net/swagger/ui/)
+-->
 
 > *Reminders.Api*
-- Neste aplicativo é utilizado a estrutura MVC da plataforma Asp.Net Core com as configurações Web.Api.
+- Api Layer is using Asp.Net Core API v1.0.0.
+- Provide information through Web.Api request.
 
-### Frontend - Asp.Net Core MVC - [Acesse o App](http://reminderscoreapp.azurewebsites.net/)
-  
+### Frontend - Asp.Net Core MVC - [Access this link - Core Web App](http://reminderscore.azurewebsites.net/)
+
 > *Reminders.App*
-- Neste aplicativo é utilizado a estrutura MVC da plataforma Asp.Net Core.
-- Aplicativo responsivo utilizando Bootstrap Framework.
+- App Layer is using Asp.Net Core MVC v1.0.0.
+- Responsive application using Bootstrap Framework v3.3.6.
 
+### Frontend - AngularJs
+<!---
 ### Frontend - AngularJs - [Acesse o App com AngularJs](http://remindersangular.azurewebsites.net/)
-	
-> *Reminders.AngularJs*
-- Neste aplicativo é utilizado a framework AngularJs.
-- Aplicativo responsivo utilizando Bootstrap Framework.
-	
-## Como configurar (Local)
+-->
 
-- Será necessário ter uma instancia do SQL Server disponível para utilização. 
-- O usuário do SQL Server deverá ter permissão para criar base de dados, pois o aplicativo criara a base assim que a aplicação compilar pela primeira vez. 
-- A string de conexão devera ser colocada no arquivo "appsettings.json" na chave "StringConnectionReminders" do projeto [Reminders.App](https://github.com/KaueReinbold/Reminders/blob/master/Reminders/src/Reminders.App/appsettings.json)/[Reminders.Api](https://github.com/KaueReinbold/Reminders/blob/master/Reminders/src/Reminders.Api/appsettings.json).
-- Para trocar a Web Api do projeto AngularJs basta trocar o valor da variávei "baseUrl" no arquivo [Server.js](https://github.com/KaueReinbold/Reminders/blob/master/Reminders/src/Reminders.AngularJs/wwwroot/js/app/api/server.factory.js).
+> *Reminders.AngularJs*
+- Another app Layer but that  is using AngularJs Framework v1.5.7.
+- Responsive application using Bootstrap Framework v3.3.6.
+	
+## How to configure (Local)
+
+- It will be necessary have an instance of SQL Server available.
+- The database user must have the permission to create a database, when the application run for the first time the database will be create.
+- The connection string must be put in the file "appsettings.json" at the key "StringConnectionReminders" inside the project [Reminders.App](https://github.com/KaueReinbold/Reminders/blob/master/Reminders/src/Reminders.App/appsettings.json)/[Reminders.Api](https://github.com/KaueReinbold/Reminders/blob/master/Reminders/src/Reminders.Api/appsettings.json).
+- To change the Web Api resource in the project AngularJs just change the variable "baseUrl" in the file [Server.js](https://github.com/KaueReinbold/Reminders/blob/master/Reminders/src/Reminders.AngularJs/wwwroot/js/app/api/server.factory.js).

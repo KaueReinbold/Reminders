@@ -87,12 +87,25 @@ table {
     display: none;
 }
 
-.message label{
+.message label {
     font-size: 20px;
     margin-top: 5px;
 }
 
-.message{
+.message {
     position: absolute;
     width: 100%;
+}
+
+.text-success .reminder-message {
+    margin: 0px 15px 10px !important;
+}
+
+.alert-message {
+    position: absolute;
+    width: 100%;
+    display: none;
+    text-align: center;
+    line-height: 4rem;
+    height: 4rem;
 }

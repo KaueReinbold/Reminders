@@ -127,7 +127,7 @@ namespace Reminders.Domain.Business
 
                 return remindersViewModel;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }

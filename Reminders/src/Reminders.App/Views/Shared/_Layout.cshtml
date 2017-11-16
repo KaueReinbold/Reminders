@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var status = (TempData["StatusMessageStatus"] != null) ? (int)TempData["StatusMessageStatus"] : -1;
+    var message = TempData["StatusMessage"];
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -16,9 +20,15 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
     <link rel="shortcut icon" href="~/images/contract.png" type="image/x-icon" />
-    @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
+    @*@Html.ApplicationInsightsJavaScript(TelemetryConfiguration)*@
 </head>
 <body>
+
+    <div id="messageNotification" class="alert-message">
+        <div role="alert">
+        </div>
+    </div>
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -29,7 +39,6 @@
             </div>
         </div>
     </div>
-    <span id="message" class="label message"><label></label></span>
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -41,9 +50,16 @@
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/table-index.reminders.js" asp-append-version="true"></script>
-        <script src="~/js/util.reminders.js" asp-append-version="true"></script>
-        <script src="~/js/server.reminders.js" asp-append-version="true"></script>
+        <script src="~/js/events/button-reminders.events.js" asp-append-version="true"></script>
+        <script src="~/js/events/grid-reminders.events.js" asp-append-version="true"></script>
+        <script src="~/js/events/input-reminders.events.js" asp-append-version="true"></script>
+        <script src="~/js/util/prototype.service.js" asp-append-version="true"></script>
+        <script src="~/js/util/notification.service.js" asp-append-version="true"></script>
+        <script src="~/js/util/events.service.js" asp-append-version="true"></script>
+        <script src="~/js/service/reminders.service.js" asp-append-version="true"></script>
+        <script src="~/js/repository/reminders.repository.js" asp-append-version="true"></script>
+        <script src="~/js/request/request.js" asp-append-version="true"></script>
+        <script src="~/js/remiders.app.js" asp-append-version="true"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
