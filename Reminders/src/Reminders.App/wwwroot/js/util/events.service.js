@@ -12,8 +12,6 @@ let EventsService = Object.create(null, {
             ButtonEventsService.create();
 
             InputEventsService.create();
-
-            ButtonEventsService.create();
         }
     }
 })
