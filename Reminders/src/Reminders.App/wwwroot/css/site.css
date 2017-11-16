@@ -103,6 +103,9 @@ table {
 
 .alert-message {
     position: absolute;
-    padding: 10px 86rem;
     width: 100%;
+    display: none;
+    text-align: center;
+    line-height: 4rem;
+    height: 4rem;
 }

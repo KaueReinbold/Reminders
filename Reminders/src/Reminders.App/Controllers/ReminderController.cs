@@ -26,7 +26,15 @@ namespace Reminders.App.Controllers
             var remindersViewModel = _business.GetAll();
 
             if (remindersViewModel == null)
-                return RedirectToAction("Index", new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
+            {
+                Response.Cookies.Append("StatusMessage", JsonConvert.SerializeObject(new
+                {
+                    type_message = TypeMessage.Error,
+                    text_message = Resource.ResourceManager.GetString("ErrorGenericMessage")
+                }));
+
+                return RedirectToAction("");
+            }
 
             return View(remindersViewModel);
         }
@@ -48,19 +56,13 @@ namespace Reminders.App.Controllers
             {
                 var result = _business.Insert(reminderModel);
 
-                if (result)
+                Response.Cookies.Append("StatusMessage", JsonConvert.SerializeObject(new
                 {
+                    type_message = result ? TypeMessage.Success : TypeMessage.Error,
+                    text_message = result ? Resource.ResourceManager.GetString("SuccessCreateMessage") : Resource.ResourceManager.GetString("ErrorGenericMessage")
+                }));
 
-                    TempData["StatusMessage"] = Resource.ResourceManager.GetString("SuccessCreateMessage");
-                    TempData["StatusMessageStatus"] = TypeMessage.Success;
-
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    TempData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
-                    TempData["StatusMessageStatus"] = TypeMessage.Error;
-                }
+                return RedirectToAction("");
             }
 
             return View(reminderModel);
@@ -96,18 +98,13 @@ namespace Reminders.App.Controllers
             {
                 var result = _business.Update(reminderModel);
 
-                if (result)
+                Response.Cookies.Append("StatusMessage", JsonConvert.SerializeObject(new
                 {
-                    TempData["StatusMessage"] = Resource.ResourceManager.GetString("SuccessEditMessage");
-                    TempData["StatusMessageStatus"] = TypeMessage.Success;
-                }
-                else
-                {
-                    TempData["StatusMessage"] = Resource.ResourceManager.GetString("ErrorGenericMessage");
-                    TempData["StatusMessageStatus"] = TypeMessage.Error;
-                }
+                    type_message = result ? TypeMessage.Success : TypeMessage.Error,
+                    text_message = result ? Resource.ResourceManager.GetString("SuccessEditMessage") : Resource.ResourceManager.GetString("ErrorGenericMessage")
+                }));
 
-                return RedirectToAction("Index");
+                return RedirectToAction("");
             }
 
             return View(reminderModel);
@@ -120,42 +117,73 @@ namespace Reminders.App.Controllers
             var ReminderModel = _business.Find(id);
 
             if (ReminderModel == null)
-                return RedirectToAction("", new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
+            {
+                Response.Cookies.Append("StatusMessage", JsonConvert.SerializeObject(new
+                {
+                    type_message = TypeMessage.Error,
+                    text_message = Resource.ResourceManager.GetString("ErrorGenericMessage")
+                }));
+
+                return RedirectToAction("");
+            }
 
             return View(ReminderModel);
         }
 
         // POST: Reminder/Delete/{id}
         [HttpPost]
-        public JsonResult Delete(int id)
+        public void Delete(int id)
         {
             var result = _business.Delete(id);
 
-            if (result)
-                return Json(new { Type = TypeMessage.Success, Message = Resource.ResourceManager.GetString("SuccessDeleteMessage") });
-            else
-                return Json(new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
+            Response.Cookies.Append("StatusMessage", JsonConvert.SerializeObject(new
+            {
+                type_message = result ? TypeMessage.Success : TypeMessage.Error,
+                text_message = result ? Resource.ResourceManager.GetString("SuccessDeleteMessage") : Resource.ResourceManager.GetString("ErrorGenericMessage")
+            }));
         }
 
         // POST Reminder/DoneReminder/{id}
         [HttpPost]
-        public JsonResult DoneReminder(int id, bool isDone)
+        public void DoneReminder(int id, bool isDone)
         {
             var reminder = _business.Find(id);
 
             if (reminder == null)
-                return Json(new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
+                Response.Cookies.Append("StatusMessage", JsonConvert.SerializeObject(new
+                {
+                    type_message = TypeMessage.Error,
+                    text_message = Resource.ResourceManager.GetString("ErrorGenericMessage")
+                }));
 
             reminder.is_done = isDone;
 
             var result = _business.Update(reminder);
 
+            Response.Cookies.Append("StatusMessage", JsonConvert.SerializeObject(new
+            {
+                type_message = result ? TypeMessage.Success : TypeMessage.Error,
+                text_message = result ? Resource.ResourceManager.GetString("SuccessDeleteMessage") : Resource.ResourceManager.GetString("ErrorGenericMessage")
+            }));
+
             if (isDone && result)
-                return Json(new { Type = TypeMessage.Success, Message = Resource.ResourceManager.GetString("SuccessDoneMessage") });
+                Response.Cookies.Append("StatusMessage", JsonConvert.SerializeObject(new
+                {
+                    type_message = TypeMessage.Success,
+                    text_message = Resource.ResourceManager.GetString("SuccessDoneMessage")
+                }));
             else if (!isDone && result)
-                return Json(new { Type = TypeMessage.Success, Message = Resource.ResourceManager.GetString("SuccessEnableMessage") });
+                Response.Cookies.Append("StatusMessage", JsonConvert.SerializeObject(new
+                {
+                    type_message = TypeMessage.Success,
+                    text_message = Resource.ResourceManager.GetString("SuccessEnableMessage")
+                }));
             else
-                return Json(new { Type = TypeMessage.Error, Message = Resource.ResourceManager.GetString("ErrorGenericMessage") });
+                Response.Cookies.Append("StatusMessage", JsonConvert.SerializeObject(new
+                {
+                    type_message = TypeMessage.Error,
+                    text_message = Resource.ResourceManager.GetString("ErrorGenericMessage")
+                }));
         }
     }
 }
