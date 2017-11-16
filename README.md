@@ -25,10 +25,7 @@ This application was develop with Asp.Net Core MVC, Asp.Net Core API and Angular
 - Api Layer is using Asp.Net Core API v1.0.0.
 - Provide information through Web.Api request.
 
-### Frontend - Asp.Net Core MVC
-<!---
-### Frontend - Asp.Net Core MVC - [Access this link - Core Web App](http://reminderscoreapp.azurewebsites.net/)
--->
+### Frontend - Asp.Net Core MVC - [Access this link - Core Web App](http://reminderscore.azurewebsites.net/)
 
 > *Reminders.App*
 - App Layer is using Asp.Net Core MVC v1.0.0.

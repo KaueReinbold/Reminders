@@ -11,9 +11,16 @@
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
-      "wwwroot/js/server.reminders.js",
-      "wwwroot/js/table-index.reminders.js",
-      "wwwroot/js/util.reminders.js",
+      "wwwroot/js/events/button-reminders.events.js",
+      "wwwroot/js/events/grid-reminders.events.js",
+      "wwwroot/js/events/input-reminders.events.js",
+      "wwwroot/js/util/prototype.service.js",
+      "wwwroot/js/util/notification.service.js",
+      "wwwroot/js/util/events.service.js",
+      "wwwroot/js/service/reminders.service.js",
+      "wwwroot/js/repository/reminders.repository.js",
+      "wwwroot/js/request/request.js",
+      "wwwroot/js/remiders.app.js",
       "wwwroot/js/site.js"
     ],
     // Optionally specify minification options
