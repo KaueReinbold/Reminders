@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
+using System.Collections.Generic;
 
 namespace Reminders.Domain.AutoMapperProfile
 {

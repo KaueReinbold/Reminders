@@ -25,14 +25,16 @@ namespace Reminders.Mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IRepositoryEntityGeneric<ReminderEntity>, RepositoryReminderEntity>();
+            services.AddScoped<IRepositoryEntityGeneric<ReminderEntity>, RepositoryReminderEntity>();
 
-            services.AddSingleton<IBusinessModelGeneric<ReminderModel>, BusinessReminderModel>();
+            services.AddScoped<IBusinessModelGeneric<ReminderModel>, BusinessReminderModel>();
 
             services.AddDbContext<RemindersDbContext>(options =>
                       options.UseSqlServer(Configuration.GetConnectionString("StringConnectionReminders")));
 
             services.AddAutoMapper();
+
+            services.AddLogging();
 
             services.AddMvc();
         }
@@ -46,7 +48,7 @@ namespace Reminders.Mvc
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler(Configuration["AppSettings:ErrorHandlerPath"]);
             }
 
             app.UseStaticFiles();
@@ -55,7 +57,7 @@ namespace Reminders.Mvc
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Reminders}/{action=Index}/{id?}");
             });
         }
     }

@@ -1,9 +1,18 @@
-﻿<!DOCTYPE html>
+﻿@using Newtonsoft.Json
+@using Reminders.Domain.Models
+@{
+    MessageModel message = null;
+    if (TempData["Message"] != null)
+    {
+        message = JsonConvert.DeserializeObject<MessageModel>(TempData["Message"].ToString());
+    }
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Reminders.Mvc</title>
+    <title>@ViewData["Title"] - Reminders Mvc</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -26,18 +35,36 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Reminders.Mvc</a>
+                <a asp-area="" asp-controller="Reminders" asp-action="Index" class="navbar-brand">Reminders Mvc</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
+                @*<ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    </ul>*@
             </div>
         </div>
     </nav>
     <div class="container body-content">
+        @if (message != null)
+        {
+            switch (message.Type)
+            {
+                case Reminders.Domain.EnumMessages.Success:
+                    <div class="alert alert-success" role="alert">
+                        @message.Message
+                    </div>
+                    break;
+                case Reminders.Domain.EnumMessages.Error:
+                    <div class="alert alert-danger" role="alert">
+                        @message.Message
+                    </div>
+                    break;
+                default:
+                    break;
+            }
+        }
         @RenderBody()
         <hr />
         <footer>

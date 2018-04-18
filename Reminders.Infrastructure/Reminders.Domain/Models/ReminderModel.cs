@@ -5,6 +5,7 @@ namespace Reminders.Domain.Models
 {
     public class ReminderModel
     {
+        [Display(Name = "Identifier")]
         public int Id { get; set; }
 
         [Required]
@@ -17,9 +18,11 @@ namespace Reminders.Domain.Models
 
         [Required]
         [DataType(DataType.Date)]
+        [Display(Name = "Limit Date")]
         public DateTime LimitDate { get; set; }
 
         [Required]
+        [Display(Name = "Done")]
         public bool IsDone { get; set; }
     }
 }
