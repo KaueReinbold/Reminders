@@ -33,6 +33,12 @@ namespace Reminders.Mvc.Test.Screen.Reminder.Edge
         }
 
         [TestMethod]
+        public void EdgeReminderEdit()
+        {
+            _remindersTests.RemindersEdit();
+        }
+
+        [TestMethod]
         public void EdgeReminderDelete()
         {
             _remindersTests.RemindersDelete();

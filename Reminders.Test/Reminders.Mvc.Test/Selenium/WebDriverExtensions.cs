@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,8 +27,6 @@ namespace Reminders.Mvc.Test.Selenium
 
         public static List<string> GetTexts(this IWebDriver webDriver, By by)
         {
-            Thread.Sleep(TimeSpan.FromSeconds(1));
-
             ICollection<IWebElement> webElements = webDriver.FindElements(by);
 
             return webElements.Select(element => element.Text).ToList();
@@ -52,6 +51,13 @@ namespace Reminders.Mvc.Test.Selenium
             IJavaScriptExecutor js = (IJavaScriptExecutor)webDriver;
             string javascriptCode = $"document.querySelector('{querySelector}').submit();";
             js.ExecuteScript(javascriptCode);
+        }
+
+        public static void WaitForElement(this IWebDriver webDriver, By by, int secondsToWait = 5)
+        {
+            WebDriverWait webDriverWait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(secondsToWait));
+
+            webDriverWait.Until(c => c.FindElement(by) != null);
         }
     }
 }

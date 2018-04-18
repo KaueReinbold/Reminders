@@ -33,6 +33,12 @@ namespace Reminders.Mvc.Test.Screen.Reminder.Firefox
         }
 
         [TestMethod]
+        public void FirefoxReminderEdit()
+        {
+            _remindersTests.RemindersEdit();
+        }
+
+        [TestMethod]
         public void FirefoxReminderDelete()
         {
             _remindersTests.RemindersDelete();

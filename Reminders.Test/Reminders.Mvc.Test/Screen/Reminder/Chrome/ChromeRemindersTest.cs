@@ -33,6 +33,12 @@ namespace Reminders.Mvc.Test.Screen.Reminder.Chrome
         }
 
         [TestMethod]
+        public void ChromeReminderEdit()
+        {
+            _remindersTests.RemindersEdit();
+        }
+
+        [TestMethod]
         public void ChromeReminderDelete()
         {
             _remindersTests.RemindersDelete();
