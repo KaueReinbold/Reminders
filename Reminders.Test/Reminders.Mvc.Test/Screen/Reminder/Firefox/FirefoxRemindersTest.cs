@@ -7,7 +7,7 @@ using Reminders.Mvc.Test.Selenium.Enums;
 using System;
 using System.IO;
 
-namespace Reminders.Mvc.Test.Screen
+namespace Reminders.Mvc.Test.Screen.Reminder.Firefox
 {
     [TestClass]
     public class FirefoxRemindersTest
@@ -30,6 +30,12 @@ namespace Reminders.Mvc.Test.Screen
         public void FirefoxReminderInsert()
         {
             _remindersTests.RemindersInsert();
+        }
+
+        [TestMethod]
+        public void FirefoxReminderDelete()
+        {
+            _remindersTests.RemindersDelete();
         }
     }
 }

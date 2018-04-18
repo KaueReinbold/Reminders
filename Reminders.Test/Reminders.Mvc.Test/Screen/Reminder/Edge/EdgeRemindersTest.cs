@@ -7,17 +7,17 @@ using Reminders.Mvc.Test.Selenium.Enums;
 using System;
 using System.IO;
 
-namespace Reminders.Mvc.Test.Screen
+namespace Reminders.Mvc.Test.Screen.Reminder.Edge
 {
     [TestClass]
-    public class ChromeRemindersTest
+    public class EdgeRemindersTest
     {
         private RemindersTests _remindersTests;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _remindersTests = new RemindersTests(EnumBrowsers.Chrome);
+            _remindersTests = new RemindersTests(EnumBrowsers.Edge);
         }
 
         [TestCleanup]
@@ -27,9 +27,15 @@ namespace Reminders.Mvc.Test.Screen
         }
 
         [TestMethod]
-        public void ChromeReminderInsert()
+        public void EdgeReminderInsert()
         {
             _remindersTests.RemindersInsert();
+        }
+
+        [TestMethod]
+        public void EdgeReminderDelete()
+        {
+            _remindersTests.RemindersDelete();
         }
     }
 }
