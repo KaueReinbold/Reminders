@@ -30,7 +30,7 @@ namespace Reminders.Mvc.Test.Business
             // Add the appsettings file.
             _configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
                 .Build();
 
             var serviceCollection = new ServiceCollection();
