@@ -25,11 +25,11 @@ namespace Reminders.Mvc.Test.Screen.Reminder
         {
             _enumBrowsers = enumBrowsers;
 
-            var builder = new ConfigurationBuilder()
-               .SetBasePath(Directory.GetCurrentDirectory())
-               .AddJsonFile($"appsettings.json");
-
-            _configuration = builder.Build();
+            // Add the appsettings file.
+            _configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
 
             string path = $"{Environment.CurrentDirectory}\\";
 

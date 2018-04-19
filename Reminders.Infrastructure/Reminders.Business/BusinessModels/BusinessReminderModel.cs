@@ -28,9 +28,9 @@ namespace Reminders.Business.BusinessModels
             {
                 var reminder = _repositoryRemindersEntity.Find(key);
 
-                _repositoryRemindersEntity.Delete(reminder);
+                var result = _repositoryRemindersEntity.Delete(reminder);
 
-                return true;
+                return result;
             }
             catch (Exception ex)
             {
@@ -72,22 +72,24 @@ namespace Reminders.Business.BusinessModels
             }
         }
 
-        public bool Insert(ReminderModel model)
+        public ReminderModel Insert(ReminderModel model)
         {
             try
             {
                 var reminder = _mapper.Map<ReminderEntity>(model);
 
-                _repositoryRemindersEntity.Insert(reminder);
+                reminder = _repositoryRemindersEntity.Insert(reminder);
 
-                return true;
+                if (reminder.Id > 0)
+                    return _mapper.Map<ReminderModel>(reminder);
 
+                return new ReminderModel();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, string.Empty);
 
-                return false;
+                return new ReminderModel();
             }
         }
 
@@ -97,9 +99,9 @@ namespace Reminders.Business.BusinessModels
             {
                 var reminder = _mapper.Map<ReminderEntity>(model);
 
-                _repositoryRemindersEntity.Update(reminder);
+                var result = _repositoryRemindersEntity.Update(reminder);
 
-                return true;
+                return result;
             }
             catch (Exception ex)
             {

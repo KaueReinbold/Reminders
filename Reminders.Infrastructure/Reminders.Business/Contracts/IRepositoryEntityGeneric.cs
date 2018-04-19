@@ -6,9 +6,9 @@ namespace Reminders.Business.Contracts
 {
     public interface IRepositoryEntityGeneric<T> where T : class
     {
-        void Insert(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        T Insert(T entity);
+        bool Update(T entity);
+        bool Delete(T entity);
         IEnumerable<T> GetAll();
         T Find(int key);
     }

@@ -4,6 +4,7 @@ using Reminders.Context.RemindersContext;
 using Reminders.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Reminders.Business.RepositoryEntities
@@ -17,16 +18,6 @@ namespace Reminders.Business.RepositoryEntities
             _remindersDbContext = remindersDbContext;
         }
 
-        public void Delete(ReminderEntity entity)
-        {
-            using (_remindersDbContext)
-            {
-                _remindersDbContext.Reminders.Remove(entity);
-
-                _remindersDbContext.SaveChanges();
-            }
-        }
-
         public ReminderEntity Find(int key)
         {
             return _remindersDbContext.Reminders.Find(key);
@@ -34,29 +25,40 @@ namespace Reminders.Business.RepositoryEntities
 
         public IEnumerable<ReminderEntity> GetAll()
         {
-            var reminders = _remindersDbContext.Reminders;
+            var reminders = _remindersDbContext.Reminders.AsNoTracking().ToList();
 
             return reminders;
         }
 
-        public void Insert(ReminderEntity entity)
+        public ReminderEntity Insert(ReminderEntity entity)
         {
-            using (_remindersDbContext)
-            {
-                _remindersDbContext.Reminders.Add(entity);
+            _remindersDbContext.Reminders.Add(entity);
 
-                _remindersDbContext.SaveChanges();
-            }
+            _remindersDbContext.SaveChanges();
+
+            return entity;
         }
 
-        public void Update(ReminderEntity entity)
+        public bool Update(ReminderEntity entity)
         {
-            using (_remindersDbContext)
-            {
-                _remindersDbContext.Attach(entity).State = EntityState.Modified;
+            int result = 0;
 
-                _remindersDbContext.SaveChanges();
-            }
+            _remindersDbContext.Attach(entity).State = EntityState.Modified;
+
+            result = _remindersDbContext.SaveChanges();
+
+            return result > 0;
+        }
+
+        public bool Delete(ReminderEntity entity)
+        {
+            int result = 0;
+
+            _remindersDbContext.Reminders.Remove(entity);
+
+            result = _remindersDbContext.SaveChanges();
+
+            return result > 0;
         }
     }
 }
