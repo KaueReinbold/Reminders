@@ -9,6 +9,7 @@
   <ItemGroup>
     <None Remove="appsettings.Development.json" />
     <None Remove="appsettings.json" />
+    <None Remove="Business\RemindersBusinessModelTests.cs~RF187e17eb.TMP" />
     <None Remove="Drivers\ChromeDriver\chromedriver.exe" />
     <None Remove="Drivers\EdgeDriver\MicrosoftWebDriver.exe" />
     <None Remove="Drivers\FirefoxDriver\geckodriver.exe" />

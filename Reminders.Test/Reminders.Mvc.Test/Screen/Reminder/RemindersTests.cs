@@ -64,12 +64,8 @@ namespace Reminders.Mvc.Test.Screen.Reminder
 
             _webDriver.SetText(By.Id("Title"), $"{_enumBrowsers.ToString()} | Title - {newGuid}");
             _webDriver.SetText(By.Id("Description"), $"Description - {newGuid}");
-
-            if (_webDriver is EdgeDriver)
-                _webDriver.SetTextJavascript("#LimitDate", dateLimit.ToString("yyyy-MM-dd"));
-            else
-                _webDriver.SetText(By.Id("LimitDate"), dateLimit.ToString("dd/MM/yyyy"));
-
+            _webDriver.SetTextJavascript("#LimitDate", dateLimit.ToString("yyyy-MM-dd"));
+            
             _webDriver.Submit("#formCreate");
 
             _webDriver.WaitForElement(By.Id("remindersTable"), secondsToWait);
@@ -89,7 +85,7 @@ namespace Reminders.Mvc.Test.Screen.Reminder
 
             var lines = _webDriver.FindElements(By.CssSelector("#remindersTable > tbody > tr"));
 
-            var textsOld = lines.Where(line => line.FindElement(By.CssSelector("td:nth-child(2)")).Text.Contains(_enumBrowsers.ToString()));
+            var textsOld = lines.Where(line => line.FindElement(By.CssSelector("td:nth-child(2)")).Text.StartsWith(_enumBrowsers.ToString()));
 
             var link = textsOld.Select(line => line.FindElement(By.CssSelector("td:nth-child(6) > a:nth-child(1)")).GetAttribute("href"))?.FirstOrDefault();
 
@@ -122,7 +118,7 @@ namespace Reminders.Mvc.Test.Screen.Reminder
 
             var lines = _webDriver.FindElements(By.CssSelector("#remindersTable > tbody > tr"));
 
-            var textsOld = lines.Where(line => line.FindElement(By.CssSelector("td:nth-child(2)")).Text.Contains(_enumBrowsers.ToString()));
+            var textsOld = lines.Where(line => line.FindElement(By.CssSelector("td:nth-child(2)")).Text.StartsWith(_enumBrowsers.ToString()));
 
             var links = textsOld.Select(line => line.FindElement(By.CssSelector("td:nth-child(6) > a:nth-child(3)")).GetAttribute("href")).ToList();
 
@@ -135,7 +131,7 @@ namespace Reminders.Mvc.Test.Screen.Reminder
 
             var textsNew = _webDriver.GetTexts(By.CssSelector("#remindersTable > tbody > tr > td:nth-child(2)"));
 
-            var hasBrowser = textsNew.Any(text => text.Contains(_enumBrowsers.ToString()));
+            var hasBrowser = textsNew.Any(text => text.StartsWith(_enumBrowsers.ToString()));
 
             Assert.IsFalse(hasBrowser, $"{_enumBrowsers.ToString()} - The delete has not happened!");
         }
