@@ -12,31 +12,31 @@
 @if (Model.Any())
 {
     <table class="table" id="remindersTable">
-        <thead>
+        <thead class="thead-light">
             <tr>
-                <th>
+                <th scope="col">
                     @Html.DisplayNameFor(model => model.Id)
                 </th>
-                <th>
+                <th scope="col">
                     @Html.DisplayNameFor(model => model.Title)
                 </th>
-                <th>
+                <th scope="col">
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
-                <th>
+                <th scope="col">
                     @Html.DisplayNameFor(model => model.LimitDate)
                 </th>
-                <th>
+                <th scope="col">
                     @Html.DisplayNameFor(model => model.IsDone)
                 </th>
-                <th></th>
+                <th scope="col">#</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
+                    <td scope="row">
                         @Html.DisplayFor(modelItem => item.Id)
                     </td>
                     <td>
