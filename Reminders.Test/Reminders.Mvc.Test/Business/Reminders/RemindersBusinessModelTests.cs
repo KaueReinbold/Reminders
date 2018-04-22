@@ -1,65 +1,27 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
-using Reminders.Business.RepositoryEntities;
-using Reminders.Context.RemindersContext;
 using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 
-namespace Reminders.Mvc.Test.Business
+namespace Reminders.Mvc.Test.Business.Reminders
 {
     [TestClass]
-    public class RemindersBusinessModelTests
+    public class RemindersBusinessModelTests : TestConfiguration
     {
-        private IConfigurationRoot _configuration;
         private BusinessReminderModel _businessReminderModel;
-        private Guid key = Guid.NewGuid();
 
         public RemindersBusinessModelTests()
-        {
-            // Add the appsettings file.
-            _configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
-                .Build();
+        {            
+            var repositoryRemindersEntity = _serviceProvider.GetService<IRepositoryEntityGeneric<ReminderEntity>>();
 
-            var serviceCollection = new ServiceCollection();
+            var logger = _serviceProvider.GetService<ILogger<BusinessReminderModel>>();
 
-            serviceCollection.AddSingleton<IRepositoryEntityGeneric<ReminderEntity>, RepositoryReminderEntity>();
-
-            serviceCollection.AddSingleton<IBusinessModelGeneric<ReminderModel>, BusinessReminderModel>();
-
-            serviceCollection.AddDbContext<RemindersDbContext>(options =>
-                      options.UseSqlServer(_configuration.GetConnectionString("StringConnectionReminders")));
-
-            serviceCollection.AddLogging();
-
-            // Build a service collection.
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            var config = new MapperConfiguration(con =>
-            {
-                con.CreateMap<ReminderModel, ReminderEntity>();
-                con.CreateMap<ReminderEntity, ReminderModel>();
-            });
-
-            var mapper = config.CreateMapper();
-
-            var logger = serviceProvider.GetService<ILogger<BusinessReminderModel>>();
-
-            var repositoryRemindersEntity = serviceProvider.GetService<IRepositoryEntityGeneric<ReminderEntity>>();
-
-            _businessReminderModel = new BusinessReminderModel(mapper, logger, repositoryRemindersEntity);
+            _businessReminderModel = new BusinessReminderModel(_mapper, logger, repositoryRemindersEntity);
         }
 
         [TestCleanup]

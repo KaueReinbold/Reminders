@@ -1,4 +1,5 @@
 ﻿@using Newtonsoft.Json
+@using Reminders.Domain.Enums;
 @using Reminders.Domain.Models
 @{
     MessageModel message = null;
@@ -51,12 +52,12 @@
         {
             switch (message.Type)
             {
-                case Reminders.Domain.EnumMessages.Success:
+                case EnumMessages.Success:
                     <div class="alert alert-success" role="alert">
                         @message.Message
                     </div>
                     break;
-                case Reminders.Domain.EnumMessages.Error:
+                case EnumMessages.Error:
                     <div class="alert alert-danger" role="alert">
                         @message.Message
                     </div>

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Reminders.Business.Contracts;
 using Reminders.Domain;
+using Reminders.Domain.Enums;
 using Reminders.Domain.Models;
 
 namespace Reminders.Mvc.Controllers
