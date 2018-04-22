@@ -6,6 +6,7 @@ using Reminders.Business.Contracts;
 using Reminders.Domain;
 using Reminders.Domain.Enums;
 using Reminders.Domain.Models;
+using Reminders.Domain.Extensions;
 
 namespace Reminders.Mvc.Controllers
 {
@@ -31,9 +32,9 @@ namespace Reminders.Mvc.Controllers
         // GET: Reminders/Details/5
         public ActionResult Details(int id)
         {
-            var reminder = _businessReminderModel.Find(id);
+            var reminderDetails = _businessReminderModel.Find(id);
 
-            return View(reminder);
+            return View(reminderDetails);
         }
 
         // GET: Reminders/Create
@@ -53,8 +54,8 @@ namespace Reminders.Mvc.Controllers
                 {
                     _businessReminderModel.Insert(reminderModel);
 
-                    TempData["Message"] = JsonConvert.SerializeObject(new MessageModel { Type = EnumMessages.Success, Message = "Reminder has created!" });
-                    
+                    TempData["Message"] = new MessageModel { Type = EnumMessages.Success, Message = "Reminder has created!" }.ToJson();
+
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -63,7 +64,7 @@ namespace Reminders.Mvc.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Message"] = JsonConvert.SerializeObject(new MessageModel { Type = EnumMessages.Error, Message = "Some error has happened!" });
+                TempData["Message"] = new MessageModel { Type = EnumMessages.Error, Message = "Some error has happened!" }.ToJson();
 
                 _logger.LogError(ex, string.Empty);
 
@@ -74,9 +75,9 @@ namespace Reminders.Mvc.Controllers
         // GET: Reminders/Edit/5
         public ActionResult Edit(int id)
         {
-            var reminder = _businessReminderModel.Find(id);
+            var reminderEdit = _businessReminderModel.Find(id);
 
-            return View(reminder);
+            return View(reminderEdit);
         }
 
         // POST: Reminders/Edit/5
@@ -90,8 +91,8 @@ namespace Reminders.Mvc.Controllers
                 {
                     _businessReminderModel.Update(reminderModel);
 
-                    TempData["Message"] = JsonConvert.SerializeObject(new MessageModel { Type = EnumMessages.Success, Message = "Reminder has updated!" });
-                    
+                    TempData["Message"] = new MessageModel { Type = EnumMessages.Success, Message = "Reminder has updated!" }.ToJson();
+
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -99,7 +100,7 @@ namespace Reminders.Mvc.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Message"] = JsonConvert.SerializeObject(new MessageModel { Type = EnumMessages.Error, Message = "Some error has happened!" });
+                TempData["Message"] = new MessageModel { Type = EnumMessages.Error, Message = "Some error has happened!" }.ToJson();
 
                 _logger.LogError(ex, string.Empty);
 
@@ -110,9 +111,9 @@ namespace Reminders.Mvc.Controllers
         // GET: Reminders/Delete/5
         public ActionResult Delete(int id)
         {
-            var reminder = _businessReminderModel.Find(id);
+            var reminderDelete = _businessReminderModel.Find(id);
 
-            return View(reminder);
+            return View(reminderDelete);
         }
 
         // POST: Reminders/Delete/5
@@ -123,14 +124,14 @@ namespace Reminders.Mvc.Controllers
             try
             {
                 _businessReminderModel.Delete(reminderModel.Id);
-                
-                TempData["Message"] = JsonConvert.SerializeObject(new MessageModel { Type = EnumMessages.Success, Message = "Reminder has deleted!" });
+
+                TempData["Message"] = new MessageModel { Type = EnumMessages.Success, Message = "Reminder has deleted!" }.ToJson();
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                TempData["Message"] = JsonConvert.SerializeObject(new MessageModel { Type = EnumMessages.Error, Message = "Some error has happened!" });
+                TempData["Message"] = new MessageModel { Type = EnumMessages.Error, Message = "Some error has happened!" }.ToJson();
 
                 _logger.LogError(ex, string.Empty);
 
