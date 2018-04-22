@@ -11,6 +11,7 @@ namespace Reminders.Context.RemindersContext
     {
         public RemindersDbContext(DbContextOptions options) : base(options)
         {
+            Database.EnsureCreated();
         }
 
         public DbSet<ReminderEntity> Reminders { get; set; }
