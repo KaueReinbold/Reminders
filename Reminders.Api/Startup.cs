@@ -10,6 +10,7 @@ using Reminders.Context.RemindersContext;
 using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
 using AutoMapper;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Reminders.Api
 {
@@ -50,6 +51,23 @@ namespace Reminders.Api
             services.AddLogging();
 
             services.AddMvc();
+
+            // Register the Swagger generator, defining one or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "Reminders Api",
+                    Description = "Application to register and list reminders. Each reminder has a Title, Description, Date Limit and Status.",
+                    Contact = new Contact
+                    {
+                        Name = "Kaue Reinbold",
+                        Email = "ck_reinbold@hotmail.com",
+                        Url = "https://github.com/KaueReinbold"
+                    }
+                });
+            });
         }
 
         /// <summary>
@@ -61,11 +79,20 @@ namespace Reminders.Api
         {
             if (env.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
             }
-            app.UseDeveloperExceptionPage();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Reminders Api");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseMvc();
-
         }
     }
 }
