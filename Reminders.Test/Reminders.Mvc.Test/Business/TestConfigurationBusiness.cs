@@ -9,6 +9,7 @@ using Reminders.Context.RemindersContext;
 using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
 using System.IO;
+using System.Net.Http;
 
 namespace Reminders.Mvc.Test.Business
 {
