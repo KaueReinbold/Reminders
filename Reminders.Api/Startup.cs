@@ -9,9 +9,6 @@ using Reminders.Business.RepositoryEntities;
 using Reminders.Context.RemindersContext;
 using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
-using Swashbuckle.AspNetCore.Swagger;
-using Microsoft.Extensions.PlatformAbstractions;
-using System.IO;
 using AutoMapper;
 
 namespace Reminders.Api
@@ -53,31 +50,6 @@ namespace Reminders.Api
             services.AddLogging();
 
             services.AddMvc();
-
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1",
-            //        new Info
-            //        {
-            //            Title = "Reminders",
-            //            Version = "v1",
-            //            Description = "Application to register and list reminders. Each reminder has a Title, Description, Date Limit and Status.",
-            //            Contact = new Swashbuckle.AspNetCore.Swagger.Contact
-            //            {
-            //                Name = "Kaue Reinbold",
-            //                Url = "https://github.com/KaueReinbold"
-            //            }
-            //        });
-
-            //    string caminhoAplicacao =
-            //        PlatformServices.Default.Application.ApplicationBasePath;
-            //    string nomeAplicacao =
-            //        PlatformServices.Default.Application.ApplicationName;
-            //    string caminhoXmlDoc =
-            //        Path.Combine(caminhoAplicacao, $"{nomeAplicacao}.xml");
-
-            //    c.IncludeXmlComments(caminhoXmlDoc);
-            //});
         }
 
         /// <summary>
@@ -94,12 +66,6 @@ namespace Reminders.Api
 
             app.UseMvc();
 
-            //app.UseSwagger();
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json",
-            //        "Reminders");
-            //});
         }
     }
 }
