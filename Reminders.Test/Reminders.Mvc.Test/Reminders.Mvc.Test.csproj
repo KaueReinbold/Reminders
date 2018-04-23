@@ -48,8 +48,4 @@
     <ProjectReference Include="..\..\Reminders.Infrastructure\Reminders.Business\Reminders.Business.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Api\" />
-  </ItemGroup>
-
 </Project>

@@ -285,3 +285,4 @@ PublishProfiles/
 Service References/
 
 *.Development.json
+*.Production.json
