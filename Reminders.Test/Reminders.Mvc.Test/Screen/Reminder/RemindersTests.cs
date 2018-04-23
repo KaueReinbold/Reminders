@@ -9,45 +9,12 @@ using Reminders.Mvc.Test.Screen.Selenium.Enums;
 
 namespace Reminders.Mvc.Test.Screen.Reminder
 {
-    public class RemindersTests
+    public class RemindersTests : TestConfigurationScreen
     {
-        private readonly IConfiguration _configuration;
-        private IWebDriver _webDriver;
-        private readonly EnumBrowsers _enumBrowsers;
-        private readonly int secondsToWait = 10;
-
-        public RemindersTests(EnumBrowsers enumBrowsers)
+        public RemindersTests(EnumBrowsers enumBrowsers) 
+            : base(enumBrowsers)
         {
-            _enumBrowsers = enumBrowsers;
 
-            // Add the appsettings file.
-            _configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
-                .Build();
-
-            string path = $"{Environment.CurrentDirectory}\\";
-
-            switch (enumBrowsers)
-            {
-                case EnumBrowsers.Firefox:
-                    path = string.Concat(path, _configuration.GetSection("Selenium:FirefoxDriver").Value);
-                    break;
-                case EnumBrowsers.Chrome:
-                    path = string.Concat(path, _configuration.GetSection("Selenium:ChromeDriver").Value);
-                    break;
-                case EnumBrowsers.Edge:
-                    path = string.Concat(path, _configuration.GetSection("Selenium:EdgeDriver").Value);
-                    break;
-            }
-
-            _webDriver = WebDriverFactory.CreateWebDriver(enumBrowsers, path);
-        }
-
-        public void Close()
-        {
-            _webDriver.Quit();
-            _webDriver = null;
         }
 
         public void RemindersInsert()
@@ -60,7 +27,7 @@ namespace Reminders.Mvc.Test.Screen.Reminder
             _webDriver.SetText(By.Id("Title"), $"{_enumBrowsers.ToString()} | Title - {newGuid}");
             _webDriver.SetText(By.Id("Description"), $"Description - {newGuid}");
             _webDriver.SetTextJavascript("#LimitDate", dateLimit.ToString("yyyy-MM-dd"));
-            
+
             _webDriver.Submit("#formCreate");
 
             _webDriver.WaitForElement(By.Id("remindersTable"), secondsToWait);

@@ -12,13 +12,13 @@ using System.IO;
 
 namespace Reminders.Mvc.Test.Business
 {
-    public class TestConfiguration
+    public class TestConfigurationBusiness
     {
         private IConfigurationRoot _configuration;
         public ServiceProvider _serviceProvider;
         public IMapper _mapper;
         
-        public TestConfiguration()
+        public TestConfigurationBusiness()
         {
             _configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
