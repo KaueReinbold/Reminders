@@ -10,9 +10,9 @@
     <None Remove="appsettings.Development.json" />
     <None Remove="appsettings.json" />
     <None Remove="Business\RemindersBusinessModelTests.cs~RF187e17eb.TMP" />
-    <None Remove="Drivers\ChromeDriver\chromedriver.exe" />
-    <None Remove="Drivers\EdgeDriver\MicrosoftWebDriver.exe" />
-    <None Remove="Drivers\FirefoxDriver\geckodriver.exe" />
+    <None Remove="Screen\Drivers\ChromeDriver\chromedriver.exe" />
+    <None Remove="Screen\Drivers\EdgeDriver\MicrosoftWebDriver.exe" />
+    <None Remove="Screen\Drivers\FirefoxDriver\geckodriver.exe" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,13 +22,13 @@
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Drivers\ChromeDriver\chromedriver.exe">
+    <Content Include="Screen\Drivers\ChromeDriver\chromedriver.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Drivers\EdgeDriver\MicrosoftWebDriver.exe">
+    <Content Include="Screen\Drivers\EdgeDriver\MicrosoftWebDriver.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Drivers\FirefoxDriver\geckodriver.exe">
+    <Content Include="Screen\Drivers\FirefoxDriver\geckodriver.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -46,6 +46,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Reminders.Infrastructure\Reminders.Business\Reminders.Business.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Api\" />
   </ItemGroup>
 
 </Project>

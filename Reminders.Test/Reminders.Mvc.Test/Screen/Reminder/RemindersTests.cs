@@ -2,15 +2,10 @@
 using OpenQA.Selenium;
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-using Reminders.Mvc.Test.Selenium;
-using Reminders.Mvc.Test.Selenium.Enums;
-using OpenQA.Selenium.Edge;
-using OpenQA.Selenium.Support.UI;
+using Reminders.Mvc.Test.Screen.Selenium;
+using Reminders.Mvc.Test.Screen.Selenium.Enums;
 
 namespace Reminders.Mvc.Test.Screen.Reminder
 {

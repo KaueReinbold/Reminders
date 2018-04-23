@@ -1,11 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using Reminders.Mvc.Test.Selenium;
-using Reminders.Mvc.Test.Selenium.Enums;
-using System;
-using System.IO;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reminders.Mvc.Test.Screen.Selenium.Enums;
 
 namespace Reminders.Mvc.Test.Screen.Reminder.Chrome
 {
