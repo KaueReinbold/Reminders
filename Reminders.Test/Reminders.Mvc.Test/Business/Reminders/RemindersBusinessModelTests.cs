@@ -11,7 +11,7 @@ using System.Linq;
 namespace Reminders.Mvc.Test.Business.Reminders
 {
     [TestClass]
-    public class RemindersBusinessModelTests : TestConfiguration
+    public class RemindersBusinessModelTests : TestConfigurationBusiness
     {
         private BusinessReminderModel _businessReminderModel;
 

@@ -13,7 +13,7 @@ using System.Linq;
 namespace Reminders.Mvc.Test.Business.Reminders
 {
     [TestClass]
-    public class RemindersRepositoryEntityTests : TestConfiguration
+    public class RemindersRepositoryEntityTests : TestConfigurationBusiness
     {
         private RepositoryReminderEntity _repositoryReminderEntity;
 
