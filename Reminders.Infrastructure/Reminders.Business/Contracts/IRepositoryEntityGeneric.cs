@@ -10,6 +10,7 @@ namespace Reminders.Business.Contracts
         bool Update(T entity);
         bool Delete(T entity);
         IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll(Func<T, bool> func);
         T Find(int key);
     }
 }

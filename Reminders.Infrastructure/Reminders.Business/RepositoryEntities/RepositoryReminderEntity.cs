@@ -30,6 +30,13 @@ namespace Reminders.Business.RepositoryEntities
             return reminders;
         }
 
+        public IEnumerable<ReminderEntity> GetAll(Func<ReminderEntity, bool> func)
+        {
+            var reminders = _remindersDbContext.Reminders.AsNoTracking().Where(func).ToList();
+
+            return reminders;
+        }
+
         public ReminderEntity Insert(ReminderEntity entity)
         {
             _remindersDbContext.Reminders.Add(entity);

@@ -10,6 +10,7 @@ namespace Reminders.Business.Contracts
         bool Update(T model);
         bool Delete(int key);
         List<T> GetAll();
+        List<T> GetAll(Func<T, bool> func);
         T Find(int key);
     }
 }
