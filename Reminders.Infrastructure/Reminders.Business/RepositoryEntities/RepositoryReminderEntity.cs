@@ -20,21 +20,21 @@ namespace Reminders.Business.RepositoryEntities
 
         public ReminderEntity Find(int key)
         {
-            return _remindersDbContext.Reminders.Find(key);
+            return _remindersDbContext.Reminders.AsNoTracking().ToList().Find(reminder => reminder.Id == key);
         }
 
         public IEnumerable<ReminderEntity> GetAll()
         {
             var reminders = _remindersDbContext.Reminders.AsNoTracking().ToList();
 
-            return reminders;
+            return reminders ?? new List<ReminderEntity>();
         }
 
         public IEnumerable<ReminderEntity> GetAll(Func<ReminderEntity, bool> func)
         {
-            var reminders = _remindersDbContext.Reminders.AsNoTracking().Where(func).ToList();
+            var reminders = _remindersDbContext.Reminders.AsNoTracking().AsQueryable().Where(func).ToList();
 
-            return reminders;
+            return reminders ?? new List<ReminderEntity>();
         }
 
         public ReminderEntity Insert(ReminderEntity entity)
@@ -43,7 +43,7 @@ namespace Reminders.Business.RepositoryEntities
 
             _remindersDbContext.SaveChanges();
 
-            return entity;
+            return entity ?? new ReminderEntity();
         }
 
         public bool Update(ReminderEntity entity)

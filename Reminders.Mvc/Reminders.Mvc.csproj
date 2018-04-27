@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <ApplicationInsightsResourceId>/subscriptions/85240c84-8174-4045-a6b0-59d34c1dc6ea/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/Reminders.Mvc</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/85240c84-8174-4045-a6b0-59d34c1dc6ea/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/Reminders.Mvc</ApplicationInsightsAnnotationResourceId>
+    <UserSecretsId>51778aa0-2f79-4576-bc23-1d050e268582</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Reminders.Infrastructure\Reminders.Business\Reminders.Business.csproj" />
     <ProjectReference Include="..\Reminders.Infrastructure\Reminders.context\Reminders.Context.csproj" />
+    <ProjectReference Include="..\Reminders.Infrastructure\Reminders.Core\Reminders.Core.csproj" />
     <ProjectReference Include="..\Reminders.Infrastructure\Reminders.Domain\Reminders.Domain.csproj" />
   </ItemGroup>
 

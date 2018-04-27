@@ -62,6 +62,8 @@ namespace Reminders.Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]ReminderModel reminder)
         {
+            reminder.LimitDate = reminder.LimitDate.ToUniversalTime();
+
             var reminderCreated = _businessReminderModel.Insert(reminder);
 
             if (reminderCreated.Id == 0)
@@ -79,6 +81,8 @@ namespace Reminders.Api.Controllers
         [HttpPut]
         public IActionResult Put([FromBody]ReminderModel reminder)
         {
+            reminder.LimitDate = reminder.LimitDate.ToUniversalTime();
+
             var reminderEdit = _businessReminderModel.Update(reminder);
 
             if (!reminderEdit)

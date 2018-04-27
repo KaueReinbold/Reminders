@@ -46,20 +46,22 @@ namespace Reminders.Mvc.Controllers
         // POST: Reminders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ReminderModel reminderModel)
+        public ActionResult Create(ReminderModel reminder)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _businessReminderModel.Insert(reminderModel);
+                    reminder.LimitDate = reminder.LimitDate.ToUniversalTime();
+
+                    _businessReminderModel.Insert(reminder);
 
                     TempData["Message"] = new MessageModel { Type = EnumMessages.Success, Message = "Reminder has created!" }.ToJson();
 
                     return RedirectToAction(nameof(Index));
                 }
                 else
-                    return View(reminderModel);
+                    return View(reminder);
 
             }
             catch (Exception ex)
@@ -83,20 +85,22 @@ namespace Reminders.Mvc.Controllers
         // POST: Reminders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ReminderModel reminderModel)
+        public ActionResult Edit(ReminderModel reminder)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _businessReminderModel.Update(reminderModel);
+                    reminder.LimitDate = reminder.LimitDate.ToUniversalTime();
+
+                    _businessReminderModel.Update(reminder);
 
                     TempData["Message"] = new MessageModel { Type = EnumMessages.Success, Message = "Reminder has updated!" }.ToJson();
 
                     return RedirectToAction(nameof(Index));
                 }
                 else
-                    return View(reminderModel);
+                    return View(reminder);
             }
             catch (Exception ex)
             {

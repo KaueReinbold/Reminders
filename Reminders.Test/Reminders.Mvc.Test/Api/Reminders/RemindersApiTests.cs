@@ -24,7 +24,7 @@ namespace Reminders.Mvc.Test.Api.Reminders
             {
                 Title = $"Api Test - Title - {newGuid}",
                 Description = $"Api Test - Description - {newGuid}",
-                LimitDate = DateTime.Now.AddDays(10),
+                LimitDate = DateTime.UtcNow.AddDays(10),
                 IsDone = false
             };
 
@@ -62,7 +62,7 @@ namespace Reminders.Mvc.Test.Api.Reminders
                     var newGuid = Guid.NewGuid().ToString();
                     reminder.Title = $"Api Test - Title Edited - {newGuid}";
                     reminder.Description = $"Api Test - Description - {newGuid}";
-                    reminder.LimitDate = DateTime.Now.AddDays(5);
+                    reminder.LimitDate = DateTime.UtcNow.AddDays(5);
                     reminder.IsDone = true;
 
                     var result = _httpClient.PutAsJsonAsync(baseUri, reminder).Result;
