@@ -283,4 +283,4 @@ PublishProfiles/
 # References
 Service References/
 
-appsettings.json
+appsettings.Development.json
