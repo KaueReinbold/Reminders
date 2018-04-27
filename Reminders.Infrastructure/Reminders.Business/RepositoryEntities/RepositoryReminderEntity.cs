@@ -50,18 +50,20 @@ namespace Reminders.Business.RepositoryEntities
         {
             int result = 0;
 
-            _remindersDbContext.Attach(entity).State = EntityState.Modified;
+            _remindersDbContext.Entry(entity).State = EntityState.Modified;
 
             result = _remindersDbContext.SaveChanges();
 
             return result > 0;
         }
 
-        public bool Delete(ReminderEntity entity)
+        public bool Delete(int key)
         {
             int result = 0;
 
-            _remindersDbContext.Reminders.Remove(entity);
+            var reminder = _remindersDbContext.Reminders.Find(key);
+
+            _remindersDbContext.Reminders.Remove(reminder);
 
             result = _remindersDbContext.SaveChanges();
 

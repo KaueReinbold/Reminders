@@ -8,10 +8,10 @@ using Reminders.Domain.Models;
 using System;
 using System.Linq;
 
-namespace Reminders.Mvc.Test.Business.Reminders
+namespace Reminders.Business.Test.Reminders
 {
     [TestClass]
-    public class RemindersBusinessModelTests : TestConfigurationBusiness
+    public class RemindersBusinessModelTests : StartupBusinessTest
     {
         private BusinessReminderModel _businessReminderModel;
 

@@ -56,7 +56,7 @@ namespace Reminders.Mvc.Controllers
 
                     _businessReminderModel.Insert(reminder);
 
-                    TempData["Message"] = new MessageModel { Type = EnumMessages.Success, Message = "Reminder has created!" }.ToJson();
+                    TempData["Message"] = new MessageModel { Type = EnumMessages.Success, Message = "Reminder created!" }.ToJson();
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -95,7 +95,7 @@ namespace Reminders.Mvc.Controllers
 
                     _businessReminderModel.Update(reminder);
 
-                    TempData["Message"] = new MessageModel { Type = EnumMessages.Success, Message = "Reminder has updated!" }.ToJson();
+                    TempData["Message"] = new MessageModel { Type = EnumMessages.Success, Message = "Reminder updated!" }.ToJson();
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -129,7 +129,7 @@ namespace Reminders.Mvc.Controllers
             {
                 _businessReminderModel.Delete(reminderModel.Id);
 
-                TempData["Message"] = new MessageModel { Type = EnumMessages.Success, Message = "Reminder has deleted!" }.ToJson();
+                TempData["Message"] = new MessageModel { Type = EnumMessages.Success, Message = "Reminder deleted!" }.ToJson();
 
                 return RedirectToAction(nameof(Index));
             }

@@ -10,10 +10,10 @@ using Reminders.Domain.Models;
 using System;
 using System.Linq;
 
-namespace Reminders.Mvc.Test.Business.Reminders
+namespace Reminders.Business.Test.Reminders
 {
     [TestClass]
-    public class RemindersRepositoryEntityTests : TestConfigurationBusiness
+    public class RemindersRepositoryEntityTests : StartupBusinessTest
     {
         private RepositoryReminderEntity _repositoryReminderEntity;
 
@@ -82,7 +82,7 @@ namespace Reminders.Mvc.Test.Business.Reminders
             {
                 foreach (var reminder in reminders)
                 {
-                    success = _repositoryReminderEntity.Delete(reminder);
+                    success = _repositoryReminderEntity.Delete(reminder.Id);
 
                     if (!success)
                         break;

@@ -3,27 +3,26 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Logging.Debug;
 using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
 using Reminders.Business.RepositoryEntities;
 using Reminders.Context.RemindersContext;
+using Reminders.Core.Options;
 using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
 using System.IO;
-using System.Net.Http;
 
-namespace Reminders.Mvc.Test.Business
+namespace Reminders.Business.Test
 {
-    public class TestConfigurationBusiness
+    public class StartupBusinessTest
     {
         private IConfigurationRoot _configuration;
         public ServiceProvider _serviceProvider;
         public IMapper _mapper;
         public static readonly LoggerFactory DebugLoggerFactory = new LoggerFactory(new[] { new DebugLoggerProvider((_, __) => true) });
 
-        public TestConfigurationBusiness()
+        public StartupBusinessTest()
         {
             _configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -38,6 +37,10 @@ namespace Reminders.Mvc.Test.Business
 
             serviceCollection.AddDbContext<RemindersDbContext>(options =>
                       options.UseLoggerFactory(DebugLoggerFactory).UseSqlServer(_configuration.GetConnectionString("StringConnectionReminders")));
+
+            serviceCollection.AddOptions();
+
+            serviceCollection.Configure<TestOptions>(_configuration.GetSection("TestConfiguration"));
 
             serviceCollection.AddLogging();
 

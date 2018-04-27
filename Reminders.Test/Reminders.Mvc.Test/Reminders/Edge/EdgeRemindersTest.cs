@@ -1,17 +1,17 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reminders.Mvc.Test.Screen.Selenium.Enums;
+using Reminders.Mvc.Test.Selenium.Enums;
 
-namespace Reminders.Mvc.Test.Screen.Reminder.Chrome
+namespace Reminders.Mvc.Test.Reminders.Edge
 {
     [TestClass]
-    public class ChromeRemindersTest
+    public class EdgeRemindersTest
     {
         private RemindersTests _remindersTests;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _remindersTests = new RemindersTests(EnumBrowsers.Chrome);
+            _remindersTests = new RemindersTests(EnumBrowsers.Edge);
         }
 
         [TestCleanup]
@@ -21,19 +21,19 @@ namespace Reminders.Mvc.Test.Screen.Reminder.Chrome
         }
 
         [TestMethod]
-        public void ChromeReminderInsert()
+        public void EdgeReminderInsert()
         {
             _remindersTests.RemindersInsert();
         }
 
         [TestMethod]
-        public void ChromeReminderEdit()
+        public void EdgeReminderEdit()
         {
             _remindersTests.RemindersEdit();
         }
 
         [TestMethod]
-        public void ChromeReminderDelete()
+        public void EdgeReminderDelete()
         {
             _remindersTests.RemindersDelete();
         }

@@ -7,15 +7,15 @@ using System.Linq;
 using System.Net;
 using Reminders.Domain.Extensions;
 
-namespace Reminders.Mvc.Test.Api.Reminders
+namespace Reminders.Api.Test.Reminders
 {
     [TestClass]
-    public class RemindersApiTests : TestConfigurationApi
+    public class RemindersApiTests : StartupApiTest
     {
         [TestMethod]
         public void RemindersInsert()
         {
-            var baseUri = _configuration["TestConfigutation:UrlApi"] + "api/reminders";
+            var baseUri = _configuration["TestConfiguration:UrlApi"] + "api/reminders";
             var success = false;
 
             var newGuid = Guid.NewGuid().ToString();
@@ -46,7 +46,7 @@ namespace Reminders.Mvc.Test.Api.Reminders
         [TestMethod]
         public void RemindersEdit()
         {
-            var baseUri = _configuration["TestConfigutation:UrlApi"] + "api/reminders";
+            var baseUri = _configuration["TestConfiguration:UrlApi"] + "api/reminders";
             var success = false;
 
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -83,7 +83,7 @@ namespace Reminders.Mvc.Test.Api.Reminders
         [TestMethod]
         public void RemindersDelete()
         {
-            var baseUri = _configuration["TestConfigutation:UrlApi"] + "api/reminders";
+            var baseUri = _configuration["TestConfiguration:UrlApi"] + "api/reminders";
             var success = false;
 
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");

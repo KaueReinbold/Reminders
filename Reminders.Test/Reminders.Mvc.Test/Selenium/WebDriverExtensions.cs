@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Reminders.Mvc.Test.Screen.Selenium
+namespace Reminders.Mvc.Test.Selenium
 {
     public static class WebDriverExtensions
     {
