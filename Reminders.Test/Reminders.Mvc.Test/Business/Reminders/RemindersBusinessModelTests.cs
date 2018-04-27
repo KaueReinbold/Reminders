@@ -39,7 +39,7 @@ namespace Reminders.Mvc.Test.Business.Reminders
             {
                 Title = $"Business Test - Title - {newGuid}",
                 Description = $"Business Test - Description - {newGuid}",
-                LimitDate = DateTime.Now.AddDays(10),
+                LimitDate = DateTime.UtcNow.AddDays(10),
                 IsDone = false
             };
 
@@ -54,14 +54,14 @@ namespace Reminders.Mvc.Test.Business.Reminders
         {
             var success = false;
 
-            var reminder = _businessReminderModel.GetAll().FirstOrDefault(r => r.Title.StartsWith("Business Test"));
+            var reminder = _businessReminderModel.GetAll(r => r.Title.StartsWith("Business Test")).FirstOrDefault();
 
             if (reminder != null)
             {
                 var newGuid = Guid.NewGuid().ToString();
                 reminder.Title = $"Business Test - Title Edited - {newGuid}";
                 reminder.Description = $"Business Test - Description - {newGuid}";
-                reminder.LimitDate = DateTime.Now.AddDays(5);
+                reminder.LimitDate = DateTime.UtcNow.AddDays(5);
                 reminder.IsDone = true;
 
                 success = _businessReminderModel.Update(reminder);
@@ -76,7 +76,7 @@ namespace Reminders.Mvc.Test.Business.Reminders
         {
             var success = false;
 
-            var reminders = _businessReminderModel.GetAll().Where(r => r.Title.Contains("Business Test")).ToList();
+            var reminders = _businessReminderModel.GetAll(r => r.Title.Contains("Business Test")).ToList();
 
             if (reminders.Any())
             {

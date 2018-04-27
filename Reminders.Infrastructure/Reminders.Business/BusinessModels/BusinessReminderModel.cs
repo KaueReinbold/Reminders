@@ -5,6 +5,7 @@ using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -77,13 +78,9 @@ namespace Reminders.Business.BusinessModels
         {
             try
             {
-                Expression<Func<ReminderEntity, ReminderModel>> mapper = Mapper.Engine.CreateMapExpression<ReminderEntity, ReminderModel>();
+                var reminders = _repositoryRemindersEntity.GetAll();
 
-                Expression<Func<ReminderEntity, bool>> mappedSelector = func.Compose(mapper);
-
-                var reminders = _repositoryRemindersEntity.GetAll(mappedSelector);
-
-                return _mapper.Map<List<ReminderModel>>(reminders);
+                return _mapper.Map<List<ReminderModel>>(reminders).Where(func).ToList();
             }
             catch (Exception ex)
             {
@@ -119,7 +116,7 @@ namespace Reminders.Business.BusinessModels
             try
             {
                 var reminder = _mapper.Map<ReminderEntity>(model);
-
+                
                 var result = _repositoryRemindersEntity.Update(reminder);
 
                 return result;
@@ -131,28 +128,5 @@ namespace Reminders.Business.BusinessModels
                 return false;
             }
         }
-
-        public bool CompleteReminder(int key)
-        {
-            try
-            {
-                var reminder = _repositoryRemindersEntity.Find(key);
-
-                if (!reminder.IsDone)
-                {
-                    reminder.IsDone = true;
-
-                    _repositoryRemindersEntity.Update(reminder);
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, string.Empty);
-
-                return false;
-            }
-        }
-    }
+    }        
 }

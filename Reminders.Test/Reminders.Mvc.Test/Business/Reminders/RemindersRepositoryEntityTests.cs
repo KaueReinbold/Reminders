@@ -39,7 +39,7 @@ namespace Reminders.Mvc.Test.Business.Reminders
             {
                 Title = $"Repository Test - Title - {newGuid}",
                 Description = $"Repository Test - Description - {newGuid}",
-                LimitDate = DateTime.Now.AddDays(10),
+                LimitDate = DateTime.UtcNow.AddDays(10),
                 IsDone = false
             };
 
@@ -54,14 +54,14 @@ namespace Reminders.Mvc.Test.Business.Reminders
         {
             var success = false;
 
-            var reminder = _repositoryReminderEntity.GetAll().FirstOrDefault(r => r.Title.StartsWith("Repository Test"));
+            var reminder = _repositoryReminderEntity.GetAll(r => r.Title.StartsWith("Repository Test")).FirstOrDefault();
 
             if (reminder != null)
             {
                 var newGuid = Guid.NewGuid().ToString();
                 reminder.Title = $"Repository Test - Title Edited - {newGuid}";
                 reminder.Description = $"Repository Test - Description - {newGuid}";
-                reminder.LimitDate = DateTime.Now.AddDays(5);
+                reminder.LimitDate = DateTime.UtcNow.AddDays(5);
                 reminder.IsDone = true;
 
                 success = _repositoryReminderEntity.Update(reminder);
@@ -76,7 +76,7 @@ namespace Reminders.Mvc.Test.Business.Reminders
         {
             var success = false;
 
-            var reminders = _repositoryReminderEntity.GetAll().Where(r => r.Title.Contains("Repository Test")).ToList();
+            var reminders = _repositoryReminderEntity.GetAll(r => r.Title.Contains("Repository Test"));
 
             if (reminders.Any())
             {

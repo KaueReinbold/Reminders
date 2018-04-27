@@ -1,26 +1,37 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Reminders.Business.BusinessModels;
+using Reminders.Business.Contracts;
+using Reminders.Domain.Entities;
+using Reminders.Domain.Models;
 
 namespace Reminders.Core.Routines.Reminders
 {
     public class ReminderCompleteService : TimerService
     {
-        private BusinessReminderModel _businessReminderModel;
+        private IRepositoryEntityGeneric<ReminderEntity> _repositoryEntityReminders;
 
-        public ReminderCompleteService(ILogger<ReminderCompleteService> logger, BusinessReminderModel businessReminderModel) : base(logger)
+        public ReminderCompleteService(ILogger<ReminderCompleteService> logger, IRepositoryEntityGeneric<ReminderEntity> repositoryEntityReminders) : base(logger)
         {
             DueTime = TimeSpan.Zero;
-            Period = TimeSpan.FromMinutes(30);
+            Period = TimeSpan.FromMinutes(2);
 
-            _businessReminderModel = businessReminderModel;
+            _repositoryEntityReminders = repositoryEntityReminders;
         }
 
         public override void DoWork(object stateInfo)
         {
             try
             {
-                var reminders = _businessReminderModel.GetAll();
+                var reminders = _repositoryEntityReminders.GetAll().Where(reminder => !reminder.IsDone && reminder.LimitDate < DateTime.UtcNow).ToList();
+
+                reminders.ForEach(reminder =>
+                {
+                    reminder.IsDone = true;
+
+                    _repositoryEntityReminders.Update(reminder);
+                });
             }
             catch (Exception ex)
             {
