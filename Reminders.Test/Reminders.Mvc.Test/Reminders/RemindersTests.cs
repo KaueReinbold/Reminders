@@ -2,14 +2,12 @@
 using OpenQA.Selenium;
 using System;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-using Reminders.Mvc.Test.Screen.Selenium;
-using Reminders.Mvc.Test.Screen.Selenium.Enums;
+using Reminders.Mvc.Test.Selenium;
+using Reminders.Mvc.Test.Selenium.Enums;
 
-namespace Reminders.Mvc.Test.Screen.Reminder
+namespace Reminders.Mvc.Test.Reminders
 {
-    public class RemindersTests : TestConfigurationScreen
+    public class RemindersTests : StartupScreenTest
     {
         public RemindersTests(EnumBrowsers enumBrowsers) 
             : base(enumBrowsers)
@@ -19,7 +17,7 @@ namespace Reminders.Mvc.Test.Screen.Reminder
 
         public void RemindersInsert()
         {
-            _webDriver.LoadPage(TimeSpan.FromSeconds(secondsToWait), $"{_configuration.GetSection("TestConfigutation:UrlApplicationMvc").Value}Reminders/Create");
+            _webDriver.LoadPage(TimeSpan.FromSeconds(secondsToWait), $"{_configuration.GetSection("TestConfiguration:UrlApplicationMvc").Value}Reminders/Create");
 
             string newGuid = Guid.NewGuid().ToString();
             DateTime dateLimit = DateTime.Now.AddDays(10);
@@ -41,7 +39,7 @@ namespace Reminders.Mvc.Test.Screen.Reminder
 
         public void RemindersEdit()
         {
-            _webDriver.LoadPage(TimeSpan.FromSeconds(secondsToWait), $"{_configuration.GetSection("TestConfigutation:UrlApplicationMvc").Value}");
+            _webDriver.LoadPage(TimeSpan.FromSeconds(secondsToWait), $"{_configuration.GetSection("TestConfiguration:UrlApplicationMvc").Value}");
 
             _webDriver.WaitForElement(By.Id("remindersTable"), secondsToWait);
 
@@ -76,7 +74,7 @@ namespace Reminders.Mvc.Test.Screen.Reminder
 
         public void RemindersDelete()
         {
-            _webDriver.LoadPage(TimeSpan.FromSeconds(secondsToWait), $"{_configuration.GetSection("TestConfigutation:UrlApplicationMvc").Value}");
+            _webDriver.LoadPage(TimeSpan.FromSeconds(secondsToWait), $"{_configuration.GetSection("TestConfiguration:UrlApplicationMvc").Value}");
 
             var lines = _webDriver.FindElements(By.CssSelector("#remindersTable > tbody > tr"));
 

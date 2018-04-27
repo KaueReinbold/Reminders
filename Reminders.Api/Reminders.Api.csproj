@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Reminders.Infrastructure\Reminders.Business\Reminders.Business.csproj" />
+    <ProjectReference Include="..\Reminders.Infrastructure\Reminders.Core\Reminders.Core.csproj" />
     <ProjectReference Include="..\Reminders.Infrastructure\Reminders.Domain\Reminders.Domain.csproj" />
   </ItemGroup>
 

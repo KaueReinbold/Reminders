@@ -1,17 +1,17 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reminders.Mvc.Test.Screen.Selenium.Enums;
+using Reminders.Mvc.Test.Selenium.Enums;
 
-namespace Reminders.Mvc.Test.Screen.Reminder.Firefox
+namespace Reminders.Mvc.Test.Reminders.Chrome
 {
     [TestClass]
-    public class FirefoxRemindersTest
+    public class ChromeRemindersTest
     {
         private RemindersTests _remindersTests;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _remindersTests = new RemindersTests(EnumBrowsers.Firefox);
+            _remindersTests = new RemindersTests(EnumBrowsers.Chrome);
         }
 
         [TestCleanup]
@@ -21,19 +21,19 @@ namespace Reminders.Mvc.Test.Screen.Reminder.Firefox
         }
 
         [TestMethod]
-        public void FirefoxReminderInsert()
+        public void ChromeReminderInsert()
         {
             _remindersTests.RemindersInsert();
         }
 
         [TestMethod]
-        public void FirefoxReminderEdit()
+        public void ChromeReminderEdit()
         {
             _remindersTests.RemindersEdit();
         }
 
         [TestMethod]
-        public void FirefoxReminderDelete()
+        public void ChromeReminderDelete()
         {
             _remindersTests.RemindersDelete();
         }

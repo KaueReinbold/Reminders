@@ -28,9 +28,7 @@ namespace Reminders.Business.BusinessModels
         {
             try
             {
-                var reminder = _repositoryRemindersEntity.Find(key);
-
-                var result = _repositoryRemindersEntity.Delete(reminder);
+                var result = _repositoryRemindersEntity.Delete(key);
 
                 return result;
             }
@@ -115,7 +113,7 @@ namespace Reminders.Business.BusinessModels
         {
             try
             {
-                var reminder = _mapper.Map<ReminderEntity>(model);
+                var reminder = _repositoryRemindersEntity.Find(model.Id);
                 
                 var result = _repositoryRemindersEntity.Update(reminder);
 

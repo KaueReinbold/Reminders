@@ -11,6 +11,7 @@ using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
 using AutoMapper;
 using Swashbuckle.AspNetCore.Swagger;
+using Reminders.Core.Options;
 
 namespace Reminders.Api
 {
@@ -41,10 +42,14 @@ namespace Reminders.Api
         {
             services.AddSingleton<IRepositoryEntityGeneric<ReminderEntity>, RepositoryReminderEntity>();
 
-            services.AddSingleton<IBusinessModelGeneric<ReminderModel>, BusinessReminderModel>();
+            services.AddScoped<IBusinessModelGeneric<ReminderModel>, BusinessReminderModel>();
 
             services.AddDbContext<RemindersDbContext>(options =>
                       options.UseSqlServer(Configuration.GetConnectionString("StringConnectionReminders")), ServiceLifetime.Singleton);
+
+            services.AddOptions();
+
+            services.Configure<ApplicationOptions>(Configuration.GetSection("AppSettings"));
 
             services.AddAutoMapper();
 
@@ -59,7 +64,7 @@ namespace Reminders.Api
                 {
                     Version = "v1",
                     Title = "Reminders Api",
-                    Description = "Application to register and list reminders. Each reminder has a Title, Description, Date Limit and Status.",
+                    Description = "Application to register and list reminders. Each Reminder a Title, Description, Date Limit and Status.",
                     Contact = new Contact
                     {
                         Name = "Kaue Reinbold",

@@ -9,6 +9,7 @@ using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
 using Reminders.Business.RepositoryEntities;
 using Reminders.Context.RemindersContext;
+using Reminders.Core.Options;
 using Reminders.Core.Routines.Reminders;
 using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
@@ -35,6 +36,10 @@ namespace Reminders.Mvc
                       options.UseSqlServer(Configuration.GetConnectionString("StringConnectionReminders")), ServiceLifetime.Singleton);
 
             services.AddSingleton<IHostedService, ReminderCompleteService>();
+
+            services.AddOptions();
+
+            services.Configure<ApplicationOptions>(Configuration.GetSection("AppSettings"));
 
             services.AddAutoMapper();
 

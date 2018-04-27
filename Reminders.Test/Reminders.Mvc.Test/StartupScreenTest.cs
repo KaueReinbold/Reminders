@@ -1,22 +1,22 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using OpenQA.Selenium;
-using Reminders.Mvc.Test.Screen.Selenium;
-using Reminders.Mvc.Test.Screen.Selenium.Enums;
+using Reminders.Core.Options;
+using Reminders.Mvc.Test.Selenium;
+using Reminders.Mvc.Test.Selenium.Enums;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
-namespace Reminders.Mvc.Test.Screen
+namespace Reminders.Mvc.Test
 {
-    public class TestConfigurationScreen
+    public class StartupScreenTest
     {
         public readonly IConfiguration _configuration;
         public IWebDriver _webDriver;
         public readonly EnumBrowsers _enumBrowsers;
         public readonly int secondsToWait = 10;
 
-        public TestConfigurationScreen(EnumBrowsers enumBrowsers)
+        public StartupScreenTest(EnumBrowsers enumBrowsers)
         {
             _enumBrowsers = enumBrowsers;
 
@@ -31,13 +31,13 @@ namespace Reminders.Mvc.Test.Screen
             switch (enumBrowsers)
             {
                 case EnumBrowsers.Firefox:
-                    path = string.Concat(path, _configuration.GetSection("Selenium:FirefoxDriver").Value);
+                    path = string.Concat(path, _configuration.GetSection("TestConfiguration:PathFirefoxDriver").Value);
                     break;
                 case EnumBrowsers.Chrome:
-                    path = string.Concat(path, _configuration.GetSection("Selenium:ChromeDriver").Value);
+                    path = string.Concat(path, _configuration.GetSection("TestConfiguration:PathChromeDriver").Value);
                     break;
                 case EnumBrowsers.Edge:
-                    path = string.Concat(path, _configuration.GetSection("Selenium:EdgeDriver").Value);
+                    path = string.Concat(path, _configuration.GetSection("TestConfiguration:PathEdgeDriver").Value);
                     break;
             }
 

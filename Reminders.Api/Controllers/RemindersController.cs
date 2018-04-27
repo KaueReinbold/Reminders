@@ -69,7 +69,7 @@ namespace Reminders.Api.Controllers
             if (reminderCreated.Id == 0)
                 return BadRequest("Some error has happened!");
 
-            return Ok("Reminder has created!");
+            return Ok("Reminder created!");
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Reminders.Api.Controllers
             if (!reminderEdit)
                 return BadRequest("Some error has happened!");
 
-            return Ok("Reminder has updated!");
+            return Ok("Reminder updated!");
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace Reminders.Api.Controllers
             if (!hasDeleted)
                 return BadRequest("Some error has happened!");
 
-            return Ok("Reminder has deleted!");
+            return Ok("Reminder deleted!");
         }
     }
 }

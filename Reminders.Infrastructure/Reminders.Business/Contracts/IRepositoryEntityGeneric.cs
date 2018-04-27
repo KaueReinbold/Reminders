@@ -9,7 +9,7 @@ namespace Reminders.Business.Contracts
     {
         T Insert(T entity);
         bool Update(T entity);
-        bool Delete(T entity);
+        bool Delete(int key);
         IEnumerable<T> GetAll();
         IEnumerable<T> GetAll(Func<T, bool> func);
         T Find(int key);
