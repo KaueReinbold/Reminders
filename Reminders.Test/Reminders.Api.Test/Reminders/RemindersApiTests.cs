@@ -12,66 +12,75 @@ namespace Reminders.Api.Test.Reminders
     [TestClass]
     public class RemindersApiTests : StartupApiTest
     {
+        private string _baseUri;
+        private string _testGuid;
+
+        public RemindersApiTests()
+        {
+            _baseUri = _configuration["TestConfiguration:UrlApi"] + "api/reminders";
+
+            _testGuid = Guid.NewGuid().ToString();
+        }
+
         [TestMethod]
+        public void RemindersApiCRUD()
+        {
+            RemindersInsert();
+
+            RemindersEdit();
+
+            RemindersDelete();
+        }
+
         public void RemindersInsert()
         {
-            var baseUri = _configuration["TestConfiguration:UrlApi"] + "api/reminders";
             var success = false;
-
-            var newGuid = Guid.NewGuid().ToString();
 
             var reminder = new ReminderModel
             {
-                Title = $"Api Test - Title - {newGuid}",
-                Description = $"Api Test - Description - {newGuid}",
+                Title = $"Api Test - Title - {_testGuid}",
+                Description = $"Api Test - Description - {_testGuid}",
                 LimitDate = DateTime.UtcNow.AddDays(10),
                 IsDone = false
             };
 
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-            var result = _httpClient.PostAsJsonAsync(baseUri, reminder).Result;
+            var result = _httpClient.PostAsJsonAsync(_baseUri, reminder).Result;
 
             if (result.StatusCode == HttpStatusCode.OK)
             {
-                var reminders = _httpClient.GetAsync(baseUri).Result.Content.ReadAsJsonAsync<IList<ReminderModel>>().Result;
+                var reminders = _httpClient.GetAsync(_baseUri).Result.Content.ReadAsJsonAsync<IList<ReminderModel>>().Result;
 
-                success = reminders.Any(r => r.Title.Contains(newGuid));
+                success = reminders.Any(r => r.Title.Contains(_testGuid));
             }
 
             if (!success)
                 Assert.Fail("The insert has not happened!");
         }
 
-        [TestMethod]
         public void RemindersEdit()
         {
-            var baseUri = _configuration["TestConfiguration:UrlApi"] + "api/reminders";
             var success = false;
 
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-            var reminders = _httpClient.GetAsync(baseUri).Result.Content.ReadAsJsonAsync<IList<ReminderModel>>().Result;
+            var reminders = _httpClient.GetAsync(_baseUri).Result.Content.ReadAsJsonAsync<IList<ReminderModel>>().Result;
 
             if (reminders.Any())
             {
-                var reminder = reminders.FirstOrDefault(r => r.Title.StartsWith("Api Test"));
+                var reminder = reminders.FirstOrDefault(r => r.Title.Contains(_testGuid));
 
                 if (reminder != null)
                 {
-                    var newGuid = Guid.NewGuid().ToString();
-                    reminder.Title = $"Api Test - Title Edited - {newGuid}";
-                    reminder.Description = $"Api Test - Description - {newGuid}";
+                    reminder.Title = $"Api Test - Title Edited - {_testGuid}";
+                    reminder.Description = $"Api Test - Description - {_testGuid}";
                     reminder.LimitDate = DateTime.UtcNow.AddDays(5);
                     reminder.IsDone = true;
 
-                    var result = _httpClient.PutAsJsonAsync(baseUri, reminder).Result;
+                    var result = _httpClient.PutAsJsonAsync(_baseUri, reminder).Result;
 
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
-                        reminders = _httpClient.GetAsync(baseUri).Result.Content.ReadAsJsonAsync<IList<ReminderModel>>().Result;
+                        reminders = _httpClient.GetAsync(_baseUri).Result.Content.ReadAsJsonAsync<IList<ReminderModel>>().Result;
 
-                        success = reminders.Any(r => r.Title.Contains(newGuid));
+                        success = reminders.Any(r => r.Title.Contains(_testGuid));
                     }
                 }
             }
@@ -80,23 +89,19 @@ namespace Reminders.Api.Test.Reminders
                 Assert.Fail("The update has not happened!");
         }
 
-        [TestMethod]
         public void RemindersDelete()
         {
-            var baseUri = _configuration["TestConfiguration:UrlApi"] + "api/reminders";
             var success = false;
-
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-            var reminders = _httpClient.GetAsync(baseUri).Result.Content.ReadAsJsonAsync<IList<ReminderModel>>().Result;
+            
+            var reminders = _httpClient.GetAsync(_baseUri).Result.Content.ReadAsJsonAsync<IList<ReminderModel>>().Result;
 
             if (reminders.Any())
             {
                 foreach (var reminder in reminders)
                 {
-                    if (reminder.Title.StartsWith("Api Test"))
+                    if (reminder.Title.Contains(_testGuid))
                     {
-                        success = _httpClient.DeleteAsync(baseUri + "/" + reminder.Id).Result.StatusCode == HttpStatusCode.OK;
+                        success = _httpClient.DeleteAsync(_baseUri + "/" + reminder.Id).Result.StatusCode == HttpStatusCode.OK;
 
                         if (!success)
                             break;

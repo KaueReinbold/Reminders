@@ -21,6 +21,8 @@ namespace Reminders.Api.Test
                 .Build();
 
             _httpClient = new HttpClient();
+
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         }
     }
 }

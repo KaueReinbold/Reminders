@@ -9,6 +9,7 @@ namespace Reminders.Mvc.Test.Reminders
 {
     public class RemindersTests : StartupScreenTest
     {
+
         public RemindersTests(EnumBrowsers enumBrowsers) 
             : base(enumBrowsers)
         {

@@ -21,20 +21,12 @@ namespace Reminders.Mvc.Test.Reminders.Edge
         }
 
         [TestMethod]
-        public void EdgeReminderInsert()
+        public void EdgeReminderCRUD()
         {
             _remindersTests.RemindersInsert();
-        }
 
-        [TestMethod]
-        public void EdgeReminderEdit()
-        {
             _remindersTests.RemindersEdit();
-        }
 
-        [TestMethod]
-        public void EdgeReminderDelete()
-        {
             _remindersTests.RemindersDelete();
         }
     }

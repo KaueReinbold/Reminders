@@ -21,20 +21,12 @@ namespace Reminders.Mvc.Test.Reminders.Chrome
         }
 
         [TestMethod]
-        public void ChromeReminderInsert()
+        public void ChromeReminderCRUD()
         {
             _remindersTests.RemindersInsert();
-        }
 
-        [TestMethod]
-        public void ChromeReminderEdit()
-        {
             _remindersTests.RemindersEdit();
-        }
 
-        [TestMethod]
-        public void ChromeReminderDelete()
-        {
             _remindersTests.RemindersDelete();
         }
     }

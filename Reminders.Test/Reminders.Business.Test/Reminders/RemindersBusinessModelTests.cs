@@ -14,14 +14,17 @@ namespace Reminders.Business.Test.Reminders
     public class RemindersBusinessModelTests : StartupBusinessTest
     {
         private BusinessReminderModel _businessReminderModel;
+        private string _testGuid;
 
         public RemindersBusinessModelTests()
-        {            
+        {
             var repositoryRemindersEntity = _serviceProvider.GetService<IRepositoryEntityGeneric<ReminderEntity>>();
 
             var logger = _serviceProvider.GetService<ILogger<BusinessReminderModel>>();
 
             _businessReminderModel = new BusinessReminderModel(_mapper, logger, repositoryRemindersEntity);
+
+            _testGuid = Guid.NewGuid().ToString();
         }
 
         [TestCleanup]
@@ -31,14 +34,22 @@ namespace Reminders.Business.Test.Reminders
         }
 
         [TestMethod]
+        public void ReminderBusinessCRUD()
+        {
+            RemindersInsert();
+
+            RemindersEdit();
+
+            RemindersDelete();
+        }
+
         public void RemindersInsert()
         {
-            var newGuid = Guid.NewGuid().ToString();
 
             var reminder = new ReminderModel
             {
-                Title = $"Business Test - Title - {newGuid}",
-                Description = $"Business Test - Description - {newGuid}",
+                Title = $"Business Test - Title - {_testGuid}",
+                Description = $"Business Test - Description - {_testGuid}",
                 LimitDate = DateTime.UtcNow.AddDays(10),
                 IsDone = false
             };
@@ -48,19 +59,18 @@ namespace Reminders.Business.Test.Reminders
             if (reminder.Id == 0)
                 Assert.Fail("The insert has not happened!");
         }
-
-        [TestMethod]
+        
         public void RemindersEdit()
         {
             var success = false;
 
-            var reminder = _businessReminderModel.GetAll(r => r.Title.StartsWith("Business Test")).FirstOrDefault();
+            var reminder = _businessReminderModel.GetAll(r => r.Title.Contains(_testGuid)).FirstOrDefault();
 
             if (reminder != null)
             {
-                var newGuid = Guid.NewGuid().ToString();
-                reminder.Title = $"Business Test - Title Edited - {newGuid}";
-                reminder.Description = $"Business Test - Description - {newGuid}";
+
+                reminder.Title = $"Business Test - Title Edited - {_testGuid}";
+                reminder.Description = $"Business Test - Description - {_testGuid}";
                 reminder.LimitDate = DateTime.UtcNow.AddDays(5);
                 reminder.IsDone = true;
 
@@ -70,13 +80,12 @@ namespace Reminders.Business.Test.Reminders
             if (!success)
                 Assert.Fail("The update has not happened!");
         }
-
-        [TestMethod]
+        
         public void RemindersDelete()
         {
             var success = false;
 
-            var reminders = _businessReminderModel.GetAll(r => r.Title.Contains("Business Test")).ToList();
+            var reminders = _businessReminderModel.GetAll(r => r.Title.Contains(_testGuid)).ToList();
 
             if (reminders.Any())
             {

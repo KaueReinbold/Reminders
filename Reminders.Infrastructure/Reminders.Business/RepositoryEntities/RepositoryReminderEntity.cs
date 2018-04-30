@@ -20,19 +20,19 @@ namespace Reminders.Business.RepositoryEntities
 
         public ReminderEntity Find(int key)
         {
-            return _remindersDbContext.Reminders.AsNoTracking().ToList().Find(reminder => reminder.Id == key);
+            return _remindersDbContext.Reminders.Find(key);
         }
 
         public IEnumerable<ReminderEntity> GetAll()
         {
-            var reminders = _remindersDbContext.Reminders.AsNoTracking().ToList();
+            var reminders = _remindersDbContext.Reminders.ToList();
 
             return reminders ?? new List<ReminderEntity>();
         }
 
         public IEnumerable<ReminderEntity> GetAll(Func<ReminderEntity, bool> func)
         {
-            var reminders = _remindersDbContext.Reminders.AsNoTracking().AsQueryable().Where(func).ToList();
+            var reminders = _remindersDbContext.Reminders.Where(func).ToList();
 
             return reminders ?? new List<ReminderEntity>();
         }
