@@ -16,12 +16,15 @@ namespace Reminders.Business.Test.Reminders
     public class RemindersRepositoryEntityTests : StartupBusinessTest
     {
         private RepositoryReminderEntity _repositoryReminderEntity;
+        private string _testGuid;
 
         public RemindersRepositoryEntityTests()
         {            
             var reminderDbContext = _serviceProvider.GetService<RemindersDbContext>();
             
             _repositoryReminderEntity = new RepositoryReminderEntity(reminderDbContext);
+
+            _testGuid = Guid.NewGuid().ToString();
         }
 
         [TestCleanup]
@@ -31,14 +34,22 @@ namespace Reminders.Business.Test.Reminders
         }
 
         [TestMethod]
+        public void RemindersRepositoryCRUD()
+        {
+            RemindersInsert();
+
+            RemindersEdit();
+
+            RemindersDelete();
+        }
+
         public void RemindersInsert()
         {
-            var newGuid = Guid.NewGuid().ToString();
 
             var reminder = new ReminderEntity
             {
-                Title = $"Repository Test - Title - {newGuid}",
-                Description = $"Repository Test - Description - {newGuid}",
+                Title = $"Repository Test - Title - {_testGuid}",
+                Description = $"Repository Test - Description - {_testGuid}",
                 LimitDate = DateTime.UtcNow.AddDays(10),
                 IsDone = false
             };
@@ -49,18 +60,16 @@ namespace Reminders.Business.Test.Reminders
                 Assert.Fail("The insert has not happened!");
         }
 
-        [TestMethod]
         public void RemindersEdit()
         {
             var success = false;
 
-            var reminder = _repositoryReminderEntity.GetAll(r => r.Title.StartsWith("Repository Test")).FirstOrDefault();
+            var reminder = _repositoryReminderEntity.GetAll(r => r.Title.Contains(_testGuid)).FirstOrDefault();
 
             if (reminder != null)
             {
-                var newGuid = Guid.NewGuid().ToString();
-                reminder.Title = $"Repository Test - Title Edited - {newGuid}";
-                reminder.Description = $"Repository Test - Description - {newGuid}";
+                reminder.Title = $"Repository Test - Title Edited - {_testGuid}";
+                reminder.Description = $"Repository Test - Description - {_testGuid}";
                 reminder.LimitDate = DateTime.UtcNow.AddDays(5);
                 reminder.IsDone = true;
 
@@ -71,12 +80,11 @@ namespace Reminders.Business.Test.Reminders
                 Assert.Fail("The update has not happened!");
         }
 
-        [TestMethod]
         public void RemindersDelete()
         {
             var success = false;
 
-            var reminders = _repositoryReminderEntity.GetAll(r => r.Title.Contains("Repository Test"));
+            var reminders = _repositoryReminderEntity.GetAll(r => r.Title.Contains(_testGuid));
 
             if (reminders.Any())
             {

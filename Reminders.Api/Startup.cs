@@ -40,12 +40,12 @@ namespace Reminders.Api
         /// <param name="services"> IServiceCollection object. </param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IRepositoryEntityGeneric<ReminderEntity>, RepositoryReminderEntity>();
+            services.AddScoped<IRepositoryEntityGeneric<ReminderEntity>, RepositoryReminderEntity>();
 
             services.AddScoped<IBusinessModelGeneric<ReminderModel>, BusinessReminderModel>();
 
             services.AddDbContext<RemindersDbContext>(options =>
-                      options.UseSqlServer(Configuration.GetConnectionString("StringConnectionReminders")), ServiceLifetime.Singleton);
+                      options.UseSqlServer(Configuration.GetConnectionString("StringConnectionReminders")), ServiceLifetime.Scoped);
 
             services.AddOptions();
 

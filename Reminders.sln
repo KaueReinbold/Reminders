@@ -20,9 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Api", "Reminders.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Core", "Reminders.Infrastructure\Reminders.Core\Reminders.Core.csproj", "{17C6B601-78A0-4794-9CFD-57CBB25461EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Api.Test", "Reminders.Test\Reminders.Api.Test\Reminders.Api.Test.csproj", "{F03FF847-71E7-4108-B210-3FF3A8E65AB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Api.Test", "Reminders.Test\Reminders.Api.Test\Reminders.Api.Test.csproj", "{F03FF847-71E7-4108-B210-3FF3A8E65AB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Business.Test", "Reminders.Test\Reminders.Business.Test\Reminders.Business.Test.csproj", "{F70A49F4-89A2-4EF7-A832-8CDBE8972726}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Business.Test", "Reminders.Test\Reminders.Business.Test\Reminders.Business.Test.csproj", "{F70A49F4-89A2-4EF7-A832-8CDBE8972726}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

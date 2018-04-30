@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
@@ -10,28 +11,37 @@ namespace Reminders.Core.Routines.Reminders
 {
     public class ReminderCompleteService : TimerService
     {
-        private IRepositoryEntityGeneric<ReminderEntity> _repositoryEntityReminders;
+        private IServiceProvider _serviceProvider;
 
-        public ReminderCompleteService(ILogger<ReminderCompleteService> logger, IRepositoryEntityGeneric<ReminderEntity> repositoryEntityReminders) : base(logger)
+        public ReminderCompleteService(ILogger<ReminderCompleteService> logger, IServiceProvider serviceProvider)
+            : base(logger)
         {
+            _serviceProvider = serviceProvider;
+
             DueTime = TimeSpan.Zero;
             Period = TimeSpan.FromMinutes(2);
-
-            _repositoryEntityReminders = repositoryEntityReminders;
         }
 
         public override void DoWork(object stateInfo)
         {
             try
             {
-                var reminders = _repositoryEntityReminders.GetAll().Where(reminder => !reminder.IsDone && reminder.LimitDate < DateTime.UtcNow).ToList();
-
-                reminders.ForEach(reminder =>
+                using (IServiceScope scope = _serviceProvider.CreateScope())
                 {
-                    reminder.IsDone = true;
+                    var businessModelGeneric = scope.ServiceProvider.GetRequiredService<IBusinessModelGeneric<ReminderModel>>();
 
-                    _repositoryEntityReminders.Update(reminder);
-                });
+                    var reminders = businessModelGeneric
+                                        .GetAll()
+                                        .Where(reminder => !reminder.IsDone && reminder.LimitDate < DateTime.UtcNow)
+                                        .ToList();
+
+                    reminders.ForEach(reminder =>
+                    {
+                        reminder.IsDone = true;
+
+                        businessModelGeneric.Update(reminder);
+                    });
+                }
             }
             catch (Exception ex)
             {

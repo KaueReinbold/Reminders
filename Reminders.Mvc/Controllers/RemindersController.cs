@@ -22,7 +22,7 @@ namespace Reminders.Mvc.Controllers
         }
 
         // GET: Reminders
-        public ActionResult Index()
+        public IActionResult Index()
         {
             var reminders = _businessReminderModel.GetAll();
 
@@ -30,7 +30,7 @@ namespace Reminders.Mvc.Controllers
         }
 
         // GET: Reminders/Details/5
-        public ActionResult Details(int id)
+        public IActionResult Details(int id)
         {
             var reminderDetails = _businessReminderModel.Find(id);
 
@@ -38,7 +38,7 @@ namespace Reminders.Mvc.Controllers
         }
 
         // GET: Reminders/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -46,7 +46,7 @@ namespace Reminders.Mvc.Controllers
         // POST: Reminders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ReminderModel reminder)
+        public IActionResult Create(ReminderModel reminder)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace Reminders.Mvc.Controllers
         }
 
         // GET: Reminders/Edit/5
-        public ActionResult Edit(int id)
+        public IActionResult Edit(int id)
         {
             var reminderEdit = _businessReminderModel.Find(id);
 
@@ -85,7 +85,7 @@ namespace Reminders.Mvc.Controllers
         // POST: Reminders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ReminderModel reminder)
+        public IActionResult Edit(ReminderModel reminder)
         {
             try
             {
@@ -113,7 +113,7 @@ namespace Reminders.Mvc.Controllers
         }
 
         // GET: Reminders/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             var reminderDelete = _businessReminderModel.Find(id);
 
@@ -123,7 +123,7 @@ namespace Reminders.Mvc.Controllers
         // POST: Reminders/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(ReminderModel reminderModel)
+        public IActionResult Delete(ReminderModel reminderModel)
         {
             try
             {

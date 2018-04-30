@@ -36,7 +36,7 @@ namespace Reminders.Business.Test
             serviceCollection.AddSingleton<IBusinessModelGeneric<ReminderModel>, BusinessReminderModel>();
 
             serviceCollection.AddDbContext<RemindersDbContext>(options =>
-                      options.UseLoggerFactory(DebugLoggerFactory).UseSqlServer(_configuration.GetConnectionString("StringConnectionReminders")));
+                      options.UseLoggerFactory(DebugLoggerFactory).UseSqlServer(_configuration.GetConnectionString("StringConnectionReminders")), ServiceLifetime.Scoped);
 
             serviceCollection.AddOptions();
 

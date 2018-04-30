@@ -17,7 +17,10 @@ namespace Reminders.Business.BusinessModels
         private readonly IMapper _mapper;
         private readonly ILogger<BusinessReminderModel> _logger;
 
-        public BusinessReminderModel(IMapper mapper, ILogger<BusinessReminderModel> logger, IRepositoryEntityGeneric<ReminderEntity> repositoryRemindersEntity)
+        public BusinessReminderModel(
+            IMapper mapper, 
+            ILogger<BusinessReminderModel> logger, 
+            IRepositoryEntityGeneric<ReminderEntity> repositoryRemindersEntity)
         {
             _mapper = mapper;
             _logger = logger;
@@ -114,6 +117,11 @@ namespace Reminders.Business.BusinessModels
             try
             {
                 var reminder = _repositoryRemindersEntity.Find(model.Id);
+
+                reminder.Title = model.Title;
+                reminder.Description = model.Description;
+                reminder.IsDone = model.IsDone;
+                reminder.LimitDate = model.LimitDate;
                 
                 var result = _repositoryRemindersEntity.Update(reminder);
 
