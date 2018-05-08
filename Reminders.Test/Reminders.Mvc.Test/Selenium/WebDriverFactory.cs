@@ -17,16 +17,19 @@ namespace Reminders.Mvc.Test.Selenium
             {
                 case EnumBrowsers.Firefox:
                     var firefoxOptions = new FirefoxOptions();
-                    firefoxOptions.AddArguments("--lang=pt");
-                    webDriver = new FirefoxDriver(FirefoxDriverService.CreateDefaultService(path), firefoxOptions, TimeSpan.FromSeconds(10));
+                    firefoxOptions.AddArgument("--headless");
+                    firefoxOptions.AddArgument("--lang=pt");
+                    webDriver = new FirefoxDriver(path, firefoxOptions);
                     break;
                 case EnumBrowsers.Chrome:
                     var chromeOptions = new ChromeOptions();
-                    chromeOptions.AddArguments("--lang=pt");
+                    chromeOptions.AddArgument("--headless");
+                    chromeOptions.AddArgument("--lang=pt");
                     webDriver = new ChromeDriver(path, chromeOptions);
                     break;
                 case EnumBrowsers.Edge:
-                    webDriver = new EdgeDriver(path);
+                    var edgeOptions = new EdgeOptions();
+                    webDriver = new EdgeDriver(path, edgeOptions);
                     break;
             }
 
