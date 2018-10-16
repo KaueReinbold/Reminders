@@ -1,5 +1,0 @@
-$(function () {
-
-    RemidersApp.init();
-
-});
