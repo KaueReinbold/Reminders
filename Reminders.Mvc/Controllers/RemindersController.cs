@@ -7,6 +7,7 @@ using Reminders.Domain;
 using Reminders.Domain.Enums;
 using Reminders.Domain.Models;
 using Reminders.Domain.Extensions;
+using Reminders.Business.Contracts.Business;
 
 namespace Reminders.Mvc.Controllers
 {

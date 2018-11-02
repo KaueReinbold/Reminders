@@ -3,7 +3,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
+using Reminders.Business.Contracts.Entity;
 using Reminders.Business.RepositoryEntities;
+using Reminders.Business.RepositoryEntities.Persistence;
+using Reminders.Business.RepositoryEntities.Persistence.Repositories;
 using Reminders.Context.RemindersContext;
 using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
@@ -15,14 +18,14 @@ namespace Reminders.Business.Test.Reminders
     [TestClass]
     public class RemindersRepositoryEntityTests : StartupBusinessTest
     {
-        private RepositoryReminderEntity _repositoryReminderEntity;
+        private IUnitOfWork _unitOfWork;
         private string _testGuid;
 
         public RemindersRepositoryEntityTests()
         {            
             var reminderDbContext = _serviceProvider.GetService<RemindersDbContext>();
             
-            _repositoryReminderEntity = new RepositoryReminderEntity(reminderDbContext);
+            _unitOfWork = new UnitOfWork(reminderDbContext);
 
             _testGuid = Guid.NewGuid().ToString();
         }
@@ -30,7 +33,7 @@ namespace Reminders.Business.Test.Reminders
         [TestCleanup]
         public void TestCleanup()
         {
-            _repositoryReminderEntity = null;
+            _unitOfWork = null;
         }
 
         [TestMethod]
@@ -54,7 +57,9 @@ namespace Reminders.Business.Test.Reminders
                 IsDone = false
             };
 
-            reminder = _repositoryReminderEntity.Insert(reminder);
+            _unitOfWork.RemindersRepository.Add(reminder);
+
+            _unitOfWork.Complete();
 
             if (reminder.Id == 0)
                 Assert.Fail("The insert has not happened!");
@@ -64,7 +69,7 @@ namespace Reminders.Business.Test.Reminders
         {
             var success = false;
 
-            var reminder = _repositoryReminderEntity.GetAll(r => r.Title.Contains(_testGuid)).FirstOrDefault();
+            var reminder = _unitOfWork.RemindersRepository.GetAll().FirstOrDefault(r => r.Title.Contains(_testGuid));
 
             if (reminder != null)
             {
@@ -73,7 +78,7 @@ namespace Reminders.Business.Test.Reminders
                 reminder.LimitDate = DateTime.UtcNow.AddDays(5);
                 reminder.IsDone = true;
 
-                success = _repositoryReminderEntity.Update(reminder);
+                success = _unitOfWork.Complete() > 0;
             }
 
             if (!success)
@@ -84,17 +89,13 @@ namespace Reminders.Business.Test.Reminders
         {
             var success = false;
 
-            var reminders = _repositoryReminderEntity.GetAll(r => r.Title.Contains(_testGuid));
+            var reminders = _unitOfWork.RemindersRepository.GetAll().Where(r => r.Title.Contains(_testGuid));
 
             if (reminders.Any())
             {
-                foreach (var reminder in reminders)
-                {
-                    success = _repositoryReminderEntity.Delete(reminder.Id);
+                _unitOfWork.RemindersRepository.RemoveRange(reminders);
 
-                    if (!success)
-                        break;
-                }
+                success = _unitOfWork.Complete() > 0;
             }
 
             if (!success)

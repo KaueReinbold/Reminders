@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Reminders.Business.Contracts;
+using Reminders.Business.Contracts.Business;
 using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
 using System;
@@ -13,42 +14,26 @@ namespace Reminders.Business.BusinessModels
 {
     public class BusinessReminderModel : IBusinessModelGeneric<ReminderModel>
     {
-        private readonly IRepositoryEntityGeneric<ReminderEntity> _repositoryRemindersEntity;
+        private readonly IUnitOfWork _unityOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<BusinessReminderModel> _logger;
 
         public BusinessReminderModel(
             IMapper mapper, 
             ILogger<BusinessReminderModel> logger, 
-            IRepositoryEntityGeneric<ReminderEntity> repositoryRemindersEntity)
+            IUnitOfWork unityOfWork)
         {
             _mapper = mapper;
             _logger = logger;
-            _repositoryRemindersEntity = repositoryRemindersEntity;
+            _unityOfWork = unityOfWork;
         }
-
-        public bool Delete(int key)
-        {
-            try
-            {
-                var result = _repositoryRemindersEntity.Delete(key);
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, string.Empty);
-
-                return false;
-            }
-        }
-
+        
         public ReminderModel Find(int key)
         {
             try
             {
-                var reminder = _repositoryRemindersEntity.Find(key);
-
+                var reminder = _unityOfWork.RemindersRepository.SingleOrDefault(r => r.Id == key);
+                
                 return _mapper.Map<ReminderModel>(reminder);
             }
             catch (Exception ex)
@@ -63,25 +48,9 @@ namespace Reminders.Business.BusinessModels
         {
             try
             {
-                var reminders = _repositoryRemindersEntity.GetAll();
+                var reminders = _unityOfWork.RemindersRepository.GetAll();
 
                 return _mapper.Map<List<ReminderModel>>(reminders);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, string.Empty);
-
-                return new List<ReminderModel>();
-            }
-        }
-
-        public List<ReminderModel> GetAll(Func<ReminderModel, bool> func)
-        {
-            try
-            {
-                var reminders = _repositoryRemindersEntity.GetAll();
-
-                return _mapper.Map<List<ReminderModel>>(reminders).Where(func).ToList();
             }
             catch (Exception ex)
             {
@@ -97,16 +66,17 @@ namespace Reminders.Business.BusinessModels
             {
                 var reminder = _mapper.Map<ReminderEntity>(model);
 
-                reminder = _repositoryRemindersEntity.Insert(reminder);
+                _unityOfWork.RemindersRepository.Add(reminder);
 
-                if (reminder.Id > 0)
-                    return _mapper.Map<ReminderModel>(reminder);
+                _unityOfWork.Complete();
 
-                return new ReminderModel();
+                var reminderInserted = _mapper.Map<ReminderModel>(reminder);
+
+                return reminderInserted;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, string.Empty);
+                _logger.LogError(ex, ex.Message);
 
                 return new ReminderModel();
             }
@@ -116,21 +86,35 @@ namespace Reminders.Business.BusinessModels
         {
             try
             {
-                var reminder = _repositoryRemindersEntity.Find(model.Id);
+                var reminder = _unityOfWork.RemindersRepository.SingleOrDefault(r => r.Id == model.Id);
 
                 reminder.Title = model.Title;
                 reminder.Description = model.Description;
                 reminder.IsDone = model.IsDone;
                 reminder.LimitDate = model.LimitDate;
-                
-                var result = _repositoryRemindersEntity.Update(reminder);
 
-                return result;
+                return _unityOfWork.Complete() > 0;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, string.Empty);
+                _logger.LogError(ex, ex.Message);
+                return false;
+            }
+        }
 
+        public bool Delete(int key)
+        {
+            try
+            {
+                var reminder = _unityOfWork.RemindersRepository.SingleOrDefault(r => r.Id == key);
+
+                _unityOfWork.RemindersRepository.Remove(reminder);
+
+                return _unityOfWork.Complete() > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
                 return false;
             }
         }

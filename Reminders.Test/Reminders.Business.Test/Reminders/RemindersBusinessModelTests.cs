@@ -18,11 +18,11 @@ namespace Reminders.Business.Test.Reminders
 
         public RemindersBusinessModelTests()
         {
-            var repositoryRemindersEntity = _serviceProvider.GetService<IRepositoryEntityGeneric<ReminderEntity>>();
+            var unitOfWork = _serviceProvider.GetService<IUnitOfWork>();
 
             var logger = _serviceProvider.GetService<ILogger<BusinessReminderModel>>();
 
-            _businessReminderModel = new BusinessReminderModel(_mapper, logger, repositoryRemindersEntity);
+            _businessReminderModel = new BusinessReminderModel(_mapper, logger, unitOfWork);
 
             _testGuid = Guid.NewGuid().ToString();
         }
@@ -64,7 +64,7 @@ namespace Reminders.Business.Test.Reminders
         {
             var success = false;
 
-            var reminder = _businessReminderModel.GetAll(r => r.Title.Contains(_testGuid)).FirstOrDefault();
+            var reminder = _businessReminderModel.GetAll().Where(r => r.Title.Contains(_testGuid)).FirstOrDefault();
 
             if (reminder != null)
             {
@@ -85,7 +85,7 @@ namespace Reminders.Business.Test.Reminders
         {
             var success = false;
 
-            var reminders = _businessReminderModel.GetAll(r => r.Title.Contains(_testGuid)).ToList();
+            var reminders = _businessReminderModel.GetAll().Where(r => r.Title.Contains(_testGuid)).ToList();
 
             if (reminders.Any())
             {
