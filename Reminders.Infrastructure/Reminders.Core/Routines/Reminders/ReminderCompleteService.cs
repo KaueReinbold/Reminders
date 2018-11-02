@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
+using Reminders.Business.Contracts.Business;
 using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
 
@@ -28,9 +29,9 @@ namespace Reminders.Core.Routines.Reminders
             {
                 using (IServiceScope scope = _serviceProvider.CreateScope())
                 {
-                    var businessModelGeneric = scope.ServiceProvider.GetRequiredService<IBusinessModelGeneric<ReminderModel>>();
+                    var remindersRepository = scope.ServiceProvider.GetRequiredService<IBusinessModelGeneric<ReminderModel>>();
 
-                    var reminders = businessModelGeneric
+                    var reminders = remindersRepository
                                         .GetAll()
                                         .Where(reminder => !reminder.IsDone && reminder.LimitDate < DateTime.UtcNow)
                                         .ToList();
@@ -39,7 +40,7 @@ namespace Reminders.Core.Routines.Reminders
                     {
                         reminder.IsDone = true;
 
-                        businessModelGeneric.Update(reminder);
+                        remindersRepository.Update(reminder);
                     });
                 }
             }

@@ -7,7 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
+using Reminders.Business.Contracts.Business;
 using Reminders.Business.RepositoryEntities;
+using Reminders.Business.RepositoryEntities.Persistence;
 using Reminders.Context.RemindersContext;
 using Reminders.Core.Options;
 using Reminders.Core.Routines.Reminders;
@@ -28,12 +30,15 @@ namespace Reminders.Mvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IRepositoryEntityGeneric<ReminderEntity>, RepositoryReminderEntity>();
-
             services.AddScoped<IBusinessModelGeneric<ReminderModel>, BusinessReminderModel>();
 
+            //services.AddDbContext<RemindersDbContext>(options =>
+            //          options.UseSqlServer(Configuration.GetConnectionString("StringConnectionReminders")));
+
             services.AddDbContext<RemindersDbContext>(options =>
-                      options.UseSqlServer(Configuration.GetConnectionString("StringConnectionReminders")));
+                      options.UseInMemoryDatabase("DbReminders"));
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddSingleton<IHostedService, ReminderCompleteService>();
 

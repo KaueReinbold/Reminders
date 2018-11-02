@@ -6,7 +6,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
+using Reminders.Business.Contracts.Business;
+using Reminders.Business.Contracts.Entity;
 using Reminders.Business.RepositoryEntities;
+using Reminders.Business.RepositoryEntities.Persistence;
 using Reminders.Context.RemindersContext;
 using Reminders.Core.Options;
 using Reminders.Domain.Entities;
@@ -31,12 +34,12 @@ namespace Reminders.Business.Test
 
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddSingleton<IRepositoryEntityGeneric<ReminderEntity>, RepositoryReminderEntity>();
-
-            serviceCollection.AddSingleton<IBusinessModelGeneric<ReminderModel>, BusinessReminderModel>();
+            serviceCollection.AddScoped<IBusinessModelGeneric<ReminderModel>, BusinessReminderModel>();
 
             serviceCollection.AddDbContext<RemindersDbContext>(options =>
-                      options.UseLoggerFactory(DebugLoggerFactory).UseSqlServer(_configuration.GetConnectionString("StringConnectionReminders")), ServiceLifetime.Scoped);
+                      options.UseInMemoryDatabase("DbReminders"));
+
+            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 
             serviceCollection.AddOptions();
 
