@@ -34,7 +34,7 @@ namespace Reminders.Business.Test.Reminders
         }
 
         [TestMethod]
-        public void ReminderBusinessCRUD()
+        public void RemindersBusinessCRUD()
         {
             RemindersInsert();
 

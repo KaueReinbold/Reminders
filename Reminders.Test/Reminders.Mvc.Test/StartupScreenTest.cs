@@ -14,7 +14,7 @@ namespace Reminders.Mvc.Test
         public readonly IConfiguration _configuration;
         public IWebDriver _webDriver;
         public readonly EnumBrowsers _enumBrowsers;
-        public readonly int secondsToWait = 10;
+        public readonly int secondsToWait = 15;
 
         public StartupScreenTest(EnumBrowsers enumBrowsers)
         {
