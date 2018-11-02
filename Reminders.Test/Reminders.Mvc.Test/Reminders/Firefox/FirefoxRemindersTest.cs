@@ -21,7 +21,7 @@ namespace Reminders.Mvc.Test.Reminders.Firefox
         }
 
         [TestMethod]
-        public void FirefoxReminderCRUD()
+        public void FirefoxRemindersCRUD()
         {
             _remindersTests.RemindersInsert();
 

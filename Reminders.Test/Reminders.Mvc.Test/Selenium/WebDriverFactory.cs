@@ -29,6 +29,7 @@ namespace Reminders.Mvc.Test.Selenium
                     break;
                 case EnumBrowsers.Edge:
                     var edgeOptions = new EdgeOptions();
+                    // TODO: Edge does not suppor headless mode. Check for updates. 
                     webDriver = new EdgeDriver(path, edgeOptions);
                     break;
             }
