@@ -8,6 +8,8 @@ using Reminders.Domain.Enums;
 using Reminders.Domain.Models;
 using Reminders.Domain.Extensions;
 using Reminders.Business.Contracts.Business;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Reminders.Mvc.Controllers
 {
@@ -24,7 +26,7 @@ namespace Reminders.Mvc.Controllers
 
         // GET: Reminders
         public IActionResult Index()
-        {
+        { 
             var reminders = _businessReminderModel.GetAll();
 
             return View(reminders);
@@ -43,7 +45,7 @@ namespace Reminders.Mvc.Controllers
         {
             return View();
         }
-
+        
         // POST: Reminders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -83,7 +85,7 @@ namespace Reminders.Mvc.Controllers
             return View(reminderEdit);
         }
 
-        // POST: Reminders/Edit/5
+        // POST: Reminderso/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(ReminderModel reminder)

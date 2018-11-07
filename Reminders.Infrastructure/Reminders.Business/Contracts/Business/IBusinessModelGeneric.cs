@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Reminders.Business.Contracts.Business
 {
@@ -11,5 +12,6 @@ namespace Reminders.Business.Contracts.Business
         bool Delete(int key);
         T Find(int key);
         List<T> GetAll();
+        Task<List<T>> GetAllAsync();
     }
 }
