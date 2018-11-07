@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Reminders.Business.Contracts.Entity
 {
@@ -16,6 +17,7 @@ namespace Reminders.Business.Contracts.Entity
 
         TEntity Get(int id);
         IEnumerable<TEntity> GetAll();
+        Task<List<TEntity>> GetAllAsync();
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
         TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);

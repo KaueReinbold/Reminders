@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Reminders.Business.BusinessModels
 {
@@ -116,6 +117,22 @@ namespace Reminders.Business.BusinessModels
             {
                 _logger.LogError(ex, ex.Message);
                 return false;
+            }
+        }
+
+        public Task<List<ReminderModel>> GetAllAsync()
+        {
+            try
+            {
+                var reminders = _unityOfWork.RemindersRepository.GetAllAsync();
+                
+                return Task.Run(() => _mapper.Map<List<ReminderModel>>(reminders));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, string.Empty);
+
+                return Task.Run(() => new List<ReminderModel>());
             }
         }
     }        

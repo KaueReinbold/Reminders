@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Reminders.Business.RepositoryEntities.Persistence.Repositories
 {
@@ -58,6 +59,11 @@ namespace Reminders.Business.RepositoryEntities.Persistence.Repositories
         public TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
             return _entity.SingleOrDefault(predicate);
+        }
+
+        public Task<List<TEntity>> GetAllAsync()
+        {
+            return _entity.ToListAsync();
         }
     }
 }
