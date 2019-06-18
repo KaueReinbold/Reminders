@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using Reminders.Domain.Models;
 using System;
 using System.Collections.Generic;

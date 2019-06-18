@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
-using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
 using System;
 using System.Linq;

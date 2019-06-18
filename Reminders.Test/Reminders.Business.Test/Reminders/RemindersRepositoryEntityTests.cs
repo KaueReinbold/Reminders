@@ -1,15 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
-using Reminders.Business.Contracts.Entity;
-using Reminders.Business.RepositoryEntities;
 using Reminders.Business.RepositoryEntities.Persistence;
-using Reminders.Business.RepositoryEntities.Persistence.Repositories;
 using Reminders.Context.RemindersContext;
 using Reminders.Domain.Entities;
-using Reminders.Domain.Models;
 using System;
 using System.Linq;
 

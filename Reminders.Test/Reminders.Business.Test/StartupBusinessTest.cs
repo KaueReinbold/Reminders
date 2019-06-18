@@ -2,13 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Debug;
 using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
 using Reminders.Business.Contracts.Business;
-using Reminders.Business.Contracts.Entity;
-using Reminders.Business.RepositoryEntities;
 using Reminders.Business.RepositoryEntities.Persistence;
 using Reminders.Context.RemindersContext;
 using Reminders.Core.Options;
@@ -23,7 +19,6 @@ namespace Reminders.Business.Test
         private IConfigurationRoot _configuration;
         public ServiceProvider _serviceProvider;
         public IMapper _mapper;
-        public static readonly LoggerFactory DebugLoggerFactory = new LoggerFactory(new[] { new DebugLoggerProvider((_, __) => true) });
 
         public StartupBusinessTest()
         {

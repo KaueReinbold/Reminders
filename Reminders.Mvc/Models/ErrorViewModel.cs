@@ -1,5 +1,3 @@
-using System;
-
 namespace Reminders.Mvc.Models
 {
     public class ErrorViewModel

@@ -3,7 +3,6 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using Reminders.Mvc.Test.Selenium.Enums;
-using System;
 
 namespace Reminders.Mvc.Test.Selenium
 {

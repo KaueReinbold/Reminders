@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Reminders.Business.Contracts;
 using Reminders.Domain.Models;
 using Reminders.Domain.Extensions;
 using Reminders.Business.Contracts.Business;

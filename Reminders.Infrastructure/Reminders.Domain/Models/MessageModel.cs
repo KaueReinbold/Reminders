@@ -1,7 +1,4 @@
 ﻿using Reminders.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Reminders.Domain.Models
 {

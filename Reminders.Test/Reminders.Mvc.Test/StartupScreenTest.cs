@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using OpenQA.Selenium;
-using Reminders.Core.Options;
 using Reminders.Mvc.Test.Selenium;
 using Reminders.Mvc.Test.Selenium.Enums;
 using System;
