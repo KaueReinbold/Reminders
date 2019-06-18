@@ -8,12 +8,10 @@ using Microsoft.Extensions.Hosting;
 using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
 using Reminders.Business.Contracts.Business;
-using Reminders.Business.RepositoryEntities;
 using Reminders.Business.RepositoryEntities.Persistence;
 using Reminders.Context.RemindersContext;
 using Reminders.Core.Options;
 using Reminders.Core.Routines.Reminders;
-using Reminders.Domain.Entities;
 using Reminders.Domain.Models;
 
 namespace Reminders.Mvc
@@ -45,8 +43,6 @@ namespace Reminders.Mvc
             services.AddOptions();
 
             services.Configure<ApplicationOptions>(Configuration.GetSection("AppSettings"));
-
-            services.AddAutoMapper();
 
             services.AddLogging();
 

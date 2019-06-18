@@ -1,15 +1,10 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Reminders.Business.Contracts;
-using Reminders.Domain;
 using Reminders.Domain.Enums;
 using Reminders.Domain.Models;
 using Reminders.Domain.Extensions;
 using Reminders.Business.Contracts.Business;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace Reminders.Mvc.Controllers
 {

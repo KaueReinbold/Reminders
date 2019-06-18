@@ -3,11 +3,7 @@ using Reminders.Business.Contracts;
 using Reminders.Business.Contracts.Entity;
 using Reminders.Business.Persistence.Repositories;
 using Reminders.Context.RemindersContext;
-using Reminders.Domain.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Reminders.Business.RepositoryEntities.Persistence
 {
