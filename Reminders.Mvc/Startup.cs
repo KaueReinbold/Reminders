@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +11,7 @@ using Reminders.Business.RepositoryEntities.Persistence;
 using Reminders.Context.RemindersContext;
 using Reminders.Core.Options;
 using Reminders.Core.Routines.Reminders;
+using Reminders.Domain.Extensions;
 using Reminders.Domain.Models;
 
 namespace Reminders.Mvc
@@ -45,6 +45,9 @@ namespace Reminders.Mvc
             services.Configure<ApplicationOptions>(Configuration.GetSection("AppSettings"));
 
             services.AddLogging();
+
+            // Add automapper
+            services.AddAutoMapper();
 
             services.AddMvc();
         }

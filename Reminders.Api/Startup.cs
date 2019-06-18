@@ -7,11 +7,11 @@ using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
 using Reminders.Context.RemindersContext;
 using Reminders.Domain.Models;
-using AutoMapper;
 using Swashbuckle.AspNetCore.Swagger;
 using Reminders.Core.Options;
 using Reminders.Business.Contracts.Business;
 using Reminders.Business.RepositoryEntities.Persistence;
+using Reminders.Domain.Extensions;
 
 namespace Reminders.Api
 {
@@ -53,6 +53,9 @@ namespace Reminders.Api
             services.AddOptions();
 
             services.Configure<ApplicationOptions>(Configuration.GetSection("AppSettings"));
+
+            // Add automapper
+            services.AddAutoMapper();
 
             services.AddLogging();
 
