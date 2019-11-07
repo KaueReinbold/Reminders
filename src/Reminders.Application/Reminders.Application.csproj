@@ -5,12 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Reminders.Domain\Reminders.Domain.csproj" />
+    <ProjectReference Include="..\Reminders.Infrastructure.CrossCutting.IoC\Reminders.Infrastructure.CrossCutting.IoC.csproj" />
   </ItemGroup>
 
 </Project>

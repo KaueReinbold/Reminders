@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Reminders.Domain.Contracts;
 using Reminders.Domain.Contracts.Repositories;
 using Reminders.Infrastructure.Data.EntityFramework;
@@ -10,10 +13,21 @@ namespace Reminders.Infrastructure.CrossCutting.IoC
     public static class DependencyInjectionBootstrapper
     {
         public static IServiceCollection RegisterDataServices(
-            this IServiceCollection services) =>
+            this IServiceCollection services,
+            IConfiguration configuration) =>
             services
-                .AddScoped<IRemindersRepository, ReminderRepository>()
+                .AddDbContext<RemindersContext>(options =>
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")))
+                .AddScoped<IRemindersRepository, RemindersRepository>()
                 .AddScoped<IUnitOfWork, UnitOfWork<RemindersContext>>()
             ;
+
+        public static void MigrateDatebase(
+            this IApplicationBuilder app)
+        {
+            using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+
+            scope.ServiceProvider.GetService<RemindersContext>().Database.Migrate();
+        }
     }
 }

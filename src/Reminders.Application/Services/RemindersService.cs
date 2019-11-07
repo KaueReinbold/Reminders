@@ -25,11 +25,11 @@ namespace Reminders.Application.Services
         public void Insert(ReminderViewModel reminderViewModel) =>
             remindersRepository.Add(mapper.Map<Reminder>(remindersRepository));
 
-        public void Delete(ReminderViewModel reminderViewModel) =>
-            remindersRepository.Remove(mapper.Map<Reminder>(reminderViewModel));
-
-        public void Edit(ReminderViewModel reminderViewModel) =>
+        public void Edit(int id, ReminderViewModel reminderViewModel) =>
             remindersRepository.Update(mapper.Map<Reminder>(reminderViewModel));
+
+        public void Delete(int id) =>
+            remindersRepository.Remove(id);
 
         public IQueryable<ReminderViewModel> Get() =>
             remindersRepository.Get().ProjectTo<ReminderViewModel>(mapper.ConfigurationProvider);

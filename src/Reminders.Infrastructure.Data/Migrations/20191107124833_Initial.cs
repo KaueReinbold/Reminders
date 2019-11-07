@@ -14,7 +14,7 @@ namespace Reminders.Infrastructure.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsDeleted = table.Column<bool>(nullable: false),
-                    Title = table.Column<string>(type: "varhcar(50)", nullable: false),
+                    Title = table.Column<string>(type: "varchar(50)", nullable: false),
                     Description = table.Column<string>(type: "varchar(200)", nullable: false),
                     LimitDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
                     IsDone = table.Column<bool>(nullable: false)

@@ -5,10 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Reminders.Infrastructure\Reminders.context\Reminders.Context.csproj" />
     <ProjectReference Include="..\Reminders.Domain\Reminders.Domain.csproj" />
     <ProjectReference Include="..\Reminders.Infrastructure.Data\Reminders.Infrastructure.Data.EntityFramework.csproj" />
   </ItemGroup>
