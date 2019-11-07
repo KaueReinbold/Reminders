@@ -41,7 +41,7 @@ namespace Reminders.Infrastructure.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("varhcar(50)");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 

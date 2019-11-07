@@ -7,9 +7,7 @@ namespace Reminders.Infrastructure.Data.EntityFramework.Contexts
         : DbContext
     {
         public RemindersContext(DbContextOptions<RemindersContext> options)
-            : base(options)
-        {
-        }
+            : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

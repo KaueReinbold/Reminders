@@ -17,7 +17,7 @@ namespace Reminders.Infrastructure.Data.EntityFramework.Configurations
 
             builder
                 .Property(reminder => reminder.Title)
-                .HasColumnType("varhcar(50)")
+                .HasColumnType("varchar(50)")
                 .IsRequired();
 
             builder

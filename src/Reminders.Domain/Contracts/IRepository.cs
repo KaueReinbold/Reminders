@@ -9,7 +9,7 @@ namespace Reminders.Domain.Contracts
     {
         void Add(TEntity obj);
         void Update(TEntity obj);
-        void Remove(TEntity obj);
+        void Remove(int id);
 
         int SaveChanges();
 
