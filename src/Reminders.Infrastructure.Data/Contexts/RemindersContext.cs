@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Reminders.Infrastructure.Data.Configuration;
+using Reminders.Infrastructure.Data.EntityFramework.Configurations;
 
-namespace Reminders.Infrastructure.Data.Context
+namespace Reminders.Infrastructure.Data.EntityFramework.Contexts
 {
     public class RemindersContext
         : DbContext

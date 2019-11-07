@@ -1,11 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Reminders.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Reminders.Infrastructure.Data.Configuration
+namespace Reminders.Infrastructure.Data.EntityFramework.Configurations
 {
     public class RemindersConfiguration
         : IEntityTypeConfiguration<Reminder>
