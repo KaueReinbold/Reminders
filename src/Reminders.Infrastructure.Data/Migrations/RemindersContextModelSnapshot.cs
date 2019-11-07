@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Reminders.Infrastructure.Data.Context;
+using Reminders.Infrastructure.Data.EntityFramework.Contexts;
 
 namespace Reminders.Infrastructure.Data.Migrations
 {

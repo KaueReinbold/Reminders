@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using Reminders.Infrastructure.Data.Context;
+using Reminders.Infrastructure.Data.EntityFramework.Contexts;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Reminders.Infrastructure.Data.Factories
 {

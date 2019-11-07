@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -9,7 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Reminders.Infrastructure\Reminders.Business\Reminders.Business.csproj" />
     <ProjectReference Include="..\Reminders.Domain\Reminders.Domain.csproj" />
     <ProjectReference Include="..\Reminders.Infrastructure.Data\Reminders.Infrastructure.Data.EntityFramework.csproj" />
   </ItemGroup>

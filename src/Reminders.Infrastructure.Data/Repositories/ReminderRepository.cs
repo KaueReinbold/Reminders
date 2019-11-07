@@ -5,7 +5,7 @@ using Reminders.Domain.Models;
 namespace Reminders.Infrastructure.Data.EntityFramework.Repositories
 {
     public class ReminderRepository
-        : Repository<Reminder>, IReminderRepository
+        : Repository<Reminder>, IRemindersRepository
     {
         public ReminderRepository(IUnitOfWork unitOfWork)
             : base(unitOfWork)

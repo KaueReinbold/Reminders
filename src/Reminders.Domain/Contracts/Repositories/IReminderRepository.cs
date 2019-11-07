@@ -2,7 +2,7 @@
 
 namespace Reminders.Domain.Contracts.Repositories
 {
-    public interface IReminderRepository
+    public interface IRemindersRepository
         : IRepository<Reminder>
     {
     }

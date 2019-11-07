@@ -1,7 +1,5 @@
 ﻿using Reminders.Domain.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Reminders.Domain.Models
 {
