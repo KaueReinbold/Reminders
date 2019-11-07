@@ -38,7 +38,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{13E2845A-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.CrossCutting.IoC", "src\Reminders.Infrastructure.CrossCutting.IoC\Reminders.Infrastructure.CrossCutting.IoC.csproj", "{DC9D5FB0-9660-459E-9BDE-AAB14447359B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.Data", "src\Reminders.Infrastructure.Data\Reminders.Infrastructure.Data.csproj", "{37BACAD5-1BDC-413C-BE98-052F6D3B226A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.Data.EntityFramework", "src\Reminders.Infrastructure.Data\Reminders.Infrastructure.Data.EntityFramework.csproj", "{37BACAD5-1BDC-413C-BE98-052F6D3B226A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "application", "application", "{971AF34C-CB58-4AA0-A4C9-1D8A609365A6}"
 EndProject
