@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{058166BB-4F2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{A5676DD4-AD3F-41F7-B986-6923A3E1446F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Domain", "src\Reminders.Domain\Reminders.Domain.csproj", "{1DA1D0D0-7D13-4B78-B180-F5D3184E87A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Domain", "src\Reminders.Domain\Reminders.Domain.csproj", "{1DA1D0D0-7D13-4B78-B180-F5D3184E87A1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "crosscutting", "crosscutting", "{CF350F6E-59E7-4FE9-BEB7-53A712A02F1E}"
 EndProject
@@ -36,13 +36,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{13E2845A-9B37-4792-844B-C5E5EB1FA22F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Infrastructure.CrossCutting.IoC", "src\Reminders.Infrastructure.CrossCutting.IoC\Reminders.Infrastructure.CrossCutting.IoC.csproj", "{DC9D5FB0-9660-459E-9BDE-AAB14447359B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.CrossCutting.IoC", "src\Reminders.Infrastructure.CrossCutting.IoC\Reminders.Infrastructure.CrossCutting.IoC.csproj", "{DC9D5FB0-9660-459E-9BDE-AAB14447359B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Infrastructure.Data", "src\Reminders.Infrastructure.Data\Reminders.Infrastructure.Data.csproj", "{37BACAD5-1BDC-413C-BE98-052F6D3B226A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.Data", "src\Reminders.Infrastructure.Data\Reminders.Infrastructure.Data.csproj", "{37BACAD5-1BDC-413C-BE98-052F6D3B226A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "application", "application", "{971AF34C-CB58-4AA0-A4C9-1D8A609365A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Application", "src\Reminders.Application\Reminders.Application.csproj", "{5385238E-79C5-44AC-A615-B1FEBA45189A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Application", "src\Reminders.Application\Reminders.Application.csproj", "{5385238E-79C5-44AC-A615-B1FEBA45189A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Domain.Core", "src\Reminders.Domain.Core\Reminders.Domain.Core.csproj", "{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -210,6 +212,18 @@ Global
 		{5385238E-79C5-44AC-A615-B1FEBA45189A}.Release|x64.Build.0 = Release|Any CPU
 		{5385238E-79C5-44AC-A615-B1FEBA45189A}.Release|x86.ActiveCfg = Release|Any CPU
 		{5385238E-79C5-44AC-A615-B1FEBA45189A}.Release|x86.Build.0 = Release|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Debug|x64.Build.0 = Debug|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Debug|x86.Build.0 = Debug|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Release|x64.ActiveCfg = Release|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Release|x64.Build.0 = Release|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Release|x86.ActiveCfg = Release|Any CPU
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -231,6 +245,7 @@ Global
 		{37BACAD5-1BDC-413C-BE98-052F6D3B226A} = {13E2845A-9B37-4792-844B-C5E5EB1FA22F}
 		{971AF34C-CB58-4AA0-A4C9-1D8A609365A6} = {058166BB-4F21-4F3D-BF6E-8E98CFA4251F}
 		{5385238E-79C5-44AC-A615-B1FEBA45189A} = {971AF34C-CB58-4AA0-A4C9-1D8A609365A6}
+		{72CFF4B2-2727-4A45-B314-9B32FCC3F27C} = {A5676DD4-AD3F-41F7-B986-6923A3E1446F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {178322FA-C7CA-4AC1-9159-123528325AAD}

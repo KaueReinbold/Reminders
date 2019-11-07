@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Reminders.Infrastructure\Reminders.Domain\Reminders.Domain.csproj" />
+    <ProjectReference Include="..\..\Reminders.Infrastructure\Reminders.Domain\Reminders.Domain.Old.csproj" />
   </ItemGroup>
 
 </Project>
