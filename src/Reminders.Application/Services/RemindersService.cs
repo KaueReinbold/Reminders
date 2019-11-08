@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Reminders.Application.Contracts;
 using Reminders.Application.ViewModels;
+using Reminders.Domain.Contracts;
 using Reminders.Domain.Contracts.Repositories;
 using Reminders.Domain.Models;
 using System.Linq;
@@ -13,23 +14,38 @@ namespace Reminders.Application.Services
     {
         private readonly IMapper mapper;
         private readonly IRemindersRepository remindersRepository;
+        private readonly IUnitOfWork unitOfWork;
 
         public RemindersService(
             IMapper mapper,
-            IRemindersRepository remindersRepository)
+            IRemindersRepository remindersRepository,
+            IUnitOfWork unitOfWork)
         {
             this.mapper = mapper;
             this.remindersRepository = remindersRepository;
+            this.unitOfWork = unitOfWork;
         }
 
-        public void Insert(ReminderViewModel reminderViewModel) =>
-            remindersRepository.Add(mapper.Map<Reminder>(remindersRepository));
+        public void Insert(ReminderViewModel reminderViewModel)
+        {
+            remindersRepository.Add(mapper.Map<Reminder>(reminderViewModel));
 
-        public void Edit(int id, ReminderViewModel reminderViewModel) =>
+            unitOfWork.Commit();
+        }
+
+        public void Edit(int id, ReminderViewModel reminderViewModel)
+        {
             remindersRepository.Update(mapper.Map<Reminder>(reminderViewModel));
 
-        public void Delete(int id) =>
+            unitOfWork.Commit();
+        }
+
+        public void Delete(int id)
+        {
             remindersRepository.Remove(id);
+
+            unitOfWork.Commit();
+        }
 
         public IQueryable<ReminderViewModel> Get() =>
             remindersRepository.Get().ProjectTo<ReminderViewModel>(mapper.ConfigurationProvider);

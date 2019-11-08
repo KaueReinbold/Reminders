@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Reminders.Application.Extensions;
 using Reminders.Infrastructure.CrossCutting.IoC;
 using Swashbuckle.AspNetCore.Swagger;
@@ -30,37 +31,22 @@ namespace Reminders.Api
                 .AddControllers();
 
             services
-                .AddSwaggerGen(c =>
-                {
-                    c.SwaggerDoc("v1", new Info { Title = "Reminders API", Version = "v1" });
-                    c.IncludeXmlComments(
-                        Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
-                });
+                .AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Reminders API", Version = "v1" }));
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
 
             app
+                .UseHttpsRedirection()
+                .UseRouting()
+                .UseAuthorization()
+                .UseEndpoints(endpoints => endpoints.MapControllers())
+                .MigrateDatabase()
                 .UseSwagger()
                 .UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Reminders API V1"));
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            app.MigrateDatebase();
         }
     }
 }

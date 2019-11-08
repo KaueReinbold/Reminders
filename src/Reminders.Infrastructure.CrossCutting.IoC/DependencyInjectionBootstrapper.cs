@@ -22,12 +22,14 @@ namespace Reminders.Infrastructure.CrossCutting.IoC
                 .AddScoped<IUnitOfWork, UnitOfWork<RemindersContext>>()
             ;
 
-        public static void MigrateDatebase(
+        public static IApplicationBuilder MigrateDatabase(
             this IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
 
             scope.ServiceProvider.GetService<RemindersContext>().Database.Migrate();
+
+            return app;
         }
     }
 }
