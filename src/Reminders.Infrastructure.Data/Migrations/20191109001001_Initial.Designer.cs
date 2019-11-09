@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Reminders.Infrastructure.Data.EntityFramework.Contexts;
 
-namespace Reminders.Infrastructure.Data.Migrations
+namespace Reminders.Infrastructure.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(RemindersContext))]
-    [Migration("20191107124833_Initial")]
+    [Migration("20191109001001_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,10 +23,9 @@ namespace Reminders.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Reminders.Domain.Models.Reminder", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -43,7 +42,7 @@ namespace Reminders.Infrastructure.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("varhcar(50)");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 

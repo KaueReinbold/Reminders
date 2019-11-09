@@ -39,7 +39,7 @@ namespace Reminders.Api.Controllers
 
         // GET: api/Reminders/5
         [HttpGet("{id}", Name = "Get")]
-        public IActionResult Get(int id)
+        public IActionResult Get(Guid id)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace Reminders.Api.Controllers
 
         // PUT: api/Reminders/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] ReminderViewModel reminderViewModel)
+        public void Put(Guid id, [FromBody] ReminderViewModel reminderViewModel)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace Reminders.Api.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             try
             {

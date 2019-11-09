@@ -5,14 +5,17 @@ namespace Reminders.Domain.Core.Models
     public abstract class Entity<TId>
     {
         public TId Id { get; protected set; }
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; protected set; }
 
-        protected Entity(TId id)
+        protected Entity(
+            TId id,
+            bool isDeleted)
         {
             if (Equals(id, default(TId)))
                 throw new ArgumentException("The ID cannot be the type's default value", "id");
 
             Id = id;
+            IsDeleted = isDeleted;
         }
 
         protected Entity() { }

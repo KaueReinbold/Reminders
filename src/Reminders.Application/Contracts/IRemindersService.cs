@@ -1,4 +1,5 @@
 ﻿using Reminders.Application.ViewModels;
+using System;
 using System.Linq;
 
 namespace Reminders.Application.Contracts
@@ -6,10 +7,10 @@ namespace Reminders.Application.Contracts
     public interface IRemindersService
     {
         void Insert(ReminderViewModel reminderViewModel);
-        void Edit(int id, ReminderViewModel reminderViewModel);
-        void Delete(int id);
+        void Edit(Guid id, ReminderViewModel reminderViewModel);
+        void Delete(Guid id);
 
         IQueryable<ReminderViewModel> Get();
-        ReminderViewModel Get(int id);
+        ReminderViewModel Get(Guid id);
     }
 }
