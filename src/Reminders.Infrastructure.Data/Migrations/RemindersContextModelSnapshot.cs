@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Reminders.Infrastructure.Data.EntityFramework.Contexts;
 
-namespace Reminders.Infrastructure.Data.Migrations
+namespace Reminders.Infrastructure.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(RemindersContext))]
     partial class RemindersContextModelSnapshot : ModelSnapshot
@@ -21,10 +21,9 @@ namespace Reminders.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Reminders.Domain.Models.Reminder", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()

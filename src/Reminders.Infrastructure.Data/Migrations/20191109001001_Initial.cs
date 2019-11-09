@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Reminders.Infrastructure.Data.Migrations
+namespace Reminders.Infrastructure.Data.EntityFramework.Migrations
 {
     public partial class Initial : Migration
     {
@@ -11,8 +11,7 @@ namespace Reminders.Infrastructure.Data.Migrations
                 name: "Reminders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Title = table.Column<string>(type: "varchar(50)", nullable: false),
                     Description = table.Column<string>(type: "varchar(200)", nullable: false),

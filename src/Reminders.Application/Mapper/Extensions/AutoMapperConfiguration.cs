@@ -5,14 +5,11 @@ namespace Reminders.Application.Mapper.Extensions
 {
     public static class AutoMapperConfiguration
     {
-        public static IServiceCollection RegisterAutoMapper(
-            this IServiceCollection services) =>
-            services
-                .AddSingleton(new MapperConfiguration(cfg =>
-                {
-                    cfg.AddProfile(new DomainModelToViewModelProfile());
-                    cfg.AddProfile(new ViewModelToDomainModelProfile());
-                }).CreateMapper())
-            ;
+        public static IMapper CreateMapper() => 
+            new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new DomainModelToViewModelProfile());
+                cfg.AddProfile(new ViewModelToDomainModelProfile());
+            }).CreateMapper();
     }
 }

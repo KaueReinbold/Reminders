@@ -21,11 +21,11 @@ namespace Reminders.Infrastructure.Data.EntityFramework
 
         public virtual void Add(TEntity obj) => DbSet.Add(obj);
         public virtual void Update(TEntity obj) => DbSet.Update(obj);
-        public virtual void Remove(int id) => DbSet.Remove(DbSet.Find(id));
+        public virtual void Remove(Guid id) => DbSet.Remove(DbSet.Find(id));
 
         public int SaveChanges() => Context.SaveChanges();
 
-        public virtual TEntity Get(int id) => DbSet.Find(id);
+        public virtual TEntity Get(Guid id) => DbSet.Find(id);
         public virtual IQueryable<TEntity> Get() => DbSet;
 
         public void Dispose()

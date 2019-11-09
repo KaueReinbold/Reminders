@@ -5,6 +5,7 @@ using Reminders.Application.ViewModels;
 using Reminders.Domain.Contracts;
 using Reminders.Domain.Contracts.Repositories;
 using Reminders.Domain.Models;
+using System;
 using System.Linq;
 
 namespace Reminders.Application.Services
@@ -33,14 +34,17 @@ namespace Reminders.Application.Services
             unitOfWork.Commit();
         }
 
-        public void Edit(int id, ReminderViewModel reminderViewModel)
+        public void Edit(Guid id, ReminderViewModel reminderViewModel)
         {
+            if (id != reminderViewModel.Id)
+                throw new ArgumentException("Ids should match");
+
             remindersRepository.Update(mapper.Map<Reminder>(reminderViewModel));
 
             unitOfWork.Commit();
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             remindersRepository.Remove(id);
 
@@ -50,7 +54,7 @@ namespace Reminders.Application.Services
         public IQueryable<ReminderViewModel> Get() =>
             remindersRepository.Get().ProjectTo<ReminderViewModel>(mapper.ConfigurationProvider);
 
-        public ReminderViewModel Get(int id) =>
+        public ReminderViewModel Get(Guid id) =>
             mapper.Map<ReminderViewModel>(remindersRepository.Get(id));
     }
 }

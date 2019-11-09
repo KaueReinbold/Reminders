@@ -9,11 +9,11 @@ namespace Reminders.Domain.Contracts
     {
         void Add(TEntity obj);
         void Update(TEntity obj);
-        void Remove(int id);
+        void Remove(Guid id);
 
         int SaveChanges();
 
-        TEntity Get(int id);
+        TEntity Get(Guid id);
 
         IQueryable<TEntity> Get();
     }
