@@ -59,7 +59,7 @@ namespace Reminders.Application.Test
 
         [DataTestMethod]
         [DynamicData(nameof(DataToAdd), DynamicDataSourceType.Property)]
-        public void Should_Add_Reminder(
+        public void Should_Insert_Reminder(
             string title, string description, DateTime limitDate, bool isDone)
         {
             // arrange
@@ -91,7 +91,7 @@ namespace Reminders.Application.Test
 
         [DataTestMethod]
         [DynamicData(nameof(DataToEdit), DynamicDataSourceType.Property)]
-        public void Should_Update_Reminder(
+        public void Should_Edit_Reminder(
             Guid id, string title, string description, DateTime limitDate, bool isDone)
         {
             // arrange
@@ -124,7 +124,7 @@ namespace Reminders.Application.Test
 
         [DataTestMethod]
         [DynamicData(nameof(DataToEdit), DynamicDataSourceType.Property)]
-        public void Should_Throw_Exception_On_Update_Reminder(
+        public void Should_Throw_Exception_With_Message_On_Edit_Reminder(
             Guid id, string title, string description, DateTime limitDate, bool isDone)
         {
             // arrange
@@ -149,7 +149,10 @@ namespace Reminders.Application.Test
 
                 result = false;
             }
-            catch (ArgumentException ex) { }
+            catch (ArgumentException ex)
+            {
+                Assert.AreEqual(ex.Message, "Ids must match");
+            }
             catch (Exception ex) { result = false; }
 
             // assert
