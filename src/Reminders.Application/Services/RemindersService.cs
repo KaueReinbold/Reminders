@@ -37,7 +37,7 @@ namespace Reminders.Application.Services
         public void Edit(Guid id, ReminderViewModel reminderViewModel)
         {
             if (id != reminderViewModel.Id)
-                throw new ArgumentException("Ids should match");
+                throw new ArgumentException("Ids must match");
 
             remindersRepository.Update(mapper.Map<Reminder>(reminderViewModel));
 
