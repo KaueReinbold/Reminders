@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Api.Old", "Remind
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Core", "Reminders.Infrastructure\Reminders.Core\Reminders.Core.csproj", "{17C6B601-78A0-4794-9CFD-57CBB25461EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Api.Test", "Reminders.Test\Reminders.Api.Test\Reminders.Api.Test.csproj", "{F03FF847-71E7-4108-B210-3FF3A8E65AB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Api.Test.Old", "Reminders.Test\Reminders.Api.Test\Reminders.Api.Test.Old.csproj", "{F03FF847-71E7-4108-B210-3FF3A8E65AB3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Business.Test", "Reminders.Test\Reminders.Business.Test\Reminders.Business.Test.csproj", "{F70A49F4-89A2-4EF7-A832-8CDBE8972726}"
 EndProject
@@ -52,7 +52,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Api", "src\Remind
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3C5E22FA-EE14-40F5-907B-AEA5BFCAB014}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Application.Test", "src\Reminders.Application.Test\Reminders.Application.Test.csproj", "{AB8BA38B-4A99-4ED4-ADD0-B8F55E0577C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Application.Test", "src\Reminders.Application.Test\Reminders.Application.Test.csproj", "{AB8BA38B-4A99-4ED4-ADD0-B8F55E0577C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Api.Test", "src\Reminders.Api.Test\Reminders.Api.Test.csproj", "{699B6D8A-6059-4D2B-BB99-3F377B0764A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -256,6 +258,18 @@ Global
 		{AB8BA38B-4A99-4ED4-ADD0-B8F55E0577C9}.Release|x64.Build.0 = Release|Any CPU
 		{AB8BA38B-4A99-4ED4-ADD0-B8F55E0577C9}.Release|x86.ActiveCfg = Release|Any CPU
 		{AB8BA38B-4A99-4ED4-ADD0-B8F55E0577C9}.Release|x86.Build.0 = Release|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Debug|x64.Build.0 = Debug|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Debug|x86.Build.0 = Debug|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Release|x64.ActiveCfg = Release|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Release|x64.Build.0 = Release|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Release|x86.ActiveCfg = Release|Any CPU
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -282,6 +296,7 @@ Global
 		{2B865A08-5F5B-4C39-AF8C-0D97D9AAE460} = {EEA50854-DE8C-4FEC-875C-B660DFE93E0A}
 		{3C5E22FA-EE14-40F5-907B-AEA5BFCAB014} = {058166BB-4F21-4F3D-BF6E-8E98CFA4251F}
 		{AB8BA38B-4A99-4ED4-ADD0-B8F55E0577C9} = {3C5E22FA-EE14-40F5-907B-AEA5BFCAB014}
+		{699B6D8A-6059-4D2B-BB99-3F377B0764A2} = {3C5E22FA-EE14-40F5-907B-AEA5BFCAB014}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {178322FA-C7CA-4AC1-9159-123528325AAD}
