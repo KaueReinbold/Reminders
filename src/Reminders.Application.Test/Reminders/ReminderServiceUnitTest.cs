@@ -1,14 +1,8 @@
-using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Reminders.Application.Contracts;
-using Reminders.Application.Mapper;
-using Reminders.Application.Mapper.Extensions;
 using Reminders.Application.Services;
 using Reminders.Application.Test.MockData;
 using Reminders.Application.ViewModels;
-using Reminders.Domain.Contracts;
-using Reminders.Domain.Contracts.Repositories;
 using Reminders.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -83,7 +77,7 @@ namespace Reminders.Application.Test
 
                 result = true;
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
             // assert
             Assert.IsTrue(result);
@@ -116,7 +110,7 @@ namespace Reminders.Application.Test
 
                 result = true;
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
             // assert
             Assert.IsTrue(result);
@@ -153,7 +147,7 @@ namespace Reminders.Application.Test
             {
                 Assert.AreEqual(ex.Message, "Ids must match");
             }
-            catch (Exception ex) { result = false; }
+            catch (Exception) { result = false; }
 
             // assert
             Assert.IsTrue(result);
@@ -180,14 +174,14 @@ namespace Reminders.Application.Test
 
                 result = true;
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
             // assert
             Assert.IsTrue(result);
         }
 
-
-        public static IEnumerable<object[]> DataToWithTitle => ReminderMock.Reminders.Select(reminder => new object[] { reminder.Title }).ToList();
+        public static IEnumerable<object[]> DataToWithTitle => 
+            ReminderMock.Reminders.Select(reminder => new object[] { reminder.Title }).ToList();
 
         public static IEnumerable<object[]> DataToAdd =>
             ReminderMock.Reminders.Select(reminder => new object[]

@@ -6,10 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Reminders.Application.Extensions;
 using Reminders.Infrastructure.CrossCutting.IoC;
-using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.IO;
-using System.Reflection;
 
 namespace Reminders.Api
 {

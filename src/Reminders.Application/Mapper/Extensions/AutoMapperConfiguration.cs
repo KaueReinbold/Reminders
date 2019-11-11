@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Reminders.Application.Mapper.Extensions
 {
