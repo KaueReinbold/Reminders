@@ -10,89 +10,28 @@ namespace Reminders.Api.Controllers
     [ApiController]
     public class RemindersController : ControllerBase
     {
-        private readonly ILogger<RemindersController> logger;
         private readonly IRemindersService remindersService;
 
-        public RemindersController(
-            ILogger<RemindersController> logger,
-            IRemindersService remindersService)
-        {
-            this.logger = logger;
-            this.remindersService = remindersService;
-        }
+        public RemindersController(IRemindersService remindersService) => this.remindersService = remindersService;
 
         // GET: api/Reminders
         [HttpGet]
-        public IActionResult Get()
-        {
-            try
-            {
-                return Ok(remindersService.Get());
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message, ex);
-
-                return null;
-            }
-        }
+        public IActionResult Get() => Ok(remindersService.Get());
 
         // GET: api/Reminders/5
         [HttpGet("{id}", Name = "Get")]
-        public IActionResult Get(Guid id)
-        {
-            try
-            {
-                return Ok(remindersService.Get(id));
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message, ex);
-
-                return null;
-            }
-        }
+        public IActionResult Get(Guid id) => Ok(remindersService.Get(id));
 
         // POST: api/Reminders
         [HttpPost]
-        public void Post([FromBody] ReminderViewModel reminderViewModel)
-        {
-            try
-            {
-                remindersService.Insert(reminderViewModel);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message, ex);
-            }
-        }
+        public void Post([FromBody] ReminderViewModel reminderViewModel) => remindersService.Insert(reminderViewModel);
 
         // PUT: api/Reminders/5
         [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody] ReminderViewModel reminderViewModel)
-        {
-            try
-            {
-                remindersService.Edit(id, reminderViewModel);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message, ex);
-            }
-        }
+        public void Put(Guid id, [FromBody] ReminderViewModel reminderViewModel) => remindersService.Edit(id, reminderViewModel);
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
-        {
-            try
-            {
-                remindersService.Delete(id);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message, ex);
-            }
-        }
+        public void Delete(Guid id) => remindersService.Delete(id);
     }
 }
