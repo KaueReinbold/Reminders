@@ -28,6 +28,7 @@ namespace Reminders.Application.Test
             var result = service.Get();
 
             // assert
+            repositoryMock.Verify(r => r.Get(), Times.Once);
             Assert.AreEqual(ReminderMock.Reminders.Count(), result.Count());
         }
 
@@ -48,158 +49,103 @@ namespace Reminders.Application.Test
             var result = service.Get(expectedResult.Id);
 
             // assert
+            repositoryMock.Verify(r => r.Get(It.IsAny<Guid>()), Times.Once);
             Assert.AreEqual(title, result.Title);
         }
 
-        [DataTestMethod]
-        [DynamicData(nameof(DataToAdd), DynamicDataSourceType.Property)]
-        public void Should_Insert_Reminder(
-            string title, string description, DateTime limitDate, bool isDone)
+        [TestMethod]
+        public void Should_Insert_Reminder()
         {
             // arrange
-            var result = false;
-
             repositoryMock
                 .Setup(r => r.Add(It.IsAny<Reminder>()));
 
-            try
+            // act
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
+
+            service.Insert(new ReminderViewModel()
             {
-                // act
-                var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
-
-                service.Insert(new ReminderViewModel()
-                {
-                    Title = title,
-                    Description = description,
-                    LimitDate = limitDate,
-                    IsDone = isDone
-                });
-
-                result = true;
-            }
-            catch (Exception) { }
+                Title = "Title",
+                Description = "Description",
+                LimitDate = new DateTime(),
+                IsDone = false
+            });
 
             // assert
-            Assert.IsTrue(result);
+            repositoryMock.Verify(r => r.Add(It.IsAny<Reminder>()), Times.Once);
+            unitOfWorkMock.Verify(u => u.Commit(), Times.Once);
         }
 
-        [DataTestMethod]
-        [DynamicData(nameof(DataToEdit), DynamicDataSourceType.Property)]
-        public void Should_Edit_Reminder(
-            Guid id, string title, string description, DateTime limitDate, bool isDone)
+        [TestMethod]
+        public void Should_Edit_Reminder()
         {
             // arrange
-            var result = false;
 
             repositoryMock
                 .Setup(r => r.Update(It.IsAny<Reminder>()));
 
-            try
+            // act
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
+
+            var id = Guid.NewGuid();
+
+            service.Edit(id, new ReminderViewModel()
             {
-                // act
-                var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
-
-                service.Edit(id, new ReminderViewModel()
-                {
-                    Id = id,
-                    Title = title,
-                    Description = description,
-                    LimitDate = limitDate,
-                    IsDone = isDone
-                });
-
-                result = true;
-            }
-            catch (Exception) { }
+                Id = id,
+                Title = "Title",
+                Description = "Description",
+                LimitDate = new DateTime(),
+                IsDone = false
+            });
 
             // assert
-            Assert.IsTrue(result);
+            repositoryMock.Verify(r => r.Update(It.IsAny<Reminder>()), Times.Once);
+            unitOfWorkMock.Verify(u => u.Commit(), Times.Once);
         }
 
-        [DataTestMethod]
-        [DynamicData(nameof(DataToEdit), DynamicDataSourceType.Property)]
-        public void Should_Throw_Exception_With_Message_On_Edit_Reminder(
-            Guid id, string title, string description, DateTime limitDate, bool isDone)
+        [TestMethod]
+        public void Should_Throw_Exception_On_Edit_Reminder()
         {
             // arrange
-            var result = true;
-
             repositoryMock
                 .Setup(r => r.Update(It.IsAny<Reminder>()));
 
-            try
-            {
-                // act
-                var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
+            // act
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
 
+            // assert
+            Assert.ThrowsException<ArgumentException>(() =>
                 service.Edit(Guid.NewGuid(), new ReminderViewModel()
                 {
-                    Id = id,
-                    Title = title,
-                    Description = description,
-                    LimitDate = limitDate,
-                    IsDone = isDone
-                });
-
-                result = false;
-            }
-            catch (ArgumentException ex)
-            {
-                Assert.AreEqual(ex.Message, "Ids must match");
-            }
-            catch (Exception) { result = false; }
-
-            // assert
-            Assert.IsTrue(result);
+                    Id = Guid.Empty,
+                    Title = "Title",
+                    Description = "Description",
+                    LimitDate = new DateTime(),
+                    IsDone = false
+                }));
         }
 
         [DataTestMethod]
         [DynamicData(nameof(DataToWithTitle), DynamicDataSourceType.Property)]
-        public void Should_Delete_Reminder(
-            string title)
+        public void Should_Delete_Reminder(string title)
         {
             // arrange
-            var result = false;
             var reminder = ReminderMock.Reminders.First(r => r.Title == title);
 
             repositoryMock
                 .Setup(r => r.Remove(It.IsAny<Guid>()));
 
-            try
-            {
-                // act
-                var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
+            // act
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
 
-                service.Delete(reminder.Id);
-
-                result = true;
-            }
-            catch (Exception) { }
+            service.Delete(reminder.Id);
 
             // assert
-            Assert.IsTrue(result);
+            unitOfWorkMock.Verify(u => u.Commit(), Times.Once);
         }
 
-        public static IEnumerable<object[]> DataToWithTitle => 
+        public static IEnumerable<object[]> DataToWithTitle =>
             ReminderMock.Reminders.Select(reminder => new object[] { reminder.Title }).ToList();
 
-        public static IEnumerable<object[]> DataToAdd =>
-            ReminderMock.Reminders.Select(reminder => new object[]
-            {
-                reminder.Title,
-                reminder.Description,
-                reminder.LimitDate,
-                reminder.IsDone
-            }).ToList();
-
-        public static IEnumerable<object[]> DataToEdit =>
-            ReminderMock.Reminders.Select(reminder => new object[]
-            {
-                reminder.Id,
-                string.Concat(reminder.Title, " - Edited"),
-                reminder.Description,
-                reminder.LimitDate,
-                reminder.IsDone
-            }).ToList();
     }
 }

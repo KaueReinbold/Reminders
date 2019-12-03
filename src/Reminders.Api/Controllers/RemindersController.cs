@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Reminders.Application.Contracts;
 using Reminders.Application.ViewModels;
 

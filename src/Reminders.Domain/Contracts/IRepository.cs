@@ -14,7 +14,9 @@ namespace Reminders.Domain.Contracts
         int SaveChanges();
 
         TEntity Get(Guid id);
-
+        TEntity GetAsNoTracking(Guid id);
+        
         IQueryable<TEntity> Get();
+        IQueryable<TEntity> GetAsNoTracking();
     }
 }

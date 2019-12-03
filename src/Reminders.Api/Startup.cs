@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Reminders.Api.Extensions;
 using Reminders.Application.Extensions;
 using Reminders.Infrastructure.CrossCutting.IoC;
 
@@ -30,12 +32,13 @@ namespace Reminders.Api
                 .AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Reminders API", Version = "v1" }));
         }
 
-        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory logger)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
             app
+                .ConfigureExceptionHandler()
                 .UseHttpsRedirection()
                 .UseRouting()
                 .UseAuthorization()
