@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Reminders.Application.ViewModels;
-using Reminders.Domain.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

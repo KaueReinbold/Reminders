@@ -26,7 +26,15 @@ namespace Reminders.Infrastructure.Data.EntityFramework
         public int SaveChanges() => Context.SaveChanges();
 
         public virtual TEntity Get(Guid id) => DbSet.Find(id);
+        public virtual TEntity GetAsNoTracking(Guid id)
+        {
+            var entity = Context.Set<TEntity>().Find(id);
+            Context.Entry(entity).State = EntityState.Detached;
+            return entity;
+        }
+
         public virtual IQueryable<TEntity> Get() => DbSet;
+        public virtual IQueryable<TEntity> GetAsNoTracking() => DbSet.AsNoTracking();
 
         public void Dispose()
         {

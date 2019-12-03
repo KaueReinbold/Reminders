@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Reminders.Application.Contracts;
+using Reminders.Application.Exceptions;
 using Reminders.Application.ViewModels;
 using Reminders.Domain.Contracts;
 using Reminders.Domain.Contracts.Repositories;
 using Reminders.Domain.Models;
 using System;
 using System.Linq;
+using System.Net;
 
 namespace Reminders.Application.Services
 {
@@ -37,7 +39,10 @@ namespace Reminders.Application.Services
         public void Edit(Guid id, ReminderViewModel reminderViewModel)
         {
             if (id != reminderViewModel.Id)
-                throw new ArgumentException("Ids must match");
+                throw new RemindersApplicationException(HttpStatusCode.Conflict, "Ids must match");
+
+            if (remindersRepository.GetAsNoTracking(id) is null)
+                throw new RemindersApplicationException(HttpStatusCode.NotFound, "Reminder does not exist");
 
             remindersRepository.Update(mapper.Map<Reminder>(reminderViewModel));
 
@@ -46,6 +51,9 @@ namespace Reminders.Application.Services
 
         public void Delete(Guid id)
         {
+            if (remindersRepository.GetAsNoTracking(id) is null)
+                throw new RemindersApplicationException(HttpStatusCode.NotFound, "Reminder does not exist");
+
             remindersRepository.Remove(id);
 
             unitOfWork.Commit();
