@@ -14,15 +14,17 @@ namespace Reminders.Api.Test.Reminders.Default
     public class ApiIntegrationTest
         : StartupApiTest
     {
-        private readonly string baseUri;
-        private readonly string testGuid;
+        private string baseUri;
+        private string testGuid;
 
-        public ApiIntegrationTest()
+        [TestInitialize]
+        public void TestInitialize()
         {
-            baseUri = Configuration["ApiBaseUrl"] + "/Reminders";
+            baseUri = "/Reminders";
 
             testGuid = Guid.NewGuid().ToString();
         }
+
         [TestMethod]
         public void Should_Perform_CRUD_For_Reminder()
         {
