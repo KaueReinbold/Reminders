@@ -7,11 +7,11 @@ using Reminders.Business.BusinessModels;
 using Reminders.Business.Contracts;
 using Reminders.Context.RemindersContext;
 using Reminders.Domain.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Reminders.Core.Options;
 using Reminders.Business.Contracts.Business;
 using Reminders.Business.RepositoryEntities.Persistence;
 using Reminders.Domain.Extensions;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Reminders.Api
 {
@@ -68,11 +68,11 @@ namespace Reminders.Api
                 {
                     Version = "v1",
                     Title = "Reminders Api",
-                    Description = "Application to register and list reminders. Each Reminder a Title, Description, Date Limit and Status.",
+                    Description = "Application to register and list reminders. Each Reminder has Title, Description, Date Limit and Status.",
                     Contact = new Contact
                     {
                         Name = "Kaue Reinbold",
-                        Email = "ck_reinbold@hotmail.com",
+                        Email = "kaue.reinbold@outlook.com",
                         Url = "https://github.com/KaueReinbold"
                     }
                 });

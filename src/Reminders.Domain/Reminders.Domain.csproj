@@ -5,8 +5,4 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Reminders.Domain.Core\Reminders.Domain.Core.csproj" />
-  </ItemGroup>
-
 </Project>

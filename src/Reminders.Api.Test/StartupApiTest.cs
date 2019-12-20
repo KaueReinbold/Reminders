@@ -11,6 +11,7 @@ namespace Reminders.Api.Test
     {
         public IConfiguration Configuration;
         public HttpClient httpClient;
+        public readonly string BaseAddress;
 
         public StartupApiTest()
         {
@@ -23,11 +24,15 @@ namespace Reminders.Api.Test
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
                 .Build();
+            
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+            BaseAddress = Configuration["ApiBaseUrl"];
+
             httpClient = new HttpClient(clientHandler)
             {
-                BaseAddress = new Uri(Configuration["ApiBaseUrl"])
+                BaseAddress = new Uri(BaseAddress)
             };
         }
     }
