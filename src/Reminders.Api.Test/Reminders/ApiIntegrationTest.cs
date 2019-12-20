@@ -1,12 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using Reminders.Application.ViewModels;
+using Reminders.Api.Test.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 
 namespace Reminders.Api.Test.Reminders.Default
 {
@@ -20,7 +21,7 @@ namespace Reminders.Api.Test.Reminders.Default
         [TestInitialize]
         public void TestInitialize()
         {
-            baseUri = "/Reminders";
+            baseUri = string.Concat(BaseAddress, "/Reminders");
 
             testGuid = Guid.NewGuid().ToString();
         }
@@ -37,6 +38,7 @@ namespace Reminders.Api.Test.Reminders.Default
 
         public void Insert()
         {
+            // arrange
             var success = false;
 
             var reminder = new ReminderViewModel
@@ -47,22 +49,19 @@ namespace Reminders.Api.Test.Reminders.Default
                 IsDone = false
             };
 
-            var request = new HttpRequestMessage(HttpMethod.Post, baseUri)
-            {
-                Content = new StringContent(JsonConvert.SerializeObject(reminder), Encoding.UTF8, "application/json")
-            };
-
-            var result = httpClient.SendAsync(request).Result;
+            // act
+            var result = httpClient.PostAsync(new Uri(baseUri), reminder.ToStringContent()).Result;
 
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var resultString = httpClient.GetAsync(baseUri).Result.Content.ReadAsStringAsync().Result;
 
-                var reminders = JsonConvert.DeserializeObject<IList<ReminderViewModel>>(resultString);
+                var reminders = JsonSerializer.Deserialize<IList<ReminderViewModel>>(resultString);
 
                 success = reminders.Any(r => r.Title.Contains(testGuid));
             }
 
+            // assert
             if (!success)
                 Assert.Fail("Insert has not happened!");
         }
@@ -71,30 +70,26 @@ namespace Reminders.Api.Test.Reminders.Default
         {
             var success = false;
 
-            var resultString = httpClient.GetAsync(baseUri).Result.Content.ReadAsStringAsync().Result;
+            var resultString = httpClient.GetAsync(new Uri(baseUri)).Result.Content.ReadAsStringAsync().Result;
 
-            var reminders = JsonConvert.DeserializeObject<IList<ReminderViewModel>>(resultString);
+            var reminders = JsonSerializer.Deserialize<IList<ReminderViewModel>>(resultString);
 
             if (reminders.Any(r => r.Title.Contains(testGuid)))
             {
                 var reminder = reminders.FirstOrDefault(r => r.Title.Contains(testGuid));
+
                 reminder.Title = $"{testGuid}";
                 reminder.Description = $"{testGuid}";
                 reminder.LimitDate = DateTime.UtcNow.AddDays(5);
                 reminder.IsDone = true;
 
-                var request = new HttpRequestMessage(HttpMethod.Put, baseUri + "/" + testGuid)
-                {
-                    Content = new StringContent(JsonConvert.SerializeObject(reminder), Encoding.UTF8, "application/json")
-                };
-
-                var result = httpClient.SendAsync(request).Result;
+                var result = httpClient.PutAsync(new Uri(baseUri + "/" + reminder.Id), reminder.ToStringContent()).Result;
 
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
-                    resultString = httpClient.GetAsync(baseUri).Result.Content.ReadAsStringAsync().Result;
+                    resultString = httpClient.GetAsync(new Uri(baseUri)).Result.Content.ReadAsStringAsync().Result;
 
-                    reminders = JsonConvert.DeserializeObject<IList<ReminderViewModel>>(resultString);
+                    reminders = JsonSerializer.Deserialize<IList<ReminderViewModel>>(resultString);
 
                     success = reminders.Any(r => r.Title.Contains(testGuid));
                 }
@@ -106,9 +101,35 @@ namespace Reminders.Api.Test.Reminders.Default
 
         public void Delete()
         {
-            var result = httpClient.DeleteAsync(baseUri + "/" + testGuid).Result;
+            var success = false;
 
-            if (result.StatusCode != HttpStatusCode.OK)
+            var request = new HttpRequestMessage(HttpMethod.Get, new Uri(baseUri));
+
+            var resultString = httpClient.SendAsync(request).Result.Content.ReadAsStringAsync().Result;
+
+            var reminders = JsonSerializer.Deserialize<IList<ReminderViewModel>>(resultString);
+
+            if (reminders.Any(r => r.Title.Contains(testGuid)))
+            {
+                var reminder = reminders.FirstOrDefault(r => r.Title.Contains(testGuid));
+                
+                request = new HttpRequestMessage(HttpMethod.Delete, new Uri(baseUri + "/" + reminder.Id));
+
+                var result = httpClient.SendAsync(request).Result;
+
+                if (result.StatusCode == HttpStatusCode.OK)
+                {
+                    request = new HttpRequestMessage(HttpMethod.Get, new Uri(baseUri));
+
+                    resultString = httpClient.SendAsync(request).Result.Content.ReadAsStringAsync().Result;
+
+                    reminders = JsonSerializer.Deserialize<IList<ReminderViewModel>>(resultString);
+
+                    success = reminders.Any(r => !r.Title.Contains(testGuid));
+                }
+            }
+
+            if (!success)
                 Assert.Fail("Delete has not happened!");
         }
     }

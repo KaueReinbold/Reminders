@@ -8,9 +8,9 @@ using Reminders.Infrastructure.Data.EntityFramework;
 using Reminders.Infrastructure.Data.EntityFramework.Contexts;
 using Reminders.Infrastructure.Data.EntityFramework.Repositories;
 
-namespace Reminders.Infrastructure.CrossCutting.IoC
+namespace Reminders.Infrastructure.CrossCutting
 {
-    public static class DependencyInjectionBootstrapper
+    public static class DependencyInjection
     {
         public static IServiceCollection RegisterDataServices(
             this IServiceCollection services,

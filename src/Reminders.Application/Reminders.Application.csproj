@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Reminders.Domain\Reminders.Domain.csproj" />
     <ProjectReference Include="..\Reminders.Infrastructure.CrossCutting.IoC\Reminders.Infrastructure.CrossCutting.IoC.csproj" />
+    <ProjectReference Include="..\Reminders.Infrastructure.CrossCutting\Reminders.Infrastructure.CrossCutting.csproj" />
   </ItemGroup>
 
 </Project>

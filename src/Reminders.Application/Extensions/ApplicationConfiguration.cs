@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Reminders.Application.Contracts;
 using Reminders.Application.Mapper.Extensions;
 using Reminders.Application.Services;
-using Reminders.Infrastructure.CrossCutting.IoC;
+using Reminders.Infrastructure.CrossCutting;
 
 namespace Reminders.Application.Extensions
 {

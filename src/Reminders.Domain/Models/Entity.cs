@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Reminders.Domain.Core.Models
+namespace Reminders.Domain.Models
 {
     public abstract class Entity<TId>
     {
@@ -42,7 +42,7 @@ namespace Reminders.Domain.Core.Models
 
         public static bool operator !=(Entity<TId> a, Entity<TId> b) => !(a == b);
 
-        public override int GetHashCode() => (GetType().GetHashCode() * 907) + Id.GetHashCode();
+        public override int GetHashCode() => GetType().GetHashCode() * 907 + Id.GetHashCode();
 
         public override string ToString() => GetType().Name + " [Id=" + Id + "]";
     }

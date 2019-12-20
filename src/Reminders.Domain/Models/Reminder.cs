@@ -1,5 +1,4 @@
-﻿using Reminders.Domain.Core.Models;
-using System;
+﻿using System;
 
 namespace Reminders.Domain.Models
 {
