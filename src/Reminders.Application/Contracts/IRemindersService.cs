@@ -11,6 +11,8 @@ namespace Reminders.Application.Contracts
         void Delete(Guid id);
 
         IQueryable<ReminderViewModel> Get();
+        IQueryable<ReminderViewModel> GetInactive();
         ReminderViewModel Get(Guid id);
+        ReminderViewModel GetInactive(Guid id);
     }
 }
