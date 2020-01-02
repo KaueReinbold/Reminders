@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Reminders.Api.Models;
-using Reminders.Application.Exceptions;
+using Reminders.Application.Validators.Reminders.Exceptions;
 using System.Net;
 
 namespace Reminders.Api.Extensions
@@ -29,7 +29,7 @@ namespace Reminders.Api.Extensions
 
                         if (contextFeature.Error is RemindersApplicationException remindersApplicationException)
                         {
-                            statusCode = (int)remindersApplicationException.HttpStatusCode;
+                            statusCode = (int)remindersApplicationException.ToHttpStatusCode();
                             message = remindersApplicationException.Message;
                             context.Response.StatusCode = statusCode;
                         }
