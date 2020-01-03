@@ -55,7 +55,7 @@ namespace Reminders.Api.Test.Reminders.Default
             {
                 var resultString = httpClient.GetAsync(baseUri).Result.Content.ReadAsStringAsync().Result;
 
-                var reminders = JsonSerializer.Deserialize<IList<ReminderViewModel>>(resultString);
+                var reminders = resultString.FromJson<IList<ReminderViewModel>>();
 
                 success = reminders.Any(r => r.Title.Contains(testGuid));
             }
@@ -71,7 +71,7 @@ namespace Reminders.Api.Test.Reminders.Default
 
             var resultString = httpClient.GetAsync(new Uri(baseUri)).Result.Content.ReadAsStringAsync().Result;
 
-            var reminders = JsonSerializer.Deserialize<IList<ReminderViewModel>>(resultString);
+            var reminders = resultString.FromJson<IList<ReminderViewModel>>();
 
             if (reminders.Any(r => r.Title.Contains(testGuid)))
             {
@@ -86,9 +86,9 @@ namespace Reminders.Api.Test.Reminders.Default
 
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
-                    resultString = httpClient.GetAsync(new Uri(baseUri)).Result.Content.ReadAsStringAsync().Result;
+                    resultString = httpClient.GetAsync(baseUri).Result.Content.ReadAsStringAsync().Result;
 
-                    reminders = JsonSerializer.Deserialize<IList<ReminderViewModel>>(resultString);
+                    reminders = resultString.FromJson<IList<ReminderViewModel>>();
 
                     success = reminders.Any(r => r.Title.Contains(testGuid));
                 }
@@ -102,29 +102,23 @@ namespace Reminders.Api.Test.Reminders.Default
         {
             var success = false;
 
-            var request = new HttpRequestMessage(HttpMethod.Get, new Uri(baseUri));
+            var resultString = httpClient.GetAsync(new Uri(baseUri)).Result.Content.ReadAsStringAsync().Result;
 
-            var resultString = httpClient.SendAsync(request).Result.Content.ReadAsStringAsync().Result;
-
-            var reminders = JsonSerializer.Deserialize<IList<ReminderViewModel>>(resultString);
+            var reminders = resultString.FromJson<IList<ReminderViewModel>>();
 
             if (reminders.Any(r => r.Title.Contains(testGuid)))
             {
                 var reminder = reminders.FirstOrDefault(r => r.Title.Contains(testGuid));
-                
-                request = new HttpRequestMessage(HttpMethod.Delete, new Uri(baseUri + "/" + reminder.Id));
 
-                var result = httpClient.SendAsync(request).Result;
+                var result = httpClient.DeleteAsync(new Uri(baseUri + "/" + reminder.Id)).Result;
 
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
-                    request = new HttpRequestMessage(HttpMethod.Get, new Uri(baseUri));
+                    resultString = httpClient.GetAsync(baseUri).Result.Content.ReadAsStringAsync().Result;
 
-                    resultString = httpClient.SendAsync(request).Result.Content.ReadAsStringAsync().Result;
+                    reminders = resultString.FromJson<IList<ReminderViewModel>>();
 
-                    reminders = JsonSerializer.Deserialize<IList<ReminderViewModel>>(resultString);
-
-                    success = reminders.Any(r => !r.Title.Contains(testGuid));
+                    success = !reminders.Any(r => r.Title.Contains(testGuid));
                 }
             }
 
