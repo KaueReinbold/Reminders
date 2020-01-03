@@ -15,6 +15,13 @@ namespace Reminders.Application.Test.Fake
 
         public void Dispose() { }
 
+        public bool Exists(Guid id)
+        {
+            var reminder = Reminders.Find(r => r.Id == id);
+
+            return !(reminder is null) && !reminder.IsDeleted;
+        }
+
         public Reminder Get(Guid id) => Reminders.Find(r => r.Id == id);
 
         public IQueryable<Reminder> Get() => Reminders.AsQueryable();
