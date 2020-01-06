@@ -146,7 +146,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Reminders.Infrastructure\Reminders.Business\Reminders.Business.csproj" />
-    <ProjectReference Include="..\Reminders.Infrastructure\Reminders.context\Reminders.Context.csproj" />
+    <ProjectReference Include="..\Reminders.Infrastructure\Reminders.Context\Reminders.Context.csproj" />
     <ProjectReference Include="..\Reminders.Infrastructure\Reminders.Core\Reminders.Core.csproj" />
     <ProjectReference Include="..\Reminders.Infrastructure\Reminders.Domain\Reminders.Domain.Old.csproj" />
   </ItemGroup>
