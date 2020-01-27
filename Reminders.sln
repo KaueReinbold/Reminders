@@ -8,7 +8,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Business", "Remin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Domain.Old", "Reminders.Infrastructure\Reminders.Domain\Reminders.Domain.Old.csproj", "{9EC95756-65CA-4E8F-82E7-0BEA41C098B5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Context", "Reminders.Infrastructure\Reminders.context\Reminders.Context.csproj", "{189D61A6-A41B-4077-B16A-8F44E3D8B8AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Context", "Reminders.Infrastructure\Reminders.Context\Reminders.Context.csproj", "{189D61A6-A41B-4077-B16A-8F44E3D8B8AF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Mvc.Old", "Reminders.Mvc\Reminders.Mvc.Old.csproj", "{5AFD1B81-90C1-4C23-BE5B-FFA731FFB9B5}"
 EndProject
