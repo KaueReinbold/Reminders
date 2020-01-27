@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Reminders.Api.Models;
+using Reminders.Application.Extensions;
 using Reminders.Application.Validators.Reminders.Exceptions;
 using System.Net;
+using System.Threading.Tasks;
 
-namespace Reminders.Api.Extensions
+namespace Reminders.Mvc.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {
@@ -14,7 +15,7 @@ namespace Reminders.Api.Extensions
         {
             app.UseExceptionHandler(appError =>
             {
-                appError.Run(async context =>
+                appError.Run(context =>
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json";
@@ -28,19 +29,14 @@ namespace Reminders.Api.Extensions
 
                         if (contextFeature.Error is RemindersApplicationException remindersApplicationException)
                         {
-                            statusCode = (int)remindersApplicationException.ToHttpStatusCode();
                             message = remindersApplicationException.Message;
                             context.Response.StatusCode = statusCode;
                         }
-
-                        //logger.LogError($"Something went wrong: {contextFeature.Error}");
-
-                        await context.Response.WriteAsync(new ErrorDetails()
-                        {
-                            StatusCode = statusCode,
-                            Message = message
-                        }.ToString());
+                        else
+                            context.Response.Redirect("/Home/Error");
                     }
+
+                    return Task.CompletedTask;
                 });
             });
 
