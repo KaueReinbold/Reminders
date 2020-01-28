@@ -1,0 +1,40 @@
+version: '3'
+
+networks: 
+    reminders-network:
+        driver: bridge
+
+services:
+    reminders-database:
+        image: "mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04"
+        container_name: reminders-database
+        networks: 
+            - reminders-network
+    reminders-build:
+        image: reminders-build-image:latest
+        container_name: reminders-build
+        build: 
+            context: .
+            dockerfile: dockerfile
+        depends_on: 
+            - reminders-database
+    reminders-mvc:
+        image: reminders-mvc-image:latest
+        container_name: reminders-mvc
+        build: 
+            context: .
+            dockerfile: mvc.dockerfile
+        networks: 
+            - reminders-network
+        depends_on: 
+            - reminders-build
+    reminders-api:
+        image: reminders-api-image:latest
+        container_name: reminders-api
+        build: 
+            context: .
+            dockerfile: api.dockerfile
+        networks: 
+            - reminders-network
+        depends_on: 
+            - reminders-mvc
