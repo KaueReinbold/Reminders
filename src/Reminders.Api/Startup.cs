@@ -43,7 +43,6 @@ namespace Reminders.Api
                 .UseRouting()
                 .UseAuthorization()
                 .UseEndpoints(endpoints => endpoints.MapControllers())
-                .MigrateDatabase()
                 .UseSwagger()
                 .UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Reminders API V1"));
         }

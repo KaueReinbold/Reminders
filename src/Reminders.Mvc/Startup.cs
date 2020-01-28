@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Reminders.Application.Extensions;
+using Reminders.Infrastructure.CrossCutting;
 using Reminders.Mvc.Extensions;
 
 namespace Reminders.Mvc
@@ -39,7 +40,6 @@ namespace Reminders.Mvc
                 app.UseHsts();
             }
             app
-                .ConfigureExceptionHandler()
                 .UseHttpsRedirection()
                 .UseStaticFiles()
                 .UseRouting()

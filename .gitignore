@@ -285,5 +285,4 @@ PublishProfiles/
 # References
 Service References/
 
-*.Development.json
-*.Production.json
+local.env
