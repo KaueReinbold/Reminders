@@ -1,10 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reminders.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Reminders.Domain.Extensions;
 
 namespace Reminders.Api.Test.Reminders
 {
