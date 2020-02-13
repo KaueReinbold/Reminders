@@ -13,5 +13,4 @@ WORKDIR /app
 # Copy publish result from build image
 COPY --from=reminders-build-image /app/out/mvc .
 
-# Run dll as entrypoint
-ENTRYPOINT ["dotnet", "Reminders.Mvc.dll"]
+RUN chmod +x ./wait-for.sh

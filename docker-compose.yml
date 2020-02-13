@@ -16,6 +16,7 @@ services:
         build: 
             context: .
             dockerfile: dockerfile
+        command: sh -c '/app/wait-for.sh reminders-database:1433 -t 2000 -- dotnet ef database update --project /app/src/Reminders.Infrastructure.Data/'
         depends_on: 
             - reminders-database
         networks: 
@@ -26,6 +27,7 @@ services:
         build: 
             context: .
             dockerfile: mvc.dockerfile
+        command: sh -c '/app/wait-for.sh reminders-database:1433 -t 2000 -- dotnet /app/Reminders.Mvc.dll'
         networks: 
             - reminders-network
         depends_on: 
@@ -36,6 +38,7 @@ services:
         build: 
             context: .
             dockerfile: api.dockerfile
+        command: sh -c '/app/wait-for.sh reminders-database:1433 -t 2000 -- dotnet /app/Reminders.Api.dll'
         networks: 
             - reminders-network
         depends_on: 
