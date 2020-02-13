@@ -10,8 +10,8 @@ COPY . ./
 RUN dotnet publish -c Release -o out/api src/Reminders.Api
 
 # Publish Mvc project
-RUN  dotnet publish -c Release -o out/mvc src/Reminders.Mvc
+RUN dotnet publish -c Release -o out/mvc src/Reminders.Mvc
 
 # Let container up running tail command
 RUN chmod +x ./entrypoint.sh
-CMD /bin/sh ./entrypoint.sh /app/src/Reminders.Mvc
+CMD /bin/sh ./entrypoint.sh /app/src/Reminders.Infrastructure.Data/
