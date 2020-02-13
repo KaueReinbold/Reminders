@@ -18,6 +18,8 @@ services:
             dockerfile: dockerfile
         depends_on: 
             - reminders-database
+        networks: 
+            - reminders-network
     reminders-mvc:
         image: reminders-mvc-image:latest
         container_name: reminders-mvc
