@@ -15,9 +15,7 @@ namespace Reminders.Api.Test
 
         public StartupApiTest()
         {
-            // TODO: Check if there is a way to work with Environment variables.
-            //var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var environment = "Development";
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
