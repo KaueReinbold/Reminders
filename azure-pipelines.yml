@@ -32,3 +32,22 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '-c Release -o out/mvc Reminders.Mvc/'
+    zipAfterPublish: false
+
+- task: oc-cmd@2
+  inputs:
+    openshiftService: 'Openshift 3,11'
+    version: '4.2'
+    cmd: 'oc start-build --from-dir="$(System.DefaultWorkingDirectory)/out/mvc" reminders --follow'
+
+- task: oc-cmd@2
+  inputs:
+    openshiftService: 'Openshift 3,11'
+    version: '4.2'
+    cmd: 'oc status'
