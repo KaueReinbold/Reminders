@@ -43,11 +43,9 @@ steps:
 - task: oc-cmd@2
   inputs:
     openshiftService: 'Openshift 3,11'
-    version: '4.2'
     cmd: 'oc start-build --from-dir="$(System.DefaultWorkingDirectory)/out/mvc" reminders --follow'
 
 - task: oc-cmd@2
   inputs:
     openshiftService: 'Openshift 3,11'
-    version: '4.2'
     cmd: 'oc status'
