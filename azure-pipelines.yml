@@ -43,11 +43,9 @@ steps:
 - task: oc-cmd@2
   inputs:
     openshiftService: 'Openshift'
-    version: 'http://mirror.openshift.com/pub/openshift-v4/clients/oc/4.2/linux/oc.tar.gz'
     cmd: 'oc start-build --from-dir="Reminders.Mvc\bin\Release\netcoreapp2.1\publish" reminders --follow'
 
 - task: oc-cmd@2
   inputs:
     openshiftService: 'Openshift'
-    version: 'http://mirror.openshift.com/pub/openshift-v4/clients/oc/4.2/linux/oc.tar.gz'
     cmd: 'oc status'
