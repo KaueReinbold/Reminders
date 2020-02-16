@@ -37,7 +37,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
-    arguments: '-c Release Reminders.Mvc\Reminders.Mvc.csproj'
+    arguments: '-c Release'
     zipAfterPublish: false
 
 - task: oc-cmd@2
