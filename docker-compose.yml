@@ -25,8 +25,8 @@ services:
         image: reminders-mvc-image:latest
         container_name: reminders-mvc
         build: 
-            context: .
-            dockerfile: mvc.dockerfile
+            context: src/Reminders.Mvc
+            dockerfile: dockerfile
         command: sh -c '/app/wait-for.sh reminders-database:1433 -t 2000 -- dotnet /app/Reminders.Mvc.dll'
         networks: 
             - reminders-network
@@ -36,8 +36,8 @@ services:
         image: reminders-api-image:latest
         container_name: reminders-api
         build: 
-            context: .
-            dockerfile: api.dockerfile
+            context: src/Reminders.Api
+            dockerfile: dockerfile
         command: sh -c '/app/wait-for.sh reminders-database:1433 -t 2000 -- dotnet /app/Reminders.Api.dll'
         networks: 
             - reminders-network
