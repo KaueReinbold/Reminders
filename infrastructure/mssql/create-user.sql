@@ -1,0 +1,8 @@
+USE [master];
+GO
+CREATE LOGIN reminders WITH PASSWORD='D6jcdaWLsBh64adr', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF;
+GO
+CREATE USER reminders FOR LOGIN reminders;
+GO
+ALTER SERVER ROLE sysadmin ADD MEMBER [reminders];
+GO
