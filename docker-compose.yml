@@ -6,40 +6,40 @@ networks:
 
 services:
     reminders-database:
-        image: "mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04"
+        image: reminders-database:lastest
         container_name: reminders-database
+        build: 
+            context: ./infrastructure/mssql
+            dockerfile: Dockerfile
         networks: 
             - reminders-network
-    reminders-build:
-        image: reminders-build-image:latest
-        container_name: reminders-build
+    reminders-migrations:
+        image: reminders-migrations-image:latest
+        container_name: reminders-migrations
         build: 
             context: .
-            dockerfile: dockerfile
-        command: sh -c '/app/wait-for.sh reminders-database:1433 -t 2000 -- dotnet ef database update --project /app/src/Reminders.Infrastructure.Data/'
+            dockerfile: migrations.Dockerfile
         depends_on: 
             - reminders-database
         networks: 
             - reminders-network
-    reminders-mvc:
-        image: reminders-mvc-image:latest
-        container_name: reminders-mvc
+    reminders-aspnetmvc:
+        image: reminders-aspnetmvc-image:latest
+        container_name: reminders-aspnetmvc
         build: 
-            context: src/Reminders.Mvc
-            dockerfile: dockerfile
-        command: sh -c '/app/wait-for.sh reminders-database:1433 -t 2000 -- dotnet /app/Reminders.Mvc.dll'
+            context: .
+            dockerfile: aspnetmvc.Dockerfile
         networks: 
             - reminders-network
         depends_on: 
-            - reminders-build
-    reminders-api:
-        image: reminders-api-image:latest
-        container_name: reminders-api
+            - reminders-migrations
+    reminders-aspnetapi:
+        image: reminders-aspnetapi-image:latest
+        container_name: reminders-aspnetapi
         build: 
-            context: src/Reminders.Api
-            dockerfile: dockerfile
-        command: sh -c '/app/wait-for.sh reminders-database:1433 -t 2000 -- dotnet /app/Reminders.Api.dll'
+            context: .
+            dockerfile: aspnetapi.Dockerfile
         networks: 
             - reminders-network
         depends_on: 
-            - reminders-mvc
+            - reminders-migrations

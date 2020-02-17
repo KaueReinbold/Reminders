@@ -10,13 +10,9 @@ WORKDIR /app
 # Copy all items to the work directory
 COPY . ./
 
-# Publish Api project
-RUN dotnet publish -c Release -o out/api src/Reminders.Api
+RUN chmod +x ./infrastructure/wait-for.sh
 
-# Publish Mvc project
-RUN dotnet publish -c Release -o out/mvc src/Reminders.Mvc
+RUN ls
 
-COPY ./wait-for.sh out/api
-COPY ./wait-for.sh out/mvc
-
-RUN chmod +x ./wait-for.sh
+# Update databse
+CMD ./infrastructure/wait-for.sh reminders-database:1433 -t 4000 -- dotnet ef database update --project ./src/Reminders.Infrastructure.Data/

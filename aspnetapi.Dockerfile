@@ -8,10 +8,10 @@ WORKDIR /app
 COPY . ./
 
 # Restore packages
-RUN dotnet restore src/Reminders.Api/
+RUN dotnet restore ./src/Reminders.Api/
 
 # Publish code
-RUN dotnet publish -c Release -o out/ src/Reminders.Api/
+RUN dotnet publish -c Release -o ./out/ ./src/Reminders.Api/
 
 # ============================================================================
 
