@@ -7,15 +7,15 @@ services:
             - ACCEPT_EULA=Y
         ports:
             - "17000:1433"
-    reminders-build:
+    reminders-migrations:
         env_file: 
             - .env
-    reminders-mvc:
+    reminders-aspnetmvc:
         env_file: 
             - .env
         ports:
             - "17001:80"
-    reminders-api:
+    reminders-aspnetapi:
         env_file: 
             - .env
         ports:
