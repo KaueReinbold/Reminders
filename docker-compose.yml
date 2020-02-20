@@ -19,10 +19,10 @@ services:
         build: 
             context: .
             dockerfile: migrations.Dockerfile
-        depends_on: 
-            - reminders-database
         networks: 
             - reminders-network
+        depends_on: 
+            - reminders-database
     reminders-aspnetmvc:
         image: reminders-aspnetmvc-image:latest
         container_name: reminders-aspnetmvc
