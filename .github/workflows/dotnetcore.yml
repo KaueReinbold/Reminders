@@ -3,7 +3,7 @@ name: .NET Core
 on: 
   pull_request:
     branches:
-      - master
+      - development
       
 jobs:
   build:
@@ -19,7 +19,12 @@ jobs:
     - name: Build
       run: dotnet build -c Release
     - name: Test
-      run: dotnet test -c Release src/Reminders.Application.Test
+      run: dotnet test -c Release src/Reminders.Application.Test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
+    - name: Publish coverage report to coveralls.io
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: src/Reminders.Application.Test/TestResults/coverage.info 
     - name: Publish Mvc
       run: dotnet publish -c Release src/Reminders.Mvc
     - name: Upload Artifact Mvc
