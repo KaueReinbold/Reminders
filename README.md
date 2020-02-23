@@ -8,6 +8,8 @@ Each reminder has a Title, Description, Date Limit and Status.
 This application was developed with Asp.Net Core. 
 The propos is show the knowledge using this techology and applying best code practices.
 
+![.NET Core](https://github.com/KaueReinbold/Reminders/workflows/.NET%20Core/badge.svg?branch=master)
+
 ## Tip
 
 List images 
