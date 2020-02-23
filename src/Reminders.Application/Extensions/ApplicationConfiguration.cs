@@ -11,13 +11,13 @@ namespace Reminders.Application.Extensions
     [ExcludeFromCodeCoverage]
     public static class ApplicationConfiguration
     {
-        public static IServiceCollection RegisterApplicationServices (
+        public static IServiceCollection RegisterApplicationServices(
                 this IServiceCollection services,
                 IConfiguration configuration) =>
             services
-            .AddSingleton (AutoMapperConfiguration.CreateMapper ())
-            .RegisterDataServices (configuration)
-            .AddScoped<IRemindersService, RemindersService> ();
+            .AddSingleton(AutoMapperConfiguration.CreateMapper())
+            .RegisterDataServices(configuration)
+            .AddScoped<IRemindersService, RemindersService>();
 
     }
 }

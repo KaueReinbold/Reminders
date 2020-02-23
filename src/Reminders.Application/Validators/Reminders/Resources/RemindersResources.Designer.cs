@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Reminders.Application.Validators.Reminders {
+namespace Reminders.Application.Validators.Reminders.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Reminders.Application.Validators.Reminders {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Reminders.Application.Validators.Reminders.RemindersResources", typeof(RemindersResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Reminders.Application.Validators.Reminders.Resources.RemindersResources", typeof(RemindersResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

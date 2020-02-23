@@ -1,13 +1,14 @@
+using System;
+using System.Linq;
 using FluentValidation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reminders.Application.Services;
 using Reminders.Application.Validators.Reminders;
 using Reminders.Application.Validators.Reminders.Exceptions;
 using Reminders.Application.Validators.Reminders.Exceptions.Enumerables;
+using Reminders.Application.Validators.Reminders.Resources;
 using Reminders.Application.ViewModels;
 using Reminders.Domain.Models;
-using System;
-using System.Linq;
 
 namespace Reminders.Application.Test
 {
@@ -35,7 +36,7 @@ namespace Reminders.Application.Test
 
             // assert
             var result = service.Get().FirstOrDefault(r => r.Title.Equals(reminder.Title));
-            
+
             Assert.IsFalse(result.IsDone);
         }
 
@@ -67,7 +68,7 @@ namespace Reminders.Application.Test
             repository.Add(new Reminder("Title", "Description", DateTime.UtcNow, false));
 
             var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
-            
+
             // act
             var result = service.Get();
 
@@ -113,7 +114,7 @@ namespace Reminders.Application.Test
 
             // assert
             var result = repository.Get().FirstOrDefault();
-            
+
             Assert.AreEqual(reminder.Title, result.Title);
         }
 
@@ -172,14 +173,14 @@ namespace Reminders.Application.Test
             // act
             // assert
             var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
-                service.Edit(id, new ReminderViewModel()
-                {
-                    Id = id,
-                    Title = "Title",
-                    Description = "Description",
-                    LimitDate = new DateTime(),
-                    IsDone = false
-                }));
+               service.Edit(id, new ReminderViewModel()
+               {
+                   Id = id,
+                   Title = "Title",
+                   Description = "Description",
+                   LimitDate = new DateTime(),
+                   IsDone = false
+               }));
 
             Assert.IsTrue(exception.StatusCode == StatusCode.NotFound);
             Assert.IsTrue(exception.Message.Contains(RemindersResources.NotFound));
@@ -200,14 +201,14 @@ namespace Reminders.Application.Test
 
             // assert
             var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
-                service.Edit(id, new ReminderViewModel()
-                {
-                    Id = id,
-                    Title = "Title",
-                    Description = "Description",
-                    LimitDate = new DateTime(),
-                    IsDone = false
-                }));
+               service.Edit(id, new ReminderViewModel()
+               {
+                   Id = id,
+                   Title = "Title",
+                   Description = "Description",
+                   LimitDate = new DateTime(),
+                   IsDone = false
+               }));
 
             Assert.IsTrue(exception.StatusCode == StatusCode.NotFound);
             Assert.IsTrue(exception.Message.Contains(RemindersResources.NotFound));
@@ -223,14 +224,14 @@ namespace Reminders.Application.Test
             // act
             // assert
             var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
-                service.Edit(Guid.NewGuid(), new ReminderViewModel()
-                {
-                    Id = Guid.Empty,
-                    Title = "Title",
-                    Description = "Description",
-                    LimitDate = new DateTime(),
-                    IsDone = false
-                }));
+               service.Edit(Guid.NewGuid(), new ReminderViewModel()
+               {
+                   Id = Guid.Empty,
+                   Title = "Title",
+                   Description = "Description",
+                   LimitDate = new DateTime(),
+                   IsDone = false
+               }));
 
             Assert.IsTrue(exception.StatusCode == StatusCode.IdsDoNotMatch);
             Assert.IsTrue(exception.Message.Contains(RemindersResources.IdsDoNotMatch));
