@@ -5,6 +5,7 @@ using Reminders.Application.Contracts;
 using Reminders.Application.Validators.Reminders;
 using Reminders.Application.Validators.Reminders.Exceptions;
 using Reminders.Application.Validators.Reminders.Exceptions.Enumerables;
+using Reminders.Application.Validators.Reminders.Resources;
 using Reminders.Application.ViewModels;
 using Reminders.Domain.Contracts;
 using Reminders.Domain.Contracts.Repositories;

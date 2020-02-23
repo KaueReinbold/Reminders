@@ -18,7 +18,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Update="Validators\Reminders\RemindersResources.Designer.cs">
+    <Compile Update="Validators\Reminders\Resources\RemindersResources.Designer.cs">
       <DependentUpon>RemindersResources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -26,7 +26,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <EmbeddedResource Update="Validators\Reminders\RemindersResources.resx">
+    <EmbeddedResource Update="Validators\Reminders\Resources\RemindersResources.resx">
       <LastGenOutput>RemindersResources.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>

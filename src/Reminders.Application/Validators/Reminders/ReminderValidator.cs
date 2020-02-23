@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Reminders.Application.Validators.Reminders.Resources;
 using Reminders.Domain.Models;
 using System;
 
