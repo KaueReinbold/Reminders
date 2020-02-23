@@ -8,8 +8,12 @@ Each reminder has a Title, Description, Date Limit and Status.
 This application was developed with Asp.Net Core. 
 The propos is show the knowledge using this techology and applying best code practices.
 
-## Tip
+![.NET Core](https://github.com/KaueReinbold/Reminders/workflows/.NET%20Core/badge.svg?branch=master)
 
+[![Coverage Status](https://coveralls.io/repos/github/KaueReinbold/Reminders/badge.svg?branch=master)](https://coveralls.io/github/KaueReinbold/Reminders?branch=master)
+
+## Tip
+    
 List images 
 ```cmd
 docker images --format '{{.ID}} - {{.Size}} - {{.Repository}}:{{.Tag}}'
