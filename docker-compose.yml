@@ -6,7 +6,7 @@ networks:
 
 services:
     reminders-database:
-        image: reminders-database:lastest
+        image: reminders-database-image:lastest
         container_name: reminders-database
         build: 
             context: ./infrastructure/mssql
