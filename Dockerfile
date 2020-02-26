@@ -1,5 +1,7 @@
 # SDK Build configuration
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS reminders-build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS build-env
+
+ARG DOTNET_PROJECT_PATH
 
 # Set up the work directory
 WORKDIR /app
@@ -8,10 +10,10 @@ WORKDIR /app
 COPY . ./
 
 # Restore packages
-RUN dotnet restore ./src/Reminders.Mvc/
+RUN dotnet restore ${DOTNET_PROJECT_PATH}
 
 # Publish code
-RUN dotnet publish -c Release -o ./out/ ./src/Reminders.Mvc
+RUN dotnet publish -c Release -o ./out/ ${DOTNET_PROJECT_PATH}
 
 # ============================================================================
 
@@ -29,7 +31,7 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 WORKDIR /app
 
 # Copy publish result from build image
-COPY --from=reminders-build /app/out/ .
+COPY --from=build-env /app/out/ .
 
 # Setup entrypoint
-ENTRYPOINT ["dotnet","Reminders.Mvc.dll"]
+ENTRYPOINT dotnet ${ENV_DOTNET_ENTRYPOINT}
