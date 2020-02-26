@@ -1,9 +1,9 @@
 name: .NET Core - Packages
 
 on: 
-    push:
-      branches:
-        - master
+  push:
+    branches:
+      - master
 
 jobs:
   build:
