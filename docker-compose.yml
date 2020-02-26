@@ -28,7 +28,11 @@ services:
         container_name: reminders-aspnetmvc
         build: 
             context: .
-            dockerfile: aspnetmvc.Dockerfile
+            dockerfile: Dockerfile
+            args: 
+                DOTNET_PROJECT_PATH: ./src/Reminders.Mvc
+        environment: 
+            ENV_DOTNET_ENTRYPOINT: Reminders.Mvc.dll
         networks: 
             - reminders-network
         depends_on: 
@@ -38,7 +42,11 @@ services:
         container_name: reminders-aspnetapi
         build: 
             context: .
-            dockerfile: aspnetapi.Dockerfile
+            dockerfile: Dockerfile
+            args: 
+                DOTNET_PROJECT_PATH: ./src/Reminders.Api
+        environment: 
+            ENV_DOTNET_ENTRYPOINT: Reminders.Api.dll
         networks: 
             - reminders-network
         depends_on: 
