@@ -12,9 +12,9 @@ COPY . /usr/config
 
 # Grant permissions for to our scripts to be executable
 USER root
-RUN chmod +x /usr/config/entrypoint.sh
-RUN chmod +x /usr/config/configure.sh
+RUN chmod +x /usr/config/mssql-entrypoint.sh
+RUN chmod +x /usr/config/configure-database.sh
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["./mssql-entrypoint.sh"]
 
 CMD ["tail -f /dev/null"]

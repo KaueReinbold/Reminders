@@ -10,6 +10,8 @@ The propos is show the knowledge using this techology and applying best code pra
 
 ![.NET Core](https://github.com/KaueReinbold/Reminders/workflows/.NET%20Core/badge.svg?branch=master)
 
+![Docker Image CI](https://github.com/KaueReinbold/Reminders/workflows/Docker%20Image%20CI/badge.svg?branch=master)
+
 [![Coverage Status](https://coveralls.io/repos/github/KaueReinbold/Reminders/badge.svg?branch=master&service=github)](https://coveralls.io/github/KaueReinbold/Reminders?branch=master)
 
 ## Tip
