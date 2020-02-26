@@ -23,23 +23,22 @@ jobs:
     - name: Create the package Application
       run: dotnet pack -c Release ./src/Reminders.Application
     - name: Publish the package to GPR
-      run: dotnet nuget push ./src/Reminders.Application/bin/Release/*.nupkg -k ${{secrets.GITHUB_TOKEN}}
+      run: dotnet nuget push ./src/Reminders.Application/bin/Release/*.nupkg -k ${{secrets.GITHUB_TOKEN}} --skip-duplicate
 
     - run: dotnet build ./src/Reminders.Domain
     - name: Create the package Domain
       run: dotnet pack -c Release ./src/Reminders.Domain
     - name: Publish the package to GPR
-      run: dotnet nuget push ./src/Reminders.Domain/bin/Release/*.nupkg -k ${{secrets.GITHUB_TOKEN}}
+      run: dotnet nuget push ./src/Reminders.Domain/bin/Release/*.nupkg -k ${{secrets.GITHUB_TOKEN}} --skip-duplicate
 
     - run: dotnet build ./src/Reminders.Infrastructure.CrossCutting
     - name: Create the package CrossCutting
       run: dotnet pack -c Release ./src/Reminders.Infrastructure.CrossCutting
     - name: Publish the package to GPR
-      run: dotnet nuget push ./src/Reminders.Infrastructure.CrossCutting/bin/Release/*.nupkg -k ${{secrets.GITHUB_TOKEN}}
-    
+      run: dotnet nuget push ./src/Reminders.Infrastructure.CrossCutting/bin/Release/*.nupkg -k ${{secrets.GITHUB_TOKEN}} --skip-duplicate
     
     - run: dotnet build ./src/Reminders.Infrastructure.Data
     - name: Create the package Data
       run: dotnet pack -c Release ./src/Reminders.Infrastructure.Data
     - name: Publish the package to GPR
-      run: dotnet nuget push ./src/Reminders.Infrastructure.Data/bin/Release/*.nupkg -k ${{secrets.GITHUB_TOKEN}}
+      run: dotnet nuget push ./src/Reminders.Infrastructure.Data/bin/Release/*.nupkg -k ${{secrets.GITHUB_TOKEN}} --skip-duplicate
