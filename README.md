@@ -15,7 +15,13 @@ The propos is show the knowledge using this techology and applying best code pra
 [![Coverage Status](https://coveralls.io/repos/github/KaueReinbold/Reminders/badge.svg?branch=master&service=github)](https://coveralls.io/github/KaueReinbold/Reminders?branch=master)
 
 ## Tip
-    
+
+### Run Docker Compose for Development
+
+```shell
+docker-compose.exe -f development.docker-compose.yml -f docker-compose.override.yml up -d
+```
+
 List images 
 ```cmd
 docker images --format '{{.ID}} - {{.Size}} - {{.Repository}}:{{.Tag}}'
