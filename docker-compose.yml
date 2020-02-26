@@ -6,7 +6,7 @@ networks:
 
 services:
     reminders-database:
-        image: reminders-database:lastest
+        image: reminders-database-image:lastest
         container_name: reminders-database
         build: 
             context: ./infrastructure/mssql
@@ -19,6 +19,11 @@ services:
         build: 
             context: .
             dockerfile: migrations.Dockerfile
+            args: 
+                DOTNET_PROJECT_PATH: ./src/Reminders.Infrastructure.Data
+                DOCKER_DATABASE_CONTAINER: reminders-database:1433
+                WAIT_FOR_SCRIPT: ./infrastructure/wait-for.sh
+                WAIT_FOR_TIMEOUT: 4000
         networks: 
             - reminders-network
         depends_on: 
@@ -28,7 +33,11 @@ services:
         container_name: reminders-aspnetmvc
         build: 
             context: .
-            dockerfile: aspnetmvc.Dockerfile
+            dockerfile: Dockerfile
+            args: 
+                DOTNET_PROJECT_PATH: ./src/Reminders.Mvc
+        environment: 
+            ENV_DOTNET_ENTRYPOINT: Reminders.Mvc.dll
         networks: 
             - reminders-network
         depends_on: 
@@ -38,7 +47,11 @@ services:
         container_name: reminders-aspnetapi
         build: 
             context: .
-            dockerfile: aspnetapi.Dockerfile
+            dockerfile: Dockerfile
+            args: 
+                DOTNET_PROJECT_PATH: ./src/Reminders.Api
+        environment: 
+            ENV_DOTNET_ENTRYPOINT: Reminders.Api.dll
         networks: 
             - reminders-network
         depends_on: 
