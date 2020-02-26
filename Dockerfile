@@ -15,6 +15,8 @@ RUN dotnet restore ${DOTNET_PROJECT_PATH}
 # Publish code
 RUN dotnet publish -c Release -o ./out/ ${DOTNET_PROJECT_PATH}
 
+RUN cp ./infrastructure/wait-for.sh ./out/wait-for.sh
+
 # ============================================================================
 
 # Building image
@@ -32,6 +34,8 @@ WORKDIR /app
 
 # Copy publish result from build image
 COPY --from=build-env /app/out/ .
+
+RUN chmod +x ./wait-for.sh
 
 # Setup entrypoint
 ENTRYPOINT dotnet ${ENV_DOTNET_ENTRYPOINT}
