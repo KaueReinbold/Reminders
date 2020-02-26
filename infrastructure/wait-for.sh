@@ -50,9 +50,9 @@ wait_for() {
   if [ $# -lt 0 ]; then return; fi
 
   if [ $WAIT_FOR_TIMEOUT -eq 0 ] ; then
-	echo "Waiting for connection timeout..." >&2
+	echo "Waiting for connection..." >&2
   else
-	echo "Wait timeout before limit..." >&2  
+	echo "Waiting for timeout..." >&2  
   fi
 
   for i in `seq $TIMEOUT` ; do
@@ -66,7 +66,7 @@ wait_for() {
 		  exit 0
 		fi
 	else
-		if [ $result -lt 0 ] ; then
+		if [ $result -gt 0 ] ; then
 		  exec "$@"
 		  	progressbar 100 $TIMEOUT 
 		  exit 0
