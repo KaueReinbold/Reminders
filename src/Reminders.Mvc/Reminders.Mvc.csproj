@@ -13,9 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Reminders.Application\Reminders.Application.csproj" />
+    <PackageReference Include="Reminders.Application" Version="2.0.0" />
   </ItemGroup>
-
-
 
 </Project>
