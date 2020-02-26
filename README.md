@@ -8,7 +8,9 @@ Each reminder has a Title, Description, Date Limit and Status.
 This application was developed with Asp.Net Core. 
 The propos is show the knowledge using this techology and applying best code practices.
 
-![.NET Core](https://github.com/KaueReinbold/Reminders/workflows/.NET%20Core/badge.svg?branch=master)
+![.NET Core - Artifacts](https://github.com/KaueReinbold/Reminders/workflows/.NET%20Core%20-%20Artifacts/badge.svg?branch=master)
+
+![.NET Core - Packages](https://github.com/KaueReinbold/Reminders/workflows/.NET%20Core%20-%20Packages/badge.svg?branch=master)
 
 ![Docker Image CI](https://github.com/KaueReinbold/Reminders/workflows/Docker%20Image%20CI/badge.svg?branch=master)
 
