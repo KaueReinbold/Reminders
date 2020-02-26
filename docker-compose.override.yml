@@ -2,21 +2,27 @@ version: '3'
 
 services: 
     reminders-database:
+        ports:
+            - "17000:1433"
         environment:
             - SA_PASSWORD=123Aa321
             - ACCEPT_EULA=Y
-        ports:
-            - "17000:1433"
+        env_file: 
+            - .env
     reminders-migrations:
         env_file: 
             - .env
     reminders-aspnetmvc:
-        env_file: 
-            - .env
         ports:
             - "17001:80"
-    reminders-aspnetapi:
+        environment: 
+            ENV_DOTNET_ENTRYPOINT: Reminders.Mvc.dll    
         env_file: 
             - .env
+    reminders-aspnetapi:
         ports:
             - "17002:80"
+        environment: 
+            ENV_DOTNET_ENTRYPOINT: Reminders.Api.dll
+        env_file: 
+            - .env
