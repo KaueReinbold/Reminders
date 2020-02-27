@@ -47,6 +47,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         buildargs: DOTNET_PROJECT_PATH=./src/Reminders.Mvc
         tag_names: true
+        source-url: https://nuget.pkg.github.com/KaueReinbold/index.json
     - name: Push Reminders Api to DockerHub
       uses: elgohr/Publish-Docker-Github-Action@2.12
       env: 
@@ -58,3 +59,4 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         buildargs: DOTNET_PROJECT_PATH=./src/Reminders.Api
         tag_names: true  
+        source-url: https://nuget.pkg.github.com/KaueReinbold/index.json
