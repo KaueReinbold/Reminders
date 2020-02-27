@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        source-url: https://nuget.pkg.github.com/KaueReinbold/index.json
     - name: Push Reminders Database to DockerHub
       uses: elgohr/Publish-Docker-Github-Action@2.12
       env: 
