@@ -3,10 +3,10 @@ name: .NET Core - Artifacts
 on: 
   pull_request:
     branches:
-      - master
+      - master-default
   push:
     branches:
-      - master
+      - master-default
   
 jobs:
   build:
