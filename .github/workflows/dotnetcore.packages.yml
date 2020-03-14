@@ -3,7 +3,7 @@ name: .NET Core - Packages
 on: 
   push:
     branches:
-      - staging-default
+      - staging
 
 jobs:
   build:
