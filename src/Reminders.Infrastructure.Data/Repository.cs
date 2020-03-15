@@ -23,7 +23,8 @@ namespace Reminders.Infrastructure.Data.EntityFramework
         public virtual void Update(TEntity obj) => DbSet.Update(obj);
         public virtual void Remove(Guid id) => DbSet.Remove(DbSet.Find(id));
 
-        public virtual TEntity Get(Guid id) => DbSet.Find(id);
+        public virtual TEntity Get(Guid id) =>
+            DbSet.Find(id);
         public virtual TEntity GetAsNoTracking(Guid id)
         {
             var entity = Context.Set<TEntity>().Find(id);

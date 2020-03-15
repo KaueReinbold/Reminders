@@ -23,13 +23,13 @@ namespace Reminders.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services
                 .RegisterApplicationServices(Configuration)
                 .AddControllers();
 
             services
-                .AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Reminders API", Version = "v1" }));
+                .AddSwaggerGen(setup =>
+                    setup.SwaggerDoc("v1", new OpenApiInfo { Title = "Reminders API", Version = "v1" }));
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory logger)
@@ -44,7 +44,8 @@ namespace Reminders.Api
                 .UseAuthorization()
                 .UseEndpoints(endpoints => endpoints.MapControllers())
                 .UseSwagger()
-                .UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Reminders API V1"));
+                .UseSwaggerUI(setup =>
+                    setup.SwaggerEndpoint("/swagger/v1/swagger.json", "Reminders API V1"));
         }
     }
 }
