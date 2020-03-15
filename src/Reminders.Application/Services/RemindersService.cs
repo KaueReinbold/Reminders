@@ -30,12 +30,13 @@ namespace Reminders.Application.Services
             IUnitOfWork unitOfWork)
         {
             validator = new ReminderValidator();
+
             this.mapper = mapper;
             this.remindersRepository = remindersRepository;
             this.unitOfWork = unitOfWork;
         }
 
-        public void Insert(ReminderViewModel reminderViewModel)
+        public ReminderViewModel Insert(ReminderViewModel reminderViewModel)
         {
             reminderViewModel.IsDone = false;
 
@@ -43,12 +44,16 @@ namespace Reminders.Application.Services
 
             validator.ValidateAndThrow(reminder, ruleSet: "*");
 
-            remindersRepository.Add(reminder);
+            reminder = remindersRepository.Add(reminder);
 
             unitOfWork.Commit();
+
+            return mapper.Map<ReminderViewModel>(reminder);
         }
 
-        public void Edit(Guid id, ReminderViewModel reminderViewModel)
+        public ReminderViewModel Edit(
+            Guid id,
+            ReminderViewModel reminderViewModel)
         {
             if (id != reminderViewModel.Id)
                 throw new RemindersApplicationException(StatusCode.IdsDoNotMatch, RemindersResources.IdsDoNotMatch);
@@ -60,9 +65,11 @@ namespace Reminders.Application.Services
 
             validator.ValidateAndThrow(reminder);
 
-            remindersRepository.Update(reminder);
+            reminder = remindersRepository.Update(reminder);
 
             unitOfWork.Commit();
+
+            return mapper.Map<ReminderViewModel>(reminder);
         }
 
         public void Delete(Guid id)

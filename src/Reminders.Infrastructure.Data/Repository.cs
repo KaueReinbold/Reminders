@@ -19,9 +19,12 @@ namespace Reminders.Infrastructure.Data.EntityFramework
             DbSet = Context.Set<TEntity>();
         }
 
-        public virtual void Add(TEntity obj) => DbSet.Add(obj);
-        public virtual void Update(TEntity obj) => DbSet.Update(obj);
-        public virtual void Remove(Guid id) => DbSet.Remove(DbSet.Find(id));
+        public virtual TEntity Add(TEntity obj) =>
+            DbSet.Add(obj).Entity;
+        public virtual TEntity Update(TEntity obj) =>
+            DbSet.Update(obj).Entity;
+        public virtual void Remove(Guid id) =>
+            DbSet.Remove(DbSet.Find(id));
 
         public virtual TEntity Get(Guid id) =>
             DbSet.Find(id);
