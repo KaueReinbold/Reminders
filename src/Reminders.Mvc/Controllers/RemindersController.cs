@@ -36,9 +36,14 @@ namespace Reminders.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([FromForm] ReminderViewModel reminder)
         {
-            remindersService.Insert(reminder);
+            if (ModelState.IsValid)
+            {
+                remindersService.Insert(reminder);
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(reminder);
         }
 
         // GET: Reminders/Edit/5
@@ -50,9 +55,14 @@ namespace Reminders.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Guid id, [FromForm] ReminderViewModel reminder)
         {
-            remindersService.Edit(id, reminder);
+            if (ModelState.IsValid)
+            {
+                remindersService.Edit(id, reminder);
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(reminder);
         }
 
         // GET: Reminders/Delete/5
