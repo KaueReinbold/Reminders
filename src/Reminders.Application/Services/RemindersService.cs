@@ -80,23 +80,31 @@ namespace Reminders.Application.Services
         }
 
         public IQueryable<ReminderViewModel> Get() =>
-            remindersRepository.Get()
-                .Where(r => !r.IsDeleted)
+            remindersRepository
+                .Get()
+                .Where(reminder => !reminder.IsDeleted)
                 .ProjectTo<ReminderViewModel>(mapper.ConfigurationProvider);
 
         public ReminderViewModel Get(Guid id) =>
             mapper.Map<ReminderViewModel>(
-                remindersRepository.Get()
-                .FirstOrDefault(r => r.Id == id && !r.IsDeleted));
+                remindersRepository
+                .Get()
+                .FirstOrDefault(reminder =>
+                    reminder.Id == id &&
+                    !reminder.IsDeleted));
 
         public IQueryable<ReminderViewModel> GetInactive() =>
-            remindersRepository.Get()
-                .Where(r => r.IsDeleted)
+            remindersRepository
+                .Get()
+                .Where(reminder => reminder.IsDeleted)
                 .ProjectTo<ReminderViewModel>(mapper.ConfigurationProvider);
 
         public ReminderViewModel GetInactive(Guid id) =>
             mapper.Map<ReminderViewModel>(
-                remindersRepository.Get()
-                .FirstOrDefault(r => r.Id == id && r.IsDeleted));
+                remindersRepository
+                .Get()
+                .FirstOrDefault(reminder =>
+                    reminder.Id == id &&
+                    reminder.IsDeleted));
     }
 }
