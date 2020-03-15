@@ -56,10 +56,10 @@ namespace Reminders.Application.Services
             ReminderViewModel reminderViewModel)
         {
             if (id != reminderViewModel.Id)
-                throw new RemindersApplicationException(StatusCode.IdsDoNotMatch, RemindersResources.IdsDoNotMatch);
+                throw new RemindersApplicationException(ValidationStatus.IdsDoNotMatch, RemindersResources.IdsDoNotMatch);
 
             if (!remindersRepository.Exists(id))
-                throw new RemindersApplicationException(StatusCode.NotFound, RemindersResources.NotFound);
+                throw new RemindersApplicationException(ValidationStatus.NotFound, RemindersResources.NotFound);
 
             var reminder = mapper.Map<Reminder>(reminderViewModel);
 
@@ -75,7 +75,7 @@ namespace Reminders.Application.Services
         public void Delete(Guid id)
         {
             if (!remindersRepository.Exists(id))
-                throw new RemindersApplicationException(StatusCode.NotFound, RemindersResources.NotFound);
+                throw new RemindersApplicationException(ValidationStatus.NotFound, RemindersResources.NotFound);
 
             var reminderData = remindersRepository.Get(id);
 
