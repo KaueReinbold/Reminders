@@ -9,8 +9,8 @@ namespace Reminders.Api.Extensions
         public static HttpStatusCode ToHttpStatusCode(this RemindersApplicationException remindersApplicationException) =>
             remindersApplicationException.StatusCode switch
             {
-                StatusCode.NotFound => HttpStatusCode.NotFound,
-                StatusCode.IdsDoNotMatch => HttpStatusCode.Conflict,
+                ValidationStatus.NotFound => HttpStatusCode.NotFound,
+                ValidationStatus.IdsDoNotMatch => HttpStatusCode.Conflict,
                 _ => HttpStatusCode.BadRequest,
             };
     }
