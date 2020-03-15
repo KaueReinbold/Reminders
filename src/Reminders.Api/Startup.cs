@@ -38,7 +38,7 @@ namespace Reminders.Api
                 app.UseDeveloperExceptionPage();
 
             app
-                .ConfigureExceptionHandler()
+                .UseRemindersExceptionHandler()
                 .UseHttpsRedirection()
                 .UseRouting()
                 .UseAuthorization()
