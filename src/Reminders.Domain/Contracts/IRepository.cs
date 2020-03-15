@@ -13,5 +13,7 @@ namespace Reminders.Domain.Contracts
         T Get(Guid id);
 
         IQueryable<T> Get();
+
+        bool Exists(Guid id);
     }
 }
