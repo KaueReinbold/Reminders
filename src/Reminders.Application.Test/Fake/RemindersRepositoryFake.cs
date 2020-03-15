@@ -11,7 +11,11 @@ namespace Reminders.Application.Test.Fake
     {
         public List<Reminder> Reminders = new List<Reminder>();
 
-        public void Add(Reminder reminder) => Reminders.Add(reminder);
+        public Reminder Add(Reminder reminder)
+        {
+            Reminders.Add(reminder);
+            return reminder;
+        }
 
         public void Dispose() { }
 
@@ -39,10 +43,11 @@ namespace Reminders.Application.Test.Fake
 
         public int SaveChanges() => 1;
 
-        public void Update(Reminder reminder)
+        public Reminder Update(Reminder reminder)
         {
             Reminders.RemoveAll(r => r.Id == reminder.Id);
             Reminders.Add(reminder);
+            return reminder;
         }
     }
 }

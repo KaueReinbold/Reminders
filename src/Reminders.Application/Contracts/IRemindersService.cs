@@ -6,8 +6,8 @@ namespace Reminders.Application.Contracts
 {
     public interface IRemindersService
     {
-        void Insert(ReminderViewModel reminderViewModel);
-        void Edit(Guid id, ReminderViewModel reminderViewModel);
+        ReminderViewModel Insert(ReminderViewModel reminderViewModel);
+        ReminderViewModel Edit(Guid id, ReminderViewModel reminderViewModel);
         void Delete(Guid id);
 
         IQueryable<ReminderViewModel> Get();
