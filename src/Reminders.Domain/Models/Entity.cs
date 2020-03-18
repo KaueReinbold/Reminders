@@ -46,9 +46,6 @@ namespace Reminders.Domain.Models
 
         public override string ToString() => GetType().Name + " [Id=" + Id + "]";
 
-        public void Delete()
-        {
-            IsDeleted = true;
-        }
+        public void Delete() => IsDeleted = true;
     }
 }
