@@ -15,9 +15,8 @@ namespace Reminders.Application.Extensions
                 this IServiceCollection services,
                 IConfiguration configuration) =>
             services
-            .AddSingleton(AutoMapperConfiguration.CreateMapper())
-            .RegisterDataServices(configuration)
-            .AddScoped<IRemindersService, RemindersService>();
-
+                .AddSingleton(AutoMapperConfiguration.CreateMapper())
+                .RegisterDataServices(configuration)
+                .AddScoped<IRemindersService, RemindersService>();
     }
 }

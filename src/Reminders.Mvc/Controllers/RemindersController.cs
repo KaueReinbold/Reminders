@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Reminders.Application.Contracts;
 using Reminders.Application.ViewModels;
@@ -21,39 +20,54 @@ namespace Reminders.Mvc.Controllers
         }
 
         // GET: Reminders
-        public ActionResult Index() => View(remindersService.Get());
+        public ActionResult Index() =>
+            View(remindersService.Get());
 
         // GET: Reminders/Details/5
-        public ActionResult Details(Guid id) => View(remindersService.Get(id));
+        public ActionResult Details(Guid id) =>
+            View(remindersService.Get(id));
 
         // GET: Reminders/Create
-        public ActionResult Create() => View();
+        public ActionResult Create() =>
+            View();
 
         // POST: Reminders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([FromForm] ReminderViewModel reminder)
         {
-            remindersService.Insert(reminder);
+            if (ModelState.IsValid)
+            {
+                remindersService.Insert(reminder);
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(reminder);
         }
 
         // GET: Reminders/Edit/5
-        public ActionResult Edit(Guid id) => View(remindersService.Get(id));
+        public ActionResult Edit(Guid id) =>
+            View(remindersService.Get(id));
 
         // POST: Reminders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Guid id, [FromForm] ReminderViewModel reminder)
         {
-            remindersService.Edit(id, reminder);
+            if (ModelState.IsValid)
+            {
+                remindersService.Edit(id, reminder);
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(reminder);
         }
 
         // GET: Reminders/Delete/5
-        public ActionResult Delete(Guid id) => View(remindersService.Get(id));
+        public ActionResult Delete(Guid id) =>
+            View(remindersService.Get(id));
 
         // POST: Reminders/Delete/5
         [HttpPost]

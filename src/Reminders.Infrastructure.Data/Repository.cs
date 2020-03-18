@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Reminders.Domain.Contracts;
+using Reminders.Domain.Models;
 using System;
 using System.Linq;
 
@@ -7,7 +8,7 @@ namespace Reminders.Infrastructure.Data.EntityFramework
 {
     public class Repository<TEntity>
         : IRepository<TEntity>
-        where TEntity : class
+        where TEntity : Entity<Guid>
     {
         protected readonly DbContext Context;
         protected readonly DbSet<TEntity> DbSet;
@@ -19,11 +20,15 @@ namespace Reminders.Infrastructure.Data.EntityFramework
             DbSet = Context.Set<TEntity>();
         }
 
-        public virtual void Add(TEntity obj) => DbSet.Add(obj);
-        public virtual void Update(TEntity obj) => DbSet.Update(obj);
-        public virtual void Remove(Guid id) => DbSet.Remove(DbSet.Find(id));
+        public virtual TEntity Add(TEntity obj) =>
+            DbSet.Add(obj).Entity;
+        public virtual TEntity Update(TEntity obj) =>
+            DbSet.Update(obj).Entity;
+        public virtual void Remove(Guid id) =>
+            DbSet.Remove(DbSet.Find(id));
 
-        public virtual TEntity Get(Guid id) => DbSet.Find(id);
+        public virtual TEntity Get(Guid id) =>
+            DbSet.Find(id);
         public virtual TEntity GetAsNoTracking(Guid id)
         {
             var entity = Context.Set<TEntity>().Find(id);
@@ -31,8 +36,20 @@ namespace Reminders.Infrastructure.Data.EntityFramework
             return entity;
         }
 
-        public virtual IQueryable<TEntity> Get() => DbSet;
-        public virtual IQueryable<TEntity> GetAsNoTracking() => DbSet.AsNoTracking();
+        public virtual IQueryable<TEntity> Get() =>
+            DbSet;
+        public virtual IQueryable<TEntity> GetAsNoTracking() =>
+            DbSet.AsNoTracking();
+
+        public bool Exists(Guid id)
+        {
+            var reminder = GetAsNoTracking(id);
+
+            if (reminder is null)
+                return false;
+
+            return reminder.IsDeleted;
+        }
 
         public void Dispose()
         {

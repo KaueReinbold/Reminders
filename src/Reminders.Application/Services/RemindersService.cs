@@ -30,12 +30,13 @@ namespace Reminders.Application.Services
             IUnitOfWork unitOfWork)
         {
             validator = new ReminderValidator();
+
             this.mapper = mapper;
             this.remindersRepository = remindersRepository;
             this.unitOfWork = unitOfWork;
         }
 
-        public void Insert(ReminderViewModel reminderViewModel)
+        public ReminderViewModel Insert(ReminderViewModel reminderViewModel)
         {
             reminderViewModel.IsDone = false;
 
@@ -43,32 +44,38 @@ namespace Reminders.Application.Services
 
             validator.ValidateAndThrow(reminder, ruleSet: "*");
 
-            remindersRepository.Add(reminder);
+            reminder = remindersRepository.Add(reminder);
 
             unitOfWork.Commit();
+
+            return mapper.Map<ReminderViewModel>(reminder);
         }
 
-        public void Edit(Guid id, ReminderViewModel reminderViewModel)
+        public ReminderViewModel Edit(
+            Guid id,
+            ReminderViewModel reminderViewModel)
         {
             if (id != reminderViewModel.Id)
-                throw new RemindersApplicationException(StatusCode.IdsDoNotMatch, RemindersResources.IdsDoNotMatch);
+                throw new RemindersApplicationException(ValidationStatus.IdsDoNotMatch, RemindersResources.IdsDoNotMatch);
 
             if (!remindersRepository.Exists(id))
-                throw new RemindersApplicationException(StatusCode.NotFound, RemindersResources.NotFound);
+                throw new RemindersApplicationException(ValidationStatus.NotFound, RemindersResources.NotFound);
 
             var reminder = mapper.Map<Reminder>(reminderViewModel);
 
             validator.ValidateAndThrow(reminder);
 
-            remindersRepository.Update(reminder);
+            reminder = remindersRepository.Update(reminder);
 
             unitOfWork.Commit();
+
+            return mapper.Map<ReminderViewModel>(reminder);
         }
 
         public void Delete(Guid id)
         {
             if (!remindersRepository.Exists(id))
-                throw new RemindersApplicationException(StatusCode.NotFound, RemindersResources.NotFound);
+                throw new RemindersApplicationException(ValidationStatus.NotFound, RemindersResources.NotFound);
 
             var reminderData = remindersRepository.Get(id);
 
@@ -80,23 +87,31 @@ namespace Reminders.Application.Services
         }
 
         public IQueryable<ReminderViewModel> Get() =>
-            remindersRepository.Get()
-                .Where(r => !r.IsDeleted)
+            remindersRepository
+                .Get()
+                .Where(reminder => !reminder.IsDeleted)
                 .ProjectTo<ReminderViewModel>(mapper.ConfigurationProvider);
 
         public ReminderViewModel Get(Guid id) =>
             mapper.Map<ReminderViewModel>(
-                remindersRepository.Get()
-                .FirstOrDefault(r => r.Id == id && !r.IsDeleted));
+                remindersRepository
+                .Get()
+                .FirstOrDefault(reminder =>
+                    reminder.Id == id &&
+                    !reminder.IsDeleted));
 
         public IQueryable<ReminderViewModel> GetInactive() =>
-            remindersRepository.Get()
-                .Where(r => r.IsDeleted)
+            remindersRepository
+                .Get()
+                .Where(reminder => reminder.IsDeleted)
                 .ProjectTo<ReminderViewModel>(mapper.ConfigurationProvider);
 
         public ReminderViewModel GetInactive(Guid id) =>
             mapper.Map<ReminderViewModel>(
-                remindersRepository.Get()
-                .FirstOrDefault(r => r.Id == id && r.IsDeleted));
+                remindersRepository
+                .Get()
+                .FirstOrDefault(reminder =>
+                    reminder.Id == id &&
+                    reminder.IsDeleted));
     }
 }

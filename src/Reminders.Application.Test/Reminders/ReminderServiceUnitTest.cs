@@ -182,7 +182,7 @@ namespace Reminders.Application.Test
                    IsDone = false
                }));
 
-            Assert.IsTrue(exception.StatusCode == StatusCode.NotFound);
+            Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);
             Assert.IsTrue(exception.Message.Contains(RemindersResources.NotFound));
         }
 
@@ -210,7 +210,7 @@ namespace Reminders.Application.Test
                    IsDone = false
                }));
 
-            Assert.IsTrue(exception.StatusCode == StatusCode.NotFound);
+            Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);
             Assert.IsTrue(exception.Message.Contains(RemindersResources.NotFound));
         }
 
@@ -233,7 +233,7 @@ namespace Reminders.Application.Test
                    IsDone = false
                }));
 
-            Assert.IsTrue(exception.StatusCode == StatusCode.IdsDoNotMatch);
+            Assert.IsTrue(exception.StatusCode == ValidationStatus.IdsDoNotMatch);
             Assert.IsTrue(exception.Message.Contains(RemindersResources.IdsDoNotMatch));
         }
 
@@ -266,7 +266,7 @@ namespace Reminders.Application.Test
             // assert
             var exception = Assert.ThrowsException<RemindersApplicationException>(() => service.Delete(id));
 
-            Assert.IsTrue(exception.StatusCode == StatusCode.NotFound);
+            Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);
             Assert.IsTrue(exception.Message.Contains(RemindersResources.NotFound));
         }
 
@@ -286,7 +286,7 @@ namespace Reminders.Application.Test
             // assert
             var exception = Assert.ThrowsException<RemindersApplicationException>(() => service.Delete(id));
 
-            Assert.IsTrue(exception.StatusCode == StatusCode.NotFound);
+            Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);
             Assert.IsTrue(exception.Message.Contains(RemindersResources.NotFound));
         }
 
@@ -327,6 +327,17 @@ namespace Reminders.Application.Test
             // assert
             Assert.AreEqual(1, result.Count());
             Assert.IsTrue(repository.Get(id).IsDeleted);
+        }
+
+        [Timeout(1000)]
+        [TestMethod]
+        public void Should_CreateReminderIntance()
+        {
+            // arrange, act
+            var reminder = new Reminder();
+
+            // assert
+            Assert.IsInstanceOfType(reminder, typeof(Reminder));
         }
     }
 }
