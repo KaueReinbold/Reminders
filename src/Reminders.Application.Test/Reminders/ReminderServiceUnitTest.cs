@@ -328,5 +328,16 @@ namespace Reminders.Application.Test
             Assert.AreEqual(1, result.Count());
             Assert.IsTrue(repository.Get(id).IsDeleted);
         }
+
+        [Timeout(1000)]
+        [TestMethod]
+        public void Should_CreateReminderIntance()
+        {
+            // arrange, act
+            var reminder = new Reminder();
+
+            // assert
+            Assert.IsInstanceOfType(reminder, typeof(Reminder));
+        }
     }
 }
