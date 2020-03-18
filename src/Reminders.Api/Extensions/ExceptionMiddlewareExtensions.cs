@@ -9,7 +9,7 @@ namespace Reminders.Api.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {
-        public static IApplicationBuilder ConfigureExceptionHandler(
+        public static IApplicationBuilder UseRemindersExceptionHandler(
             this IApplicationBuilder app)
         {
             app.UseExceptionHandler(appError =>
@@ -32,8 +32,6 @@ namespace Reminders.Api.Extensions
                             message = remindersApplicationException.Message;
                             context.Response.StatusCode = statusCode;
                         }
-
-                        //logger.LogError($"Something went wrong: {contextFeature.Error}");
 
                         await context.Response.WriteAsync(new ErrorDetails()
                         {

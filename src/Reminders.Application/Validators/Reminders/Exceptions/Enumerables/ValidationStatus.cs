@@ -1,6 +1,6 @@
 ﻿namespace Reminders.Application.Validators.Reminders.Exceptions.Enumerables
 {
-    public enum StatusCode
+    public enum ValidationStatus
     {
         NotFound,
         IdsDoNotMatch
