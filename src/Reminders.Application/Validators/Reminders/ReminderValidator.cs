@@ -18,8 +18,8 @@ namespace Reminders.Application.Validators.Reminders
             });
 
             RuleFor(reminder => reminder.LimitDate.Date)
-                    .GreaterThan(DateTime.UtcNow.Date)
-                    .WithMessage(RemindersResources.InvalidLimitDate);
+                .GreaterThan(DateTime.UtcNow.Date)
+                .WithMessage(RemindersResources.InvalidLimitDate);
         }
     }
 }

@@ -6,11 +6,11 @@ namespace Reminders.Domain.Contracts
         : IDisposable
     {
         bool Commit();
-        T GetContext<T>() where T : class;
+        TContext GetContext<TContext>() where TContext : class;
     }
 
-    public interface IUnitOfWork<T>
+    public interface IUnitOfWork<TContext>
         : IUnitOfWork
-        where T : class
+        where TContext : class
     { }
 }
