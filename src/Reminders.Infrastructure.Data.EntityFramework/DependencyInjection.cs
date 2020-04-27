@@ -11,7 +11,7 @@ namespace Reminders.Infrastructure.Data.EntityFramework
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection RegisterDataServices(
+        public static IServiceCollection RegisterEntityFrameworkServices(
             this IServiceCollection services,
             IConfiguration configuration) =>
             services
