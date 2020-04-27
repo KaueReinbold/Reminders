@@ -10,7 +10,7 @@ services:
         container_name: reminders-database
         build: 
             context: ./infrastructure/mssql
-            dockerfile: Dockerfile
+            dockerfile: ./src/Dockerfile
         networks: 
             - reminders-network
     reminders-migrations:
@@ -18,9 +18,9 @@ services:
         container_name: reminders-migrations
         build: 
             context: .
-            dockerfile: migrations.Dockerfile
+            dockerfile: ./src/Dockerfile.migrations
             args: 
-                DOTNET_PROJECT_PATH: ./src/Reminders.Infrastructure.Data
+                DOTNET_PROJECT_PATH: ./Reminders.Infrastructure.Data
                 DOCKER_DATABASE_CONTAINER: reminders-database:1433
                 WAIT_FOR_SCRIPT: ./infrastructure/wait-for.sh
                 WAIT_FOR_TIMEOUT: 4000
@@ -33,9 +33,9 @@ services:
         container_name: reminders-aspnetmvc
         build: 
             context: .
-            dockerfile: Dockerfile
+            dockerfile: ./src/Dockerfile
             args: 
-                DOTNET_PROJECT_PATH: ./src/Reminders.Mvc
+                DOTNET_PROJECT_PATH: ./Reminders.Mvc
         networks: 
             - reminders-network
         depends_on: 
@@ -45,9 +45,9 @@ services:
         container_name: reminders-aspnetapi
         build: 
             context: .
-            dockerfile: Dockerfile
+            dockerfile: ./src/Dockerfile
             args: 
-                DOTNET_PROJECT_PATH: ./src/Reminders.Api
+                DOTNET_PROJECT_PATH: ./Reminders.Api
         networks: 
             - reminders-network
         depends_on: 

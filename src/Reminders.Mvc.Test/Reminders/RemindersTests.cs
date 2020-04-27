@@ -5,6 +5,7 @@ using System.Linq;
 using Reminders.Mvc.Test.Selenium;
 using Reminders.Mvc.Test.Selenium.Enums;
 using Microsoft.Extensions.Configuration;
+using Reminders.Infrastructure.CrossCutting.Configuration;
 
 namespace Reminders.Mvc.Test.Reminders
 {
@@ -17,7 +18,8 @@ namespace Reminders.Mvc.Test.Reminders
         public readonly int secondsToWait = 15;
 
         [TestInitialize]
-        public void TestInitialize() => _configuration = WebDriverFactory.GetConfiguration();
+        public void TestInitialize() => _configuration = 
+            IConfigurationHelper.GetConfiguration();
 
         [TestMethod]
         [DataRow(EnumBrowsers.Chrome, PlatformType.Windows)]
