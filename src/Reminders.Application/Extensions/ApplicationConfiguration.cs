@@ -17,7 +17,7 @@ namespace Reminders.Application.Extensions
                 IConfiguration configuration) =>
             services
                 .AddSingleton(AutoMapperConfiguration.CreateMapper())
-                .RegisterDataServices(configuration)
+                .RegisterEntityFrameworkServices(configuration)
                 .AddScoped<IRemindersService, RemindersService>();
     }
 }
