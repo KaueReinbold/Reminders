@@ -29,7 +29,7 @@
                 "panel": "dedicated",
                 "clear": true
             },
-            "dependsOn": ["clean"]
+            "dependsOn": ["dotnet: clean"]
         },
         {
             "label": "dotnet: run",
