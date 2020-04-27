@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Reminders.Infrastructure.CrossCutting.Configuration;
 
-namespace Reminders.Infrastructure.Data.Extensions
+namespace Reminders.Infrastructure.Data.EntityFramework.Extensions
 {
     public static class DbContextOptionsBuilderExtensions
     {
