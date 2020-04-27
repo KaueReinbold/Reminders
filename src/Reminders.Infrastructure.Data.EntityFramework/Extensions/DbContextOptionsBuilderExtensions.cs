@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Reminders.Infrastructure.CrossCutting.Configuration;
 
 namespace Reminders.Infrastructure.Data.EntityFramework.Extensions
 {
@@ -11,7 +10,15 @@ namespace Reminders.Infrastructure.Data.EntityFramework.Extensions
         public static void ConfigureSqlServer(
             this DbContextOptionsBuilder optionsBuilder)
         {
-            var configuration = IConfigurationHelper.GetConfiguration();
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
     }
