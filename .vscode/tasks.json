@@ -32,6 +32,23 @@
             "dependsOn": ["dotnet: clean"]
         },
         {
+            "label": "dotnet: restore",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "restore",
+                "${workspaceFolder}",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
             "label": "dotnet: run",
             "command": "dotnet",
             "type": "process",
