@@ -5,7 +5,7 @@
             "label": "dotnet: clean",
             "command": "dotnet",
             "type": "process",
-            "args": ["clean", "${workspaceFolder}/src"],
+            "args": ["clean", "${workspaceFolder}"],
             "problemMatcher": "$msCompile",
             "presentation": {
                 "focus": true,
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src",
+                "${workspaceFolder}",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
