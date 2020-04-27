@@ -1,0 +1,254 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "dotnet: clean",
+            "command": "dotnet",
+            "type": "process",
+            "args": ["clean", "${workspaceFolder}/src"],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "dotnet: build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            },
+            "dependsOn": ["clean"]
+        },
+        {
+            "label": "dotnet: run",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "run",
+                "--project",
+                "${workspaceFolder}/src/${input:project}",
+                "--launch-profile",
+                "${input:project}",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "new",
+                "clear": true
+            }
+        },
+        {
+            "label": "dotnet: publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/src/${input:project}",
+                "--output",
+                "${input:publish_output}",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "dotnet: watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "--project",
+                "${workspaceFolder}/src/${input:project}",
+                "run"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+
+        {
+            "label": "dotnet ef: migrations add - Mvc",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "ef",
+                "migrations",
+                "add",
+                "${input:miration_name}",
+                "--startup-project",
+                "${workspaceFolder}/src/Reminders.Mvc",
+                "--project",
+                "${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "dotnet ef: database update - Mvc",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "ef",
+                "database",
+                "update",
+                "--startup-project",
+                "${workspaceFolder}/src/Reminders.Mvc",
+                "--project",
+                "${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "dotnet ef: migrations remove - Mvc",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "ef",
+                "migrations",
+                "remove",
+                "--startup-project",
+                "${workspaceFolder}/src/Reminders.Mvc",
+                "--project",
+                "${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+
+        {
+            "label": "dotnet user-secrets: init",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "user-secrets",
+                "init",
+                "--project",
+                "${workspaceFolder}/src/${input:project}"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "dotnet user-secrets: set",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "user-secrets",
+                "set",
+                "${input:secret_key}",
+                "${input:secret_value}",
+                "--project",
+                "${workspaceFolder}/src/${input:project}"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "dotnet user-secrets: remove",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "user-secrets",
+                "remove",
+                "${input:secret_key}",
+                "--project",
+                "${workspaceFolder}/src/${input:project}"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "dotnet user-secrets: list",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "user-secrets",
+                "list",
+                "--project",
+                "${workspaceFolder}/src/${input:project}"
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "miration_name",
+            "type": "promptString",
+            "description": "Type here the name of the Migration"
+        },
+        {
+            "id": "secret_key",
+            "type": "promptString",
+            "description": "Type here the Key name to store"
+        },
+        {
+            "id": "secret_value",
+            "type": "promptString",
+            "description": "Type here the Value to store"
+        },
+        {
+            "id": "project",
+            "type": "pickString",
+            "description": "Select the project to use",
+            "default": "Reminders.Api",
+            "options": ["Reminders.Api", "Reminders.Mvc"]
+        },
+        {
+            "id": "publish_output",
+            "type": "promptString",
+            "description": "Type the output file"
+        }
+    ]
+}
