@@ -48,7 +48,7 @@ namespace Reminders.Infrastructure.Data.EntityFramework
             if (entity is null)
                 return false;
 
-            return entity.IsDeleted;
+            return !entity.IsDeleted;
         }
 
         public void Dispose()
