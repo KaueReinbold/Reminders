@@ -5,6 +5,7 @@ using Reminders.Application.Contracts;
 using Reminders.Application.Mapper.Extensions;
 using Reminders.Application.Services;
 using Reminders.Infrastructure.CrossCutting;
+using Reminders.Infrastructure.Data.EntityFramework;
 
 namespace Reminders.Application.Extensions
 {
