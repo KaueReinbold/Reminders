@@ -43,12 +43,12 @@ namespace Reminders.Infrastructure.Data.EntityFramework
 
         public bool Exists(Guid id)
         {
-            var reminder = GetAsNoTracking(id);
+            var entity = GetAsNoTracking(id);
 
-            if (reminder is null)
+            if (entity is null)
                 return false;
 
-            return reminder.IsDeleted;
+            return entity.IsDeleted;
         }
 
         public void Dispose()
