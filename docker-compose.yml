@@ -1,43 +1,46 @@
 version: '3'
 
-networks: 
-    reminders-network:
-        driver: bridge
+networks:
+  reminders-network:
+    driver: bridge
 
 services:
-    reminders-database:
-        image: kauereinbold/reminders-database-image:latest
-        container_name: reminders-database
-        env_file: 
-            - .env
-        networks: 
-            - reminders-network
-    reminders-migrations:
-        image: kauereinbold/reminders-migrations-image:latest
-        container_name: reminders-migrations
-        networks: 
-            - reminders-network
-        depends_on: 
-            - reminders-database
-    reminders-aspnetmvc:
-        image: kauereinbold/reminders-aspnetmvc-image:latest
-        container_name: reminders-aspnetmvc
-        environment: 
-            ENV_DOTNET_ENTRYPOINT: Reminders.Mvc.dll
-        env_file: 
-            - .env
-        networks: 
-            - reminders-network
-        depends_on: 
-            - reminders-migrations
-    reminders-aspnetapi:
-        image: kauereinbold/reminders-aspnetapi-image:latest
-        container_name: reminders-aspnetapi
-        environment: 
-            ENV_DOTNET_ENTRYPOINT: Reminders.Mvc.dll
-        env_file: 
-            - .env
-        networks: 
-            - reminders-network
-        depends_on: 
-            - reminders-migrations
+  reminders-database:
+    image: kauereinbold/reminders-database-image:latest
+    container_name: reminders-database
+    env_file:
+      - .env
+      - .env.local
+    networks:
+      - reminders-network
+  reminders-migrations:
+    image: kauereinbold/reminders-migrations-image:latest
+    container_name: reminders-migrations
+    networks:
+      - reminders-network
+    depends_on:
+      - reminders-database
+  reminders-aspnetmvc:
+    image: kauereinbold/reminders-aspnetmvc-image:latest
+    container_name: reminders-aspnetmvc
+    environment:
+      ENV_DOTNET_ENTRYPOINT: Reminders.Mvc.dll
+    env_file:
+      - .env
+      - .env.local
+    networks:
+      - reminders-network
+    depends_on:
+      - reminders-migrations
+  reminders-aspnetapi:
+    image: kauereinbold/reminders-aspnetapi-image:latest
+    container_name: reminders-aspnetapi
+    environment:
+      ENV_DOTNET_ENTRYPOINT: Reminders.Mvc.dll
+    env_file:
+      - .env
+      - .env.local
+    networks:
+      - reminders-network
+    depends_on:
+      - reminders-migrations
