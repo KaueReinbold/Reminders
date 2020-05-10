@@ -17,12 +17,7 @@
             "label": "dotnet: build",
             "command": "dotnet",
             "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
+            "args": ["build", "${workspaceFolder}"],
             "problemMatcher": "$msCompile",
             "presentation": {
                 "focus": true,
@@ -30,23 +25,6 @@
                 "clear": true
             },
             "dependsOn": ["dotnet: clean"]
-        },
-        {
-            "label": "dotnet: restore",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "restore",
-                "${workspaceFolder}",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile",
-            "presentation": {
-                "focus": true,
-                "panel": "dedicated",
-                "clear": true
-            }
         },
         {
             "label": "dotnet: run",
@@ -104,9 +82,33 @@
                 "clear": true
             }
         },
+        {
+            "label": "dotnet: restore",
+            "command": "dotnet",
+            "type": "process",
+            "args": ["restore", "${workspaceFolder}/src"],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "dotnet: test",
+            "command": "dotnet",
+            "type": "process",
+            "args": ["test", "${workspaceFolder}"],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
 
         {
-            "label": "dotnet ef: migrations add - Mvc",
+            "label": "dotnet ef: migrations add - Reminders.Mvc",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -127,7 +129,7 @@
             }
         },
         {
-            "label": "dotnet ef: database update - Mvc",
+            "label": "dotnet ef: database update - Reminders.Mvc",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -147,7 +149,7 @@
             }
         },
         {
-            "label": "dotnet ef: migrations remove - Mvc",
+            "label": "dotnet ef: migrations remove - Reminders.Mvc",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -219,7 +221,8 @@
                 "focus": true,
                 "panel": "dedicated",
                 "clear": true
-            }
+            },
+            "dependsOn": ["dotnet user-secrets: list - Reminders.Mvc"]
         },
         {
             "label": "dotnet user-secrets: list",
@@ -259,7 +262,7 @@
             "id": "project",
             "type": "pickString",
             "description": "Select the project to use",
-            "default": "Reminders.Api",
+            "default": "Reminders.Mvc",
             "options": ["Reminders.Api", "Reminders.Mvc"]
         },
         {
