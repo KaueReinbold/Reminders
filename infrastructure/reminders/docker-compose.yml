@@ -19,6 +19,9 @@ services:
   kauereinbold-reminders-migrations:
     image: kauereinbold/reminders-migrations-image:latest
     container_name: kauereinbold-reminders-migrations
+    environment:
+      ConnectionStrings:DefaultConnection: ConnectionStrings:DefaultConnection=Server=reminders-database;Database=Reminders;User=reminders;Password=D6jcdaWLsBh64adr;TrustServerCertificate=True;MultipleActiveResultSets=True;
+      ASPNETCORE_ENVIRONMENT: Production
     networks:
       - kauereinbold-reminders-network
     depends_on:
