@@ -286,3 +286,5 @@ PublishProfiles/
 Service References/
 
 local.env
+appsettings.Development.json
+.env.local

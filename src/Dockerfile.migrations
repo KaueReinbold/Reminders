@@ -11,7 +11,7 @@ ENV ENV_DOCKER_DATABASE_CONTAINER=$DOCKER_DATABASE_CONTAINER
 ENV ENV_DOTNET_PROJECT_PATH=$DOTNET_PROJECT_PATH
 
 # Add dotnet tool for migration
-RUN dotnet tool install --global dotnet-ef --version 3.1.1 
+RUN dotnet tool install --global dotnet-ef 
 ENV PATH="$PATH:/root/.dotnet/tools"
 
 # Set up the work directory 
