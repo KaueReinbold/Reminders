@@ -2,6 +2,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+    <Version>2.0.0</Version>
+    <PackageDescription>Reminders Mvc</PackageDescription>
+    <RepositoryUrl>https://github.com/KaueReinbold/Reminders</RepositoryUrl>
     <UserSecretsId>b8555d52-fe93-4d86-80d9-1fb03fc18baa</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
