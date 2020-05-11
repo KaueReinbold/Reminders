@@ -1,43 +1,72 @@
 version: '3'
 
-networks: 
-    reminders-network:
-        driver: bridge
+networks:
+  reminders-network:
+    driver: bridge
 
 services:
-    reminders-database:
-        image: kauereinbold/reminders-database-image:latest
-        container_name: reminders-database
-        env_file: 
-            - .env
-        networks: 
-            - reminders-network
-    reminders-migrations:
-        image: kauereinbold/reminders-migrations-image:latest
-        container_name: reminders-migrations
-        networks: 
-            - reminders-network
-        depends_on: 
-            - reminders-database
-    reminders-aspnetmvc:
-        image: kauereinbold/reminders-aspnetmvc-image:latest
-        container_name: reminders-aspnetmvc
-        environment: 
-            ENV_DOTNET_ENTRYPOINT: Reminders.Mvc.dll
-        env_file: 
-            - .env
-        networks: 
-            - reminders-network
-        depends_on: 
-            - reminders-migrations
-    reminders-aspnetapi:
-        image: kauereinbold/reminders-aspnetapi-image:latest
-        container_name: reminders-aspnetapi
-        environment: 
-            ENV_DOTNET_ENTRYPOINT: Reminders.Mvc.dll
-        env_file: 
-            - .env
-        networks: 
-            - reminders-network
-        depends_on: 
-            - reminders-migrations
+  reminders-database:
+    image: reminders-database-image:latest
+    container_name: reminders-database
+    ports:
+      - '17000:1433'
+    env_file:
+      - .env
+    build:
+      context: ./infrastructure/mssql
+      dockerfile: Dockerfile
+    networks:
+      - reminders-network
+  reminders-migrations:
+    image: reminders-migrations-image:latest
+    container_name: reminders-migrations
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile.migrations
+      args:
+        DOTNET_PROJECT_PATH: ./src/Reminders.Infrastructure.Data.EntityFramework
+        DOCKER_DATABASE_CONTAINER: reminders-database:1433
+        WAIT_FOR_SCRIPT: ./infrastructure/wait-for.sh
+        WAIT_FOR_TIMEOUT: 4000
+    networks:
+      - reminders-network
+    depends_on:
+      - reminders-database
+  reminders-aspnetmvc:
+    image: reminders-aspnetmvc-image:latest
+    container_name: reminders-aspnetmvc
+    ports:
+      - '17001:80'
+    environment:
+      ENV_DOTNET_ENTRYPOINT: Reminders.Mvc.dll
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+      args:
+        DOTNET_PROJECT_PATH: ./src/Reminders.Mvc
+    networks:
+      - reminders-network
+    depends_on:
+      - reminders-migrations
+  reminders-aspnetapi:
+    image: reminders-aspnetapi-image:latest
+    container_name: reminders-aspnetapi
+    ports:
+      - '17002:80'
+    environment:
+      ENV_DOTNET_ENTRYPOINT: Reminders.Api.dll
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+      args:
+        DOTNET_PROJECT_PATH: ./src/Reminders.Api
+    networks:
+      - reminders-network
+    depends_on:
+      - reminders-migrations

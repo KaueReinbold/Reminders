@@ -3,7 +3,7 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Reminders.Infrastructure.Data.Extensions
+namespace Reminders.Infrastructure.Data.EntityFramework.Extensions
 {
     public static class DbContextOptionsBuilderExtensions
     {
@@ -11,11 +11,14 @@ namespace Reminders.Infrastructure.Data.Extensions
             this DbContextOptionsBuilder optionsBuilder)
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            IConfigurationRoot configuration = new ConfigurationBuilder()
+
+            var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"appsettings.{environment}.json")
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
                 .Build();
+
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
     }

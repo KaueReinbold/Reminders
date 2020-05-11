@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reminders.Infrastructure.CrossCutting.Configuration;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -15,15 +16,10 @@ namespace Reminders.Api.Test
 
         public StartupApiTest()
         {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            Configuration = IConfigurationHelper.GetConfiguration();
 
-            Configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
-                .Build();
-            
             HttpClientHandler clientHandler = new HttpClientHandler();
+            
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
             BaseAddress = Configuration["ApiBaseUrl"];
