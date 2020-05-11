@@ -240,6 +240,62 @@
 				"panel": "dedicated",
 				"clear": true
 			}
+		},
+
+		{
+			"label": "docker: compose up",
+			"command": "docker-compose",
+			"type": "process",
+			"args": [
+				"-f",
+				"${workspaceFolder}/${input:docker_compose_file}",
+				"-f",
+				"${workspaceFolder}/${input:docker_compose_override_file}",
+				"up",
+				"-d"
+			],
+			"problemMatcher": "$msCompile",
+			"presentation": {
+				"focus": true,
+				"panel": "dedicated",
+				"clear": true
+			}
+		},
+		{
+			"label": "docker: compose build",
+			"command": "docker-compose",
+			"type": "process",
+			"args": [
+				"-f",
+				"${workspaceFolder}/${input:docker_compose_file}",
+				"-f",
+				"${workspaceFolder}/${input:docker_compose_override_file}",
+				"build"
+			],
+			"problemMatcher": "$msCompile",
+			"presentation": {
+				"focus": true,
+				"panel": "dedicated",
+				"clear": true
+			}
+		},
+		{
+			"label": "docker: compose down",
+			"command": "docker-compose",
+			"type": "process",
+			"args": [
+				"-f",
+				"${workspaceFolder}/${input:docker_compose_file}",
+				"-f",
+				"${workspaceFolder}/${input:docker_compose_override_file}",
+				"down"
+			],
+			"problemMatcher": "$msCompile",
+			"presentation": {
+				"focus": true,
+				"panel": "dedicated",
+				"clear": true
+			}
 		}
 	],
 	"inputs": [
@@ -269,6 +325,20 @@
 			"id": "publish_output",
 			"type": "promptString",
 			"description": "Type the output file"
+		},
+		{
+			"id": "docker_compose_file",
+			"type": "pickString",
+			"description": "Select the project to use",
+			"default": "docker-compose.yml",
+			"options": ["docker-compose.yml", "docker-compose.development.yml"]
+		},
+		{
+			"id": "docker_compose_override_file",
+			"type": "pickString",
+			"description": "Select the project to use",
+			"default": "docker-compose.override.yml",
+			"options": ["docker-compose.override.yml"]
 		}
 	]
 }
