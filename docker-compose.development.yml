@@ -10,7 +10,7 @@ services:
     container_name: reminders-database
     build:
       context: ./infrastructure/mssql
-      dockerfile: ./src/Dockerfile
+      dockerfile: Dockerfile
     networks:
       - reminders-network
   reminders-migrations:
