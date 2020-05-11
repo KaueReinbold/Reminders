@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Domain", "src\Rem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.CrossCutting", "src\Reminders.Infrastructure.CrossCutting\Reminders.Infrastructure.CrossCutting.csproj", "{DC9D5FB0-9660-459E-9BDE-AAB14447359B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.Data.EntityFramework", "src\Reminders.Infrastructure.Data\Reminders.Infrastructure.Data.EntityFramework.csproj", "{37BACAD5-1BDC-413C-BE98-052F6D3B226A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.Data.EntityFramework", "src\Reminders.Infrastructure.Data.EntityFramework\Reminders.Infrastructure.Data.EntityFramework.csproj", "{37BACAD5-1BDC-413C-BE98-052F6D3B226A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Mvc", "src\Reminders.Mvc\Reminders.Mvc.csproj", "{A5F519E6-81B9-4E19-B9B7-73E764D66278}"
 EndProject

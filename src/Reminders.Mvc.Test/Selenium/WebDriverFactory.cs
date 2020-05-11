@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
+using Reminders.Infrastructure.CrossCutting.Configuration;
 using Reminders.Mvc.Test.Selenium.Enums;
 using System;
 using System.IO;
@@ -15,7 +16,7 @@ namespace Reminders.Mvc.Test.Selenium
 
         public static IWebDriver CreateWebDriver(EnumBrowsers enumBrowsers, PlatformType platformType)
         {
-            _configuration = GetConfiguration();
+            _configuration = IConfigurationHelper.GetConfiguration();
 
             string path = $"{Environment.CurrentDirectory}\\";
 
@@ -84,22 +85,6 @@ namespace Reminders.Mvc.Test.Selenium
                 default:
                     return options;
             }
-        }
-
-        public static IConfiguration GetConfiguration()
-        {
-            if (_configuration != null)
-                return _configuration;
-
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            _configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
-                .Build();
-
-            return _configuration;
         }
     }
 }

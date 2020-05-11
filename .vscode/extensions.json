@@ -1,0 +1,26 @@
+{
+    "recommendations": [
+        "abusaidm.html-snippets",
+        "DavidAnson.vscode-markdownlint",
+        "dracula-theme.theme-dracula",
+        "eamodio.gitlens",
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode",
+        "formulahendry.code-runner",
+        "formulahendry.dotnet-test-explorer",
+        "Gruntfuggly.todo-tree",
+        "humao.rest-client",
+        "jchannon.csharpextensions",
+        "lkytal.pomodoro",
+        "ms-azuretools.vscode-docker",
+        "ms-dotnettools.csharp",
+        "ms-mssql.mssql",
+        "ms-vscode.powershell",
+        "ms-vscode.vs-keybindings",
+        "PKief.material-icon-theme",
+        "quicktype.quicktype",
+        "ritwickdey.LiveServer",
+        "vscode-icons-team.vscode-icons",
+        "vscode-snippet.snippet"
+    ]
+}

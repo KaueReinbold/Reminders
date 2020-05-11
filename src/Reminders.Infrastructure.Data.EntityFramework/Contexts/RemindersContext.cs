@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Reminders.Infrastructure.Data.EntityFramework.Configurations;
-using Reminders.Infrastructure.Data.Extensions;
+using Reminders.Infrastructure.Data.EntityFramework.Extensions;
 using System;
 using System.IO;
 
