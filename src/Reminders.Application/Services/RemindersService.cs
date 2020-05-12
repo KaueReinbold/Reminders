@@ -15,7 +15,6 @@ using System.Linq;
 
 namespace Reminders.Application.Services
 {
-    // TODO: Enhance way to send back validation result.
     public class RemindersService
         : IRemindersService
     {
