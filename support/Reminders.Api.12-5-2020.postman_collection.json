@@ -1,0 +1,214 @@
+{
+	"info": {
+		"_postman_id": "a7f399c8-374c-4958-ad17-a1bc5615a3ef",
+		"name": "Reminders",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Reminders",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Reminders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get By",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Reminders/2da16cb5-38b5-4245-bd89-08d76636806d",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Reminders",
+						"2da16cb5-38b5-4245-bd89-08d76636806d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"7645aa73-f4e7-4363-8176-86002c5b408c\",\r\n    \"description\": \"7645aa73-f4e7-4363-8176-86002c5b408c\",\r\n    \"limitDate\": \"2019-11-20T23:34:00\",\r\n    \"isDone\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Reminders",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Reminders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"2da16cb5-38b5-4245-bd89-08d76636806d\",\r\n    \"title\": \"7645aa73-f4e7-4363-8176-86002c5b408c\",\r\n    \"description\": \"7645aa73-f4e7-4363-8176-86002c5b408c\",\r\n    \"limitDate\": \"2019-11-20T23:34:00\",\r\n    \"isDone\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Reminders/2da16cb5-38b5-4245-bd89-08d76636806d",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Reminders",
+						"2da16cb5-38b5-4245-bd89-08d76636806d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Reminders/712B1F78-5FBE-44DD-B1DB-0F31F5F470D3",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Reminders",
+						"712B1F78-5FBE-44DD-B1DB-0F31F5F470D3"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "7894e2f0-5c26-4df7-b8a8-89e46df2b98b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "76fe3731-0fb6-475c-a219-6c8460e567eb",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "f026f50b-01f0-4286-a37c-c5bba0a3cf4f",
+			"key": "baseUrl",
+			"value": "http://localhost:15000/api",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
