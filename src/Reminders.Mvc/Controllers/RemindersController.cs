@@ -6,6 +6,7 @@ using System;
 
 namespace Reminders.Mvc.Controllers
 {
+    // FIXME: Do not redirect user to a different page when an error occurred. Show a friendly message.
     public class RemindersController : Controller
     {
         private ILogger<RemindersController> logger;
