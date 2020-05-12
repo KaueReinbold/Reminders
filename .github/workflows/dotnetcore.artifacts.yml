@@ -1,47 +1,43 @@
 name: .NET Core - Artifacts
 
-on: 
-  pull_request:
-    branches:
-      - master
+on:
   push:
     branches:
       - master
-  
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '3.1.100' # SDK Version to use.
-        source-url: https://nuget.pkg.github.com/KaueReinbold/index.json
-      env:
-        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-    - name: Build
-      run: dotnet build -c Release
-    - name: Test
-      run: dotnet test -c Release src/Reminders.Application.Test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov /p:Exclude=\"[Reminders.Infrastructure.CrossCutting]*,[Reminders.Infrastructure.Data.EntityFramework]*\" /p:ExcludeByFile=\"**/*.Designer.cs,**/*Entity.cs\"
-    - name: Publish coverage report to coveralls.io
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: src/Reminders.Application.Test/TestResults/coverage.info 
-    - name: Publish Mvc
-      run: dotnet publish -c Release src/Reminders.Mvc
-    - name: Upload Artifact Mvc
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: Reminders-Mvc 
-        path: src/Reminders.Mvc/bin/Release/netcoreapp3.1/publish
-    - name: Publish Api
-      run: dotnet publish -c Release src/Reminders.Api
-    - name: Upload artifact Api
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: Reminders-Api
-        path: src/Reminders.Api/bin/Release/netcoreapp3.1/publish
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.100' # SDK Version to use.
+          source-url: https://nuget.pkg.github.com/KaueReinbold/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Build
+        run: dotnet build -c Release
+      - name: Test
+        run: dotnet test -c Release src/Reminders.Application.Test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov /p:Exclude=\"[Reminders.Infrastructure.CrossCutting]*,[Reminders.Infrastructure.Data.EntityFramework]*\" /p:ExcludeByFile=\"**/*.Designer.cs,**/*Entity.cs\"
+      - name: Publish coverage report to coveralls.io
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: src/Reminders.Application.Test/TestResults/coverage.info
+      - name: Publish Mvc
+        run: dotnet publish -c Release src/Reminders.Mvc
+      - name: Upload Artifact Mvc
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: Reminders-Mvc
+          path: src/Reminders.Mvc/bin/Release/netcoreapp3.1/publish
+      - name: Publish Api
+        run: dotnet publish -c Release src/Reminders.Api
+      - name: Upload artifact Api
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: Reminders-Api
+          path: src/Reminders.Api/bin/Release/netcoreapp3.1/publish
