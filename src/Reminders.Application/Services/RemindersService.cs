@@ -62,7 +62,6 @@ namespace Reminders.Application.Services
             if (!remindersRepository.Exists(id))
                 throw new RemindersApplicationException(ValidationStatus.NotFound, RemindersResources.NotFound);
 
-
             var reminder = mapper.Map<Reminder>(reminderViewModel);
 
             reminder = remindersRepository.Update(reminder);
