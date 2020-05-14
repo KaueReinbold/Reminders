@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using Reminders.Application.Validators.Reminders.Resources;
-using Reminders.Domain.Models;
+using Reminders.Application.ViewModels;
 using System;
 
 namespace Reminders.Application.Validators.Reminders
 {
-    public class ReminderValidator
-        : AbstractValidator<Reminder>
+    public class ReminderViewModelValidator
+        : AbstractValidator<ReminderViewModel>
     {
-        public ReminderValidator()
+        public ReminderViewModelValidator()
         {
             RuleSet("Insert", () =>
             {
