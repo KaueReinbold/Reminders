@@ -18,7 +18,7 @@ namespace Reminders.Application.Services
     public class RemindersService
         : IRemindersService
     {
-        private readonly ReminderValidator validator;
+        private readonly ReminderViewModelValidator validator;
         private readonly IMapper mapper;
         private readonly IRemindersRepository remindersRepository;
         private readonly IUnitOfWork unitOfWork;
@@ -28,7 +28,7 @@ namespace Reminders.Application.Services
             IRemindersRepository remindersRepository,
             IUnitOfWork unitOfWork)
         {
-            validator = new ReminderValidator();
+            validator = new ReminderViewModelValidator();
 
             this.mapper = mapper;
             this.remindersRepository = remindersRepository;
@@ -39,9 +39,9 @@ namespace Reminders.Application.Services
         {
             reminderViewModel.IsDone = false;
 
-            var reminder = mapper.Map<Reminder>(reminderViewModel);
+            validator.ValidateAndThrow(reminderViewModel, ruleSet: "*");
 
-            validator.ValidateAndThrow(reminder, ruleSet: "*");
+            var reminder = mapper.Map<Reminder>(reminderViewModel);
 
             reminder = remindersRepository.Add(reminder);
 
@@ -54,15 +54,16 @@ namespace Reminders.Application.Services
             Guid id,
             ReminderViewModel reminderViewModel)
         {
+            validator.ValidateAndThrow(reminderViewModel);
+
             if (id != reminderViewModel.Id)
                 throw new RemindersApplicationException(ValidationStatus.IdsDoNotMatch, RemindersResources.IdsDoNotMatch);
 
             if (!remindersRepository.Exists(id))
                 throw new RemindersApplicationException(ValidationStatus.NotFound, RemindersResources.NotFound);
 
-            var reminder = mapper.Map<Reminder>(reminderViewModel);
 
-            validator.ValidateAndThrow(reminder);
+            var reminder = mapper.Map<Reminder>(reminderViewModel);
 
             reminder = remindersRepository.Update(reminder);
 
