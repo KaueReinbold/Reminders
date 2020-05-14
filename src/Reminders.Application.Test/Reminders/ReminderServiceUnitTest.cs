@@ -178,7 +178,7 @@ namespace Reminders.Application.Test
                    Id = id,
                    Title = "Title",
                    Description = "Description",
-                   LimitDate = new DateTime(),
+                   LimitDate = DateTime.Now.AddDays(1),
                    IsDone = false
                }));
 
@@ -206,7 +206,7 @@ namespace Reminders.Application.Test
                    Id = id,
                    Title = "Title",
                    Description = "Description",
-                   LimitDate = new DateTime(),
+                   LimitDate = DateTime.Now.AddDays(1),
                    IsDone = false
                }));
 
@@ -229,7 +229,7 @@ namespace Reminders.Application.Test
                    Id = Guid.Empty,
                    Title = "Title",
                    Description = "Description",
-                   LimitDate = new DateTime(),
+                   LimitDate = DateTime.Now.AddDays(1),
                    IsDone = false
                }));
 
