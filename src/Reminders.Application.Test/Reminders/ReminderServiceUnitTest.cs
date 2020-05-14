@@ -331,7 +331,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_CreateReminderIntance()
+        public void Should_CreateReminderInstance()
         {
             // arrange, act
             var reminder = new Reminder();
