@@ -1,9 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reminders.Application.Contracts;
 using Reminders.Application.Mapper.Extensions;
 using Reminders.Application.Services;
+using Reminders.Application.Validators.Reminders;
+using Reminders.Application.ViewModels;
 using Reminders.Infrastructure.CrossCutting;
 
 namespace Reminders.Application.Extensions
@@ -18,5 +22,16 @@ namespace Reminders.Application.Extensions
                 .AddSingleton(AutoMapperConfiguration.CreateMapper())
                 .RegisterDataServices(configuration)
                 .AddScoped<IRemindersService, RemindersService>();
+
+        public static IMvcBuilder AddApplicationValidations(
+            this IMvcBuilder mvcBuilder,
+            IServiceCollection services)
+        {
+            mvcBuilder.AddFluentValidation();
+
+            services.AddTransient<IValidator<ReminderViewModel>, ReminderViewModelValidator>();
+
+            return mvcBuilder;
+        }
     }
 }
