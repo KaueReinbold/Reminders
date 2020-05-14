@@ -1,21 +1,41 @@
 using System;
 using System.Linq;
+using AutoMapper;
 using FluentValidation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Reminders.Application.Mapper.Extensions;
 using Reminders.Application.Services;
+using Reminders.Application.Test.Fake;
 using Reminders.Application.Validators.Reminders;
 using Reminders.Application.Validators.Reminders.Exceptions;
 using Reminders.Application.Validators.Reminders.Exceptions.Enumerables;
 using Reminders.Application.Validators.Reminders.Resources;
 using Reminders.Application.ViewModels;
+using Reminders.Domain.Contracts;
+using Reminders.Domain.Contracts.Repositories;
 using Reminders.Domain.Models;
 
 namespace Reminders.Application.Test
 {
     [TestClass]
     public class ReminderServiceUnitTest
-        : BaseUnitTest
     {
+        protected IRemindersRepository repository;
+        protected Mock<IUnitOfWork> unitOfWorkMock;
+        protected IMapper mapperMock;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            repository = new RemindersRepositoryFake();
+            unitOfWorkMock = new Mock<IUnitOfWork>();
+            mapperMock = AutoMapperConfiguration.CreateMapper();
+
+            unitOfWorkMock
+                .Setup(u => u.Commit())
+                .Returns(true);
+        }
 
         [Timeout(1000)]
         [TestMethod]
