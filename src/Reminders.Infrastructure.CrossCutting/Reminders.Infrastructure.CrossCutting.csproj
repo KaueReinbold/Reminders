@@ -5,7 +5,7 @@
     <LangVersion>8.0</LangVersion>
     <Version>3.0.0</Version>
     <PackageDescription>Reminders Infrastructure CrossCutting</PackageDescription>
-    <RepositoryUrl>https://github.com/KaueReinbold/Reminders</RepositoryUrl>
+    <RepositoryUrl>https://github.com/KaueReinbold/reminders-library</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
