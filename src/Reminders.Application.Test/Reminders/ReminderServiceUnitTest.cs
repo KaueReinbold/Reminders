@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using FluentValidation;
@@ -21,14 +22,14 @@ namespace Reminders.Application.Test
     [TestClass]
     public class ReminderServiceUnitTest
     {
-        protected IRemindersRepository repository;
+        protected Mock<IRemindersRepository> repositoryMock;
         protected Mock<IUnitOfWork> unitOfWorkMock;
         protected IMapper mapperMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            repository = new RemindersRepositoryFake();
+            repositoryMock = new Mock<IRemindersRepository>();
             unitOfWorkMock = new Mock<IUnitOfWork>();
             mapperMock = AutoMapperConfiguration.CreateMapper();
 
@@ -42,22 +43,23 @@ namespace Reminders.Application.Test
         public void Should_IsDoneAsFalseOnInsert()
         {
             // arrange
-            var reminder = new ReminderViewModel
+            var reminderViewModel = new ReminderViewModel
             {
                 Title = "My Title",
                 Description = "My Description",
                 LimitDate = DateTime.UtcNow.AddDays(1),
                 IsDone = true
             };
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
 
             // act
-            service.Insert(reminder);
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
+
+            service.Insert(reminderViewModel);
 
             // assert
-            var result = service.Get().FirstOrDefault(r => r.Title.Equals(reminder.Title));
-
-            Assert.IsFalse(result.IsDone);
+            repositoryMock.Verify(repository =>
+                repository.Add(It.Is<Reminder>(reminder => !reminder.IsDone)),
+                Times.Once);
         }
 
         [Timeout(1000)]
@@ -65,18 +67,19 @@ namespace Reminders.Application.Test
         public void Should_LimitDateAfterTodayOnInsert()
         {
             // arrange
-            var reminder = new ReminderViewModel
+            var reminderViewModel = new ReminderViewModel
             {
                 Title = "My Title",
                 Description = "My Description",
-                LimitDate = DateTime.UtcNow.AddDays(-1)
+                LimitDate = DateTime.UtcNow
             };
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
 
             // act
-            // assert
-            var exception = Assert.ThrowsException<ValidationException>(() => service.Insert(reminder));
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
 
+            var exception = Assert.ThrowsException<ValidationException>(() => service.Insert(reminderViewModel));
+
+            // assert
             Assert.IsTrue(exception.Message.Contains(RemindersResources.InvalidLimitDate));
         }
 
@@ -85,15 +88,23 @@ namespace Reminders.Application.Test
         public void Should_Get()
         {
             // arrange
-            repository.Add(new Reminder("Title", "Description", DateTime.UtcNow, false));
+            var reminder = new Reminder("My Title", "My Description", DateTime.UtcNow, false);
 
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
+            repositoryMock
+                .Setup(repository => repository.Get())
+                .Returns(new List<Reminder>
+                {
+                    reminder
+                }.AsQueryable());
 
             // act
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
+
             var result = service.Get();
 
             // assert
-            Assert.AreEqual(1, result.Count());
+            repositoryMock.Verify(repository => repository.Get(), Times.Once);
+            Assert.IsTrue(result.All(r => r.Title == reminder.Title));
         }
 
         [Timeout(1000)]
@@ -101,16 +112,19 @@ namespace Reminders.Application.Test
         public void Should_GetById()
         {
             // arrange
-            var reminder = new Reminder("Title", "Description", DateTime.UtcNow, false);
+            var reminder = new Reminder("My Title", "My Description", DateTime.UtcNow, false);
 
-            repository.Add(reminder);
+            repositoryMock
+                .Setup(repository => repository.Get())
+                .Returns(new List<Reminder>
+                {
+                    reminder
+                }.AsQueryable());
 
-            var id = repository.Get().FirstOrDefault().Id;
-
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
 
             // act
-            var result = service.Get(id);
+            var result = service.Get(reminder.Id);
 
             // assert
             Assert.AreEqual(reminder.Title, result.Title);
@@ -121,7 +135,6 @@ namespace Reminders.Application.Test
         public void Should_Insert()
         {
             // arrange
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
             var reminder = new ReminderViewModel()
             {
                 Title = "Title",
@@ -130,12 +143,17 @@ namespace Reminders.Application.Test
             };
 
             // act
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
+
             service.Insert(reminder);
 
             // assert
-            var result = repository.Get().FirstOrDefault();
-
-            Assert.AreEqual(reminder.Title, result.Title);
+            repositoryMock.Verify(repository =>
+                repository.Add(It.Is<Reminder>(r =>
+                    r.Title == reminder.Title &&
+                    r.Description == reminder.Description &&
+                    r.LimitDate == reminder.LimitDate)), Times.Once);
+            unitOfWorkMock.Verify(unitOfWork => unitOfWork.Commit(), Times.Once);
         }
 
         [Timeout(1000)]
@@ -143,22 +161,30 @@ namespace Reminders.Application.Test
         public void Should_Edit()
         {
             // arrange
-            repository.Add(new Reminder("Title", "Description", DateTime.UtcNow.AddDays(1), false));
+            var reminder = new ReminderViewModel()
+            {
+                Id = Guid.NewGuid(),
+                Title = "Title",
+                Description = "Description",
+                LimitDate = DateTime.UtcNow.AddDays(1)
+            };
 
-            var id = repository.Get().FirstOrDefault().Id;
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
+            repositoryMock
+                .Setup(repository => repository.Exists(It.IsAny<Guid>()))
+                .Returns(true);
 
             // act
-            var reminder = service.Get(id);
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
 
-            reminder.IsDone = true;
-
-            service.Edit(id, reminder);
+            service.Edit(reminder.Id, reminder);
 
             // assert
-            var result = repository.Get(id);
-
-            Assert.IsTrue(result.IsDone);
+            repositoryMock.Verify(repository =>
+                repository.Update(It.Is<Reminder>(r =>
+                    r.Title == reminder.Title &&
+                    r.Description == reminder.Description &&
+                    r.LimitDate == reminder.LimitDate)), Times.Once);
+            unitOfWorkMock.Verify(unitOfWork => unitOfWork.Commit(), Times.Once);
         }
 
         [Timeout(1000)]
@@ -166,19 +192,20 @@ namespace Reminders.Application.Test
         public void Should_LimitDateAfterTodayOnEdit()
         {
             // arrange
-            repository.Add(new Reminder("Title", "Description", DateTime.UtcNow.AddDays(1), false));
-
-            var id = repository.Get().FirstOrDefault().Id;
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
+            var reminder = new ReminderViewModel()
+            {
+                Id = Guid.NewGuid(),
+                Title = "Title",
+                Description = "Description",
+                LimitDate = DateTime.UtcNow.AddDays(-1)
+            };
 
             // act
-            var reminder = service.Get(id);
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
 
-            reminder.LimitDate = DateTime.UtcNow;
+            var exception = Assert.ThrowsException<ValidationException>(() => service.Edit(reminder.Id, reminder));
 
             // assert
-            var exception = Assert.ThrowsException<ValidationException>(() => service.Edit(id, reminder));
-
             Assert.IsTrue(exception.Message.Contains(RemindersResources.InvalidLimitDate));
         }
 
@@ -187,49 +214,25 @@ namespace Reminders.Application.Test
         public void Should_NotFindOnEdit()
         {
             // arrange
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
-            var id = Guid.NewGuid();
+            var reminder = new ReminderViewModel()
+            {
+                Id = Guid.NewGuid(),
+                Title = "Title",
+                Description = "Description",
+                LimitDate = DateTime.UtcNow.AddDays(1)
+            };
+
+            repositoryMock
+                .Setup(repository => repository.Exists(It.IsAny<Guid>()))
+                .Returns(false);
 
             // act
-            // assert
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
+
             var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
-               service.Edit(id, new ReminderViewModel()
-               {
-                   Id = id,
-                   Title = "Title",
-                   Description = "Description",
-                   LimitDate = DateTime.Now.AddDays(1),
-                   IsDone = false
-               }));
-
-            Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);
-            Assert.IsTrue(exception.Message.Contains(RemindersResources.NotFound));
-        }
-
-        [Timeout(1000)]
-        [TestMethod]
-        public void Should_NotFindDeletedOnEdit()
-        {
-            // arrange
-            repository.Add(new Reminder("Title", "Description", DateTime.UtcNow.AddDays(1), false));
-
-            var id = repository.Get().FirstOrDefault().Id;
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
-
-            // act
-            service.Delete(id);
+               service.Edit(reminder.Id, reminder));
 
             // assert
-            var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
-               service.Edit(id, new ReminderViewModel()
-               {
-                   Id = id,
-                   Title = "Title",
-                   Description = "Description",
-                   LimitDate = DateTime.Now.AddDays(1),
-                   IsDone = false
-               }));
-
             Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);
             Assert.IsTrue(exception.Message.Contains(RemindersResources.NotFound));
         }
@@ -239,20 +242,25 @@ namespace Reminders.Application.Test
         public void Should_IdsMatchOnEdit()
         {
             // arrange
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
+            var reminder = new ReminderViewModel()
+            {
+                Id = Guid.NewGuid(),
+                Title = "Title",
+                Description = "Description",
+                LimitDate = DateTime.UtcNow.AddDays(1)
+            };
+
+            repositoryMock
+                .Setup(repository => repository.Exists(It.IsAny<Guid>()))
+                .Returns(false);
 
             // act
-            // assert
-            var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
-               service.Edit(Guid.NewGuid(), new ReminderViewModel()
-               {
-                   Id = Guid.Empty,
-                   Title = "Title",
-                   Description = "Description",
-                   LimitDate = DateTime.Now.AddDays(1),
-                   IsDone = false
-               }));
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
 
+            var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
+               service.Edit(Guid.NewGuid(), reminder));
+
+            // assert
             Assert.IsTrue(exception.StatusCode == ValidationStatus.IdsDoNotMatch);
             Assert.IsTrue(exception.Message.Contains(RemindersResources.IdsDoNotMatch));
         }
@@ -262,16 +270,31 @@ namespace Reminders.Application.Test
         public void Should_Delete()
         {
             // arrange
-            repository.Add(new Reminder("Title", "Description", DateTime.UtcNow.AddDays(1), false));
+            var reminder = new Reminder("My Title", "My Description", DateTime.UtcNow, false);
 
-            var id = repository.Get().FirstOrDefault().Id;
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
+            repositoryMock
+                .Setup(repository => repository.Exists(It.IsAny<Guid>()))
+                .Returns(true);
+
+            repositoryMock
+                .Setup(repository => repository.Get(It.IsAny<Guid>()))
+                .Returns(reminder);
 
             // act
-            service.Delete(id);
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
+
+            service.Delete(reminder.Id);
 
             // assert
-            Assert.IsTrue(repository.Get(id).IsDeleted);
+            repositoryMock
+                .Verify(repository =>
+                    repository.Update(It.Is<Reminder>(r =>
+                        r.Id == reminder.Id &&
+                        r.Title == reminder.Title &&
+                        r.Description == reminder.Description &&
+                        r.LimitDate == reminder.LimitDate &&
+                        r.IsDeleted)));
+            unitOfWorkMock.Verify(unitOfWork => unitOfWork.Commit(), Times.Once);
         }
 
         [Timeout(1000)]
@@ -279,74 +302,19 @@ namespace Reminders.Application.Test
         public void Should_NotFindOnDelete()
         {
             // arrange
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
-            var id = Guid.NewGuid();
+            repositoryMock
+                .Setup(repository => repository.Exists(It.IsAny<Guid>()))
+                .Returns(false);
 
             // act
-            // assert
-            var exception = Assert.ThrowsException<RemindersApplicationException>(() => service.Delete(id));
+            var service = new RemindersService(mapperMock, repositoryMock.Object, unitOfWorkMock.Object);
 
+            var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
+               service.Delete(Guid.NewGuid()));
+
+            // assert
             Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);
             Assert.IsTrue(exception.Message.Contains(RemindersResources.NotFound));
-        }
-
-        [Timeout(1000)]
-        [TestMethod]
-        public void Should_NotFindDeletedOnDelete()
-        {
-            // arrange
-            repository.Add(new Reminder("Title", "Description", DateTime.UtcNow.AddDays(1), false));
-
-            var id = repository.Get().FirstOrDefault().Id;
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
-
-            // act
-            service.Delete(id);
-
-            // assert
-            var exception = Assert.ThrowsException<RemindersApplicationException>(() => service.Delete(id));
-
-            Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);
-            Assert.IsTrue(exception.Message.Contains(RemindersResources.NotFound));
-        }
-
-        [Timeout(1000)]
-        [TestMethod]
-        public void Should_GetInactive()
-        {
-            // arrange
-            repository.Add(new Reminder("Title", "Description", DateTime.UtcNow.AddDays(1), false));
-
-            var id = repository.Get().FirstOrDefault().Id;
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
-
-            // act
-            service.Delete(id);
-
-            var result = service.GetInactive(id);
-
-            // assert
-            Assert.IsTrue(repository.Get(id).IsDeleted);
-        }
-
-        [Timeout(1000)]
-        [TestMethod]
-        public void Should_GetInactiveItems()
-        {
-            // arrange
-            repository.Add(new Reminder("Title", "Description", DateTime.UtcNow.AddDays(1), false));
-
-            var id = repository.Get().FirstOrDefault().Id;
-            var service = new RemindersService(mapperMock, repository, unitOfWorkMock.Object);
-
-            // act
-            service.Delete(id);
-
-            var result = service.GetInactive();
-
-            // assert
-            Assert.AreEqual(1, result.Count());
-            Assert.IsTrue(repository.Get(id).IsDeleted);
         }
 
         [Timeout(1000)]
