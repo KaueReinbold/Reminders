@@ -5,7 +5,7 @@
 			"label": "dotnet: clean",
 			"command": "dotnet",
 			"type": "process",
-			"args": ["clean", "${workspaceFolder}"],
+			"args": ["clean", "${workspaceFolder}/src"],
 			"problemMatcher": "$msCompile",
 			"presentation": {
 				"focus": true,
@@ -17,7 +17,7 @@
 			"label": "dotnet: build",
 			"command": "dotnet",
 			"type": "process",
-			"args": ["build", "${workspaceFolder}"],
+			"args": ["build", "${workspaceFolder}/src"],
 			"problemMatcher": "$msCompile",
 			"presentation": {
 				"focus": true,
@@ -98,7 +98,7 @@
 			"label": "dotnet: test",
 			"command": "dotnet",
 			"type": "process",
-			"args": ["test", "${workspaceFolder}"],
+			"args": ["test", "${workspaceFolder}/src"],
 			"problemMatcher": "$msCompile",
 			"presentation": {
 				"focus": true,
@@ -107,6 +107,7 @@
 			}
 		},
 
+		// TODO: Remove MVC task when use EntityFramework layer instead.
 		{
 			"label": "dotnet ef: migrations add - Reminders.Mvc",
 			"command": "dotnet",
@@ -128,6 +129,7 @@
 				"clear": true
 			}
 		},
+		// TODO: Remove MVC task when use EntityFramework layer instead.
 		{
 			"label": "dotnet ef: database update - Reminders.Mvc",
 			"command": "dotnet",
@@ -148,6 +150,7 @@
 				"clear": true
 			}
 		},
+		// TODO: Remove MVC task when use EntityFramework layer instead.
 		{
 			"label": "dotnet ef: migrations remove - Reminders.Mvc",
 			"command": "dotnet",
@@ -242,6 +245,7 @@
 			}
 		},
 
+		// TODO: Verify if it will be used docker compose for this library.
 		{
 			"label": "docker: compose up",
 			"command": "docker-compose",
