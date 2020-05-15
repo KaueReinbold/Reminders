@@ -25,7 +25,8 @@ namespace Reminders.Api
         {
             services
                 .RegisterApplicationServices(Configuration)
-                .AddControllers();
+                .AddControllers()
+                .AddApplicationValidations(services);
 
             services
                 .AddSwaggerGen(setup =>
