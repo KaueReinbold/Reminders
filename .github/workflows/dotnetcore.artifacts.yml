@@ -19,7 +19,7 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Build
-        run: dotnet build -c Release
+        run: dotnet build -c Release ./src
       - name: Test
         run: dotnet test -c Release src/Reminders.Application.Test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov /p:Exclude=\"[Reminders.Infrastructure.CrossCutting]*,[Reminders.Infrastructure.Data.EntityFramework]*\" /p:ExcludeByFile=\"**/*.Designer.cs,**/*Entity.cs\"
       - name: Publish coverage report to coveralls.io
