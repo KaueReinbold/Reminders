@@ -3,7 +3,7 @@ name: .NET Core - Artifacts
 on:
   push:
     branches:
-      - master
+      - master-main
 
 jobs:
   build:
