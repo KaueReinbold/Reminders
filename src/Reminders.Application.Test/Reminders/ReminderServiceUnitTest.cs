@@ -7,8 +7,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Reminders.Application.Mapper.Extensions;
 using Reminders.Application.Services;
-using Reminders.Application.Test.Fake;
-using Reminders.Application.Validators.Reminders;
 using Reminders.Application.Validators.Reminders.Exceptions;
 using Reminders.Application.Validators.Reminders.Exceptions.Enumerables;
 using Reminders.Application.Validators.Reminders.Resources;
