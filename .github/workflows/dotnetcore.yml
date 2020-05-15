@@ -19,7 +19,7 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Restore
-        run: dotnet restore -c Release ./src
+        run: dotnet restore ./src
       - name: Build
         run: dotnet build -c Release ./src
       - name: Test
