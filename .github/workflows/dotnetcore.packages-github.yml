@@ -1,4 +1,4 @@
-name: .NET Core - Packages
+name: .NET Core - Packages GitHub
 
 on:
   push:
