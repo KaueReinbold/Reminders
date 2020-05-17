@@ -1,0 +1,43 @@
+name: .NET Core - Packages Nuget
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.100' # SDK Version to use.
+          source-url: https://api.nuget.org/v3/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}
+      - run: dotnet build ./src/Reminders.Application
+      - name: Create the package Application
+        run: dotnet pack -c Release ./src/Reminders.Application
+      - name: Publish the package to GPR
+        run: dotnet nuget push ./src/Reminders.Application/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
+
+      - run: dotnet build ./src/Reminders.Domain
+      - name: Create the package Domain
+        run: dotnet pack -c Release ./src/Reminders.Domain
+      - name: Publish the package to GPR
+        run: dotnet nuget push ./src/Reminders.Domain/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
+
+      - run: dotnet build ./src/Reminders.Infrastructure.CrossCutting
+      - name: Create the package CrossCutting
+        run: dotnet pack -c Release ./src/Reminders.Infrastructure.CrossCutting
+      - name: Publish the package to GPR
+        run: dotnet nuget push ./src/Reminders.Infrastructure.CrossCutting/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
+
+      - run: dotnet build ./src/Reminders.Infrastructure.Data.EntityFramework
+      - name: Create the package Data
+        run: dotnet pack -c Release ./src/Reminders.Infrastructure.Data.EntityFramework
+      - name: Publish the package to GPR
+        run: dotnet nuget push ./src/Reminders.Infrastructure.Data.EntityFramework/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
