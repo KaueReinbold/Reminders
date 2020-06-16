@@ -107,155 +107,11 @@
 			}
 		},
 
-		// TODO: Remove MVC task when use EntityFramework layer instead.
-		{
-			"label": "dotnet ef: migrations add - Reminders.Mvc",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"ef",
-				"migrations",
-				"add",
-				"${input:miration_name}",
-				"--startup-project",
-				"${workspaceFolder}/src/Reminders.Mvc",
-				"--project",
-				"${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		// TODO: Remove MVC task when use EntityFramework layer instead.
-		{
-			"label": "dotnet ef: database update - Reminders.Mvc",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"ef",
-				"database",
-				"update",
-				"--startup-project",
-				"${workspaceFolder}/src/Reminders.Mvc",
-				"--project",
-				"${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		// TODO: Remove MVC task when use EntityFramework layer instead.
-		{
-			"label": "dotnet ef: migrations remove - Reminders.Mvc",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"ef",
-				"migrations",
-				"remove",
-				"--startup-project",
-				"${workspaceFolder}/src/Reminders.Mvc",
-				"--project",
-				"${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-
-		{
-			"label": "dotnet user-secrets: init",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"user-secrets",
-				"init",
-				"--project",
-				"${workspaceFolder}/src/${input:project}"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet user-secrets: set",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"user-secrets",
-				"set",
-				"${input:secret_key}",
-				"${input:secret_value}",
-				"--project",
-				"${workspaceFolder}/src/${input:project}"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet user-secrets: remove",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"user-secrets",
-				"remove",
-				"${input:secret_key}",
-				"--project",
-				"${workspaceFolder}/src/${input:project}"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			},
-			"dependsOn": ["dotnet user-secrets: list - Reminders.Mvc"]
-		},
-		{
-			"label": "dotnet user-secrets: list",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"user-secrets",
-				"list",
-				"--project",
-				"${workspaceFolder}/src/${input:project}"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-
-		// TODO: Verify if it will be used docker compose for this library.
 		{
 			"label": "docker: compose up",
 			"command": "docker-compose",
 			"type": "process",
-			"args": [
-				"-f",
-				"${workspaceFolder}/${input:docker_compose_file}",
-				"up",
-				"-d"
-			],
+			"args": ["-f", "up", "-d"],
 			"problemMatcher": "$msCompile",
 			"presentation": {
 				"focus": true,
@@ -267,11 +123,7 @@
 			"label": "docker: compose build",
 			"command": "docker-compose",
 			"type": "process",
-			"args": [
-				"-f",
-				"${workspaceFolder}/${input:docker_compose_file}",
-				"build"
-			],
+			"args": ["-f", "build"],
 			"problemMatcher": "$msCompile",
 			"presentation": {
 				"focus": true,
@@ -283,52 +135,13 @@
 			"label": "docker: compose down",
 			"command": "docker-compose",
 			"type": "process",
-			"args": ["-f", "${workspaceFolder}/${input:docker_compose_file}", "down"],
+			"args": ["-f", "down"],
 			"problemMatcher": "$msCompile",
 			"presentation": {
 				"focus": true,
 				"panel": "dedicated",
 				"clear": true
 			}
-		}
-	],
-	"inputs": [
-		{
-			"id": "miration_name",
-			"type": "promptString",
-			"description": "Type here the name of the Migration"
-		},
-		{
-			"id": "secret_key",
-			"type": "promptString",
-			"description": "Type here the Key name to store"
-		},
-		{
-			"id": "secret_value",
-			"type": "promptString",
-			"description": "Type here the Value to store"
-		},
-		{
-			"id": "project",
-			"type": "pickString",
-			"description": "Select the project to use",
-			"default": "Reminders.Mvc",
-			"options": ["Reminders.Api", "Reminders.Mvc"]
-		},
-		{
-			"id": "publish_output",
-			"type": "promptString",
-			"description": "Type the output file"
-		},
-		{
-			"id": "docker_compose_file",
-			"type": "pickString",
-			"description": "Select the project to use",
-			"default": "docker-compose.yml",
-			"options": [
-				"docker-compose.yml",
-				"infrastructure/reminders/docker-compose.yml"
-			]
 		}
 	]
 }
