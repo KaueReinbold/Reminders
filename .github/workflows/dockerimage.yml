@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches:
-      - master-main
+      - master
 
 jobs:
   build:
@@ -23,38 +23,3 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           workdir: ./infrastructure/mssql
           tag_names: true
-      - name: Push Reminders Migrations to DockerHub
-        uses: elgohr/Publish-Docker-Github-Action@2.12
-        env:
-          ASPNETCORE_ENVIRONMENT: Docker
-        with:
-          name: ${{ secrets.DOCKER_USERNAME }}/reminders-migrations-image
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          dockerfile: Dockerfile.migrations
-          buildargs: DOTNET_PROJECT_PATH=./src/Reminders.Infrastructure.Data.EntityFramework,DOCKER_DATABASE_CONTAINER=reminders-database:1433,WAIT_FOR_SCRIPT=./infrastructure/wait-for.sh,WAIT_FOR_TIMEOUT=4000
-          tag_names: true
-      - name: Push Reminders Mvc to DockerHub
-        uses: elgohr/Publish-Docker-Github-Action@2.12
-        env:
-          ENV_DOTNET_ENTRYPOINT: Reminders.Mvc.dll
-          ASPNETCORE_ENVIRONMENT: Docker
-        with:
-          name: ${{ secrets.DOCKER_USERNAME }}/reminders-aspnetmvc-image
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          buildargs: DOTNET_PROJECT_PATH=./src/Reminders.Mvc
-          tag_names: true
-          source-url: https://nuget.pkg.github.com/KaueReinbold/index.json
-      - name: Push Reminders Api to DockerHub
-        uses: elgohr/Publish-Docker-Github-Action@2.12
-        env:
-          ENV_DOTNET_ENTRYPOINT: Reminders.Api.dll
-          ASPNETCORE_ENVIRONMENT: Docker
-        with:
-          name: ${{ secrets.DOCKER_USERNAME }}/reminders-aspnetapi-image
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          buildargs: DOTNET_PROJECT_PATH=./src/Reminders.Api
-          tag_names: true
-          source-url: https://nuget.pkg.github.com/KaueReinbold/index.json
