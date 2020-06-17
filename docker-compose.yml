@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 networks:
   reminders-network:
@@ -9,11 +9,11 @@ services:
     image: reminders-database-image:latest
     container_name: reminders-database
     ports:
-      - '17000:1433'
+      - "17000:1433"
     env_file:
       - .env
     build:
-      context: ./infrastructure/mssql
+      context: .
       dockerfile: Dockerfile
     networks:
       - reminders-network

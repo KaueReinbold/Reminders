@@ -8,7 +8,7 @@ RUN mkdir -p /usr/config
 WORKDIR /usr/config
 
 # Bundle config source
-COPY . /usr/config
+COPY ./infrastructure/mssql /usr/config
 
 # Grant permissions for to our scripts to be executable
 USER root
