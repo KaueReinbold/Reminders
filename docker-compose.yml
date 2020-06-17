@@ -8,8 +8,8 @@ services:
   reminders-database:
     image: reminders-database-image:latest
     container_name: reminders-database
-    ports: 
-			- "17000:1433"
+    ports:
+      - "17000:1433"
     build:
       context: .
       dockerfile: Dockerfile
