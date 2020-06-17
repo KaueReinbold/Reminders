@@ -1,7 +1,7 @@
-name: .NET Core - Build
+name: .NET Core - Code Coverage
 
 on:
-  pull_request:
+  push:
     branches:
       - master
 
@@ -24,3 +24,8 @@ jobs:
         run: dotnet build -c Release ./src
       - name: Test
         run: dotnet test -c Release src/Reminders.Application.Test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov /p:Exclude=\"[Reminders.Infrastructure.CrossCutting]*,[Reminders.Infrastructure.Data.EntityFramework]*\" /p:ExcludeByFile=\"**/*.Designer.cs,**/*Entity.cs\"
+      - name: Publish coverage report to coveralls.io
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: src/Reminders.Application.Test/TestResults/coverage.info
