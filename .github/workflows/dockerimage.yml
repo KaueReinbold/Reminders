@@ -16,10 +16,9 @@ jobs:
         env:
           SA_PASSWORD: 123Aa321
           ACCEPT_EULA: Y
-          ASPNETCORE_ENVIRONMENT: Docker
         with:
           name: ${{ secrets.DOCKER_USERNAME }}/reminders-database-image
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          workdir: ./infrastructure/mssql
+          workdir: .
           tag_names: true

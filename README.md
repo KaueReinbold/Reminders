@@ -5,36 +5,15 @@ Each reminder has a Title, Description, Date Limit and Status.
 
 ## Technical Objective
 
-This application was developed with Asp.Net Core. 
-The propos is show the knowledge using this techology and applying best code practices.
+This application was developed with Asp.Net Core.
+The propose is show the knowledge using this technology and applying best code practices.
 
-![.NET Core - Artifacts](https://github.com/KaueReinbold/Reminders/workflows/.NET%20Core%20-%20Artifacts/badge.svg?branch=master)
+![Coverage Status](https://coveralls.io/repos/github/KaueReinbold/Reminders/badge.svg?branch=master&service=github)
 
-![.NET Core - Packages](https://github.com/KaueReinbold/Reminders/workflows/.NET%20Core%20-%20Packages/badge.svg?branch=master)
+![.NET Core - Build](https://github.com/KaueReinbold/reminders-library/workflows/.NET%20Core%20-%20Build/badge.svg)
 
-![Docker Image CI](https://github.com/KaueReinbold/Reminders/workflows/Docker%20Image%20CI/badge.svg?branch=master)
+![.NET Core - Packages Nuget](https://github.com/KaueReinbold/reminders-library/workflows/.NET%20Core%20-%20Packages%20Nuget/badge.svg)
 
-[![Coverage Status](https://coveralls.io/repos/github/KaueReinbold/Reminders/badge.svg?branch=master&service=github)](https://coveralls.io/github/KaueReinbold/Reminders?branch=master)
+![.NET Core - Packages GitHub](https://github.com/KaueReinbold/reminders-library/workflows/.NET%20Core%20-%20Packages%20GitHub/badge.svg)
 
-## Tip
-
-### Run Docker Compose for Development
-
-```shell
-docker-compose.exe -f development.docker-compose.yml -f docker-compose.override.yml up -d
-```
-
-List images 
-```cmd
-docker images --format '{{.ID}} - {{.Size}} - {{.Repository}}:{{.Tag}}'
-```
-
-List containers
-```cmd
-docker ps -a --format '{{.ID}} - {{.Image}} - {{.Names}} - {{.Ports}}'
-```
-
-Check container ip
-```cmd
-docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {container_name}
-``` 
+![Docker Image CI](https://github.com/KaueReinbold/reminders-library/workflows/Docker%20Image%20CI/badge.svg)

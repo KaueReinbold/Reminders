@@ -6,3 +6,5 @@ CREATE USER reminders FOR LOGIN reminders;
 GO
 ALTER SERVER ROLE sysadmin ADD MEMBER [reminders];
 GO
+CREATE DATABASE Reminders
+GO
