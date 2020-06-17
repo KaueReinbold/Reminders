@@ -14,7 +14,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.100' # SDK Version to use.
+          dotnet-version: "3.1.100" # SDK Version to use.
           source-url: https://nuget.pkg.github.com/KaueReinbold/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -24,3 +24,8 @@ jobs:
         run: dotnet build -c Release ./src
       - name: Test
         run: dotnet test -c Release src/Reminders.Application.Test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov /p:Exclude=\"[Reminders.Infrastructure.CrossCutting]*,[Reminders.Infrastructure.Data.EntityFramework]*\" /p:ExcludeByFile=\"**/*.Designer.cs,**/*Entity.cs\"
+      - name: Publish coverage report to coveralls.io
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: src/Reminders.Application.Test/TestResults/coverage.info
