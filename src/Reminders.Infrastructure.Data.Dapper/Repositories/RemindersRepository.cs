@@ -11,39 +11,65 @@ namespace Reminders.Infrastructure.Data.Dapper.Repositories
     public class RemindersRepository
         : IRemindersRepository
     {
-        private IDbConnection dbConnection;
+        private IDbConnection connection;
 
-        public RemindersRepository(IDbConnection dbConnection)
+        public RemindersRepository(IDbConnection connection)
         {
-            this.dbConnection = dbConnection;
+            this.connection = connection;
         }
 
-        public Reminder Add(Reminder obj)
+        public Reminder Add(Reminder reminder)
         {
             var query = @"INSERT INTO Reminders SELECT @Id, @Title, @Description, @LimitDate, @IsDone";
 
-            dbConnection.Query(query, obj);
+            connection.Query(query, reminder);
 
-            return Get(obj.Id);
+            return reminder;
         }
 
-        public bool Exists(Guid id) =>
-            !(Get(id) is null);
-
-        public Reminder Get(Guid id) =>
-            dbConnection.QueryFirstOrDefault<Reminder>("SELECT * FROM Reminders WHERE Id = @id", new { id });
-
-        public IQueryable<Reminder> Get() =>
-            dbConnection.Query<Reminder>("SELECT * FROM Reminders").AsQueryable();
-
-        public void Remove(Guid id) =>
-            dbConnection.Execute("DELETE FROM Reminders WHERE Id = @id", new { id });
-
-        public Reminder Update(Reminder obj)
+        public bool Exists(Guid id)
         {
-            dbConnection.Query<Reminder>("UPDATE Reminders SET Title = @Title, Description = @Description, LimitDate = @LimitDate, IsDone = @IsDone WHERE Id = @id", obj);
+            var reminder = Get(id);
 
-            return Get(obj.Id);
+            var reminderExists = reminder is null;
+
+            return reminderExists;
+        }
+
+        public Reminder Get(Guid id)
+        {
+            var query = "SELECT * FROM Reminders WHERE Id = @id";
+            var parameters = new { id };
+
+            var reminder = connection.QueryFirstOrDefault<Reminder>(query, parameters);
+
+            return reminder;
+        }
+
+        public IQueryable<Reminder> Get()
+        {
+            var query = "SELECT * FROM Reminders";
+
+            var reminder = connection.Query<Reminder>(query);
+
+            return reminder.AsQueryable();
+        }
+
+        public void Remove(Guid id)
+        {
+            var query = "DELETE FROM Reminders WHERE Id = @id";
+            var parameters = new { id };
+
+            connection.Execute(query, parameters);
+        }
+
+        public Reminder Update(Reminder reminder)
+        {
+            var query = "UPDATE Reminders SET Title = @Title, Description = @Description, LimitDate = @LimitDate, IsDone = @IsDone WHERE Id = @id";
+
+            connection.Query<Reminder>(query, reminder);
+
+            return reminder;
         }
     }
 }
