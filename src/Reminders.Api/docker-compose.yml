@@ -1,0 +1,32 @@
+version: "3"
+
+networks:
+  reminders-network:
+    driver: bridge
+
+services:
+  reminders-aspnetapi-database:
+    image: mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+    container_name: reminders-aspnetapi-database
+    environment:
+      SA_PASSWORD: 123Aa321
+      ACCEPT_EULA: Y
+    ports:
+      - "18000:1433"
+    networks:
+      - reminders-network
+  reminders-aspnetapi:
+    image: reminders-aspnetapi-image:latest
+    container_name: reminders-aspnetapi
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ConnectionStrings:DefaultConnection: Server=reminders-aspnetapi-database;Database=Reminders;User=sa;Password=123Aa321;TrustServerCertificate=True;MultipleActiveResultSets=True;
+    ports:
+      - "18001:80"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    networks:
+      - reminders-network
+    depends_on:
+      - reminders-aspnetapi-database
