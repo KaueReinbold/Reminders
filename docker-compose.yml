@@ -9,7 +9,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
     container_name: reminders-database
     environment:
-      SA_PASSWORD: '123Aa321'
+      SA_PASSWORD: 'h9pJwUUV0y'
       ACCEPT_EULA: 'Y'
     ports:
       - '18000:1433'
