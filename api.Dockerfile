@@ -5,13 +5,13 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS build-env
 WORKDIR /app
 
 # Copy file to container
-COPY . .
+COPY ./src .
 
 # Restore packages
-RUN dotnet restore
+RUN dotnet restore ./Reminders.Api
 
 # Publish code
-RUN dotnet publish -c Release -o ./out/ 
+RUN dotnet publish -c Release -o ./out/ ./Reminders.Api
 
 # ============================================================================
 
