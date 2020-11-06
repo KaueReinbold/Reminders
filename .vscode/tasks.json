@@ -189,7 +189,7 @@
         "command": "docker-compose.exe"
       },
       "type": "process",
-      "args": ["up", "-d"],
+      "args": ["-f", "${input:docker_compose_file}", "up", "-d"],
       "problemMatcher": "$msCompile",
       "presentation": {
         "focus": true,
@@ -204,7 +204,7 @@
         "command": "docker-compose.exe"
       },
       "type": "process",
-      "args": ["build"],
+      "args": ["-f", "${input:docker_compose_file}", "build"],
       "problemMatcher": "$msCompile",
       "presentation": {
         "focus": true,
@@ -219,7 +219,7 @@
         "command": "docker-compose.exe"
       },
       "type": "process",
-      "args": ["down"],
+      "args": ["-f", "${input:docker_compose_file}", "down"],
       "problemMatcher": "$msCompile",
       "presentation": {
         "focus": true,
@@ -337,6 +337,13 @@
       "type": "pickString",
       "options": ["Reminders.Api"],
       "default": "Reminders.Api",
+      "description": "Select the project"
+    },
+    {
+      "id": "docker_compose_file",
+      "type": "pickString",
+      "options": ["docker-compose.yml", "api.docker-compose.yml"],
+      "default": "docker-compose.yml",
       "description": "Select the project"
     }
   ]
