@@ -1,147 +1,156 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "dotnet: clean",
-			"command": "dotnet",
-			"type": "process",
-			"args": ["clean", "${workspaceFolder}/src"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet: build",
-			"command": "dotnet",
-			"type": "process",
-			"args": ["build", "${workspaceFolder}/src"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			},
-			"dependsOn": ["dotnet: clean"]
-		},
-		{
-			"label": "dotnet: run",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"run",
-				"--project",
-				"${workspaceFolder}/src/${input:project}",
-				"--launch-profile",
-				"${input:project}",
-				"/property:GenerateFullPaths=true",
-				"/consoleloggerparameters:NoSummary"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "new",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet: publish",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"publish",
-				"${workspaceFolder}/src/${input:project}",
-				"--output",
-				"${input:publish_output}",
-				"/property:GenerateFullPaths=true",
-				"/consoleloggerparameters:NoSummary"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet: watch",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"watch",
-				"--project",
-				"${workspaceFolder}/src/${input:project}",
-				"run"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet: restore",
-			"command": "dotnet",
-			"type": "process",
-			"args": ["restore", "${workspaceFolder}/src"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet: test",
-			"command": "dotnet",
-			"type": "process",
-			"args": ["test", "${workspaceFolder}/src"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dotnet: clean",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["clean", "${workspaceFolder}/src"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "dotnet: build",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["build", "${workspaceFolder}/src"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "dependsOn": ["dotnet: clean"]
+    },
+    {
+      "label": "dotnet: run",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/src/${input:project}",
+        "--launch-profile",
+        "${input:project}",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "new",
+        "clear": true
+      }
+    },
+    {
+      "label": "dotnet: publish",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "publish",
+        "${workspaceFolder}/src/${input:project}",
+        "--output",
+        "${input:publish_output}",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "dotnet: watch",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "--project",
+        "${workspaceFolder}/src/${input:project}",
+        "run"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "dotnet: restore",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["restore", "${workspaceFolder}/src"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "dotnet: test",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["test", "${workspaceFolder}/src"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
 
-		{
-			"label": "docker: compose up",
-			"command": "docker-compose",
-			"type": "process",
-			"args": ["-f", "up", "-d"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "docker: compose build",
-			"command": "docker-compose",
-			"type": "process",
-			"args": ["-f", "build"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "docker: compose down",
-			"command": "docker-compose",
-			"type": "process",
-			"args": ["-f", "down"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		}
-	]
+    {
+      "label": "docker: compose up",
+      "command": "docker-compose",
+      "windows": {
+        "command": "docker-compose.exe"
+      },
+      "type": "process",
+      "args": ["up", "-d"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "docker: compose build",
+      "command": "docker-compose",
+      "windows": {
+        "command": "docker-compose.exe"
+      },
+      "type": "process",
+      "args": ["build"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "docker: compose down",
+      "command": "docker-compose",
+      "windows": {
+        "command": "docker-compose.exe"
+      },
+      "type": "process",
+      "args": ["down"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    }
+  ]
 }
