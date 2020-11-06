@@ -106,6 +106,81 @@
         "clear": true
       }
     },
+    {
+      "label": "dotnet: ef migrations add",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "ef",
+        "migrations",
+        "add",
+        "${input:migration_name}",
+        "--project",
+        "${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework",
+        "--startup-project",
+        "${workspaceFolder}/src/Reminders.Api"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "dotnet: ef migrations remove",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "ef",
+        "migrations",
+        "remove",
+        "--project",
+        "${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework",
+        "--startup-project",
+        "${workspaceFolder}/src/Reminders.Api"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "dotnet: ef database update",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "ef",
+        "database",
+        "update",
+        "--project",
+        "${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework",
+        "--startup-project",
+        "${workspaceFolder}/src/Reminders.Api"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "dotnet: ef migrations script",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "ef",
+        "migrations",
+        "script",
+        "--output",
+        "${input:output_script}",
+        "--project",
+        "${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework",
+        "--startup-project",
+        "${workspaceFolder}/src/Reminders.Api"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
 
     {
       "label": "docker: compose up",
@@ -151,6 +226,118 @@
         "panel": "dedicated",
         "clear": true
       }
+    },
+
+    {
+      "label": "dotnet: user-secrets: init",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "user-secrets",
+        "init",
+        "--project",
+        "${workspaceFolder}/src/${input:project_name}"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "dotnet: user-secrets: set",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "user-secrets",
+        "set",
+        "${input:secret_key}",
+        "${input:secret_value}",
+        "--project",
+        "${workspaceFolder}/src/${input:project_name}"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "dotnet: user-secrets: remove",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "user-secrets",
+        "remove",
+        "${input:secret_key}",
+        "--project",
+        "${workspaceFolder}/src/${input:project_name}"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "dotnet: user-secrets: list",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "user-secrets",
+        "list",
+        "--project",
+        "${workspaceFolder}/src/${input:project_name}"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+
+    {
+      "label": "rebuild environment",
+      "command": "echo Done!",
+      "type": "shell",
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "docker: compose down",
+        "docker: compose build",
+        "docker: compose up",
+        "dotnet: ef database update"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "secret_key",
+      "type": "promptString",
+      "description": "Type here the Key name to store"
+    },
+    {
+      "id": "secret_value",
+      "type": "promptString",
+      "description": "Type here the Value to store"
+    },
+    {
+      "id": "migration_name",
+      "type": "promptString",
+      "description": "Type here the Migration name"
+    },
+    {
+      "id": "output_script",
+      "type": "promptString",
+      "description": "Type here the output for migration script"
+    },
+    {
+      "id": "project_name",
+      "type": "pickString",
+      "options": ["Reminders.Api"],
+      "default": "Reminders.Api",
+      "description": "Select the project"
     }
   ]
 }
