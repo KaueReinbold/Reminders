@@ -159,6 +159,12 @@
       "problemMatcher": "$msCompile",
       "presentation": {
         "panel": "shared"
+      },
+      "options": {
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "${input:environment}",
+          "DOTNET_ENVIRONMENT": "${input:environment}"
+        }
       }
     },
     {
@@ -345,6 +351,13 @@
       "options": ["docker-compose.yml", "api.docker-compose.yml"],
       "default": "docker-compose.yml",
       "description": "Select the project"
+    },
+    {
+      "id": "environment",
+      "type": "pickString",
+      "options": ["Docker", "Development"],
+      "default": "Development",
+      "description": "Environment to execute"
     }
   ]
 }
