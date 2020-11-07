@@ -315,6 +315,29 @@
         "docker: compose up",
         "dotnet: ef database update"
       ]
+    },
+
+    {
+      "label": "k6: run",
+      "command": "k6",
+      "windows": {
+        "command": "k6.exe"
+      },
+      "type": "shell",
+      "problemMatcher": "$msCompile",
+      "args": [
+        "run",
+        "--vus",
+        "${input:k6_vus}",
+        "--duration",
+        "${input:k6_duration}s",
+        "${input:k6_file}"
+      ],
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
     }
   ],
   "inputs": [
@@ -358,6 +381,28 @@
       "options": ["Docker", "Development"],
       "default": "Development",
       "description": "Environment to execute"
+    },
+    {
+      "id": "k6_file",
+      "type": "pickString",
+      "options": [
+        "./infrastructure/k6/k6.get.js",
+        "./infrastructure/k6/k6.post.js"
+      ],
+      "default": "./infrastructure/k6/k6.get.js",
+      "description": "Environment to execute"
+    },
+    {
+      "id": "k6_vus",
+      "type": "promptString",
+      "description": "Type here the VUS number",
+      "default": "10"
+    },
+    {
+      "id": "k6_duration",
+      "type": "promptString",
+      "description": "Type here the Duration number",
+      "default": "30"
     }
   ]
 }
