@@ -20,7 +20,7 @@ services:
     container_name: reminders-aspnetapi
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
-      ConnectionStrings:DefaultConnection: Server=reminders-aspnetapi-database;Database=Reminders;User=sa;Password=123Aa321;TrustServerCertificate=True;MultipleActiveResultSets=True;
+      ConnectionStrings:DefaultConnection: Server=reminders-aspnetapi-database;Database=Reminders;User=sa;Password=h9pJwUUV0y;TrustServerCertificate=True;MultipleActiveResultSets=True;
     ports:
       - '5001:80'
     build:
