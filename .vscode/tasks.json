@@ -340,6 +340,43 @@
         "panel": "dedicated",
         "clear": true
       }
+    },
+
+    {
+      "label": "dotnet: trace ps",
+      "command": "dotnet-trace",
+      "windows": {
+        "command": "dotnet-trace.exe"
+      },
+      "type": "shell",
+      "problemMatcher": "$msCompile",
+      "args": ["ps"],
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "dotnet: counters monitor",
+      "command": "dotnet-counters",
+      "windows": {
+        "command": "dotnet-counters.exe"
+      },
+      "type": "shell",
+      "problemMatcher": "$msCompile",
+      "args": [
+        "monitor",
+        "--refresh-interval",
+        "1",
+        "-p",
+        "${input:dotnet_process_id}"
+      ],
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
     }
   ],
   "inputs": [
@@ -405,6 +442,11 @@
       "type": "promptString",
       "description": "Type here the Duration number",
       "default": "30"
+    },
+    {
+      "id": "dotnet_process_id",
+      "type": "promptString",
+      "description": "Enter the dotnet process id"
     },
     {
       "id": "dotnet_configuration",
