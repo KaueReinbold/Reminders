@@ -52,11 +52,13 @@
       "type": "process",
       "args": [
         "publish",
-        "${workspaceFolder}/src/${input:project}",
-        "--output",
-        "${input:publish_output}",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
+        "--configuration",
+        "${input:dotnet_configuration}",
+        "--runtime",
+        "${input:dotnet_runtime}",
+        "-p:PublishSingleFile=${input:dotnet_single_file}",
+        "--self-contained=${input:dotnet_self_contained}",
+        "${workspaceFolder}/src/${input:project_name}"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -403,6 +405,34 @@
       "type": "promptString",
       "description": "Type here the Duration number",
       "default": "30"
+    },
+    {
+      "id": "dotnet_configuration",
+      "type": "pickString",
+      "options": ["Release", "Debug"],
+      "default": "Release",
+      "description": "Select configuration to publish"
+    },
+    {
+      "id": "dotnet_runtime",
+      "type": "pickString",
+      "options": ["win-x64", "ubuntu.14.04-x64", "osx.10.11-x64"],
+      "default": "win-x64",
+      "description": "Select runtime to publish"
+    },
+    {
+      "id": "dotnet_single_file",
+      "type": "pickString",
+      "options": ["true", "false"],
+      "default": "true",
+      "description": "Is is single file publish?"
+    },
+    {
+      "id": "dotnet_self_contained",
+      "type": "pickString",
+      "options": ["true", "false"],
+      "default": "true",
+      "description": "Is is self contained publish?"
     }
   ]
 }
