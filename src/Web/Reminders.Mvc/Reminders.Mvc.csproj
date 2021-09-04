@@ -16,6 +16,6 @@
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\Reminders.Application\Reminders.Application.csproj" />
+		<ProjectReference Include="..\..\Services\Reminders.Application\Reminders.Application.csproj" />
 	</ItemGroup>
 </Project>
