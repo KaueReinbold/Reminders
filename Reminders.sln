@@ -20,23 +20,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3C5E22FA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Application", "src\Reminders.Application\Reminders.Application.csproj", "{5385238E-79C5-44AC-A615-B1FEBA45189A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Application.Test", "test\Reminders.Application.Test\Reminders.Application.Test.csproj", "{AB8BA38B-4A99-4ED4-ADD0-B8F55E0577C9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Domain", "src\Reminders.Domain\Reminders.Domain.csproj", "{1DA1D0D0-7D13-4B78-B180-F5D3184E87A1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.CrossCutting", "src\Reminders.Infrastructure.CrossCutting\Reminders.Infrastructure.CrossCutting.csproj", "{DC9D5FB0-9660-459E-9BDE-AAB14447359B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.Data.EntityFramework", "src\Reminders.Infrastructure.Data.EntityFramework\Reminders.Infrastructure.Data.EntityFramework.csproj", "{37BACAD5-1BDC-413C-BE98-052F6D3B226A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.Data.EntityFramework", "src\Data\Reminders.Infrastructure.Data.EntityFramework\Reminders.Infrastructure.Data.EntityFramework.csproj", "{37BACAD5-1BDC-413C-BE98-052F6D3B226A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Infrastructure.Data.Dapper", "src\Reminders.Infrastructure.Data.Dapper\Reminders.Infrastructure.Data.Dapper.csproj", "{99A121C3-EB6B-427B-A158-48C098E82E99}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Api.Test", "test\Reminders.Api.Test\Reminders.Api.Test.csproj", "{6FB54BB9-96D7-46F3-85BC-3FFDA0866C1F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Mvc.Test", "test\Reminders.Mvc.Test\Reminders.Mvc.Test.csproj", "{01561FEC-BCDF-4262-9A41-A5E70B42E0DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Infrastructure.Data.Dapper", "src\Data\Reminders.Infrastructure.Data.Dapper\Reminders.Infrastructure.Data.Dapper.csproj", "{99A121C3-EB6B-427B-A158-48C098E82E99}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Api", "src\Web\Reminders.Api\Reminders.Api.csproj", "{7C707AD5-EAE5-43E6-AA61-6F14CADBA734}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Mvc", "src\Web\Reminders.Mvc\Reminders.Mvc.csproj", "{1B82D1B4-6188-4789-8662-2642F16596CE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Application.Test", "test\Reminders.Application.Test\Reminders.Application.Test.csproj", "{AB8BA38B-4A99-4ED4-ADD0-B8F55E0577C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Api.Test", "test\Reminders.Api.Test\Reminders.Api.Test.csproj", "{6FB54BB9-96D7-46F3-85BC-3FFDA0866C1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminders.Mvc.Test", "test\Reminders.Mvc.Test\Reminders.Mvc.Test.csproj", "{01561FEC-BCDF-4262-9A41-A5E70B42E0DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
