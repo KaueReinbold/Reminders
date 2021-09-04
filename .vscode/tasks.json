@@ -2,10 +2,10 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "dotnet: clean",
+      "label": "clean",
       "command": "dotnet",
       "type": "process",
-      "args": ["clean", "${workspaceFolder}/src"],
+      "args": ["clean"],
       "problemMatcher": "$msCompile",
       "presentation": {
         "focus": true,
@@ -14,26 +14,26 @@
       }
     },
     {
-      "label": "dotnet: build",
+      "label": "build",
       "command": "dotnet",
       "type": "process",
-      "args": ["build", "${workspaceFolder}/src"],
+      "args": ["build"],
       "problemMatcher": "$msCompile",
       "presentation": {
         "focus": true,
         "panel": "dedicated",
         "clear": true
       },
-      "dependsOn": ["dotnet: clean"]
+      "dependsOn": ["clean"]
     },
     {
-      "label": "dotnet: run",
+      "label": "run",
       "command": "dotnet",
       "type": "process",
       "args": [
         "run",
         "--project",
-        "${workspaceFolder}/src/${input:project}",
+        "${workspaceFolder}/src/Web/${input:project}",
         "--launch-profile",
         "${input:project}",
         "/property:GenerateFullPaths=true",
@@ -47,34 +47,13 @@
       }
     },
     {
-      "label": "dotnet: publish",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "publish",
-        "--configuration",
-        "${input:dotnet_configuration}",
-        "--runtime",
-        "${input:dotnet_runtime}",
-        "-p:PublishSingleFile=${input:dotnet_single_file}",
-        "--self-contained=${input:dotnet_self_contained}",
-        "${workspaceFolder}/src/${input:project}"
-      ],
-      "problemMatcher": "$msCompile",
-      "presentation": {
-        "focus": true,
-        "panel": "dedicated",
-        "clear": true
-      }
-    },
-    {
-      "label": "dotnet: watch",
+      "label": "watch",
       "command": "dotnet",
       "type": "process",
       "args": [
         "watch",
         "--project",
-        "${workspaceFolder}/src/${input:project}",
+        "${workspaceFolder}/src/Web/${input:project}",
         "run"
       ],
       "problemMatcher": "$msCompile",
@@ -85,10 +64,10 @@
       }
     },
     {
-      "label": "dotnet: restore",
+      "label": "restore",
       "command": "dotnet",
       "type": "process",
-      "args": ["restore", "${workspaceFolder}/src"],
+      "args": ["restore"],
       "problemMatcher": "$msCompile",
       "presentation": {
         "focus": true,
@@ -97,10 +76,10 @@
       }
     },
     {
-      "label": "dotnet: test",
+      "label": "test",
       "command": "dotnet",
       "type": "process",
-      "args": ["test", "${workspaceFolder}/src"],
+      "args": ["test"],
       "problemMatcher": "$msCompile",
       "presentation": {
         "focus": true,
@@ -118,9 +97,9 @@
         "add",
         "${input:migration_name}",
         "--project",
-        "${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
         "--startup-project",
-        "${workspaceFolder}/src/Reminders.Api"
+        "${workspaceFolder}/src/Web/Reminders.Api"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -136,9 +115,9 @@
         "migrations",
         "remove",
         "--project",
-        "${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
         "--startup-project",
-        "${workspaceFolder}/src/Reminders.Api"
+        "${workspaceFolder}/src/Web/Reminders.Api"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -154,9 +133,9 @@
         "database",
         "update",
         "--project",
-        "${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
         "--startup-project",
-        "${workspaceFolder}/src/Reminders.Api"
+        "${workspaceFolder}/src/Web/Reminders.Api"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -180,9 +159,9 @@
         "--output",
         "${input:output_script}",
         "--project",
-        "${workspaceFolder}/src/Reminders.Infrastructure.Data.EntityFramework",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
         "--startup-project",
-        "${workspaceFolder}/src/Reminders.Api"
+        "${workspaceFolder}/src/Web/Reminders.Api"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -196,7 +175,7 @@
         "command": "docker-compose.exe"
       },
       "type": "process",
-      "args": ["-f", "${input:docker_compose_file}", "up", "-d"],
+      "args": ["up", "-d"],
       "problemMatcher": "$msCompile",
       "presentation": {
         "focus": true,
@@ -211,7 +190,7 @@
         "command": "docker-compose.exe"
       },
       "type": "process",
-      "args": ["-f", "${input:docker_compose_file}", "build"],
+      "args": ["build"],
       "problemMatcher": "$msCompile",
       "presentation": {
         "focus": true,
@@ -226,27 +205,12 @@
         "command": "docker-compose.exe"
       },
       "type": "process",
-      "args": ["-f", "${input:docker_compose_file}", "down"],
+      "args": ["down"],
       "problemMatcher": "$msCompile",
       "presentation": {
         "focus": true,
         "panel": "dedicated",
         "clear": true
-      }
-    },
-    {
-      "label": "dotnet: user-secrets: init",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "user-secrets",
-        "init",
-        "--project",
-        "${workspaceFolder}/src/${input:project}"
-      ],
-      "problemMatcher": "$msCompile",
-      "presentation": {
-        "panel": "shared"
       }
     },
     {
@@ -259,7 +223,7 @@
         "${input:secret_key}",
         "${input:secret_value}",
         "--project",
-        "${workspaceFolder}/src/${input:project}"
+        "${workspaceFolder}/src/Web/${input:project}"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -275,7 +239,7 @@
         "remove",
         "${input:secret_key}",
         "--project",
-        "${workspaceFolder}/src/${input:project}"
+        "${workspaceFolder}/src/Web/${input:project}"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -290,7 +254,7 @@
         "user-secrets",
         "list",
         "--project",
-        "${workspaceFolder}/src/${input:project}"
+        "${workspaceFolder}/src/Web/${input:project}"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -374,55 +338,18 @@
       }
     },
     {
-      "label": "build",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "build",
-        "${workspaceFolder}/src/Reminders.Domain/Reminders.Domain.csproj",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
-      ],
-      "problemMatcher": "$msCompile"
-    },
-    {
-      "label": "publish",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "publish",
-        "${workspaceFolder}/src/Reminders.Domain/Reminders.Domain.csproj",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
-      ],
-      "problemMatcher": "$msCompile"
-    },
-    {
-      "label": "watch",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "watch",
-        "run",
-        "${workspaceFolder}/src/Reminders.Domain/Reminders.Domain.csproj",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
-      ],
-      "problemMatcher": "$msCompile"
-    },
-    {
       "type": "docker-build",
       "label": "docker-build: debug",
       "dependsOn": ["build"],
       "dockerBuild": {
         "tag": "reminderslibrary:dev",
         "target": "base",
-        "dockerfile": "${workspaceFolder}/src/Reminders.Api/Dockerfile",
+        "dockerfile": "${workspaceFolder}/src/Web/Reminders.Mvc/Dockerfile",
         "context": "${workspaceFolder}",
         "pull": true
       },
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Reminders.Api/Reminders.Api.csproj"
+        "appProject": "${workspaceFolder}/src/Web/Reminders.Mvc/Reminders.Mvc.csproj"
       }
     },
     {
@@ -431,12 +358,12 @@
       "dependsOn": ["build"],
       "dockerBuild": {
         "tag": "reminderslibrary:latest",
-        "dockerfile": "${workspaceFolder}/src/Reminders.Api/Dockerfile",
+        "dockerfile": "${workspaceFolder}/src/Web/Reminders.Mvc/Dockerfile",
         "context": "${workspaceFolder}",
         "pull": true
       },
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Reminders.Api/Reminders.Api.csproj"
+        "appProject": "${workspaceFolder}/src/Web/Reminders.Mvc/Reminders.Mvc.csproj"
       }
     },
     {
@@ -445,7 +372,7 @@
       "dependsOn": ["docker-build: debug"],
       "dockerRun": {},
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Reminders.Api/Reminders.Api.csproj",
+        "appProject": "${workspaceFolder}/src/Web/Reminders.Mvc/Reminders.Mvc.csproj",
         "enableDebugging": true
       }
     },
@@ -455,7 +382,7 @@
       "dependsOn": ["docker-build: release"],
       "dockerRun": {},
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Reminders.Api/Reminders.Api.csproj"
+        "appProject": "${workspaceFolder}/src/Web/Reminders.Mvc/Reminders.Mvc.csproj"
       }
     }
   ],
@@ -483,7 +410,7 @@
     {
       "id": "project",
       "type": "pickString",
-      "options": ["Reminders.Api"],
+      "options": ["Reminders.Api", "Reminders.Mvc"],
       "default": "Reminders.Api",
       "description": "Select the project"
     },
