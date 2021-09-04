@@ -58,7 +58,7 @@
         "${input:dotnet_runtime}",
         "-p:PublishSingleFile=${input:dotnet_single_file}",
         "--self-contained=${input:dotnet_self_contained}",
-        "${workspaceFolder}/src/${input:project_name}"
+        "${workspaceFolder}/src/${input:project}"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -189,7 +189,6 @@
         "panel": "shared"
       }
     },
-
     {
       "label": "docker: compose up",
       "command": "docker-compose",
@@ -235,7 +234,6 @@
         "clear": true
       }
     },
-
     {
       "label": "dotnet: user-secrets: init",
       "command": "dotnet",
@@ -244,7 +242,7 @@
         "user-secrets",
         "init",
         "--project",
-        "${workspaceFolder}/src/${input:project_name}"
+        "${workspaceFolder}/src/${input:project}"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -261,7 +259,7 @@
         "${input:secret_key}",
         "${input:secret_value}",
         "--project",
-        "${workspaceFolder}/src/${input:project_name}"
+        "${workspaceFolder}/src/${input:project}"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -277,7 +275,7 @@
         "remove",
         "${input:secret_key}",
         "--project",
-        "${workspaceFolder}/src/${input:project_name}"
+        "${workspaceFolder}/src/${input:project}"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -292,14 +290,13 @@
         "user-secrets",
         "list",
         "--project",
-        "${workspaceFolder}/src/${input:project_name}"
+        "${workspaceFolder}/src/${input:project}"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
         "panel": "shared"
       }
     },
-
     {
       "label": "rebuild environment",
       "command": "echo Done!",
@@ -318,7 +315,6 @@
         "dotnet: ef database update"
       ]
     },
-
     {
       "label": "k6: run",
       "command": "k6",
@@ -341,7 +337,6 @@
         "clear": true
       }
     },
-
     {
       "label": "dotnet: trace ps",
       "command": "dotnet-trace",
@@ -377,6 +372,91 @@
         "panel": "dedicated",
         "clear": true
       }
+    },
+    {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/Reminders.Domain/Reminders.Domain.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "publish",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "publish",
+        "${workspaceFolder}/src/Reminders.Domain/Reminders.Domain.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "watch",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "run",
+        "${workspaceFolder}/src/Reminders.Domain/Reminders.Domain.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build: debug",
+      "dependsOn": ["build"],
+      "dockerBuild": {
+        "tag": "reminderslibrary:dev",
+        "target": "base",
+        "dockerfile": "${workspaceFolder}/src/Reminders.Api/Dockerfile",
+        "context": "${workspaceFolder}",
+        "pull": true
+      },
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Reminders.Api/Reminders.Api.csproj"
+      }
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build: release",
+      "dependsOn": ["build"],
+      "dockerBuild": {
+        "tag": "reminderslibrary:latest",
+        "dockerfile": "${workspaceFolder}/src/Reminders.Api/Dockerfile",
+        "context": "${workspaceFolder}",
+        "pull": true
+      },
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Reminders.Api/Reminders.Api.csproj"
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: debug",
+      "dependsOn": ["docker-build: debug"],
+      "dockerRun": {},
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Reminders.Api/Reminders.Api.csproj",
+        "enableDebugging": true
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: release",
+      "dependsOn": ["docker-build: release"],
+      "dockerRun": {},
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Reminders.Api/Reminders.Api.csproj"
+      }
     }
   ],
   "inputs": [
@@ -401,7 +481,7 @@
       "description": "Type here the output for migration script"
     },
     {
-      "id": "project_name",
+      "id": "project",
       "type": "pickString",
       "options": ["Reminders.Api"],
       "default": "Reminders.Api",
