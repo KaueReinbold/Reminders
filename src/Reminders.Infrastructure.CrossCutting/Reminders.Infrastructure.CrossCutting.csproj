@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Reminders.Domain\Reminders.Domain.csproj" />
-    <ProjectReference Include="..\Reminders.Infrastructure.Data.EntityFramework\Reminders.Infrastructure.Data.EntityFramework.csproj" />
+    <ProjectReference Include="..\Data\Reminders.Infrastructure.Data.EntityFramework\Reminders.Infrastructure.Data.EntityFramework.csproj" />
   </ItemGroup>
 
 </Project>
