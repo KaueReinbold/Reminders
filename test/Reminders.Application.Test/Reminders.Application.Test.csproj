@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Reminders.Application\Reminders.Application.csproj" />
+    <ProjectReference Include="..\..\src\Reminders.Application\Reminders.Application.csproj" />
   </ItemGroup>
 
 </Project>
