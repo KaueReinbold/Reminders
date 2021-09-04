@@ -5,13 +5,33 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET Core Launch (web)",
+      "name": "Api",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet: build",
-      "program": "${workspaceFolder}/src/Reminders.Api/bin/Debug/netcoreapp3.1/Reminders.Api.dll",
+      "program": "${workspaceFolder}/src/Web/Reminders.Api/bin/Debug/netcoreapp3.1/Reminders.Api.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/src/Reminders.Api",
+      "cwd": "${workspaceFolder}/src/Web/Reminders.Api",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      }
+    },
+    {
+      "name": "Mvc",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "dotnet: build",
+      "program": "${workspaceFolder}/src/Web/Reminders.Mvc/bin/Debug/netcoreapp3.1/Reminders.Mvc.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Web/Reminders.Mvc",
       "stopAtEntry": false,
       "serverReadyAction": {
         "action": "openExternally",
@@ -31,12 +51,21 @@
       "processId": "${command:pickProcess}"
     },
     {
-      "name": "Docker .NET Core Launch",
+      "name": "Docker Api",
       "type": "docker",
       "request": "launch",
       "preLaunchTask": "docker-run: debug",
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Reminders.Api/Reminders.Api.csproj"
+        "appProject": "${workspaceFolder}/src/Web/Reminders.Api/Reminders.Api.csproj"
+      }
+    },
+    {
+      "name": "Docker Mvc",
+      "type": "docker",
+      "request": "launch",
+      "preLaunchTask": "docker-run: debug",
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Web/Reminders.Mvc/Reminders.Mvc.csproj"
       }
     }
   ]
