@@ -1,147 +1,487 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "dotnet: clean",
-			"command": "dotnet",
-			"type": "process",
-			"args": ["clean", "${workspaceFolder}/src"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet: build",
-			"command": "dotnet",
-			"type": "process",
-			"args": ["build", "${workspaceFolder}/src"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			},
-			"dependsOn": ["dotnet: clean"]
-		},
-		{
-			"label": "dotnet: run",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"run",
-				"--project",
-				"${workspaceFolder}/src/${input:project}",
-				"--launch-profile",
-				"${input:project}",
-				"/property:GenerateFullPaths=true",
-				"/consoleloggerparameters:NoSummary"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "new",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet: publish",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"publish",
-				"${workspaceFolder}/src/${input:project}",
-				"--output",
-				"${input:publish_output}",
-				"/property:GenerateFullPaths=true",
-				"/consoleloggerparameters:NoSummary"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet: watch",
-			"command": "dotnet",
-			"type": "process",
-			"args": [
-				"watch",
-				"--project",
-				"${workspaceFolder}/src/${input:project}",
-				"run"
-			],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet: restore",
-			"command": "dotnet",
-			"type": "process",
-			"args": ["restore", "${workspaceFolder}/src"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "dotnet: test",
-			"command": "dotnet",
-			"type": "process",
-			"args": ["test", "${workspaceFolder}/src"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-
-		{
-			"label": "docker: compose up",
-			"command": "docker-compose",
-			"type": "process",
-			"args": ["-f", "up", "-d"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "docker: compose build",
-			"command": "docker-compose",
-			"type": "process",
-			"args": ["-f", "build"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		},
-		{
-			"label": "docker: compose down",
-			"command": "docker-compose",
-			"type": "process",
-			"args": ["-f", "down"],
-			"problemMatcher": "$msCompile",
-			"presentation": {
-				"focus": true,
-				"panel": "dedicated",
-				"clear": true
-			}
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "clean",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["clean"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["build"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "dependsOn": ["clean"]
+    },
+    {
+      "label": "run",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/src/Web/${input:project}",
+        "--launch-profile",
+        "${input:project}",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "new",
+        "clear": true
+      }
+    },
+    {
+      "label": "watch",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "--project",
+        "${workspaceFolder}/src/Web/${input:project}",
+        "run"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "restore",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["restore"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "test",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["test"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "dotnet: ef migrations add",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "ef",
+        "migrations",
+        "add",
+        "${input:migration_name}",
+        "--project",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
+        "--startup-project",
+        "${workspaceFolder}/src/Web/Reminders.Api"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "dotnet: ef migrations remove",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "ef",
+        "migrations",
+        "remove",
+        "--project",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
+        "--startup-project",
+        "${workspaceFolder}/src/Web/Reminders.Api"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "dotnet: ef database update",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "ef",
+        "database",
+        "update",
+        "--project",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
+        "--startup-project",
+        "${workspaceFolder}/src/Web/Reminders.Api"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      },
+      "options": {
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "${input:environment}",
+          "DOTNET_ENVIRONMENT": "${input:environment}"
+        }
+      }
+    },
+    {
+      "label": "dotnet: ef migrations script",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "ef",
+        "migrations",
+        "script",
+        "--output",
+        "${input:output_script}",
+        "--project",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
+        "--startup-project",
+        "${workspaceFolder}/src/Web/Reminders.Api"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "docker: compose up",
+      "command": "docker-compose",
+      "windows": {
+        "command": "docker-compose.exe"
+      },
+      "type": "process",
+      "args": ["up", "-d"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "docker: compose build",
+      "command": "docker-compose",
+      "windows": {
+        "command": "docker-compose.exe"
+      },
+      "type": "process",
+      "args": ["build"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "docker: compose down",
+      "command": "docker-compose",
+      "windows": {
+        "command": "docker-compose.exe"
+      },
+      "type": "process",
+      "args": ["down"],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "dotnet: user-secrets: set",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "user-secrets",
+        "set",
+        "${input:secret_key}",
+        "${input:secret_value}",
+        "--project",
+        "${workspaceFolder}/src/Web/${input:project}"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "dotnet: user-secrets: remove",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "user-secrets",
+        "remove",
+        "${input:secret_key}",
+        "--project",
+        "${workspaceFolder}/src/Web/${input:project}"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "dotnet: user-secrets: list",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "user-secrets",
+        "list",
+        "--project",
+        "${workspaceFolder}/src/Web/${input:project}"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "rebuild environment",
+      "command": "echo Done!",
+      "type": "shell",
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "docker: compose down",
+        "docker: compose build",
+        "docker: compose up",
+        "dotnet: ef database update"
+      ]
+    },
+    {
+      "label": "k6: run",
+      "command": "k6",
+      "windows": {
+        "command": "k6.exe"
+      },
+      "type": "shell",
+      "problemMatcher": "$msCompile",
+      "args": [
+        "run",
+        "--vus",
+        "${input:k6_vus}",
+        "--duration",
+        "${input:k6_duration}s",
+        "${input:k6_file}"
+      ],
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "dotnet: trace ps",
+      "command": "dotnet-trace",
+      "windows": {
+        "command": "dotnet-trace.exe"
+      },
+      "type": "shell",
+      "problemMatcher": "$msCompile",
+      "args": ["ps"],
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "dotnet: counters monitor",
+      "command": "dotnet-counters",
+      "windows": {
+        "command": "dotnet-counters.exe"
+      },
+      "type": "shell",
+      "problemMatcher": "$msCompile",
+      "args": [
+        "monitor",
+        "--refresh-interval",
+        "1",
+        "-p",
+        "${input:dotnet_process_id}"
+      ],
+      "presentation": {
+        "focus": true,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build: debug",
+      "dependsOn": ["build"],
+      "dockerBuild": {
+        "tag": "reminderslibrary:dev",
+        "target": "base",
+        "dockerfile": "${workspaceFolder}/src/Web/Reminders.Mvc/Dockerfile",
+        "context": "${workspaceFolder}",
+        "pull": true
+      },
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Web/Reminders.Mvc/Reminders.Mvc.csproj"
+      }
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build: release",
+      "dependsOn": ["build"],
+      "dockerBuild": {
+        "tag": "reminderslibrary:latest",
+        "dockerfile": "${workspaceFolder}/src/Web/Reminders.Mvc/Dockerfile",
+        "context": "${workspaceFolder}",
+        "pull": true
+      },
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Web/Reminders.Mvc/Reminders.Mvc.csproj"
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: debug",
+      "dependsOn": ["docker-build: debug"],
+      "dockerRun": {},
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Web/Reminders.Mvc/Reminders.Mvc.csproj",
+        "enableDebugging": true
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: release",
+      "dependsOn": ["docker-build: release"],
+      "dockerRun": {},
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Web/Reminders.Mvc/Reminders.Mvc.csproj"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "secret_key",
+      "type": "promptString",
+      "description": "Type here the Key name to store"
+    },
+    {
+      "id": "secret_value",
+      "type": "promptString",
+      "description": "Type here the Value to store"
+    },
+    {
+      "id": "migration_name",
+      "type": "promptString",
+      "description": "Type here the Migration name"
+    },
+    {
+      "id": "output_script",
+      "type": "promptString",
+      "description": "Type here the output for migration script"
+    },
+    {
+      "id": "project",
+      "type": "pickString",
+      "options": ["Reminders.Api", "Reminders.Mvc"],
+      "default": "Reminders.Api",
+      "description": "Select the project"
+    },
+    {
+      "id": "docker_compose_file",
+      "type": "pickString",
+      "options": ["docker-compose.yml", "api.docker-compose.yml"],
+      "default": "docker-compose.yml",
+      "description": "Select the project"
+    },
+    {
+      "id": "environment",
+      "type": "pickString",
+      "options": ["Docker", "Development"],
+      "default": "Development",
+      "description": "Environment to execute"
+    },
+    {
+      "id": "k6_file",
+      "type": "pickString",
+      "options": [
+        "./infrastructure/k6/k6.get.js",
+        "./infrastructure/k6/k6.post.js"
+      ],
+      "default": "./infrastructure/k6/k6.get.js",
+      "description": "Environment to execute"
+    },
+    {
+      "id": "k6_vus",
+      "type": "promptString",
+      "description": "Type here the VUS number",
+      "default": "10"
+    },
+    {
+      "id": "k6_duration",
+      "type": "promptString",
+      "description": "Type here the Duration number",
+      "default": "30"
+    },
+    {
+      "id": "dotnet_process_id",
+      "type": "promptString",
+      "description": "Enter the dotnet process id"
+    },
+    {
+      "id": "dotnet_configuration",
+      "type": "pickString",
+      "options": ["Release", "Debug"],
+      "default": "Release",
+      "description": "Select configuration to publish"
+    },
+    {
+      "id": "dotnet_runtime",
+      "type": "pickString",
+      "options": ["win-x64", "ubuntu.14.04-x64", "osx.10.11-x64"],
+      "default": "win-x64",
+      "description": "Select runtime to publish"
+    },
+    {
+      "id": "dotnet_single_file",
+      "type": "pickString",
+      "options": ["true", "false"],
+      "default": "true",
+      "description": "Is is single file publish?"
+    },
+    {
+      "id": "dotnet_self_contained",
+      "type": "pickString",
+      "options": ["true", "false"],
+      "default": "true",
+      "description": "Is is self contained publish?"
+    }
+  ]
 }

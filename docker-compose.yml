@@ -1,17 +1,19 @@
-version: "3"
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
 
-networks:
-  reminders-network:
-    driver: bridge
+version: '3.4'
 
 services:
-  reminders-database:
-    image: reminders-database-image:latest
-    container_name: reminders-database
-    ports:
-      - "17000:1433"
+  reminders-mvc:
+    image: reminders-mvc
     build:
       context: .
-      dockerfile: Dockerfile
-    networks:
-      - reminders-network
+      dockerfile: src/Web/Reminders.Mvc/Dockerfile
+    ports:
+      - 5000:5000
+  reminders-api:
+    image: reminders-api
+    build:
+      context: .
+      dockerfile: src/Web/Reminders.Api/Dockerfile
+    ports:
+      - 5000:5000
