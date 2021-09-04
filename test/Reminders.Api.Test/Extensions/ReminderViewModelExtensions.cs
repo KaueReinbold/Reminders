@@ -7,7 +7,7 @@ namespace Reminders.Api.Test.Extensions
 {
     public static class ReminderViewModelExtensions
     {
-        public static StringContent ToStringContent(this ReminderViewModel reminder) 
+        public static StringContent ToStringContent(this ReminderViewModel reminder)
             => new StringContent(JsonSerializer.Serialize(reminder), Encoding.UTF8, "application/json");
     }
 }

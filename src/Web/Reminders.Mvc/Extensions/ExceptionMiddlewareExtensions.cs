@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Reminders.Application.Extensions;
 using Reminders.Application.Validators.Reminders.Exceptions;
 using System.Net;
 using System.Threading.Tasks;

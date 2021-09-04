@@ -19,7 +19,7 @@ namespace Reminders.Api.Test
             Configuration = IConfigurationHelper.GetConfiguration();
 
             HttpClientHandler clientHandler = new HttpClientHandler();
-            
+
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
             BaseAddress = Configuration["ApiBaseUrl"];

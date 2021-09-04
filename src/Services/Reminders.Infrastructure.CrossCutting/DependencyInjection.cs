@@ -5,13 +5,13 @@ using Reminders.Infrastructure.Data.EntityFramework;
 
 namespace Reminders.Infrastructure.CrossCutting
 {
-  [ExcludeFromCodeCoverage]
-  public static class ApplicationConfiguration
-  {
-    public static IServiceCollection RegisterDataServices(
-            this IServiceCollection services,
-            IConfiguration configuration) =>
-        services
-            .RegisterEntityFrameworkServices(configuration);
-  }
+    [ExcludeFromCodeCoverage]
+    public static class ApplicationConfiguration
+    {
+        public static IServiceCollection RegisterDataServices(
+                this IServiceCollection services,
+                IConfiguration configuration) =>
+            services
+                .RegisterEntityFrameworkServices(configuration);
+    }
 }

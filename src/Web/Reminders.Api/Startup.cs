@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Reminders.Api.Extensions;
 using Reminders.Application.Extensions;
-using Reminders.Infrastructure.CrossCutting;
 
 namespace Reminders.Api
 {
