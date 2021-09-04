@@ -30,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Reminders.Application\Reminders.Application.csproj" />
+		<ProjectReference Include="..\..\src\Services\Reminders.Application\Reminders.Application.csproj" />
 	</ItemGroup>
 
 </Project>

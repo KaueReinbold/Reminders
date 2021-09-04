@@ -18,11 +18,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{13E2845A-9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3C5E22FA-EE14-40F5-907B-AEA5BFCAB014}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Application", "src\Reminders.Application\Reminders.Application.csproj", "{5385238E-79C5-44AC-A615-B1FEBA45189A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Application", "src\Services\Reminders.Application\Reminders.Application.csproj", "{5385238E-79C5-44AC-A615-B1FEBA45189A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Domain", "src\Reminders.Domain\Reminders.Domain.csproj", "{1DA1D0D0-7D13-4B78-B180-F5D3184E87A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Domain", "src\Services\Reminders.Domain\Reminders.Domain.csproj", "{1DA1D0D0-7D13-4B78-B180-F5D3184E87A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.CrossCutting", "src\Reminders.Infrastructure.CrossCutting\Reminders.Infrastructure.CrossCutting.csproj", "{DC9D5FB0-9660-459E-9BDE-AAB14447359B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.CrossCutting", "src\Services\Reminders.Infrastructure.CrossCutting\Reminders.Infrastructure.CrossCutting.csproj", "{DC9D5FB0-9660-459E-9BDE-AAB14447359B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.Infrastructure.Data.EntityFramework", "src\Data\Reminders.Infrastructure.Data.EntityFramework\Reminders.Infrastructure.Data.EntityFramework.csproj", "{37BACAD5-1BDC-413C-BE98-052F6D3B226A}"
 EndProject
