@@ -10,6 +10,10 @@ services:
       dockerfile: src/Web/Reminders.Mvc/Dockerfile
     ports:
       - 5000:5000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
   reminders-api:
     image: reminders-api
     build:
@@ -17,3 +21,7 @@ services:
       dockerfile: src/Web/Reminders.Api/Dockerfile
     ports:
       - 5000:5000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
