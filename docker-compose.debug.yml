@@ -10,3 +10,7 @@ services:
       dockerfile: src/Reminders.Api/Dockerfile
     ports:
       - 5000:5000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
