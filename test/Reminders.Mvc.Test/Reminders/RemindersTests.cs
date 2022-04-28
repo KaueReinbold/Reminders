@@ -29,7 +29,6 @@ namespace Reminders.Mvc.Test.Reminders
 
         [TestMethod]
         [DataRow(EnumBrowsers.Chrome, PlatformType.Windows)]
-        [DataRow(EnumBrowsers.Edge, PlatformType.Windows)]
         [DataRow(EnumBrowsers.Firefox, PlatformType.Windows)]
         public void RemindersCRUD(EnumBrowsers browsers, PlatformType platformType)
         {

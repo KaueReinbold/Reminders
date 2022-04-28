@@ -39,7 +39,11 @@ namespace Reminders.Application.Services
         {
             reminderViewModel.IsDone = false;
 
-            validator.ValidateAndThrow(reminderViewModel, ruleSet: "*");
+            validator.Validate(reminderViewModel, options =>
+            {
+                options.ThrowOnFailures();
+                options.IncludeRuleSets("*");
+            });
 
             var reminder = mapper.Map<Reminder>(reminderViewModel);
 

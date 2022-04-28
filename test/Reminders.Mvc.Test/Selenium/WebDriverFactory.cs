@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using Microsoft.Edge.SeleniumTools;
 using OpenQA.Selenium.Firefox;
 using Reminders.Infrastructure.CrossCutting.Configuration;
 using Reminders.Mvc.Test.Selenium.Enums;
@@ -28,9 +27,6 @@ namespace Reminders.Mvc.Test.Selenium
                 case EnumBrowsers.Chrome:
                     path = string.Concat(path, _configuration.GetSection("TestConfiguration:PathChromeDriver").Value);
                     break;
-                case EnumBrowsers.Edge:
-                    path = string.Concat(path, _configuration.GetSection("TestConfiguration:PathEdgeDriver").Value);
-                    break;
             }
 
             IWebDriver webDriver = null;
@@ -51,14 +47,6 @@ namespace Reminders.Mvc.Test.Selenium
                     chromeOptions.AddArgument("--lang=pt");
                     //SetPlatform(chromeOptions, platformType); // TODO: Enable plataform choice.
                     webDriver = new ChromeDriver(path, chromeOptions);
-                    break;
-                case EnumBrowsers.Edge:
-                    var edgeOptions = new EdgeOptions();
-                    //SetPlatform(edgeOptions, platformType); // TODO: Enable plataform choice.
-                    edgeOptions.UseChromium = true;
-                    edgeOptions.AddArgument("headless");
-                    edgeOptions.AddArgument("disable-gpu");
-                    webDriver = new EdgeDriver(path, edgeOptions);
                     break;
             }
 
