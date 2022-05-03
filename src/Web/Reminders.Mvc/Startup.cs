@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Reminders.Application.Enumerables;
 using Reminders.Application.Extensions;
 
 namespace Reminders.Mvc
@@ -20,7 +21,10 @@ namespace Reminders.Mvc
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .RegisterApplicationServices(Configuration)
+                // .RegisterApplicationServices(Configuration.GetConnectionString("DefaultConnection"))
+                .RegisterApplicationServices(
+                    Configuration.GetConnectionString("DefaultConnectionSqlite"), 
+                    SupportedDatabases.Sqlite)
                 .AddControllersWithViews()
                 .AddApplicationValidations(services);
         }
