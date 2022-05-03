@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reminders.Application.Contracts;
+using Reminders.Application.Enumerables;
 using Reminders.Application.Mapper.Extensions;
 using Reminders.Application.Services;
 using Reminders.Application.Validators.Reminders;
@@ -16,12 +16,22 @@ namespace Reminders.Application.Extensions
     public static class ApplicationConfiguration
     {
         public static IServiceCollection RegisterApplicationServices(
-                this IServiceCollection services,
-                IConfiguration configuration) =>
+            this IServiceCollection services,
+            string connectionString,
+            SupportedDatabases supportedDatabases = SupportedDatabases.SqlServer)
+        {
             services
-                .AddSingleton(AutoMapperConfiguration.CreateMapper())
-                .RegisterDataServices(configuration)
-                .AddScoped<IRemindersService, RemindersService>();
+                .AddSingleton(AutoMapperConfiguration.CreateMapper());
+
+            if (supportedDatabases == SupportedDatabases.Sqlite)
+                services.RegisterDataServicesSqlite(connectionString);
+            else
+                services.RegisterDataServices(connectionString);
+
+            services.AddScoped<IRemindersService, RemindersService>();
+
+            return services;
+        }
 
         public static IMvcBuilder AddApplicationValidations(
             this IMvcBuilder mvcBuilder,

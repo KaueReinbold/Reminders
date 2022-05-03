@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reminders.Infrastructure.Data.EntityFramework;
+using Reminders.Infrastructure.Data.EntityFramework.Enumerables;
 
 namespace Reminders.Infrastructure.CrossCutting
 {
@@ -10,8 +10,14 @@ namespace Reminders.Infrastructure.CrossCutting
     {
         public static IServiceCollection RegisterDataServices(
                 this IServiceCollection services,
-                IConfiguration configuration) =>
+                string connectionString) =>
             services
-                .RegisterEntityFrameworkServices(configuration);
+                .RegisterEntityFrameworkServices(connectionString);
+
+        public static IServiceCollection RegisterDataServicesSqlite(
+                this IServiceCollection services,
+                string databasePath) =>
+            services
+                .RegisterEntityFrameworkServices(databasePath, SupportedDatabases.Sqlite);
     }
 }

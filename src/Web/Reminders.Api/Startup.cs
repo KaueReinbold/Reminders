@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Reminders.Api.Extensions;
+using Reminders.Application.Enumerables;
 using Reminders.Application.Extensions;
 
 namespace Reminders.Api
@@ -19,11 +20,13 @@ namespace Reminders.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .RegisterApplicationServices(Configuration)
+                // .RegisterApplicationServices(Configuration.GetConnectionString("DefaultConnection"))
+                .RegisterApplicationServices(
+                    Configuration.GetConnectionString("DefaultConnectionSqlite"), 
+                    SupportedDatabases.Sqlite)
                 .AddControllers()
                 .AddApplicationValidations(services);
 
