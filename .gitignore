@@ -284,5 +284,9 @@ PublishProfiles/
 # References
 Service References/
 
+# Env files
 local.env
 .env.local
+
+# Database 
+Reminders.db*
