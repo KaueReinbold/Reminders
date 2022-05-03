@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reminders.Domain.Contracts;
 using Reminders.Domain.Contracts.Repositories;
 using Reminders.Infrastructure.Data.EntityFramework.Contexts;
+using Reminders.Infrastructure.Data.EntityFramework.Enumerables;
 using Reminders.Infrastructure.Data.EntityFramework.Repositories;
 
 namespace Reminders.Infrastructure.Data.EntityFramework
@@ -13,10 +13,16 @@ namespace Reminders.Infrastructure.Data.EntityFramework
     {
         public static IServiceCollection RegisterEntityFrameworkServices(
             this IServiceCollection services,
-            IConfiguration configuration) =>
+            string connectionString,
+            SupportedDatabases supportedDatabases = SupportedDatabases.SqlServer) =>
             services
                 .AddDbContext<RemindersContext>(options =>
-                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")))
+                {
+                    if (supportedDatabases == SupportedDatabases.Sqlite)
+                        options.UseSqlite(connectionString);
+                    else
+                        options.UseSqlServer(connectionString);
+                })
                 .AddScoped<IRemindersRepository, RemindersRepository>()
                 .AddScoped<IUnitOfWork, UnitOfWork<RemindersContext>>()
             ;
