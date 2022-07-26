@@ -1,5 +1,3 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
-
 version: '3.4'
 
 services:
@@ -10,6 +8,9 @@ services:
       dockerfile: src/Web/Reminders.Mvc/Dockerfile
     ports:
       - 5000:5000
+    profiles:
+      - reminders-mvc
+
   reminders-api:
     image: reminders-api
     build:
@@ -17,3 +18,14 @@ services:
       dockerfile: src/Web/Reminders.Api/Dockerfile
     ports:
       - 5000:5000
+    profiles:
+      - reminders-api
+
+  reminders-db:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+        SA_PASSWORD: "Your_password123"
+        ACCEPT_EULA: "Y"
+    profiles:
+      - reminders-mvc
+      - reminders-api
