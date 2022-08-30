@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Reminders.Api.Extensions;
 using Reminders.Application.Enumerables;
 using Reminders.Application.Extensions;
+using Reminders.Infrastructure.Data.EntityFramework.Contexts;
 
 namespace Reminders.Api
 {
@@ -23,10 +25,9 @@ namespace Reminders.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                // .RegisterApplicationServices(Configuration.GetConnectionString("DefaultConnection"))
                 .RegisterApplicationServices(
-                    Configuration.GetConnectionString("DefaultConnectionSqlite"), 
-                    SupportedDatabases.Sqlite)
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    SupportedDatabases.SqlServer)
                 .AddControllers()
                 .AddApplicationValidations(services);
 
@@ -35,7 +36,7 @@ namespace Reminders.Api
                     setup.SwaggerDoc("v1", new OpenApiInfo { Title = "Reminders API", Version = "v1" }));
         }
 
-        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory logger)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory logger, RemindersContext context)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -49,6 +50,8 @@ namespace Reminders.Api
                 .UseSwagger()
                 .UseSwaggerUI(setup =>
                     setup.SwaggerEndpoint("/swagger/v1/swagger.json", "Reminders API V1"));
+
+            context.Database.Migrate();
         }
     }
 }
