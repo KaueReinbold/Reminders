@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  mvc:
+    build: 
+      args:
+        DOTNET_VERSION: 6.0-bullseye-slim
+    ports:
+      - 5000:80
+    environment:
+      ConnectionStrings__DefaultConnection: Server=reminders-database;Database=Reminders;User ID=sa;Password=h9pJwUUV0y;MultipleActiveResultSets=True;Application Name=Reminders;
+
+  api:
+    build: 
+      args:
+        DOTNET_VERSION: 6.0-bullseye-slim
+    environment:
+      ConnectionStrings__DefaultConnection: Server=reminders-database;Database=Reminders;User ID=sa;Password=h9pJwUUV0y;MultipleActiveResultSets=True;Application Name=Reminders;
+    ports:
+      - 5001:80
+
+  db:
+    environment:
+      SA_PASSWORD: "h9pJwUUV0y"
+      ACCEPT_EULA: "Y"
+    ports:
+      - '1433:1433'

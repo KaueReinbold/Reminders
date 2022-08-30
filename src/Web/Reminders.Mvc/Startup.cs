@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Reminders.Application.Enumerables;
 using Reminders.Application.Extensions;
+using Reminders.Infrastructure.Data.EntityFramework.Contexts;
 
 namespace Reminders.Mvc
 {
@@ -21,16 +23,15 @@ namespace Reminders.Mvc
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                // .RegisterApplicationServices(Configuration.GetConnectionString("DefaultConnection"))
                 .RegisterApplicationServices(
-                    Configuration.GetConnectionString("DefaultConnectionSqlite"), 
-                    SupportedDatabases.Sqlite)
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    SupportedDatabases.SqlServer)
                 .AddControllersWithViews()
                 .AddApplicationValidations(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RemindersContext context)
         {
             if (env.IsDevelopment())
             {
@@ -53,6 +54,8 @@ namespace Reminders.Mvc
                         name: "default",
                         pattern: "{controller=Reminders}/{action=Index}/{id?}");
                 });
+
+            context.Database.Migrate();
         }
     }
 }
