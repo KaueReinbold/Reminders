@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Push Reminders Database to DockerHub
-        uses: elgohr/Publish-Docker-Github-Action@2.12
+        uses: elgohr/Publish-Docker-Github-Action@v5
         env:
           SA_PASSWORD: 123Aa321
           ACCEPT_EULA: Y
