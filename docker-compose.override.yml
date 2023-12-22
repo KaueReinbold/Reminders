@@ -4,7 +4,7 @@ services:
   mvc:
     build: 
       args:
-        DOTNET_VERSION: 6.0-bullseye-slim
+        DOTNET_VERSION: 8.0-alpine
     ports:
       - 5000:80
     environment:
@@ -13,7 +13,7 @@ services:
   api:
     build: 
       args:
-        DOTNET_VERSION: 6.0-bullseye-slim
+        DOTNET_VERSION: 8.0-alpine
     environment:
       ConnectionStrings__DefaultConnection: Server=reminders-database;Database=Reminders;User ID=sa;Password=h9pJwUUV0y;MultipleActiveResultSets=True;Application Name=Reminders;
     ports:
