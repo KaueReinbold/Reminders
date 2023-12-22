@@ -28,7 +28,7 @@ namespace Reminders.Api.Extensions
                     {
                         var statusCode = (int)HttpStatusCode.InternalServerError;
                         var message = "Internal Server Error.";
-                        Dictionary<string, string> properties = null;
+                        Dictionary<string, string>? properties = null;
 
                         if (contextFeature.Error is RemindersApplicationException remindersApplicationException)
                         {

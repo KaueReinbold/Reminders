@@ -1,12 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <LangVersion>8.0</LangVersion>
-    <Version>2.0.1</Version>
+    <LangVersion>11.0</LangVersion>
+    <Version>8.0.0</Version>
     <PackageDescription>Reminders Api Test</PackageDescription>
     <RepositoryUrl>https://github.com/KaueReinbold/Reminders</RepositoryUrl>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
@@ -19,13 +21,16 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\Services\Reminders.Application\Reminders.Application.csproj" />
   </ItemGroup>
+  
 </Project>

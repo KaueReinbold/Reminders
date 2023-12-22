@@ -34,14 +34,6 @@ app
 
 
 
-try
-{
-    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-    using var scope = scopedFactory.CreateScope();
-    
-    scope.ServiceProvider.GetService<RemindersContext>().Database.Migrate();
-}
-catch // TODO: implement the better way to migrate the database.
-{ }
+app.MigrateRemindersDatabase();
 
 app.Run();
