@@ -45,6 +45,8 @@ namespace Reminders.Application.Services
                 options.IncludeRuleSets("*");
             });
 
+            reminderViewModel.Id = Guid.Empty;
+
             var reminder = mapper.Map<Reminder>(reminderViewModel);
 
             reminder = remindersRepository.Add(reminder);

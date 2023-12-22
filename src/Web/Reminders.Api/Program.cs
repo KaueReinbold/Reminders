@@ -1,20 +1,39 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace Reminders.Api
+// Add services to the container.
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(setup =>
+    setup.SwaggerDoc("v1", new OpenApiInfo { Title = "Reminders API", Version = "v1" }));
+
+// App
+builder.Services
+    .RegisterApplicationServices(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        SupportedDatabases.SqlServer)
+    .AddControllers()
+    .AddApplicationValidations(builder.Services);
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    app
+        .UseSwagger()
+        .UseSwaggerUI(setup =>
+            setup.SwaggerEndpoint("/swagger/v1/swagger.json", "Reminders API V1"));
 }
+
+app
+    .UseRemindersExceptionHandler()
+    .UseHttpsRedirection()
+    .UseRouting()
+    .UseAuthorization()
+    .UseEndpoints(endpoints => endpoints.MapControllers());
+
+
+
+app.MigrateRemindersDatabase();
+
+app.Run();
