@@ -35,7 +35,7 @@ namespace Reminders.Api.Test.Reminders.Default
 
         public void Insert()
         {
-            // arrange
+            // Arrange
             var success = false;
 
             var reminder = new ReminderViewModel
@@ -46,7 +46,7 @@ namespace Reminders.Api.Test.Reminders.Default
                 IsDone = false
             };
 
-            // act
+            // Act
             var result = httpClient.PostAsync(new Uri(baseUri), reminder.ToStringContent()).Result;
 
             if (result.StatusCode == HttpStatusCode.OK)
@@ -58,19 +58,20 @@ namespace Reminders.Api.Test.Reminders.Default
                 success = reminders.Any(r => r.Title.Contains(testGuid));
             }
 
-            // assert
-            if (!success)
-                Assert.Fail("Insert has not happened!");
+            // Assert
+            Assert.IsTrue(success, "Insert has not happened!");
         }
 
         public void Edit()
         {
+            // Arrange
             var success = false;
 
             var resultString = httpClient.GetAsync(new Uri(baseUri)).Result.Content.ReadAsStringAsync().Result;
 
             var reminders = resultString.FromJson<IList<ReminderViewModel>>();
 
+            // Act
             if (reminders.Any(r => r.Title.Contains(testGuid)))
             {
                 var reminder = reminders.FirstOrDefault(r => r.Title.Contains(testGuid));
@@ -92,18 +93,20 @@ namespace Reminders.Api.Test.Reminders.Default
                 }
             }
 
-            if (!success)
-                Assert.Fail("Update has not happened!");
+            // Assert
+            Assert.IsTrue(success, "Update has not happened!");
         }
 
         public void Delete()
         {
+            // Arrange
             var success = false;
 
             var resultString = httpClient.GetAsync(new Uri(baseUri)).Result.Content.ReadAsStringAsync().Result;
 
             var reminders = resultString.FromJson<IList<ReminderViewModel>>();
 
+            // Act
             if (reminders.Any(r => r.Title.Contains(testGuid)))
             {
                 var reminder = reminders.FirstOrDefault(r => r.Title.Contains(testGuid));
@@ -120,8 +123,8 @@ namespace Reminders.Api.Test.Reminders.Default
                 }
             }
 
-            if (!success)
-                Assert.Fail("Delete has not happened!");
+            // Assert
+            Assert.IsTrue(success, "Delete has not happened!");
         }
     }
 }

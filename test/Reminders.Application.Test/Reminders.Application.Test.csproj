@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>8.0</LangVersion>
-    <Version>3.0.0</Version>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>11.0</LangVersion>
+    <Version>8.0.0</Version>
     <PackageDescription>Reminders Application Test</PackageDescription>
     <RepositoryUrl>https://github.com/KaueReinbold/reminders-library</RepositoryUrl>
     <IsPackable>false</IsPackable>
@@ -29,5 +29,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Services\Reminders.Application\Reminders.Application.csproj" />
   </ItemGroup>
-
+  
 </Project>
