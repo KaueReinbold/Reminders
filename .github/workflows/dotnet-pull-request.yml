@@ -1,4 +1,4 @@
-name: dotnet - build
+name: dotnet - build - pull request
 
 on:
   pull_request:
