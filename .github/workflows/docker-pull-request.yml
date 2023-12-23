@@ -1,0 +1,36 @@
+name: docker - build - pull request
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Reminders.Mvc - Build the Docker image
+      run: > 
+        docker build
+        --file src/Web/Reminders.Mvc/Dockerfile
+        --tag reminders-mvc:$(date +%s)
+        --build-arg NUGET_SOURCE=${NUGET_SOURCE}
+        --build-arg NUGET_USER_NAME=${NUGET_USER_NAME}
+        --build-arg NUGET_PASSWORD=${PERSONAL_ACCESS_TOKEN}
+        --build-arg DOTNET_ASPNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0
+        --build-arg DOTNET_SDK_IMAGE=mcr.microsoft.com/dotnet/sdk:8.0
+        .
+    - uses: actions/checkout@v3
+    - name: Reminders.Api - Build the Docker image
+      run: >
+        docker build
+        --file src/Web/Reminders.Api/Dockerfile
+        --tag reminders-mvc:$(date +%s)
+        --build-arg NUGET_SOURCE=${NUGET_SOURCE}
+        --build-arg NUGET_USER_NAME=${NUGET_USER_NAME}
+        --build-arg NUGET_PASSWORD=${PERSONAL_ACCESS_TOKEN}
+        --build-arg DOTNET_ASPNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0
+        --build-arg DOTNET_SDK_IMAGE=mcr.microsoft.com/dotnet/sdk:8.0
+        .

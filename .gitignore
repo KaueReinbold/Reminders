@@ -289,3 +289,4 @@ local.env
 
 # Database 
 Reminders.db*
+.env
