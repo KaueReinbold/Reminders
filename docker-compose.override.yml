@@ -4,20 +4,42 @@ services:
   mvc:
     build: 
       args:
-        DOTNET_VERSION: 8.0-alpine
+        NUGET_SOURCE: ${NUGET_SOURCE}
+        NUGET_USER_NAME: ${NUGET_USER_NAME}
+        NUGET_PASSWORD: ${PERSONAL_ACCESS_TOKEN}
+
+        DOTNET_ASPNET_IMAGE: mcr.microsoft.com/dotnet/aspnet:8.0
+        DOTNET_SDK_IMAGE: mcr.microsoft.com/dotnet/sdk:8.0
     ports:
-      - 5000:80
+      - 5000:8080
     environment:
-      ConnectionStrings__DefaultConnection: Server=reminders-database;Database=Reminders;User ID=sa;Password=h9pJwUUV0y;MultipleActiveResultSets=True;Application Name=Reminders;
+      ASPNETCORE_ENVIRONMENT: Development
+      
+      ConnectionStrings__DefaultConnection: Server=reminders-database;Database=Reminders;User ID=sa;Password=h9pJwUUV0y;MultipleActiveResultSets=True;Application Name=Reminders;Persist Security Info=True;Trust Server Certificate=True;
+    volumes:
+      - user_secrets:/root/.microsoft/usersecrets:ro
+      - https_certificates:/root/.aspnet/https:ro
+      - data_protection_keys:/root/.aspnet/DataProtection-Keys
 
   api:
     build: 
       args:
-        DOTNET_VERSION: 8.0-alpine
+        NUGET_SOURCE: ${NUGET_SOURCE}
+        NUGET_USER_NAME: ${NUGET_USER_NAME}
+        NUGET_PASSWORD: ${PERSONAL_ACCESS_TOKEN}
+
+        DOTNET_ASPNET_IMAGE: mcr.microsoft.com/dotnet/aspnet:8.0
+        DOTNET_SDK_IMAGE: mcr.microsoft.com/dotnet/sdk:8.0
     environment:
-      ConnectionStrings__DefaultConnection: Server=reminders-database;Database=Reminders;User ID=sa;Password=h9pJwUUV0y;MultipleActiveResultSets=True;Application Name=Reminders;
+      ASPNETCORE_ENVIRONMENT: Development
+
+      ConnectionStrings__DefaultConnection: Server=reminders-database;Database=Reminders;User ID=sa;Password=h9pJwUUV0y;MultipleActiveResultSets=True;Application Name=Reminders;Persist Security Info=True;Trust Server Certificate=True;
     ports:
-      - 5001:80
+      - 5001:8080
+    volumes:
+      - user_secrets:/root/.microsoft/usersecrets:ro
+      - https_certificates:/root/.aspnet/https:ro
+      - data_protection_keys:/root/.aspnet/DataProtection-Keys
 
   db:
     environment:
@@ -25,3 +47,23 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - '1433:1433'
+
+volumes:
+  user_secrets:
+    driver: local
+    driver_opts:
+      type: none
+      device: $HOME/.microsoft/usersecrets
+      o: bind
+  https_certificates:
+    driver: local
+    driver_opts:
+      type: none
+      device: $HOME/.aspnet/https
+      o: bind
+  data_protection_keys:
+    driver: local
+    driver_opts:
+      type: none
+      device: /tmp/aspnetcore
+      o: bind

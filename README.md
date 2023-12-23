@@ -10,10 +10,6 @@ The purpose is to show the knowledge using this technology and code best practic
 
 ![Coverage Status](https://coveralls.io/repos/github/KaueReinbold/Reminders/badge.svg?branch=master&service=github)
 
-![.NET Core - Build](https://github.com/KaueReinbold/reminders-library/workflows/.NET%20Core%20-%20Build/badge.svg)
+[![dotnet - build - pull request](https://github.com/KaueReinbold/Reminders/actions/workflows/dotnet-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/dotnet-pull-request.yml)
 
-![.NET Core - Packages Nuget](https://github.com/KaueReinbold/reminders-library/workflows/.NET%20Core%20-%20Packages%20Nuget/badge.svg)
-
-![.NET Core - Packages GitHub](https://github.com/KaueReinbold/reminders-library/workflows/.NET%20Core%20-%20Packages%20GitHub/badge.svg)
-
-![Docker Image CI](https://github.com/KaueReinbold/reminders-library/workflows/Docker%20Image%20CI/badge.svg)
+[![docker - build - pull request](https://github.com/KaueReinbold/Reminders/actions/workflows/docker-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/docker-pull-request.yml)

@@ -1,11 +1,17 @@
-ARG DOTNET_VERSION
+ARG DOTNET_ASPNET_IMAGE
+ARG DOTNET_SDK_IMAGE
 
-FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION} AS base
+FROM ${DOTNET_ASPNET_IMAGE} AS base
 WORKDIR /app
-EXPOSE 80
+EXPOSE 8080
+EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS build
+FROM ${DOTNET_SDK_IMAGE} AS build
 WORKDIR /src
+
+ARG NUGET_SOURCE
+ARG NUGET_USER_NAME
+ARG NUGET_PASSWORD
 
 # Application
 COPY ["src/Web/Reminders.Mvc/Reminders.Mvc.csproj", "src/Web/Reminders.Mvc/"]
@@ -16,16 +22,26 @@ COPY ["src/Services/Reminders.Domain/Reminders.Domain.csproj", "src/Services/Rem
 
 COPY ["src/Data/Reminders.Infrastructure.Data.EntityFramework/Reminders.Infrastructure.Data.EntityFramework.csproj", "src/Data/Reminders.Infrastructure.Data.EntityFramework/"]
 
+# Check if all required environment variables are set
+RUN if [ -n "${NUGET_SOURCE}" ] && [ -n "${NUGET_USER_NAME}" ] && [ -n "${NUGET_PASSWORD}" ]; then \
+    dotnet nuget add source ${NUGET_SOURCE} -n NugetFeed -u ${NUGET_USER_NAME} -p ${NUGET_PASSWORD} --store-password-in-clear-text; \
+else \
+    echo "One or more required environment variables are not set. Skipping nuget source addition."; \
+fi
+
 RUN dotnet restore "src/Web/Reminders.Mvc/Reminders.Mvc.csproj"
 
 # Build
 COPY . .
 WORKDIR "/src/src/Web/Reminders.Mvc"
-RUN dotnet build "Reminders.Mvc.csproj" -c Release -o /app/build
+
+ARG DOTNET_CONFIGURATION=Release
+
+RUN dotnet build "Reminders.Mvc.csproj" -c ${DOTNET_CONFIGURATION} -o /app/build
 
 # Publish
 FROM build AS publish
-RUN dotnet publish "Reminders.Mvc.csproj" -c Release -o /app/publish
+RUN dotnet publish "Reminders.Mvc.csproj" -c ${DOTNET_CONFIGURATION} -o /app/publish
 
 # Final
 FROM base AS final
