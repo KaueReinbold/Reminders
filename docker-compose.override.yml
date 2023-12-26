@@ -49,21 +49,24 @@ services:
       - '1433:1433'
 
 volumes:
+
   user_secrets:
     driver: local
     driver_opts:
       type: none
       device: $HOME/.microsoft/usersecrets
       o: bind
+
   https_certificates:
     driver: local
     driver_opts:
       type: none
       device: $HOME/.aspnet/https
       o: bind
+  
   data_protection_keys:
     driver: local
     driver_opts:
       type: none
-      device: /tmp/aspnetcore
+      device: $HOME/.aspnet/DataProtection-Keys
       o: bind
