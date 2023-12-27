@@ -2,40 +2,23 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Dotnet",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/Web/${input:dotnet_project}/bin/Debug/net6.0/${input:dotnet_project}.dll",
-      "args": [],
-      "cwd": "${workspaceFolder}/src/Web/${input:dotnet_project}",
-      "stopAtEntry": false,
-      "serverReadyAction": {
-        "action": "openExternally",
-        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-      },
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "${input:dotnet_env}"
-      },
-      "sourceFileMap": {
-        "/Views": "${workspaceFolder}/src/Web/${input:dotnet_project}/Views"
+      "name": "Docker API",
+      "type": "docker",
+      "request": "attach",
+      "containerName": "reminders-api",
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Web/Reminder.Api/Reminder.Api.csproj"
+      }
+    },
+    {
+      "name": "Docker MVC",
+      "type": "docker",
+      "request": "attach",
+      "containerName": "reminders-mvc",
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Web/Reminder.Mvc/Reminder.Mvc.csproj"
       }
     }
   ],
-  "inputs": [
-    {
-      "id": "dotnet_project",
-      "type": "pickString",
-      "options": ["Reminders.Api", "Reminders.Mvc"],
-      "default": "Reminders.Api",
-      "description": "Select the project"
-    },
-    {
-      "id": "dotnet_env",
-      "type": "pickString",
-      "options": ["Development"],
-      "default": "Development",
-      "description": "Select the environment"
-    }
-  ]
+  "inputs": []
 }

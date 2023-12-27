@@ -5,25 +5,32 @@ services:
   mvc:
     image: reminders-mvc
     container_name: reminders-mvc
+    depends_on:
+      - db
     build:
       context: .
       dockerfile: src/Web/Reminders.Mvc/Dockerfile
     profiles:
       - mvc
+      - all
 
   api:
     image: reminders-api
     container_name: reminders-api
+    depends_on:
+      - db
     build:
       context: .
       dockerfile: src/Web/Reminders.Api/Dockerfile
     profiles:
       - api
+      - all
 
   db:
     image: "mcr.microsoft.com/mssql/server"
     container_name: reminders-database
     profiles:
+      - all
       - mvc
       - api
 
