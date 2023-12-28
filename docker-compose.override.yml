@@ -27,14 +27,14 @@ services:
   api-2: 
     <<: *api
     ports:
-      - 5003:8080
+      - 5001:8080
 
   mvc:
     build: 
       args: *dotnet-args
     environment: *dotnet-env
     ports:
-      - 5001:8080
+      - 5050:8080
     volumes: *dotnet-volumes
 
   # Database
