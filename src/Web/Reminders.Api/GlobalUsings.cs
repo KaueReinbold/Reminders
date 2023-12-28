@@ -11,5 +11,5 @@ global using Reminders.Application.Contracts;
 global using Reminders.Application.Enumerables;
 global using Reminders.Application.Extensions;
 global using Reminders.Application.ViewModels;
-global using Reminders.Infrastructure.Data.EntityFramework.Contexts;
+global using Reminders.Infrastructure.CrossCutting.Extensions;
 global using System;
