@@ -4,9 +4,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .RegisterApplicationServices(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        SupportedDatabases.SqlServer)
-    .AddControllersWithViews()
-    .AddApplicationValidations(builder.Services);
+        builder.Configuration.GetValue<SupportedDatabases?>("DatabaseProvider") ?? SupportedDatabases.SqlServer)
+    .AddApplicationValidations()
+    .AddControllersWithViews();
 
 var app = builder.Build();
 

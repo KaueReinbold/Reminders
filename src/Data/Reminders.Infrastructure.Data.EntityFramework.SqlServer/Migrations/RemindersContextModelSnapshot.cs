@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Reminders.Infrastructure.Data.EntityFramework.Contexts;
 
-namespace Reminders.Infrastructure.Data.EntityFramework.Migrations
+#nullable disable
+
+namespace Reminders.Infrastructure.Data.EntityFramework.SqlServer.Migrations
 {
     [DbContext(typeof(RemindersContext))]
     partial class RemindersContextModelSnapshot : ModelSnapshot
@@ -15,9 +17,10 @@ namespace Reminders.Infrastructure.Data.EntityFramework.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Reminders.Domain.Models.Reminder", b =>
                 {
@@ -27,7 +30,7 @@ namespace Reminders.Infrastructure.Data.EntityFramework.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -36,15 +39,15 @@ namespace Reminders.Infrastructure.Data.EntityFramework.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LimitDate")
-                        .HasColumnType("smalldatetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Reminders");
+                    b.ToTable("Reminders", (string)null);
                 });
 #pragma warning restore 612, 618
         }

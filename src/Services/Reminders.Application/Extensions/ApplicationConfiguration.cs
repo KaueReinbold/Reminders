@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Reminders.Application.Contracts;
@@ -22,39 +24,39 @@ namespace Reminders.Application.Extensions
             this IServiceCollection services,
             string connectionString,
             SupportedDatabases supportedDatabases = SupportedDatabases.SqlServer)
-        {
+        {   
             services
                 .AddSingleton(AutoMapperConfiguration.CreateMapper());
 
-            if (supportedDatabases == SupportedDatabases.Sqlite)
-                services.RegisterDataServicesSqlite(connectionString);
+            if (supportedDatabases == SupportedDatabases.Postgres)
+                services.RegisterDataServicesPostgres(connectionString);
             else
-                services.RegisterDataServices(connectionString);
+                services.RegisterDataServicesSqlServer(connectionString);
 
             services.AddScoped<IRemindersService, RemindersService>();
 
             return services;
         }
 
-        public static IMvcBuilder AddApplicationValidations(
-            this IMvcBuilder mvcBuilder,
-            IServiceCollection services)
+        public static IServiceCollection AddApplicationValidations(
+            this IServiceCollection services)
         {
-            mvcBuilder.AddFluentValidation();
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
 
             services.AddTransient<IValidator<ReminderViewModel>, ReminderViewModelValidator>();
 
-            return mvcBuilder;
+            return services;
         }
 
-         public static WebApplication MigrateRemindersDatabase(
-            this WebApplication app)
+        public static WebApplication MigrateRemindersDatabase(
+           this WebApplication app)
         {
             try
             {
                 var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
                 using var scope = scopedFactory?.CreateScope();
-                
+
                 scope?.ServiceProvider.GetService<RemindersContext>()?.Database.Migrate();
             }
             catch // TODO: implement the better way to migrate the database.

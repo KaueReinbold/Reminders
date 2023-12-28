@@ -12,9 +12,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\..\Services\Reminders.Domain\Reminders.Domain.csproj" />
+    <ProjectReference Include="..\Reminders.Infrastructure.Data.EntityFramework\Reminders.Infrastructure.Data.EntityFramework.csproj" />
   </ItemGroup>
 </Project>

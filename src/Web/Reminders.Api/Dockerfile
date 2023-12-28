@@ -21,6 +21,8 @@ COPY ["src/Services/Reminders.Infrastructure.CrossCutting/Reminders.Infrastructu
 COPY ["src/Services/Reminders.Domain/Reminders.Domain.csproj", "src/Services/Reminders.Domain/"]
 
 COPY ["src/Data/Reminders.Infrastructure.Data.EntityFramework/Reminders.Infrastructure.Data.EntityFramework.csproj", "src/Data/Reminders.Infrastructure.Data.EntityFramework/"]
+COPY ["src/Data/Reminders.Infrastructure.Data.EntityFramework.SqlServer/Reminders.Infrastructure.Data.EntityFramework.SqlServer.csproj", "src/Data/Reminders.Infrastructure.Data.EntityFramework.SqlServer/"]
+COPY ["src/Data/Reminders.Infrastructure.Data.EntityFramework.Postgres/Reminders.Infrastructure.Data.EntityFramework.Postgres.csproj", "src/Data/Reminders.Infrastructure.Data.EntityFramework.Postgres/"]
 
 # Check if all required environment variables are set
 RUN if [ -n "${NUGET_SOURCE}" ] && [ -n "${NUGET_USER_NAME}" ] && [ -n "${NUGET_PASSWORD}" ]; then \
