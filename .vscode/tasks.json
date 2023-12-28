@@ -11,7 +11,7 @@
         "add",
         "${input:migration_name}",
         "--project",
-        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
         "--startup-project",
         "${workspaceFolder}/src/Web/Reminders.Api"
       ],
@@ -29,7 +29,7 @@
         "migrations",
         "remove",
         "--project",
-        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
         "--startup-project",
         "${workspaceFolder}/src/Web/Reminders.Api"
       ],
@@ -47,7 +47,7 @@
         "database",
         "update",
         "--project",
-        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
         "--startup-project",
         "${workspaceFolder}/src/Web/Reminders.Api"
       ],
@@ -73,7 +73,7 @@
         "--output",
         "${input:output_script}",
         "--project",
-        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework",
+        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
         "--startup-project",
         "${workspaceFolder}/src/Web/Reminders.Api"
       ],
@@ -170,6 +170,13 @@
       "options": ["Docker", "Development"],
       "default": "Development",
       "description": "Environment to execute"
+    },
+    {
+      "id": "database",
+      "type": "pickString",
+      "options": ["SqlServer", "Postgres"],
+      "default": "SqlServer",
+      "description": "Database to execute"
     }
   ]
 }

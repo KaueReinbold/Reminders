@@ -10,9 +10,9 @@ builder.Services.AddSwaggerGen(setup =>
 builder.Services
     .RegisterApplicationServices(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        SupportedDatabases.SqlServer)
-    .AddControllers()
-    .AddApplicationValidations(builder.Services);
+        builder.Configuration.GetValue<SupportedDatabases?>("DatabaseProvider") ?? SupportedDatabases.SqlServer)
+    .AddApplicationValidations()
+    .AddControllers();
 
 var app = builder.Build();
 

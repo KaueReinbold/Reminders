@@ -50,11 +50,11 @@ services:
 
   postgres:
     image: postgres
-    container_name: reminders-postgresl
+    container_name: reminders-postgres
     profiles:
       - all
-      # - mvc
-      # - api
+      - mvc
+      - api
     deploy: *shared-deploy
 
   # Load Balancer
