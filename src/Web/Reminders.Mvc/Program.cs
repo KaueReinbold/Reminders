@@ -22,6 +22,8 @@ else
     app.UseHsts();
 }
 
+app.UseMachineNameLogging<Program>();
+
 app
     .UseHttpsRedirection()
     .UseStaticFiles()

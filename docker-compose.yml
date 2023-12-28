@@ -1,38 +1,72 @@
 version: '3.4'
 
-
 services:
+
+  # Apps
+
+  api: &api
+    image: reminders-api
+    container_name: reminders-api
+    depends_on:
+      - mssql
+    build: 
+      context: .
+      dockerfile: src/Web/Reminders.Api/Dockerfile
+    profiles: 
+      - api
+      - all
+    deploy: &shared-deploy
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.5GB'
+
+  api-2:
+    <<: *api
+    container_name: reminders-api-2
+
   mvc:
     image: reminders-mvc
     container_name: reminders-mvc
     depends_on:
-      - db
+      - mssql
     build:
       context: .
       dockerfile: src/Web/Reminders.Mvc/Dockerfile
     profiles:
       - mvc
       - all
+    deploy: *shared-deploy
 
-  api:
-    image: reminders-api
-    container_name: reminders-api
-    depends_on:
-      - db
-    build:
-      context: .
-      dockerfile: src/Web/Reminders.Api/Dockerfile
-    profiles:
-      - api
-      - all
+  # Database
 
-  db:
+  mssql:
     image: "mcr.microsoft.com/mssql/server"
-    container_name: reminders-database
+    container_name: reminders-mssql
     profiles:
       - all
       - mvc
       - api
+
+  postgres:
+    image: postgres
+    container_name: reminders-postgresl
+    profiles:
+      - all
+      # - mvc
+      # - api
+    deploy: *shared-deploy
+
+  # Load Balancer
+
+  nginx: 
+    image: nginx:latest
+    container_name: reminders-nginx
+    depends_on:
+      - api
+    profiles:
+      - api
+    deploy: *shared-deploy
 
 networks:
   default:
