@@ -25,14 +25,14 @@ if (app.Environment.IsDevelopment())
             setup.SwaggerEndpoint("/swagger/v1/swagger.json", "Reminders API V1"));
 }
 
+app.UseMachineNameLogging<Program>();
+
 app
     .UseRemindersExceptionHandler()
     .UseHttpsRedirection()
     .UseRouting()
     .UseAuthorization()
     .UseEndpoints(endpoints => endpoints.MapControllers());
-
-
 
 app.MigrateRemindersDatabase();
 
