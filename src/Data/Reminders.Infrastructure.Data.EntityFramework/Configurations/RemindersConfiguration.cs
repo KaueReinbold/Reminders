@@ -17,17 +17,14 @@ namespace Reminders.Infrastructure.Data.EntityFramework.Configurations
 
             builder
                 .Property(reminder => reminder.Title)
-                .HasColumnType("varchar(50)")
                 .IsRequired();
 
             builder
                 .Property(reminder => reminder.Description)
-                .HasColumnType("varchar(200)")
                 .IsRequired();
 
             builder
                 .Property(reminder => reminder.LimitDate)
-                .HasColumnType("smalldatetime")
                 .IsRequired();
 
             builder
