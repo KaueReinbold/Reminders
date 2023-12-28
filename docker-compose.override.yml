@@ -26,6 +26,9 @@ services:
 
   api-2: 
     <<: *api
+    environment:
+      ConnectionStrings__DefaultConnection: Host=reminders-postgres;Database=Reminders;Username=root;Password=h9pJwUUV0y;Pooling=true;
+      DatabaseProvider: Postgres
     ports:
       - 5001:8080
 
@@ -41,8 +44,8 @@ services:
 
   mssql:
     environment:
-      SA_PASSWORD: "h9pJwUUV0y"
-      ACCEPT_EULA: "Y"
+      SA_PASSWORD: h9pJwUUV0y
+      ACCEPT_EULA: Y
     ports:
       - '1433:1433'
   

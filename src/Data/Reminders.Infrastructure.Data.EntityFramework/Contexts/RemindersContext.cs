@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Reminders.Infrastructure.Data.EntityFramework.Configurations;
-using Reminders.Infrastructure.Data.EntityFramework.Extensions;
 
 namespace Reminders.Infrastructure.Data.EntityFramework.Contexts
 {
@@ -22,9 +21,6 @@ namespace Reminders.Infrastructure.Data.EntityFramework.Contexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-
-            if (!optionsBuilder.IsConfigured)
-                optionsBuilder.ConfigureSqlServer();
         }
     }
 }
