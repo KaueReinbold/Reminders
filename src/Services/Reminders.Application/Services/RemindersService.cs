@@ -62,7 +62,7 @@ namespace Reminders.Application.Services
         {
             validator.ValidateAndThrow(reminderViewModel);
 
-            if (id != reminderViewModel.Id)
+            if (reminderViewModel.Id.Equals(id) == false)
                 throw new RemindersApplicationException(ValidationStatus.IdsDoNotMatch, RemindersResources.IdsDoNotMatch);
 
             if (!remindersRepository.Exists(id))
