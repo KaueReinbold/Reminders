@@ -3,7 +3,7 @@ name: .NET Core - Code Coverage
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
