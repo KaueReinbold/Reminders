@@ -1,7 +1,10 @@
 global using Microsoft.AspNetCore.Mvc;
-global using Microsoft.EntityFrameworkCore;
-global using Reminders.Application.Contracts;
-global using Reminders.Application.Enumerables;
-global using Reminders.Application.Extensions;
+global using Newtonsoft.Json;
 global using Reminders.Application.ViewModels;
 global using Reminders.Infrastructure.CrossCutting.Extensions;
+global using Reminders.Mvc.Extensions;
+global using Reminders.Mvc.Models;
+global using Reminders.Mvc.Services;
+global using Reminders.Mvc.Services.Contracts;
+global using System.Net.Http.Headers;
+global using System.Text;

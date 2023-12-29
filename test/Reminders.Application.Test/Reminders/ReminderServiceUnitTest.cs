@@ -150,7 +150,7 @@ namespace Reminders.Application.Test
             // act
             var service = GetRemindersService();
 
-            service.Edit(reminder.Id, reminder);
+            service.Edit(reminder.Id.Value, reminder);
 
             // assert
             repositoryMock.Verify(repository =>
@@ -177,7 +177,7 @@ namespace Reminders.Application.Test
             // act
             var service = GetRemindersService();
 
-            var exception = Assert.ThrowsException<ValidationException>(() => service.Edit(reminder.Id, reminder));
+            var exception = Assert.ThrowsException<ValidationException>(() => service.Edit(reminder.Id.Value, reminder));
 
             // assert
             Assert.IsTrue(exception.Message.Contains(RemindersResources.InvalidLimitDate));
@@ -204,7 +204,7 @@ namespace Reminders.Application.Test
             var service = GetRemindersService();
 
             var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
-               service.Edit(reminder.Id, reminder));
+               service.Edit(reminder.Id.Value, reminder));
 
             // assert
             Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);

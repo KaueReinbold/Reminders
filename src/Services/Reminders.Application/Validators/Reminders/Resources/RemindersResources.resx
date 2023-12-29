@@ -124,7 +124,7 @@
     <value>Is Done should be set as False.</value>
   </data>
   <data name="InvalidLimitDate" xml:space="preserve">
-    <value>Limit Date should be later then Today.</value>
+    <value>The Limit Date should be later than Today.</value>
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>Reminder does not exist.</value>

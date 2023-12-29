@@ -1,11 +1,7 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using Reminders.Api.Models;
 using Reminders.Application.Validators.Reminders.Exceptions;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 
 namespace Reminders.Api.Extensions

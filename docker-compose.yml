@@ -65,6 +65,7 @@ services:
     depends_on:
       - api
     profiles:
+      - all
       - api
     deploy: *shared-deploy
 
