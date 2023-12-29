@@ -14,7 +14,7 @@ public static class MachineNameMiddlewareExtensions
             context
                 .RequestServices
                 .GetRequiredService<ILogger<T>>()
-                .LogInformation($"\t\nMachineName: {Environment.MachineName} \t\nSystem: {Environment.OSVersion.VersionString} \n");
+                .LogInformation($"\t\nMachineName: {Environment.MachineName} \t\nSystem: {Environment.OSVersion.VersionString} \t\nDateTime: {DateTime.UtcNow} \n");
 
             await next.Invoke();
         });

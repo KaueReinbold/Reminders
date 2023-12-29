@@ -2,10 +2,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
-    .RegisterApplicationServices(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        builder.Configuration.GetValue<SupportedDatabases?>("DatabaseProvider") ?? SupportedDatabases.SqlServer)
-    .AddApplicationValidations()
+    .AddHttpClient<IRemindersService, RemindersService>(client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"] ?? string.Empty);
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+    });
+
+builder.Services
     .AddControllersWithViews();
 
 var app = builder.Build();
@@ -25,6 +30,7 @@ else
 app.UseMachineNameLogging<Program>();
 
 app
+    .ConfigureExceptionHandler()
     .UseHttpsRedirection()
     .UseStaticFiles()
     .UseRouting()
@@ -35,7 +41,5 @@ app
             name: "default",
             pattern: "{controller=Reminders}/{action=Index}/{id?}");
     });
-
-app.MigrateRemindersDatabase();
 
 app.Run();
