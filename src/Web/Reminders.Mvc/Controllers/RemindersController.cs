@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Reminders.Application.Contracts;
-using Reminders.Application.ViewModels;
-using System;
-
-namespace Reminders.Mvc.Controllers
+﻿namespace Reminders.Mvc.Controllers
 {
     // FIXME: Do not redirect user to a different page when an error occurred. Show a friendly message.
     public class RemindersController : Controller
@@ -21,63 +15,96 @@ namespace Reminders.Mvc.Controllers
         }
 
         // GET: Reminders
-        public ActionResult Index() =>
-            View(remindersService.Get());
+        public async Task<IActionResult> Index() =>
+            View(await remindersService.GetRemindersAsync());
 
         // GET: Reminders/Details/5
-        public ActionResult Details(Guid id) =>
-            View(remindersService.Get(id));
+        public async Task<IActionResult> Details(Guid id) =>
+            View(await remindersService.GetReminderAsync(id));
 
         // GET: Reminders/Create
-        public ActionResult Create() =>
+        public IActionResult Create() =>
             View();
 
         // POST: Reminders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([FromForm] ReminderViewModel reminder)
+        public async Task<IActionResult> Create([FromForm] ReminderViewModel reminder)
         {
-            if (ModelState.IsValid)
+            try
             {
-                remindersService.Insert(reminder);
+                if (ModelState.IsValid)
+                {
+                    await remindersService.AddReminderAsync(reminder);
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View(reminder);
             }
+            catch (ApiException ex)
+            {
+                ConvertApiExceptionToModalStateErrors(ex);
 
-            return View(reminder);
+                return View();
+            }
         }
 
         // GET: Reminders/Edit/5
-        public ActionResult Edit(Guid id) =>
-            View(remindersService.Get(id));
+        public async Task<IActionResult> Edit(Guid id) =>
+            View(await remindersService.GetReminderAsync(id));
 
         // POST: Reminders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Guid id, [FromForm] ReminderViewModel reminder)
+        public async Task<IActionResult> Edit(Guid id, [FromForm] ReminderViewModel reminder)
         {
-            if (ModelState.IsValid)
+            try
             {
-                remindersService.Edit(id, reminder);
+                if (ModelState.IsValid)
+                {
+                    await remindersService.EditReminderAsync(id, reminder);
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View(reminder);
+            }
+            catch (ApiException ex)
+            {
+                ConvertApiExceptionToModalStateErrors(ex);
+
+                return View();
             }
 
-            return View(reminder);
         }
 
         // GET: Reminders/Delete/5
-        public ActionResult Delete(Guid id) =>
-            View(remindersService.Get(id));
+        public async Task<IActionResult> Delete(Guid id) =>
+            View(await remindersService.GetReminderAsync(id));
 
         // POST: Reminders/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(Guid id, [FromForm] ReminderViewModel reminder)
+        public async Task<IActionResult> Delete(Guid id, [FromForm] ReminderViewModel reminder)
         {
-            remindersService.Delete(id);
+            await remindersService.DeleteReminderAsync(id);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private void ConvertApiExceptionToModalStateErrors(ApiException ex)
+        {
+            if (ex.ErrorResponse?.Errors is not null)
+            {
+                foreach (var (key, errors) in ex.ErrorResponse.Errors)
+                {
+                    foreach (var error in errors)
+                    {
+                        ModelState.AddModelError(key, error);
+                    }
+                }
+            }
         }
     }
 }

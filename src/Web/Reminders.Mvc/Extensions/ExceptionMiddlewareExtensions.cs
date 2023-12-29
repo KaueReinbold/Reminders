@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Reminders.Application.Validators.Reminders.Exceptions;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace Reminders.Mvc.Extensions
 {
