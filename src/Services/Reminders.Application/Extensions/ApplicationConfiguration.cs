@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Reminders.Application.Contracts;

@@ -4,30 +4,35 @@
 
 ###
 
-GET {{url}}/api/Reminders/
+GET {{url}}/api/reminders/
 Accept: application/json
 
 ###
 
-POST {{url}}/api/Reminders/
+GET {{url}}/api/reminders/count
+Accept: application/json
+
+###
+
+POST {{url}}/api/reminders/
 Accept: application/json
 Content-Type: application/json
 
 {
   "title": "string",
   "description": "string",
-  "limitDate": "2024-12-20T18:44:37.637Z",
+  "limitDate": "2022-12-20T18:44:37.637Z",
   "isDone": true
 }
 
 ###
 
-GET {{url}}/api/Reminders/{{id}}
+GET {{url}}/api/reminders/{{id}}
 Accept: application/json
 
 ###
 
-PUT {{url}}/api/Reminders/{{id}}
+PUT {{url}}/api/reminders/{{id}}
 Accept: application/json
 Content-Type: application/json
 
@@ -41,5 +46,5 @@ Content-Type: application/json
 
 ###
 
-DELETE {{url}}/api/Reminders/{{id}}
+DELETE {{url}}/api/reminders/{{id}}
 Accept: application/json

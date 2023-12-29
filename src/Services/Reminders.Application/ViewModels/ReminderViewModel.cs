@@ -6,7 +6,7 @@ namespace Reminders.Application.ViewModels
     public class ReminderViewModel
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         [Required(ErrorMessage = "The field is Required")]
         [MaxLength(50)]

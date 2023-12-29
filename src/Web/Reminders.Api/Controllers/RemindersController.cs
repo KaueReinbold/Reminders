@@ -14,6 +14,11 @@ public class RemindersController
     [HttpGet]
     public IActionResult Get() =>
         Ok(remindersService.Get());
+    
+    // GET: api/Reminders/Count
+    [HttpGet("count")]
+    public IActionResult Count() =>
+        Ok(remindersService.Get().Count());
 
     // GET: api/Reminders/5
     [HttpGet("{id}", Name = "Get")]

@@ -79,7 +79,7 @@ namespace Reminders.Application.Validators.Reminders.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Limit Date should be later then Today..
+        ///   Looks up a localized string similar to The Limit Date should be later than Today..
         /// </summary>
         public static string InvalidLimitDate {
             get {
