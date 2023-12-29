@@ -11,7 +11,7 @@ A simple and intuitive web application for managing your daily reminders.
 
 ## Project Status
 
-[![Coverage Status](https://coveralls.io/repos/github/KaueReinbold/Reminders/badge.svg?branch=master&service=github)](https://coveralls.io/github/KaueReinbold/Reminders?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/KaueReinbold/Reminders/badge.svg?branch=main)](https://coveralls.io/github/KaueReinbold/Reminders?branch=main)
 
 ### Build Status
 
