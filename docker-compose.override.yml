@@ -15,10 +15,14 @@ services:
         DOTNET_SDK_IMAGE: mcr.microsoft.com/dotnet/sdk:8.0
     ports:
       - 5000:8080
-    environment: &dotnet-env
+    environment:
       ASPNETCORE_ENVIRONMENT: Development
       
-      ConnectionStrings__DefaultConnection: Server=reminders-mssql;Database=Reminders;User ID=sa;Password=h9pJwUUV0y;MultipleActiveResultSets=True;Application Name=Reminders;Persist Security Info=True;Trust Server Certificate=True;
+      # ConnectionStrings__DefaultConnection: Server=reminders-mssql;Database=Reminders;User ID=sa;Password=h9pJwUUV0y;MultipleActiveResultSets=True;Application Name=Reminders;Persist Security Info=True;Trust Server Certificate=True;
+      # DatabaseProvider: SqlServer
+
+      ConnectionStrings__DefaultConnection: Host=reminders-postgres;Database=Reminders;Username=root;Password=h9pJwUUV0y;Pooling=true;
+      DatabaseProvider: Postgres
     volumes: &dotnet-volumes
       - user_secrets:/root/.microsoft/usersecrets:ro
       - https_certificates:/root/.aspnet/https:ro
@@ -26,9 +30,6 @@ services:
 
   api-2: 
     <<: *api
-    # environment:
-    #   ConnectionStrings__DefaultConnection: Host=reminders-postgres;Database=Reminders;Username=root;Password=h9pJwUUV0y;Pooling=true;
-    #   DatabaseProvider: Postgres
     ports:
       - 5001:8080
 
@@ -36,7 +37,7 @@ services:
     build: 
       args: *dotnet-args
     environment: 
-      <<: *dotnet-env
+      ASPNETCORE_ENVIRONMENT: Development
       
       ApiBaseUrl: http://reminders-nginx:9999
     ports:
