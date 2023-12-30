@@ -2,13 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Dotnet launch",
+      "name": "Dotnet launch (mvc)",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/Web/${input:project}/bin/Debug/net8.0/${input:project}.dll",
+      "program": "${workspaceFolder}/src/app/dotnet/Reminders.Mvc/bin/Debug/net8.0/Reminders.Mvc.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/src/Web/${input:project}",
+      "cwd": "${workspaceFolder}/src/app/dotnet/Reminders.Mvc",
       "stopAtEntry": false,
       "serverReadyAction": {
         "action": "openExternally",
@@ -18,7 +18,27 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "sourceFileMap": {
-        "/Views": "${workspaceFolder}/src/Web/${input:project}/Views"
+        "/Views": "${workspaceFolder}/src/app/dotnet/Reminders.Mvc/Views"
+      }
+    },
+    {
+      "name": "Dotnet launch (api)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/server/api/dotnet/Reminders.Api/bin/Debug/net8.0/$Reminders.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/server/api/dotnet/Reminders.Api",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/src/server/api/dotnet/Reminders.Api/Views"
       }
     },
     {
@@ -40,13 +60,5 @@
       }
     }
   ],
-  "inputs": [
-    {
-      "id": "project",
-      "type": "pickString",
-      "options": ["Reminders.Mvc", "Reminders.Api"],
-      "default": "Reminders.Mvc",
-      "description": "Project to execute"
-    }
-  ]
+  "inputs": []
 }

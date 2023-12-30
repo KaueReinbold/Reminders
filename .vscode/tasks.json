@@ -11,9 +11,9 @@
         "add",
         "${input:migration_name}",
         "--project",
-        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
+        "${workspaceFolder}/src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
         "--startup-project",
-        "${workspaceFolder}/src/Web/Reminders.Api"
+        "${workspaceFolder}/src/server/api/dotnet/Reminders.Api"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -29,9 +29,9 @@
         "migrations",
         "remove",
         "--project",
-        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
+        "${workspaceFolder}/src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
         "--startup-project",
-        "${workspaceFolder}/src/Web/Reminders.Api"
+        "${workspaceFolder}/src/server/api/dotnet/Reminders.Api"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -47,9 +47,9 @@
         "database",
         "update",
         "--project",
-        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
+        "${workspaceFolder}/src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
         "--startup-project",
-        "${workspaceFolder}/src/Web/Reminders.Api"
+        "${workspaceFolder}/src/server/api/dotnet/Reminders.Api"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -73,9 +73,9 @@
         "--output",
         "${input:output_script}",
         "--project",
-        "${workspaceFolder}/src/Data/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
+        "${workspaceFolder}/src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.${input:database}",
         "--startup-project",
-        "${workspaceFolder}/src/Web/Reminders.Api"
+        "${workspaceFolder}/src/server/api/dotnet/Reminders.Api"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -153,36 +153,28 @@
       ]
     },
     {
-        "label": "build",
-        "command": "dotnet",
-        "type": "process",
-        "args": [
-            "build",
-            "/property:GenerateFullPaths=true",
-            "/consoleloggerparameters:NoSummary;ForceNoAlign"
-        ],
-        "problemMatcher": "$msCompile"
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "./src",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary;ForceNoAlign"
+      ],
+      "problemMatcher": "$msCompile"
     },
     {
-        "label": "publish",
-        "command": "dotnet",
-        "type": "process",
-        "args": [
-            "publish",
-            "/property:GenerateFullPaths=true",
-            "/consoleloggerparameters:NoSummary;ForceNoAlign"
-        ],
-        "problemMatcher": "$msCompile"
-    },
-    {
-        "label": "watch",
-        "command": "dotnet",
-        "type": "process",
-        "args": [
-            "watch",
-            "run"
-        ],
-        "problemMatcher": "$msCompile"
+      "label": "publish",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "publish",
+        "./src",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary;ForceNoAlign"
+      ],
+      "problemMatcher": "$msCompile"
     },
   ],
   "inputs": [
@@ -199,14 +191,20 @@
     {
       "id": "environment",
       "type": "pickString",
-      "options": ["Docker", "Development"],
+      "options": [
+        "Docker",
+        "Development"
+      ],
       "default": "Development",
       "description": "Environment to execute"
     },
     {
       "id": "database",
       "type": "pickString",
-      "options": ["SqlServer", "Postgres"],
+      "options": [
+        "SqlServer",
+        "Postgres"
+      ],
       "default": "SqlServer",
       "description": "Database to execute"
     }

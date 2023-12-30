@@ -9,7 +9,7 @@ services:
     container_name: reminders-api
     build: 
       context: .
-      dockerfile: src/Web/Reminders.Api/Dockerfile
+      dockerfile: src/server/api/dotnet/Reminders.Api/Dockerfile
     depends_on:
       - postgres
     profiles: 
@@ -30,7 +30,7 @@ services:
     container_name: reminders-mvc
     build:
       context: .
-      dockerfile: src/Web/Reminders.Mvc/Dockerfile
+      dockerfile: src/app/dotnet/Reminders.Mvc/Dockerfile
     depends_on:
       - api
     profiles:
