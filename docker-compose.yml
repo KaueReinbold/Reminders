@@ -7,14 +7,14 @@ services:
   api: &api
     image: reminders-api
     container_name: reminders-api
-    depends_on:
-      - mssql
     build: 
       context: .
       dockerfile: src/Web/Reminders.Api/Dockerfile
+    depends_on:
+      - postgres
     profiles: 
-      - api
       - all
+      - api
     deploy: &shared-deploy
       resources:
         limits:
@@ -28,14 +28,14 @@ services:
   mvc:
     image: reminders-mvc
     container_name: reminders-mvc
-    depends_on:
-      - mssql
     build:
       context: .
       dockerfile: src/Web/Reminders.Mvc/Dockerfile
+    depends_on:
+      - api
     profiles:
-      - mvc
       - all
+      - mvc
     deploy: *shared-deploy
 
   # Database
@@ -45,16 +45,16 @@ services:
     container_name: reminders-mssql
     profiles:
       - all
-      - mvc
-      - api
+      # - api
+      # - mvc
 
   postgres:
     image: postgres
     container_name: reminders-postgres
     profiles:
       - all
-      - mvc
       - api
+      - mvc
     deploy: *shared-deploy
 
   # Load Balancer
