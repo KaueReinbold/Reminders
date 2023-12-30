@@ -1,0 +1,50 @@
+@url = http://localhost:9999
+
+@id = 
+
+###
+
+GET {{url}}/api/reminders/
+Accept: application/json
+
+###
+
+GET {{url}}/api/reminders/count
+Accept: application/json
+
+###
+
+POST {{url}}/api/reminders/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "title": "string",
+  "description": "string",
+  "limitDate": "2024-12-20T18:44:37.637Z",
+  "isDone": true
+}
+
+###
+
+GET {{url}}/api/reminders/{{id}}
+Accept: application/json
+
+###
+
+PUT {{url}}/api/reminders/{{id}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "{{id}}",
+  "title": "string edited",
+  "description": "string edited",
+  "limitDate": "2024-12-20T18:44:37.637Z",
+  "isDone": true
+}
+
+###
+
+DELETE {{url}}/api/reminders/{{id}}
+Accept: application/json
