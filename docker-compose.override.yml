@@ -39,7 +39,8 @@ services:
     environment: 
       ASPNETCORE_ENVIRONMENT: Development
       
-      ApiBaseUrl: http://reminders-nginx:9999
+      ApiOptions__BaseUrl: http://reminders-nginx:9999
+      ApiOptions__HealthUrl: /health
     ports:
       - 5050:8080
     volumes: *dotnet-volumes

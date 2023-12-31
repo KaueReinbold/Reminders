@@ -1,93 +1,107 @@
 namespace Reminders.Mvc.Services;
 
-public class ApiException : Exception
-{
-    public ErrorResponse? ErrorResponse { get; }
-
-    public ApiException(string message, ErrorResponse? errorResponse) : base(message)
-    {
-        ErrorResponse = errorResponse;
-    }
-}
-
 public class RemindersService : IRemindersService
 {
     private readonly HttpClient httpClient;
+    private readonly HealthCheckService healthCheckService;
     private readonly string remoteServiceBaseUrl = "/api/reminders";
 
-    public RemindersService(HttpClient httpClient)
+    public RemindersService(
+        HttpClient httpClient,
+        HealthCheckService healthCheckService)
     {
         this.httpClient = httpClient;
+        this.healthCheckService = healthCheckService;
     }
 
-    public async Task<IEnumerable<ReminderViewModel>?> GetRemindersAsync()
+    public async Task<IEnumerable<ReminderViewModel>?> GetRemindersAsync(CancellationToken cancellationToken)
     {
-        var response = await httpClient.GetAsync(remoteServiceBaseUrl);
+        await ValidateApiHealth(cancellationToken);
+
+        var response = await httpClient.GetAsync(remoteServiceBaseUrl, cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
-        var content = response.Content.ReadAsStringAsync().Result;
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
+
         var reminders = JsonConvert.DeserializeObject<IEnumerable<ReminderViewModel>?>(content);
 
         return reminders;
     }
 
-    public async Task<ReminderViewModel?> GetReminderAsync(Guid id)
+    public async Task<ReminderViewModel?> GetReminderAsync(Guid id, CancellationToken cancellationToken)
     {
-        var response = await httpClient.GetAsync($"{remoteServiceBaseUrl}/{id}");
+        await ValidateApiHealth(cancellationToken);
+
+        var response = await httpClient.GetAsync($"{remoteServiceBaseUrl}/{id}", cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
-        var content = response.Content.ReadAsStringAsync().Result;
+        var content = await response.Content.ReadAsStringAsync(cancellationToken);
+
         var reminder = JsonConvert.DeserializeObject<ReminderViewModel>(content);
 
         return reminder;
     }
 
-    public async Task AddReminderAsync(ReminderViewModel reminderViewModel)
+    public async Task AddReminderAsync(ReminderViewModel reminderViewModel, CancellationToken cancellationToken)
     {
+        await ValidateApiHealth(cancellationToken);
+
         using StringContent jsonContent = new(
             JsonConvert.SerializeObject(reminderViewModel),
             Encoding.UTF8,
             "application/json");
 
-        var response = await httpClient.PostAsync(remoteServiceBaseUrl, jsonContent);
+        var response = await httpClient.PostAsync(remoteServiceBaseUrl, jsonContent, cancellationToken);
 
-        ValidateApiResponse(response);
+        await ValidateApiResponse(response, cancellationToken);
 
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task EditReminderAsync(Guid id, ReminderViewModel reminderViewModel)
+    public async Task EditReminderAsync(Guid id, ReminderViewModel reminderViewModel, CancellationToken cancellationToken)
     {
+        await ValidateApiHealth(cancellationToken);
+
         using StringContent jsonContent = new(
             JsonConvert.SerializeObject(reminderViewModel),
             Encoding.UTF8,
             "application/json");
 
-        var response = await httpClient.PutAsync($"{remoteServiceBaseUrl}/{id}", jsonContent);
+        var response = await httpClient.PutAsync($"{remoteServiceBaseUrl}/{id}", jsonContent, cancellationToken);
 
-        ValidateApiResponse(response);
+        await ValidateApiResponse(response, cancellationToken);
 
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task DeleteReminderAsync(Guid id)
+    public async Task DeleteReminderAsync(Guid id, CancellationToken cancellationToken)
     {
-        var response = await httpClient.DeleteAsync($"{remoteServiceBaseUrl}/{id}");
+        await ValidateApiHealth(cancellationToken);
+
+        var response = await httpClient.DeleteAsync($"{remoteServiceBaseUrl}/{id}", cancellationToken);
 
         response.EnsureSuccessStatusCode();
     }
 
-    private void ValidateApiResponse(HttpResponseMessage? response)
+    private static async Task ValidateApiResponse(HttpResponseMessage? response, CancellationToken cancellationToken)
     {
         if (response?.IsSuccessStatusCode == false)
         {
-            var content = response.Content.ReadAsStringAsync().Result;
+            var content = await response.Content.ReadAsStringAsync(cancellationToken);
 
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(content);
 
-            throw new ApiException("API returned an error.", errorResponse);
+            throw new ApiException(ApiException.TROUBLE_CONNECTING_SERVERS, errorResponse);
         }
+    }
+
+    private async Task ValidateApiHealth(CancellationToken cancellationToken)
+    {
+        var healthReport = await healthCheckService.CheckHealthAsync(cancellationToken);
+
+        if (healthReport.Status != HealthStatus.Healthy)
+            throw new ApiException(ApiException.TROUBLE_CONNECTING_SERVERS);
     }
 }

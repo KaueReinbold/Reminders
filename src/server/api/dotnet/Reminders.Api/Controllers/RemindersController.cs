@@ -1,6 +1,6 @@
 ﻿namespace Reminders.Api.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/reminders")]
 [ApiController]
 public class RemindersController
     : ControllerBase

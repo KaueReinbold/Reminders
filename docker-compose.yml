@@ -44,7 +44,7 @@ services:
     image: "mcr.microsoft.com/mssql/server"
     container_name: reminders-mssql
     profiles:
-      - all
+      - all-old
       # - api
       # - mvc
 

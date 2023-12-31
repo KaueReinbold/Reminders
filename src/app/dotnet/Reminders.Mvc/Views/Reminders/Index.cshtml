@@ -10,6 +10,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<div asp-validation-summary="All"></div>
+
 @if (Model.Any())
 {
     <table class="table" id="remindersTable">
@@ -33,6 +36,7 @@
                 <th scope="col">#</th>
             </tr>
         </thead>
+        
         <tbody>
             @foreach (var item in Model)
             {
@@ -61,4 +65,8 @@
             }
         </tbody>
     </table>
+}
+else 
+{
+    <h4>There are currently no reminders!</h4>
 }
