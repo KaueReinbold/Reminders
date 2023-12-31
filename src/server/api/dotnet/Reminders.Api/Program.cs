@@ -8,8 +8,6 @@ builder.Services.AddSwaggerGen(setup =>
     setup.SwaggerDoc("v1", new OpenApiInfo { Title = "Reminders API", Version = "v1" }));
 
 // App
-
-
 builder.Services
     .RegisterApplicationServices(
         builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -29,6 +27,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMachineNameLogging<Program>();
+
+app.MapHealthChecks("/health");
 
 app
     .UseRemindersExceptionHandler()

@@ -4,7 +4,12 @@
 
 ###
 
-GET {{url}}/api/reminders/
+GET {{url}}/health
+Accept: application/json
+
+###
+
+GET {{url}}/api/reminders
 Accept: application/json
 
 ###
@@ -14,7 +19,7 @@ Accept: application/json
 
 ###
 
-POST {{url}}/api/reminders/
+POST {{url}}/api/reminders
 Accept: application/json
 Content-Type: application/json
 

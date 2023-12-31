@@ -2,15 +2,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
-    .AddHttpClient<IRemindersService, RemindersService>(client =>
+    .AddHealthChecks()
+    .AddCheck<RemindersServiceHealthCheck>(nameof(RemindersServiceHealthCheck));
+
+var apiOptionsSection = builder.Configuration.GetSection(ApiOptions.ApiOptionsSectionName);
+
+builder.Services
+    .AddHttpClient<IRemindersService, RemindersService>(nameof(RemindersService), client =>
     {
-        client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"] ?? string.Empty);
+        client.BaseAddress = apiOptionsSection?.Get<ApiOptions>()?.BaseUrl ?? default;
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
     });
 
 builder.Services
+    .Configure<ApiOptions>(apiOptionsSection)
     .AddControllersWithViews();
 
 var app = builder.Build();
