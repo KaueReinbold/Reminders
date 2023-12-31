@@ -10,27 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Reminders.Mvc - Build the Docker image
-      run: > 
-        docker build
-        --file src/app/dotnet/Reminders.Mvc/Dockerfile
-        --tag reminders-mvc:$(date +%s)
-        --build-arg NUGET_SOURCE=${NUGET_SOURCE}
-        --build-arg NUGET_USER_NAME=${NUGET_USER_NAME}
-        --build-arg NUGET_PASSWORD=${PERSONAL_ACCESS_TOKEN}
-        --build-arg DOTNET_ASPNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0
-        --build-arg DOTNET_SDK_IMAGE=mcr.microsoft.com/dotnet/sdk:8.0
-        .
-    - uses: actions/checkout@v3
-    - name: Reminders.Api - Build the Docker image
-      run: >
-        docker build
-        --file src/server/api/dotnet/Reminders.Api/Dockerfile
-        --tag reminders-mvc:$(date +%s)
-        --build-arg NUGET_SOURCE=${NUGET_SOURCE}
-        --build-arg NUGET_USER_NAME=${NUGET_USER_NAME}
-        --build-arg NUGET_PASSWORD=${PERSONAL_ACCESS_TOKEN}
-        --build-arg DOTNET_ASPNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0
-        --build-arg DOTNET_SDK_IMAGE=mcr.microsoft.com/dotnet/sdk:8.0
-        .
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Reminders.Mvc - Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: src/app/dotnet/Reminders.Mvc/Dockerfile
+          build-args: |
+            DOTNET_ASPNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0
+            DOTNET_SDK_IMAGE=mcr.microsoft.com/dotnet/sdk:8.0
+          push: false
+
+      - name: Reminders.Api - Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: src/server/api/dotnet/Reminders.Api/Dockerfile
+          build-args: |
+            DOTNET_ASPNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0
+            DOTNET_SDK_IMAGE=mcr.microsoft.com/dotnet/sdk:8.0
+          push: false
