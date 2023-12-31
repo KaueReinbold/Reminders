@@ -19,12 +19,21 @@ A simple and intuitive web application for managing your daily reminders.
 
   [![docker - build - pull request](https://github.com/KaueReinbold/Reminders/actions/workflows/docker-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/docker-pull-request.yml)
 
+### Docker Hub
+
+Reminders MVC:
+
+  [![Docker Hub - Reminders MVC)](https://img.shields.io/docker/pulls/kauereinbold/reminders-mvc.svg)](https://hub.docker.com/r/kauereinbold/reminders-mvc)
+
+Reminders API:
+
+  [![Docker Hub - Reminders API)](https://img.shields.io/docker/pulls/kauereinbold/reminders-api.svg)](https://hub.docker.com/r/kauereinbold/reminders-api)
+
 ## Docker Compose Configuration
 
 This section describes the Docker Compose configuration for deploying the Reminders application.
 
 ## Usage
-
 
 To deploy the Reminders application using Docker Compose, follow these steps:
 
