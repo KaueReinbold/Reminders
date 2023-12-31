@@ -1,4 +1,4 @@
-name: docker - build - code coverage
+name: dotnet - build - code coverage
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
         run: dotnet build -c Release ./src
 
       - name: Test
-        run: dotnet test ./src -c Release src/test/server/dotnet/Reminders.Application.Test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov /p:Exclude=\"[Reminders.Infrastructure.CrossCutting]*,[Reminders.Infrastructure.Data.EntityFramework]*,[Reminders.Infrastructure.Data.EntityFramework.SqlServer]*,[Reminders.Infrastructure.Data.EntityFramework.Postgres]*\" /p:ExcludeByFile=\"**/*.Designer.cs,**/*Entity.cs\"
+        run: dotnet test -c Release src/test/server/dotnet/Reminders.Application.Test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov /p:Exclude=\"[Reminders.Infrastructure.CrossCutting]*,[Reminders.Infrastructure.Data.EntityFramework]*,[Reminders.Infrastructure.Data.EntityFramework.SqlServer]*,[Reminders.Infrastructure.Data.EntityFramework.Postgres]*\" /p:ExcludeByFile=\"**/*.Designer.cs,**/*Entity.cs\"
 
       - name: Publish coverage report to coveralls.io
         uses: coverallsapp/github-action@master
