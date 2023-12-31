@@ -10,17 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: "8.0.x"
-          source-url: https://nuget.pkg.github.com/KaueReinbold/index.json
-        env:
-          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - name: Restore
-        run: dotnet restore ./src
-      - name: Build
-        run: dotnet build ./src -c Release
-      - name: Test
-        run: dotnet test -c Release ./src/test/server/dotnet/Reminders.Application.Test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov /p:Exclude=\"[Reminders.Infrastructure.CrossCutting]*,[Reminders.Infrastructure.Data.EntityFramework]*\" /p:ExcludeByFile=\"**/*.Designer.cs,**/*Entity.cs\"
+    - name: Check out the repo
+      uses: actions/checkout@v4
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: "8.0.x"
+        source-url: https://nuget.pkg.github.com/KaueReinbold/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    - name: Restore
+      run: dotnet restore ./src
+    - name: Build
+      run: dotnet build ./src -c Release
+    - name: Test
+      run: dotnet test -c Release ./src/test/server/dotnet/Reminders.Application.Test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov /p:Exclude=\"[Reminders.Infrastructure.CrossCutting]*,[Reminders.Infrastructure.Data.EntityFramework]*\" /p:ExcludeByFile=\"**/*.Designer.cs,**/*Entity.cs\"
