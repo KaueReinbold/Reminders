@@ -18,6 +18,22 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            name/app
+            ghcr.io/username/app            
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha  
     
       - name: Reminders.Api - Extract metadata (tags, labels) for Docker
         id: meta-api
@@ -34,5 +50,5 @@ jobs:
             DOTNET_ASPNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0
             DOTNET_SDK_IMAGE=mcr.microsoft.com/dotnet/sdk:8.0
           push: true
-          tags: ${{ steps.meta-api.outputs.tags }}
-          labels: ${{ steps.meta-api.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
