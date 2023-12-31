@@ -18,26 +18,32 @@ jobs:
           source-url: https://api.nuget.org/v3/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: dotnet build ./src/Reminders.Application
+      - run: dotnet build ./src/server/application/dotnet/Reminders.Application
       - name: Create the package Application
-        run: dotnet pack -c Release ./src/Reminders.Application
+        run: dotnet pack -c Release ./src/server/application/dotnet/Reminders.Application
       - name: Publish the package to GPR
-        run: dotnet nuget push ./src/Reminders.Application/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
+        run: dotnet nuget push ./src/server/application/dotnet/Reminders.Application/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
 
-      - run: dotnet build ./src/Reminders.Domain
+      - run: dotnet build ./src/server/domain/dotnet/Reminders.Domain
       - name: Create the package Domain
-        run: dotnet pack -c Release ./src/Reminders.Domain
+        run: dotnet pack -c Release ./src/server/domain/dotnet/Reminders.Domain
       - name: Publish the package to GPR
-        run: dotnet nuget push ./src/Reminders.Domain/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
+        run: dotnet nuget push ./src/server/domain/dotnet/Reminders.Domain/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
 
-      - run: dotnet build ./src/Reminders.Infrastructure.CrossCutting
+      - run: dotnet build ./src/server/infrastructure/dotnet/Reminders.Infrastructure.CrossCutting
       - name: Create the package CrossCutting
-        run: dotnet pack -c Release ./src/Reminders.Infrastructure.CrossCutting
+        run: dotnet pack -c Release ./src/server/infrastructure/dotnet/Reminders.Infrastructure.CrossCutting
       - name: Publish the package to GPR
-        run: dotnet nuget push ./src/Reminders.Infrastructure.CrossCutting/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
+        run: dotnet nuget push ./src/server/infrastructure/dotnet/Reminders.Infrastructure.CrossCutting/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
 
-      - run: dotnet build ./src/Reminders.Infrastructure.Data.EntityFramework
+      - run: dotnet build ./src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.Postgres
       - name: Create the package Data
-        run: dotnet pack -c Release ./src/Reminders.Infrastructure.Data.EntityFramework
+        run: dotnet pack -c Release ./src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.Postgres
       - name: Publish the package to GPR
-        run: dotnet nuget push ./src/Reminders.Infrastructure.Data.EntityFramework/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
+        run: dotnet nuget push ./src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.Postgres/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate
+
+      - run: dotnet build ./src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.SqlServer
+      - name: Create the package Data
+        run: dotnet pack -c Release ./src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.SqlServer
+      - name: Publish the package to GPR
+        run: dotnet nuget push ./src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.SqlServer/bin/Release/*.nupkg -k ${{secrets.NUGET_TOKEN}} --skip-duplicate

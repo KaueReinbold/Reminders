@@ -14,7 +14,7 @@ jobs:
     - name: Reminders.Mvc - Build the Docker image
       run: > 
         docker build
-        --file src/Web/Reminders.Mvc/Dockerfile
+        --file src/app/dotnet/Reminders.Mvc/Dockerfile
         --tag reminders-mvc:$(date +%s)
         --build-arg NUGET_SOURCE=${NUGET_SOURCE}
         --build-arg NUGET_USER_NAME=${NUGET_USER_NAME}
@@ -26,7 +26,7 @@ jobs:
     - name: Reminders.Api - Build the Docker image
       run: >
         docker build
-        --file src/Web/Reminders.Api/Dockerfile
+        --file src/server/api/dotnet/Reminders.Api/Dockerfile
         --tag reminders-mvc:$(date +%s)
         --build-arg NUGET_SOURCE=${NUGET_SOURCE}
         --build-arg NUGET_USER_NAME=${NUGET_USER_NAME}
