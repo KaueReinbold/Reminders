@@ -34,4 +34,5 @@ jobs:
             DOTNET_ASPNET_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0
             DOTNET_SDK_IMAGE=mcr.microsoft.com/dotnet/sdk:8.0
           push: true
-          tags: reminders-mvc:$(date +%s)
+          tags: |
+            reminders-mvc:latest
