@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    if: ${{ contains(github.event_path, 'src/') }}
+    if: ${{ startsWith(github.event_path, 'src/') && contains(github.event_path, '/dotnet/') }}
 
     steps:
     - name: Check out the repo
