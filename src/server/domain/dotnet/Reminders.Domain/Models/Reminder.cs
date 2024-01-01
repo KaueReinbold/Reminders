@@ -9,7 +9,7 @@ namespace Reminders.Domain.Models
         public Reminder(
             string title,
             string description,
-            DateTime limitDate,
+            DateTimeOffset limitDate,
             bool isDone)
          : base(Guid.NewGuid(), false)
         {
@@ -21,7 +21,7 @@ namespace Reminders.Domain.Models
 
         public string Title { get; protected set; }
         public string Description { get; protected set; }
-        public DateTime LimitDate { get; protected set; }
+        public DateTimeOffset LimitDate { get; protected set; }
         public bool IsDone { get; protected set; }
     }
 }

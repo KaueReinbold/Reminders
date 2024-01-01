@@ -38,8 +38,8 @@ namespace Reminders.Infrastructure.Data.EntityFramework.SqlServer.Migrations
                     b.Property<bool>("IsDone")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LimitDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("LimitDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Title")
                         .IsRequired()
