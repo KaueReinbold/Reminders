@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+
+  # Apps
+
+  api:
+    image: reminders-api:debug
+    build: 
+      args:
+        DOTNET_CONFIGURATION: Debug
+    profiles: 
+      - debug
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+
+  mvc:
+    image: reminders-mvc:debug
+    build:
+      args:
+        DOTNET_CONFIGURATION: Debug
+    profiles: 
+      - debug
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+  
+  # Load Balancer
+
+  nginx: 
+    profiles: 
+      - debug
+    volumes:
+      - ./infrastructure/debug.nginx.conf:/etc/nginx/nginx.conf:ro
