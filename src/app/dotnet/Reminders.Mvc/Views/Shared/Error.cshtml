@@ -7,7 +7,7 @@
 <h1 class="text-danger">Error.</h1>
 <h2 class="text-danger">An error occurred while processing your request.</h2>
 
-@if (Model.ShowRequestId)
+@if (Model is not null && Model.ShowRequestId)
 {
     <p>
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
@@ -26,3 +26,6 @@
     <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
     and restarting the app.
 </p>
+
+<!-- Add a button to return to Reminder/Index -->
+<a class="btn btn-primary" asp-area="" asp-controller="Reminders" asp-action="Index">Return to Home</a>

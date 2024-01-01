@@ -11,8 +11,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    if: ${{ !contains(github.event_path, 'src/app') }}
-
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
