@@ -22,7 +22,7 @@ namespace Reminders.Application.ViewModels
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:MM/dd/yyyy}")]
         [DataType(DataType.DateTime, ErrorMessage = "Invalid {0}")]
         [Display(Name = "Limit Date", Prompt = "This is Reminder Limit Date")]
-        public DateTime LimitDate { get; set; }
+        public DateTimeOffset LimitDate { get; set; }
 
         [Required(ErrorMessage = "The field is Required")]
         [Display(Name = "Is Done", Prompt = "This is Reminder Is Done flag")]
