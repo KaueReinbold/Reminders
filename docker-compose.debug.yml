@@ -23,6 +23,12 @@ services:
       - debug
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
+
+  # Database
+  
+  postgres:
+    profiles:
+      - debug
   
   # Load Balancer
 
