@@ -1,0 +1,14 @@
+name: pull request - check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check status
+      run: echo "Check success!"

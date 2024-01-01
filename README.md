@@ -50,44 +50,6 @@ The application can be accessed using the following URLs:
 
 Please note that the exact URLs may vary based on your specific configuration and environment. Adjust them accordingly.
 
-## Profiles
-
-Profiles are used to define different configurations for services based on specific roles. Here's a breakdown of how profiles are used:
-
-- **Profiles Defined:**
-  - For the `api` service: `profiles: - api - all`
-  - For the `mvc` service: `profiles: - mvc - all`
-  - For the `mssql` service: `profiles: - all - mvc - api`
-  - For the `postgres` service: `profiles: - all`
-
-- **Usage:**
-  
-To run the application with specific profiles, you can use the following Docker Compose command:
-    
-```bash
-docker-compose --profile <profile_name_1> --profile <profile_name_2> up -d
-```
-
-Replace <profile_name_1>, <profile_name_2>, etc., with the desired profiles you want to apply. For example:
-
-- To run the application with the API profile:
-
-  ```bash
-  docker-compose --profile api up -d
-  ```
-
-- To run the application with the MVC profile:
-  
-  ```bash
-  docker-compose --profile mvc up -d
-  ```
-
-  - To run the application with multiple profiles:
-
-  ```bash
-  docker-compose --profile api --profile mvc up -d
-  ```
-
 ## Support
 
 If you encounter any issues or have suggestions, we encourage you to open an issue on the [GitHub Issues](https://github.com/KaueReinbold/Reminders/issues) page.
