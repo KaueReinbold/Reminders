@@ -18,7 +18,7 @@ namespace Reminders.Infrastructure.Data.EntityFramework.SqlServer.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LimitDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LimitDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     IsDone = table.Column<bool>(type: "bit", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
