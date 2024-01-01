@@ -12,7 +12,7 @@ using Reminders.Infrastructure.Data.EntityFramework.Contexts;
 namespace Reminders.Infrastructure.Data.EntityFramework.SqlServer.Migrations
 {
     [DbContext(typeof(RemindersContext))]
-    [Migration("20231228191336_Initial")]
+    [Migration("20240101182721_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -41,8 +41,8 @@ namespace Reminders.Infrastructure.Data.EntityFramework.SqlServer.Migrations
                     b.Property<bool>("IsDone")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LimitDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("LimitDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Title")
                         .IsRequired()

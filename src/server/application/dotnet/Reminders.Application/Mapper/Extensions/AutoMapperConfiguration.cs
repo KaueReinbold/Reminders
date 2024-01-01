@@ -7,8 +7,7 @@ namespace Reminders.Application.Mapper.Extensions
         public static IMapper CreateMapper() =>
             new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new DomainModelToViewModelProfile());
-                cfg.AddProfile(new ViewModelToDomainModelProfile());
+                cfg.AddProfile(new AutoMapperProfile());
             }).CreateMapper();
     }
 }
