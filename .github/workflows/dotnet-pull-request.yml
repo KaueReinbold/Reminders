@@ -9,8 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    if: ${{ startsWith(github.event_path, 'src/') && contains(github.event_path, '/dotnet/') }}
-
     steps:
     - name: Check out the repo
       uses: actions/checkout@v4
