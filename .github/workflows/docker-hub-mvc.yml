@@ -5,11 +5,13 @@ on:
     branches:
       - main
     paths:
-      - ./src
+      - './src/**/dotnet/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    if: ${{ !contains(github.event_path, 'src/api') }}
 
     steps:
       - name: Check out the repo
