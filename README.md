@@ -90,4 +90,4 @@ Replace <profile_name_1>, <profile_name_2>, etc., with the desired profiles you 
 
 ## Support
 
-If you encounter any issues or have suggestions, we encourage you to open an issue on the [GitHub Issues](https://github.com/KaueReinbold/Reminders/issues) page. Your feedback is valuable, and we appreciate your help in improving this project.
+If you encounter any issues or have suggestions, we encourage you to open an issue on the [GitHub Issues](https://github.com/KaueReinbold/Reminders/issues) page.
