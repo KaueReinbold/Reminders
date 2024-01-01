@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Options;
-
 namespace Reminders.Mvc.Extensions.Handlers;
 
 public class RemindersServiceHealthCheck : IHealthCheck
