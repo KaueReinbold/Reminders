@@ -2,6 +2,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Docker dotnet attach",
+      "type": "docker",
+      "request": "attach",
+      "platform": "netCore",
+      "sourceFileMap": {
+        "/src": "${workspaceFolder}/src"
+      }
+    },
+    {
       "name": "Dotnet launch (mvc)",
       "type": "coreclr",
       "request": "launch",
@@ -26,7 +35,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/server/api/dotnet/Reminders.Api/bin/Debug/net8.0/$Reminders.Api.dll",
+      "program": "${workspaceFolder}/src/server/api/dotnet/Reminders.Api/bin/Debug/net8.0/Reminders.Api.dll",
       "args": [],
       "cwd": "${workspaceFolder}/src/server/api/dotnet/Reminders.Api",
       "stopAtEntry": false,
@@ -39,24 +48,6 @@
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/src/server/api/dotnet/Reminders.Api/Views"
-      }
-    },
-    {
-      "name": "Docker API",
-      "type": "docker",
-      "request": "attach",
-      "containerName": "reminders-api",
-      "netCore": {
-        "appProject": "${workspaceFolder}/src/Web/Reminder.Api/Reminder.Api.csproj"
-      }
-    },
-    {
-      "name": "Docker MVC",
-      "type": "docker",
-      "request": "attach",
-      "containerName": "reminders-mvc",
-      "netCore": {
-        "appProject": "${workspaceFolder}/src/Web/Reminder.Mvc/Reminder.Mvc.csproj"
       }
     }
   ],

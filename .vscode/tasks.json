@@ -83,74 +83,44 @@
       }
     },
     {
-      "label": "docker: compose up",
-      "command": "docker-compose",
-      "windows": {
-        "command": "docker-compose.exe"
-      },
-      "type": "process",
-      "args": [
-        "up",
-        "-d"
-      ],
-      "problemMatcher": "$msCompile",
-      "presentation": {
-        "focus": true,
-        "panel": "dedicated",
-        "clear": true
-      }
-    },
-    {
-      "label": "docker: compose build",
-      "command": "docker-compose",
-      "windows": {
-        "command": "docker-compose.exe"
-      },
-      "type": "process",
-      "args": [
-        "build"
-      ],
-      "problemMatcher": "$msCompile",
-      "presentation": {
-        "focus": true,
-        "panel": "dedicated",
-        "clear": true
-      }
-    },
-    {
-      "label": "docker: compose down",
-      "command": "docker-compose",
-      "windows": {
-        "command": "docker-compose.exe"
-      },
-      "type": "process",
-      "args": [
-        "down"
-      ],
-      "problemMatcher": "$msCompile",
-      "presentation": {
-        "focus": true,
-        "panel": "dedicated",
-        "clear": true
-      }
-    },
-    {
-      "label": "rebuild environment",
-      "command": "echo Done!",
       "type": "shell",
-      "problemMatcher": "$msCompile",
+      "label": "compose up",
+      "command": "docker compose --profile all up --build -d",
       "presentation": {
-        "focus": true,
-        "panel": "dedicated",
-        "clear": true
+        "reveal": "always",
+        "panel": "new"
       },
-      "dependsOrder": "sequence",
-      "dependsOn": [
-        "docker: compose down",
-        "docker: compose build",
-        "docker: compose up",
-        "dotnet: ef database update"
-      ]
+      "problemMatcher": "$msCompile",
+    },
+    {
+      "type": "shell",
+      "label": "compose down",
+      "command": "docker compose --profile all down",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": "$msCompile",
+    },
+    {
+      "type": "shell",
+      "label": "compose up debug",
+      "command": "docker compose --profile debug -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.debug.yml up --build -d",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": "$msCompile",
+    },
+    {
+      "type": "shell",
+      "label": "compose down debug",
+      "command": "docker compose --profile debug -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.debug.yml down",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": "$msCompile",
     },
     {
       "label": "build",
