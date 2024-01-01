@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+
+  # Apps
+
+  api:
+    image: kauereinbold/reminders-api
+    profiles:
+      - production
+  
+  api-2:
+    image: kauereinbold/reminders-api
+    profiles:
+      - production
+
+  mvc:
+    image: kauereinbold/reminders-mvc
+    profiles:
+      - production
+
+  # Database
+
+  postgres:
+    profiles:
+          - production
+
+  # Load Balancer
+
+  nginx: 
+    profiles:
+      - production
+
+networks:
+  default:
+    name: 'reminders-network'
+    driver: bridge
