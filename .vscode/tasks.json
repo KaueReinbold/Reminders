@@ -123,6 +123,26 @@
       "problemMatcher": "$msCompile",
     },
     {
+      "type": "shell",
+      "label": "compose up production",
+      "command": "docker compose --profile production -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.production.yml up --build -d",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": "$msCompile",
+    },
+    {
+      "type": "shell",
+      "label": "compose down production",
+      "command": "docker compose --profile production -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.production.yml down",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": "$msCompile",
+    },
+    {
       "label": "build",
       "command": "dotnet",
       "type": "process",
