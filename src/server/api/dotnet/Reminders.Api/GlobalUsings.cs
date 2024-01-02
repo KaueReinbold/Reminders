@@ -7,7 +7,6 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.OpenApi.Models;
 global using Reminders.Api.Extensions;
-global using Reminders.Api.Extensions;
 global using Reminders.Application.Contracts;
 global using Reminders.Application.Enumerables;
 global using Reminders.Application.Extensions;
