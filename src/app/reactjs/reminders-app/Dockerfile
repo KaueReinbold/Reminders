@@ -1,4 +1,5 @@
-ARG NODE_IMAGE
+# Use an official Node.js runtime as a parent image
+ARG NODE_IMAGE=node:18-alpine
 
 # Define the build stage
 FROM ${NODE_IMAGE} as build-stage
@@ -15,8 +16,14 @@ RUN npm install
 # Copy project files
 COPY src/app/reactjs/reminders-app/. .
 
+# Declare NEXT_PUBLIC_API_BASE_URL as a build argument
+ARG NEXT_PUBLIC_API_BASE_URL
+
+# Set NEXT_PUBLIC_API_BASE_URL as an environment variable
+ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+
 # Build the app
-RUN npm run build && ls /app
+RUN npm run build
 
 # Define the production stage
 FROM ${NODE_IMAGE} as production-stage
