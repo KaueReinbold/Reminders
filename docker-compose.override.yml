@@ -45,6 +45,13 @@ services:
       - 5050:8080
     volumes: *dotnet-volumes
 
+  react:
+    build:
+      args:
+        NODE_IMAGE: node:18-alpine
+    ports:
+      - '3000:3000'
+
   # Database
 
   mssql:
