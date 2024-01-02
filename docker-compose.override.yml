@@ -17,6 +17,7 @@ services:
       - 5000:8080
     environment:
       ASPNETCORE_ENVIRONMENT: Development
+      CorsOrigins: http://reminders-react:3000,http://localhost:3000
       
       # ConnectionStrings__DefaultConnection: Server=reminders-mssql;Database=Reminders;User ID=sa;Password=h9pJwUUV0y;MultipleActiveResultSets=True;Application Name=Reminders;Persist Security Info=True;Trust Server Certificate=True;
       # DatabaseProvider: SqlServer
