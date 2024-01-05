@@ -2,30 +2,15 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { TextField, Button, Container, Typography } from '@material-ui/core';
+import { TextField, Button, Container, Grid } from '@material-ui/core';
 import { Reminder } from '@/components/RemindersList';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export type APIError = {
-  type: string,
-  title: string,
-  status: number,
-  errors: Errors,
-  traceId: string,
-}
-
-export type Errors = {
-  "LimitDate.Date": string[],
-}
-
-
 export default function Create() {
-  const [reminder, setReminder] = useState<Reminder>({ title: '', description: '', limitDate: '2025-01-05T00:50:06.416Z', isDone: false });
-
-  const [errors, setErrors] = useState<Errors>();
-
   const router = useRouter();
+
+  const [reminder, setReminder] = useState<Reminder>({ title: '', description: '', limitDate: '', isDone: false });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,30 +27,59 @@ export default function Create() {
     const data = await response.json();
 
     if (response.ok) {
-      router.back();
-    } else {
-      setErrors(data?.errors);
+      handleBack();
     }
   };
+
+  const handleBack = () => {
+    router.push('/');
+  }
 
   return (
     <Container>
       <form onSubmit={handleSubmit}>
-        <TextField
-          label="Title"
-          value={reminder?.title}
-          onChange={(e) => setReminder(state => ({ ...state, title: e.target.value }))}
-          required
-        />
-        <TextField
-          label="Description"
-          value={reminder?.description}
-          onChange={(e) => setReminder(state => ({ ...state, description: e.target.value }))}
-          required
-        />
-        <Button type="submit" variant="contained" color="primary">
-          Create
-        </Button>
+        <Grid container direction="column" spacing={5}>
+          <Grid item>
+            <TextField
+              label="Title"
+              value={reminder?.title}
+              onChange={(e) => setReminder(state => ({ ...state, title: e.target.value }))}
+              required
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item>
+            <TextField
+              label="Description"
+              value={reminder?.description}
+              onChange={(e) => setReminder(state => ({ ...state, description: e.target.value }))}
+              required
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item>
+            <TextField
+              label="Limit Date"
+              value={reminder?.limitDate}
+              onChange={(e) => setReminder(state => ({ ...state, limitDate: e.target.value }))}
+              required
+              type='date'
+              fullWidth
+              InputLabelProps={{ shrink: true, required: true }}
+            />
+          </Grid>
+
+          <Grid item>
+            <Button type="submit" variant="contained" color="primary">
+              Create
+            </Button>
+            <Button variant="contained" onClick={handleBack}>
+              Back
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     </Container>
   );

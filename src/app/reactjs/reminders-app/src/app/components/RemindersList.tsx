@@ -11,7 +11,9 @@ export type Reminder = {
   title: string;
   description: string;
   limitDate: string;
+  limitDateFormatted?: string;
   isDone: boolean;
+  isDoneFormatted?: string;
 };
 
 export default function RemindersList() {
@@ -20,7 +22,13 @@ export default function RemindersList() {
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/reminders`)
       .then(response => response.json())
-      .then(data => setReminders(data));
+      .then(data => {
+        setReminders(data?.map((d: Reminder) => ({
+          ...d,
+          limitDateFormatted: d.limitDate ? new Date(d.limitDate).toLocaleDateString() : '',
+          isDoneFormatted: d.isDone ? 'Yes' : 'No',
+        } as Reminder)))
+      });
   }, []);
 
   return (
@@ -37,6 +45,9 @@ export default function RemindersList() {
               <TableCell>ID</TableCell>
               <TableCell>Title</TableCell>
               <TableCell>Description</TableCell>
+              <TableCell>Limit Date</TableCell>
+              <TableCell>Done</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -45,6 +56,14 @@ export default function RemindersList() {
                 <TableCell>{reminder.id}</TableCell>
                 <TableCell>{reminder.title}</TableCell>
                 <TableCell>{reminder.description}</TableCell>
+                <TableCell>{reminder.limitDateFormatted}</TableCell>
+                <TableCell>{reminder.isDoneFormatted}</TableCell>
+                <TableCell>
+                  <Link href={`/reminder/${reminder.id}`}>
+                    <Button variant="contained" color="primary">
+                      Edit
+                    </Button>
+                  </Link></TableCell>
               </TableRow>
             ))}
           </TableBody>
