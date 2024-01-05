@@ -44,6 +44,8 @@ services:
     build:
       context: .
       dockerfile: src/app/reactjs/reminders-app/Dockerfile
+    profiles:
+      - all
     deploy: *shared-deploy
 
   # Database
