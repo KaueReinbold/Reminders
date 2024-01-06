@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TextField, Button, Container, Grid } from '@mui/material';
-import { Reminder, useCreateReminder } from '@/app/api';
+import { Errors, Reminder, ValidationError, useCreateReminder } from '@/app/api';
 
 export default function Create() {
   const router = useRouter();
@@ -11,6 +11,7 @@ export default function Create() {
   const createReminder = useCreateReminder();
 
   const [reminder, setReminder] = useState<Reminder>({ title: '', description: '', limitDate: '', isDone: false });
+  const [errors, setErrors] = useState<Errors>()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +22,11 @@ export default function Create() {
         handleBack();
       }
     } catch (error) {
-      console.error(error);
+      if (error instanceof ValidationError) {
+        setErrors(error.errors);
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -40,6 +45,8 @@ export default function Create() {
               onChange={(e) => setReminder((state) => ({ ...state, title: e.target.value }))}
               required
               fullWidth
+              error={Boolean(errors?.Title)}
+              helperText={errors?.Title}
             />
           </Grid>
 
@@ -50,6 +57,8 @@ export default function Create() {
               onChange={(e) => setReminder((state) => ({ ...state, description: e.target.value }))}
               required
               fullWidth
+              error={Boolean(errors?.Description)}
+              helperText={errors?.Description}
             />
           </Grid>
 
@@ -62,6 +71,8 @@ export default function Create() {
               type='date'
               fullWidth
               InputLabelProps={{ shrink: true }}
+              error={Boolean(errors?.['LimitDate.Date'])}
+              helperText={errors?.['LimitDate.Date']}
             />
           </Grid>
 

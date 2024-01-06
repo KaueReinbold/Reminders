@@ -1,3 +1,4 @@
+import { ApiError } from "next/dist/server/api-utils";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export type Reminder = {
@@ -10,6 +11,30 @@ export type Reminder = {
   isDoneFormatted?: string;
 };
 
+interface APIError {
+  type: string;
+  title: string;
+  status: number;
+  errors: Errors;
+  traceId: string;
+}
+
+export interface Errors {
+  "LimitDate.Date": string[];
+  "Description": string[];
+  "Title": string[];
+}
+
+export class ValidationError extends Error {
+  errors: Errors;
+
+  constructor(message: string, errors: Errors) {
+    super(message);
+    this.name = 'ValidationError';
+    this.errors = errors;
+  }
+}
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const REMINDER_QUERY_NAME = 'reminders';
 
@@ -17,12 +42,20 @@ const headers = {
   'Content-Type': 'application/json',
 }
 
-function formatDate(dateString: string) {
+const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are 0-indexed in JavaScript
   const day = ('0' + date.getDate()).slice(-2);
   return `${year}-${month}-${day}`;
+}
+
+const getErrors = async (response: Response) => {
+  const apiError = await response.json() as APIError;
+  const errors = Object.entries(apiError.errors)
+    .reduce((prev, [key, value]) => ({ ...prev, [key]: value[0] }), {} as Errors);
+
+  throw new ValidationError(apiError.title, errors);
 }
 
 const mapReminder = (reminder: Reminder) => ({
@@ -48,6 +81,10 @@ const createReminder = async (reminder: Reminder) => {
   });
 
   if (!response.ok) {
+    if (response.status === 400) {
+      await getErrors(response);
+    }
+
     throw new Error('Failed to update reminder');
   }
 
@@ -63,6 +100,10 @@ const updateReminder = async (reminder: Reminder) => {
   });
 
   if (!response.ok) {
+    if (response.status === 400) {
+      return getErrors(response);
+    }
+
     throw new Error('Failed to update reminder');
   }
 

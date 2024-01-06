@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useReducer, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { TextField, Button, Container, Grid, Checkbox, FormControlLabel, Modal, Box, Typography, CircularProgress } from '@mui/material';
-import { Reminder, useDeleteReminder, useReminder, useUpdateReminder } from '@/app/api';
+import { Errors, Reminder, ValidationError, useDeleteReminder, useReminder, useUpdateReminder } from '@/app/api';
 
 const style = {
   modalContent: {
@@ -47,6 +47,7 @@ export default function Edit() {
 
   const [reminder, dispatch] = useReducer(reminderReducer, null);
   const [openDelete, setOpenDelete] = useState(false);
+  const [errors, setErrors] = useState<Errors>()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,10 +55,15 @@ export default function Edit() {
     try {
       if (reminder) {
         await updateReminder.mutateAsync(reminder);
+
         handleBack();
       }
     } catch (error) {
-      console.error(error);
+      if (error instanceof ValidationError) {
+        setErrors(error.errors);
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -92,7 +98,7 @@ export default function Edit() {
   return (
     <Suspense fallback={<CircularProgress />}>
       <Container sx={{ margin: 3 }}>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <Grid container direction="column" spacing={5}>
             <Grid item>
               <TextField
@@ -115,6 +121,8 @@ export default function Edit() {
                 required
                 fullWidth
                 InputLabelProps={{ shrink: true }}
+                error={Boolean(errors?.Title)}
+                helperText={errors?.Title}
               />
             </Grid>
 
@@ -126,6 +134,8 @@ export default function Edit() {
                 required
                 fullWidth
                 InputLabelProps={{ shrink: true }}
+                error={Boolean(errors?.Description)}
+                helperText={errors?.Description}
               />
             </Grid>
 
@@ -138,6 +148,8 @@ export default function Edit() {
                 fullWidth
                 type='date'
                 InputLabelProps={{ shrink: true }}
+                error={Boolean(errors?.['LimitDate.Date'])}
+                helperText={errors?.['LimitDate.Date']}
               />
             </Grid>
 
@@ -146,7 +158,7 @@ export default function Edit() {
                 label="Done"
                 control={
                   <Checkbox
-                    defaultChecked={reminder?.isDone}
+                    checked={reminder?.isDone ?? false}
                     onChange={(e) => dispatch({ type: 'UPDATE_REMINDER', payload: { isDone: e.target.checked } })}
                   />
                 }
