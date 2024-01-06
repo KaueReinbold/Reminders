@@ -1,38 +1,15 @@
 "use client"
 
-import { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, CircularProgress } from '@mui/material';
 import Link from 'next/link';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-export type Reminder = {
-  id?: string;
-  title: string;
-  description: string;
-  limitDate: string;
-  limitDateFormatted?: string;
-  isDone: boolean;
-  isDoneFormatted?: string;
-};
+import { useReminders } from '@/app/api';
+import { Suspense } from 'react';
 
 export default function RemindersList() {
-  const [reminders, setReminders] = useState<Reminder[]>([]);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/reminders`)
-      .then(response => response.json())
-      .then(data => {
-        setReminders(data?.map((d: Reminder) => ({
-          ...d,
-          limitDateFormatted: d.limitDate ? new Date(d.limitDate).toLocaleDateString() : '',
-          isDoneFormatted: d.isDone ? 'Yes' : 'No',
-        } as Reminder)))
-      });
-  }, []);
+  const { data: reminders, isStale } = useReminders();
 
   return (
-    <>
+    <Suspense fallback={<CircularProgress />}>
       <Link href="/reminder/create">
         <Button variant="contained" color="primary">
           Create Reminder
@@ -51,7 +28,7 @@ export default function RemindersList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {reminders.map((reminder: Reminder) => (
+            {reminders?.map((reminder) => (
               <TableRow key={reminder.id}>
                 <TableCell>{reminder.id}</TableCell>
                 <TableCell>{reminder.title}</TableCell>
@@ -69,6 +46,6 @@ export default function RemindersList() {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </Suspense>
   );
 }
