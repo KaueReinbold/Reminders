@@ -2,32 +2,26 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { TextField, Button, Container, Grid } from '@material-ui/core';
-import { Reminder } from '@/app/components/RemindersList';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { TextField, Button, Container, Grid } from '@mui/material';
+import { Reminder, useCreateReminder } from '@/app/api';
 
 export default function Create() {
   const router = useRouter();
+
+  const createReminder = useCreateReminder();
 
   const [reminder, setReminder] = useState<Reminder>({ title: '', description: '', limitDate: '', isDone: false });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const body = JSON.stringify(reminder);
-    const response = await fetch(`${API_BASE_URL}/api/reminders`, {
-      method: 'POST',
-
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body,
-    });
-    const data = await response.json();
-
-    if (response.ok) {
-      handleBack();
+    try {
+      if (reminder) {
+        await createReminder.mutateAsync(reminder);
+        handleBack();
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -36,7 +30,7 @@ export default function Create() {
   }
 
   return (
-    <Container>
+    <Container sx={{ margin: 3 }}>
       <form onSubmit={handleSubmit}>
         <Grid container direction="column" spacing={5}>
           <Grid item>
@@ -67,15 +61,15 @@ export default function Create() {
               required
               type='date'
               fullWidth
-              InputLabelProps={{ shrink: true, required: true }}
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
 
           <Grid item>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="success">
               Create
             </Button>
-            <Button variant="contained" onClick={handleBack}>
+            <Button variant="contained" color="info" onClick={handleBack}>
               Back
             </Button>
           </Grid>

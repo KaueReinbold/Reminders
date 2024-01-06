@@ -1,20 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useReducer, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { TextField, Button, Container, Grid, Checkbox, FormControlLabel, Modal, Box, Typography } from '@material-ui/core';
-
-import { Reminder } from '@/app/components/RemindersList';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-export function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are 0-indexed in JavaScript
-  const day = ('0' + date.getDate()).slice(-2);
-  return `${year}-${month}-${day}`;
-}
+import { TextField, Button, Container, Grid, Checkbox, FormControlLabel, Modal, Box, Typography, CircularProgress } from '@mui/material';
+import { Reminder, useDeleteReminder, useReminder, useUpdateReminder } from '@/app/api';
 
 const style = {
   modalContent: {
@@ -23,7 +12,6 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     bgcolor: 'background.paper',
-    borderRadius: 20,
     boxShadow: 24,
     pt: 2,
     px: 4,
@@ -34,43 +22,53 @@ const style = {
   }
 };
 
+type ReminderAction =
+  | { type: 'SET_REMINDER'; payload: Reminder }
+  | { type: 'UPDATE_REMINDER'; payload: Partial<Reminder> };
+
+function reminderReducer(state: Reminder | null, action: ReminderAction): Reminder | null {
+  switch (action.type) {
+    case 'SET_REMINDER':
+      return action.payload;
+    case 'UPDATE_REMINDER':
+      return { ...state, ...action.payload } as Reminder | null;
+    default:
+      throw new Error();
+  }
+}
 
 export default function Edit() {
   const { id } = useParams<{ id: string }>()
   const router = useRouter();
 
-  const [reminder, setReminder] = useState<Reminder>({ id, title: '', description: '', limitDate: '', isDone: false });
+  const { data: reminderData } = useReminder(id);
+  const updateReminder = useUpdateReminder();
+  const deleteReminder = useDeleteReminder();
+
+  const [reminder, dispatch] = useReducer(reminderReducer, null);
   const [openDelete, setOpenDelete] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const body = JSON.stringify(reminder);
-    const response = await fetch(`${API_BASE_URL}/api/reminders/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body,
-    });
-
-    if (response.ok) {
-      handleBack();
+    try {
+      if (reminder) {
+        await updateReminder.mutateAsync(reminder);
+        handleBack();
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await fetch(`${API_BASE_URL}/api/reminders/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (response.ok) {
+    try {
+      await deleteReminder.mutateAsync(id);
       handleBack();
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -86,120 +84,114 @@ export default function Edit() {
   }
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/reminders/${id}`)
-      .then(response => response.json())
-      .then(data => {
-        setReminder(({
-          ...data,
-          limitDateFormatted: formatDate(data?.limitDate),
-          isDoneFormatted: data.isDone ? 'Yes' : 'No',
-        } as Reminder));
-      });
-  }, []);
-
+    if (reminderData) {
+      dispatch({ type: 'SET_REMINDER', payload: reminderData });
+    }
+  }, [reminderData]);
 
   return (
-    <Container>
-      <form onSubmit={handleSubmit}>
-        <Grid container direction="column" spacing={5}>
-          <Grid item>
-            <TextField
-              label="Id"
-              defaultValue={reminder?.id}
-              disabled
-              fullWidth
-              inputProps={
-                { readOnly: true }
-              }
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
+    <Suspense fallback={<CircularProgress />}>
+      <Container sx={{ margin: 3 }}>
+        <form onSubmit={handleSubmit}>
+          <Grid container direction="column" spacing={5}>
+            <Grid item>
+              <TextField
+                label="Id"
+                defaultValue={reminder?.id}
+                disabled
+                fullWidth
+                inputProps={
+                  { readOnly: true }
+                }
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
 
-          <Grid item>
-            <TextField
-              label="Title"
-              defaultValue={reminder?.title}
-              onChange={(e) => setReminder(state => ({ ...state, title: e.target.value }))}
-              required
-              fullWidth
-              InputLabelProps={{ shrink: true, required: true }}
-            />
-          </Grid>
+            <Grid item>
+              <TextField
+                label="Title"
+                defaultValue={reminder?.title}
+                onChange={(e) => dispatch({ type: 'UPDATE_REMINDER', payload: { title: e.target.value } })}
+                required
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
 
-          <Grid item>
-            <TextField
-              label="Description"
-              defaultValue={reminder?.description}
-              onChange={(e) => setReminder(state => ({ ...state, description: e.target.value }))}
-              required
-              fullWidth
-              InputLabelProps={{ shrink: true, required: true }}
-            />
-          </Grid>
+            <Grid item>
+              <TextField
+                label="Description"
+                defaultValue={reminder?.description}
+                onChange={(e) => dispatch({ type: 'UPDATE_REMINDER', payload: { description: e.target.value } })}
+                required
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
 
-          <Grid item>
-            <TextField
-              label="Limit Date"
-              defaultValue={reminder?.limitDateFormatted}
-              onChange={(e) => setReminder(state => ({ ...state, limitDate: e.target.value }))}
-              required
-              type='date'
-              fullWidth
-              InputLabelProps={{ shrink: true, required: true }}
-            />
-          </Grid>
+            <Grid item>
+              <TextField
+                label="Limit Date"
+                defaultValue={reminder?.limitDateFormatted || ''}
+                onChange={(e) => dispatch({ type: 'UPDATE_REMINDER', payload: { limitDate: e.target.value } })}
+                required
+                fullWidth
+                type='date'
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
 
-          <Grid item>
-            <FormControlLabel
-              label="Done"
-              control={
-                <Checkbox
-                  defaultChecked={reminder?.isDone}
-                  onChange={(e) => setReminder(state => ({ ...state, isDone: e.target.checked }))}
-                  required
-                />
-              }
-            />
-          </Grid>
+            <Grid item>
+              <FormControlLabel
+                label="Done"
+                control={
+                  <Checkbox
+                    defaultChecked={reminder?.isDone}
+                    onChange={(e) => dispatch({ type: 'UPDATE_REMINDER', payload: { isDone: e.target.checked } })}
+                  />
+                }
+              />
+            </Grid>
 
-          <Grid item>
-            <Button type="submit" variant="contained" color="primary">
-              Edit
-            </Button>
-            <Button variant="contained" color="secondary" onClick={handleOpenDelete}>
-              Delete
-            </Button>
-            <Button variant="contained" onClick={handleBack}>
-              Back
-            </Button>
+            <Grid item>
+              <Button type="submit" variant="contained" color="success">
+                Edit
+              </Button>
+              <Button variant="contained" color="error" onClick={handleOpenDelete}>
+                Delete
+              </Button>
+              <Button variant="contained" color="info" onClick={handleBack}>
+                Back
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
-      </form>
+        </form>
 
-      <Modal
-        open={openDelete}
-        onClose={handleCloseDelete}
-        aria-labelledby="child-modal-title"
-        aria-describedby="child-modal-description"
-      >
-        <Box sx={{ ...style.modalContent }}>
-          <Box sx={{ ...style.modalElement }}>
-            <Typography variant="h4">
-              Delete reminder
-            </Typography>
+        <Modal
+          open={openDelete}
+          onClose={handleCloseDelete}
+          aria-labelledby="child-modal-title"
+          aria-describedby="child-modal-description"
+        >
+          <Box sx={{ ...style.modalContent }}>
+            <Box sx={{ ...style.modalElement }}>
+              <Typography variant="h4">
+                Delete reminder
+              </Typography>
+            </Box>
+
+            <Box sx={{ ...style.modalElement }}>
+              <Typography variant="body1">
+                Are you sure you want to delete this reminder?
+              </Typography>
+            </Box>
+
+            <Button variant="contained" color="error" onClick={handleDelete}>Delete</Button>
+
+            <Button variant="contained" color="info" onClick={handleCloseDelete}>Close</Button>
           </Box>
-
-          <Box sx={{ ...style.modalElement }}>
-            <Typography variant="body1">
-              Are you sure you want to delete this reminder?
-            </Typography>
-          </Box>
-
-          <Button variant="contained" color="secondary" onClick={handleDelete}>Delete</Button>
-
-          <Button variant="contained" onClick={handleCloseDelete}>Close</Button>
-        </Box>
-      </Modal>
-    </Container>
+        </Modal>
+      </Container>
+    </Suspense>
   );
 }
