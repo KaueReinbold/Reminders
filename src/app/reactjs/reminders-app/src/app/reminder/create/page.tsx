@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TextField, Button, Container, Grid } from '@material-ui/core';
-import { Reminder } from '@/components/RemindersList';
+import { Reminder } from '@/app/components/RemindersList';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -43,7 +43,7 @@ export default function Create() {
             <TextField
               label="Title"
               value={reminder?.title}
-              onChange={(e) => setReminder(state => ({ ...state, title: e.target.value }))}
+              onChange={(e) => setReminder((state) => ({ ...state, title: e.target.value }))}
               required
               fullWidth
             />
@@ -53,7 +53,7 @@ export default function Create() {
             <TextField
               label="Description"
               value={reminder?.description}
-              onChange={(e) => setReminder(state => ({ ...state, description: e.target.value }))}
+              onChange={(e) => setReminder((state) => ({ ...state, description: e.target.value }))}
               required
               fullWidth
             />
@@ -63,7 +63,7 @@ export default function Create() {
             <TextField
               label="Limit Date"
               value={reminder?.limitDate}
-              onChange={(e) => setReminder(state => ({ ...state, limitDate: e.target.value }))}
+              onChange={(e) => setReminder((state) => ({ ...state, limitDate: e.target.value }))}
               required
               type='date'
               fullWidth
