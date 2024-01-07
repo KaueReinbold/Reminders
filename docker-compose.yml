@@ -38,6 +38,16 @@ services:
       - mvc
     deploy: *shared-deploy
 
+  react:
+    image: reminders-react
+    container_name: reminders-react
+    build:
+      context: .
+      dockerfile: src/app/reactjs/reminders-app/Dockerfile
+    profiles:
+      - all
+    deploy: *shared-deploy
+
   # Database
 
   mssql:

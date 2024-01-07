@@ -9,12 +9,12 @@ namespace Reminders.Application.ViewModels
         public Guid? Id { get; set; }
 
         [Required(ErrorMessage = "The field is Required")]
-        [MaxLength(50)]
+        [MaxLength(50, ErrorMessage = "The field {0} must be a text with a maximum length of '{1}'.")]
         [Display(Name = "Title", Prompt = "This is Reminder Title")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "The field is Required")]
-        [MaxLength(200)]
+        [MaxLength(200, ErrorMessage = "The field {0} must be a text with a maximum length of '{1}'.")]
         [Display(Name = "Description", Prompt = "This is Reminder Description")]
         public string Description { get; set; }
 

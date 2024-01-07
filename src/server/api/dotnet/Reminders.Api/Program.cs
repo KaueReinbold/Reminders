@@ -7,6 +7,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(setup =>
     setup.SwaggerDoc("v1", new OpenApiInfo { Title = "Reminders API", Version = "v1" }));
 
+// Add CORS services
+builder.Services.AddRemindersCors(
+    builder.Configuration);
+
 // App
 builder.Services
     .RegisterApplicationServices(
@@ -17,7 +21,7 @@ builder.Services
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline.http://localhost:3000/
 if (app.Environment.IsDevelopment())
 {
     app
@@ -25,6 +29,8 @@ if (app.Environment.IsDevelopment())
         .UseSwaggerUI(setup =>
             setup.SwaggerEndpoint("/swagger/v1/swagger.json", "Reminders API V1"));
 }
+
+app.UseRemindersCors();
 
 app.UseMachineNameLogging<Program>();
 
