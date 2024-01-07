@@ -34,7 +34,6 @@ class ValidationError extends Error {
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const REMINDER_QUERY_NAME = 'reminders';
 
 const headers = {
   'Content-Type': 'application/json',
@@ -134,7 +133,6 @@ export { ValidationError };
 
 export {
   API_BASE_URL,
-  REMINDER_QUERY_NAME,
   getReminders,
   getReminder,
   createReminder,

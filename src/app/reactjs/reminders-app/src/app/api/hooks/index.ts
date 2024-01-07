@@ -1,5 +1,4 @@
 import {
-  REMINDER_QUERY_NAME,
   createReminder,
   deleteReminder,
   getReminder,
@@ -7,6 +6,8 @@ import {
   updateReminder,
 } from '../index';
 import { useMutation, useQuery } from '@/app/hooks';
+
+const REMINDER_QUERY_NAME = 'reminders';
 
 const useReminders = () => useQuery(REMINDER_QUERY_NAME, getReminders);
 
