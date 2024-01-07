@@ -24,8 +24,8 @@ export function ReminderForm({ editing = false }: Props) {
             defaultValue={reminder?.id}
             disabled
             fullWidth
-            inputProps={{ readOnly: true }}
             InputLabelProps={{ shrink: true }}
+            inputProps={{ readOnly: true, 'data-testid': 'reminderId' }}
           />
         </Grid>
       )}
@@ -37,15 +37,17 @@ export function ReminderForm({ editing = false }: Props) {
           onChange={e => handleChange('title', e.target.value)}
           required
           fullWidth
-          InputLabelProps={{ shrink: true }}
           error={Boolean(errors?.Title)}
           helperText={errors?.Title}
+          InputLabelProps={{ shrink: true }}
+          inputProps={{ 'data-testid': 'title' }}
         />
       </Grid>
 
       <Grid item>
         <TextField
           label="Description"
+          placeholder="Enter description"
           defaultValue={reminder?.description}
           onChange={e => handleChange('description', e.target.value)}
           required
@@ -53,12 +55,14 @@ export function ReminderForm({ editing = false }: Props) {
           InputLabelProps={{ shrink: true }}
           error={Boolean(errors?.Description)}
           helperText={errors?.Description}
+          inputProps={{ 'data-testid': 'description' }}
         />
       </Grid>
 
       <Grid item>
         <TextField
           label="Limit Date"
+          placeholder="Enter limit date"
           defaultValue={reminder?.limitDateFormatted}
           onChange={e => handleChange('limitDate', e.target.value)}
           required
@@ -67,6 +71,7 @@ export function ReminderForm({ editing = false }: Props) {
           InputLabelProps={{ shrink: true }}
           error={Boolean(errors?.['LimitDate.Date'])}
           helperText={errors?.['LimitDate.Date']}
+          inputProps={{ 'data-testid': 'limitDate' }}
         />
       </Grid>
 
@@ -76,8 +81,9 @@ export function ReminderForm({ editing = false }: Props) {
             label="Done"
             control={
               <Checkbox
-                checked={reminder?.isDone ?? false}
+                checked={reminder?.isDone}
                 onChange={e => handleChange('isDone', e.target.checked)}
+                inputProps={{ 'data-testid': 'isDone' } as any}
               />
             }
           />

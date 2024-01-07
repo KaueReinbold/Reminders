@@ -25,6 +25,15 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@/app/components/*": [
+        "./src/app/components/*"
+      ],
+      "@/app/hooks/*": [
+        "./src/app/hooks/*"
+      ],
+      "@/app/api/*": [
+        "./src/app/api/*"
       ]
     },
     "types": [
