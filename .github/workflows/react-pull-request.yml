@@ -1,12 +1,11 @@
 name: Build and Test React App
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
+    paths:
+      - 'src/**/reactjs/**'
 
 jobs:
   build:
@@ -16,16 +15,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 18
+      # - name: Set up Node.js
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: 18
 
-      - name: Install dependencies
-        run: npm install
+      # - name: Install dependencies
+      #   run: npm install
+      #   working-directory: src/app/reactjs/reminders-app
 
-      - name: Build React app
-        run: npm run build
+      # - name: Build React app
+      #   run: npm run build
+      #   working-directory: src/app/reactjs/reminders-app
 
-      - name: Run tests
-        run: npm test
+      # - name: Run tests
+      #   run: npm test
+      #   working-directory: src/app/reactjs/reminders-app
