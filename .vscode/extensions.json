@@ -4,6 +4,6 @@
         "ms-azuretools.vscode-docker",
         "kreativ-software.csharpextensions",
         "ms-dotnettools.csharp",
-        "dbaeumer.vscode-eslint"
+        "esbenp.prettier-vscode"
     ]
 }
