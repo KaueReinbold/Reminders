@@ -20,7 +20,7 @@ const style = {
 interface Props {
   openDelete: boolean;
   toggleOpenDelete: () => void;
-  onDelete: (e: React.FormEvent) => Promise<void>;
+  onDelete: (e: React.FormEvent) => void;
 }
 
 export function ReminderDeleteModal({
@@ -46,11 +46,11 @@ export function ReminderDeleteModal({
           </Typography>
         </Box>
 
-        <Button variant="contained" color="error" onClick={onDelete}>
+        <Button variant="contained" color="error" onClick={onDelete} data-testid="delete-button">
           Delete
         </Button>
 
-        <Button variant="contained" color="info" onClick={toggleOpenDelete}>
+        <Button variant="contained" color="info" onClick={toggleOpenDelete} data-testid="close-button">
           Close
         </Button>
       </Box>
