@@ -29,6 +29,14 @@ const jestMocks = {
     useReminders: jest.fn().mockImplementation(() => ({
       data: mockReminders,
     })),
+    useReminder: jest.fn().mockImplementation(() => ({
+      data: mockReminder,
+    })),
+    createReminder: jest.fn(),
+    deleteReminder: jest.fn(),
+    getReminder: jest.fn(),
+    getReminders: jest.fn(),
+    updateReminder: jest.fn(),
   }),
   '@/app/hooks': () => ({
     useRemindersClearContext: jest.fn().mockReturnValue(jest.fn),
@@ -40,6 +48,7 @@ const jestMocks = {
       onUpdateReminder: jest.fn(),
       onDeleteReminder: jest.fn(),
     }),
+    useMutation: jest.fn(),
   }),
 };
 

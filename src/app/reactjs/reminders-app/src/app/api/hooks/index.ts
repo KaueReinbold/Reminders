@@ -4,7 +4,7 @@ import {
   getReminder,
   getReminders,
   updateReminder,
-} from '../index';
+} from '@/app/api';
 import { useMutation, useQuery } from '@/app/hooks';
 
 const REMINDER_QUERY_NAME = 'reminders';
