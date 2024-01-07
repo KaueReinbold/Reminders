@@ -12,17 +12,22 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.3",
-    "next": "14.0.4",
-    "react": "^18",
-    "react-dom": "^18",
-    "react-query": "^3.39.3"
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
+    "use-context-selector": "^1.4.1"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
+    "@next/eslint-plugin-next": "^14.0.4",
+    "@types/node": "^20.10.6",
+    "@types/react": "^18.2.47",
+    "@types/react-dom": "^18.2.18",
+    "@typescript-eslint/eslint-plugin": "^6.18.0",
+    "eslint": "^8.56.0",
     "eslint-config-next": "14.0.4",
-    "typescript": "^5"
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
   }
 }

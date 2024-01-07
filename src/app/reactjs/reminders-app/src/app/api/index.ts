@@ -1,7 +1,4 @@
-import { ApiError } from "next/dist/server/api-utils";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-
-export type Reminder = {
+type Reminder = {
   id?: string;
   title: string;
   description: string;
@@ -19,13 +16,14 @@ interface APIError {
   traceId: string;
 }
 
-export interface Errors {
+interface Errors {
   "LimitDate.Date": string[];
   "Description": string[];
   "Title": string[];
+  "ServerError": string;
 }
 
-export class ValidationError extends Error {
+class ValidationError extends Error {
   errors: Errors;
 
   constructor(message: string, errors: Errors) {
@@ -85,7 +83,7 @@ const createReminder = async (reminder: Reminder) => {
       await getErrors(response);
     }
 
-    throw new Error('Failed to update reminder');
+    throw new Error('Failed to create reminder');
   }
 
   return await response.json();
@@ -123,40 +121,22 @@ const deleteReminder = async (id: string) => {
   return id;
 };
 
-// Hooks
+export type {
+  Reminder,
+  Errors,
+}
 
-export const useReminders = () =>
-  useQuery(REMINDER_QUERY_NAME, () => getReminders);
+export {
+  ValidationError,
+}
 
-export const useReminder = (id: string) =>
-  useQuery(['reminder', id], () => getReminder(id));
+export {
+  REMINDER_QUERY_NAME,
+  getReminders,
+  getReminder,
+  createReminder,
+  updateReminder,
+  deleteReminder,
+}
 
-export const useCreateReminder = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(createReminder, {
-    onSuccess: () => {
-      return queryClient.invalidateQueries(REMINDER_QUERY_NAME);
-    },
-  });
-};
-
-export const useUpdateReminder = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(updateReminder, {
-    onSuccess: (data, variables) => {
-      queryClient.setQueryData(['reminder', { id: variables.id }], data);
-    },
-  });
-};
-
-export const useDeleteReminder = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(deleteReminder, {
-    onSuccess: (data, variables) => {
-      queryClient.removeQueries(['reminder', { id: variables }]);
-    },
-  });
-};
+export * from './hooks'
