@@ -3,6 +3,7 @@
         "Npgsql"
     ],
     "conventionalCommits.scopes": [
-        "docker"
+        "docker",
+        "react"
     ]
 }
