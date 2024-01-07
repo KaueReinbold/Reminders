@@ -2,27 +2,16 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ReminderForm } from '.';
+import { mockReminder, mockReminders } from '@/app/util/testMocks';
 
-const mockDispatch = jest.fn();
-jest.mock('@/app/hooks', () => ({
-  ...jest.requireActual('@/app/hooks'),
-  useRemindersContext: () => ({
-    reminder: {
-      id: 1,
-      title: 'Test Title',
-      description: 'Test Description',
-      limitDateFormatted: '2023-01-01',
-      isDone: true,
-    },
-    errors: {},
-    dispatch: mockDispatch,
-  }),
-}));
+jest.mock(
+  '@/app/hooks',
+  require('@/app/util/testMocks').jestMocks['@/app/hooks'],
+);
 
 describe('ReminderForm', () => {
   afterEach(() => {
     jest.restoreAllMocks();
-    jest.resetAllMocks();
   });
 
   it('should render without errors', async () => {
@@ -108,6 +97,14 @@ describe('ReminderForm', () => {
   });
 
   it('should call dispatch', async () => {
+    const dispatch = jest.fn();
+    jest
+      .spyOn(require('@/app/hooks'), 'useRemindersContext')
+      .mockImplementation(() => ({
+        reminder: mockReminder,
+        dispatch,
+      }));
+
     render(<ReminderForm editing />);
 
     fireEvent.change(screen.getByTestId('title'), {
@@ -122,19 +119,19 @@ describe('ReminderForm', () => {
 
     await userEvent.click(screen.getByTestId('isDone'));
 
-    expect(mockDispatch).toHaveBeenCalledWith({
+    expect(dispatch).toHaveBeenCalledWith({
       type: 'UPDATE_REMINDER',
       payload: { title: 'Updated Title' },
     });
-    expect(mockDispatch).toHaveBeenCalledWith({
+    expect(dispatch).toHaveBeenCalledWith({
       type: 'UPDATE_REMINDER',
       payload: { description: 'Updated Description' },
     });
-    expect(mockDispatch).toHaveBeenCalledWith({
+    expect(dispatch).toHaveBeenCalledWith({
       type: 'UPDATE_REMINDER',
       payload: { limitDate: '2023-12-31' },
     });
-    expect(mockDispatch).toHaveBeenCalledWith({
+    expect(dispatch).toHaveBeenCalledWith({
       type: 'UPDATE_REMINDER',
       payload: { isDone: false },
     });
