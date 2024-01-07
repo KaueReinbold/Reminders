@@ -34,6 +34,9 @@
       ],
       "@/app/api/*": [
         "./src/app/api/*"
+      ],
+      "@/app/reminder/*": [
+        "./src/app/reminder/*"
       ]
     },
     "types": [
