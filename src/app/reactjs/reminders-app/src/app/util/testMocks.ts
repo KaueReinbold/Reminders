@@ -24,6 +24,7 @@ const jestMocks = {
     useRouter: jest.fn().mockReturnValue({
       push: jest.fn(),
     }),
+    useParams: jest.fn(() => ({ id: 'someId' })),
   }),
   '@/app/api': () => ({
     useReminders: jest.fn().mockImplementation(() => ({
@@ -37,6 +38,11 @@ const jestMocks = {
     getReminder: jest.fn(),
     getReminders: jest.fn(),
     updateReminder: jest.fn(),
+    useReminderActions: jest.fn().mockReturnValue({
+      createReminder: jest.fn(),
+      updateReminder: jest.fn(),
+      deleteReminder: jest.fn(),
+    }),
   }),
   '@/app/hooks': () => ({
     useRemindersClearContext: jest.fn().mockReturnValue(jest.fn),
