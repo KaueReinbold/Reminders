@@ -36,6 +36,7 @@ const jestMocks = {
       reminder: mockReminder,
       errors: {},
       dispatch: jest.fn().mockImplementation(jest.fn),
+      onCreateReminder: jest.fn().mockImplementation(jest.fn),
     }),
   }),
 };

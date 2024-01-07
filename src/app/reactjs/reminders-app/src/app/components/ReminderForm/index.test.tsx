@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ReminderForm } from '.';
-import { mockReminder, mockReminders } from '@/app/util/testMocks';
+import { mockReminder } from '@/app/util/testMocks';
 
 jest.mock(
   '@/app/hooks',
