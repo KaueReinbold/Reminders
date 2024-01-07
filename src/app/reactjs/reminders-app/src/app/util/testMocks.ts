@@ -35,8 +35,10 @@ const jestMocks = {
     useRemindersContext: jest.fn().mockReturnValue({
       reminder: mockReminder,
       errors: {},
-      dispatch: jest.fn().mockImplementation(jest.fn),
-      onCreateReminder: jest.fn().mockImplementation(jest.fn),
+      dispatch: jest.fn(),
+      onCreateReminder: jest.fn(),
+      onUpdateReminder: jest.fn(),
+      onDeleteReminder: jest.fn(),
     }),
   }),
 };
