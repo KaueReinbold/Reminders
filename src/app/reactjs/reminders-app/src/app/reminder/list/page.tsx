@@ -1,16 +1,31 @@
 "use client"
 
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, CircularProgress } from '@mui/material';
-import Link from 'next/link';
-import { useReminders } from '@/app/api';
 import { Suspense } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, CircularProgress } from '@mui/material';
+
+import { useRemindersClearContext } from '@/app/hooks';
+import { useReminders } from '@/app/api';
 
 export default function RemindersList() {
-  const { data: reminders, isStale } = useReminders();
+  const router = useRouter();
+
+  const { data: reminders } = useReminders();
+  const clearReminder = useRemindersClearContext();
+
+  const handleCreateClick = () => {
+    clearReminder();
+    router.push('/reminder/create');
+  }
 
   return (
     <Suspense fallback={<CircularProgress />}>
-      <Link href="/reminder/create">
+      <Link href={'#'} onClick={(e) => {
+        e.preventDefault();
+        handleCreateClick();
+      }}>
         <Button variant="contained" color="primary">
           Create Reminder
         </Button>
