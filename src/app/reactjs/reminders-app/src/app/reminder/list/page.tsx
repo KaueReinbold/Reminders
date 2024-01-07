@@ -1,10 +1,20 @@
-"use client"
+'use client';
 
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, CircularProgress } from '@mui/material';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  CircularProgress,
+} from '@mui/material';
 
 import { useRemindersClearContext } from '@/app/hooks';
 import { useReminders } from '@/app/api';
@@ -18,14 +28,22 @@ export default function RemindersList() {
   const handleCreateClick = () => {
     clearReminder();
     router.push('/reminder/create');
-  }
+  };
+
+  const handleEditClick = (id?: string) => {
+    clearReminder();
+    router.push(`/reminder/${id}`);
+  };
 
   return (
     <Suspense fallback={<CircularProgress />}>
-      <Link href={'#'} onClick={(e) => {
-        e.preventDefault();
-        handleCreateClick();
-      }}>
+      <Link
+        href={'#'}
+        onClick={e => {
+          e.preventDefault();
+          handleCreateClick();
+        }}
+      >
         <Button variant="contained" color="primary">
           Create Reminder
         </Button>
@@ -43,7 +61,7 @@ export default function RemindersList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {reminders?.map((reminder) => (
+            {reminders?.map(reminder => (
               <TableRow key={reminder.id}>
                 <TableCell>{reminder.id}</TableCell>
                 <TableCell>{reminder.title}</TableCell>
@@ -51,11 +69,18 @@ export default function RemindersList() {
                 <TableCell>{reminder.limitDateFormatted}</TableCell>
                 <TableCell>{reminder.isDoneFormatted}</TableCell>
                 <TableCell>
-                  <Link href={`/reminder/${reminder.id}`}>
+                  <Link
+                    href={'#'}
+                    onClick={e => {
+                      e.preventDefault();
+                      handleEditClick(reminder.id);
+                    }}
+                  >
                     <Button variant="contained" color="primary">
                       Edit
                     </Button>
-                  </Link></TableCell>
+                  </Link>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

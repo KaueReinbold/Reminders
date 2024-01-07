@@ -17,10 +17,10 @@ interface APIError {
 }
 
 interface Errors {
-  "LimitDate.Date": string[];
-  "Description": string[];
-  "Title": string[];
-  "ServerError": string;
+  'LimitDate.Date': string[];
+  Description: string[];
+  Title: string[];
+  ServerError: string;
 }
 
 class ValidationError extends Error {
@@ -38,7 +38,7 @@ const REMINDER_QUERY_NAME = 'reminders';
 
 const headers = {
   'Content-Type': 'application/json',
-}
+};
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -46,31 +46,38 @@ const formatDate = (dateString: string) => {
   const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are 0-indexed in JavaScript
   const day = ('0' + date.getDate()).slice(-2);
   return `${year}-${month}-${day}`;
-}
+};
 
 const getErrors = async (response: Response) => {
-  const apiError = await response.json() as APIError;
-  const errors = Object.entries(apiError.errors)
-    .reduce((prev, [key, value]) => ({ ...prev, [key]: value[0] }), {} as Errors);
+  const apiError = (await response.json()) as APIError;
+  const errors = Object.entries(apiError.errors).reduce(
+    (prev, [key, value]) => ({ ...prev, [key]: value[0] }),
+    {} as Errors,
+  );
 
   throw new ValidationError(apiError.title, errors);
-}
+};
 
-const mapReminder = (reminder: Reminder) => ({
-  ...reminder,
-  limitDateFormatted: reminder.limitDate ? formatDate(reminder.limitDate) : '',
-  isDoneFormatted: reminder.isDone ? 'Yes' : 'No',
-} as Reminder);
+const mapReminder = (reminder: Reminder): Reminder =>
+  ({
+    ...reminder,
+    limitDateFormatted: reminder.limitDate
+      ? formatDate(reminder.limitDate)
+      : '',
+    isDoneFormatted: reminder.isDone ? 'Yes' : 'No',
+  }) as Reminder;
 
-const getReminders: Promise<Reminder[]> = fetch(`${API_BASE_URL}/api/reminders`)
-  .then(response => response.json())
-  .then(data => data?.map(mapReminder));
+const getReminders = (): Promise<Reminder[]> =>
+  fetch(`${API_BASE_URL}/api/reminders`)
+    .then(response => response.json())
+    .then(data => data?.map(mapReminder));
 
-const getReminder = async (id: string) => fetch(`${API_BASE_URL}/api/reminders/${id}`)
-  .then(response => response.json())
-  .then(mapReminder);
+const getReminder = (id: string): Promise<Reminder> =>
+  fetch(`${API_BASE_URL}/api/reminders/${id}`)
+    .then(response => response.json())
+    .then(mapReminder);
 
-const createReminder = async (reminder: Reminder) => {
+const createReminder = async (reminder: Reminder): Promise<Reminder> => {
   const body = JSON.stringify(reminder);
   const response = await fetch(`${API_BASE_URL}/api/reminders`, {
     method: 'POST',
@@ -89,7 +96,7 @@ const createReminder = async (reminder: Reminder) => {
   return await response.json();
 };
 
-const updateReminder = async (reminder: Reminder) => {
+const updateReminder = async (reminder: Reminder): Promise<Reminder> => {
   const body = JSON.stringify(reminder);
   const response = await fetch(`${API_BASE_URL}/api/reminders/${reminder.id}`, {
     method: 'PUT',
@@ -108,7 +115,7 @@ const updateReminder = async (reminder: Reminder) => {
   return await response.json();
 };
 
-const deleteReminder = async (id: string) => {
+const deleteReminder = async (id: string): Promise<string> => {
   const response = await fetch(`${API_BASE_URL}/api/reminders/${id}`, {
     method: 'DELETE',
     headers,
@@ -121,22 +128,18 @@ const deleteReminder = async (id: string) => {
   return id;
 };
 
-export type {
-  Reminder,
-  Errors,
-}
+export type { Reminder, Errors };
+
+export { ValidationError };
 
 export {
-  ValidationError,
-}
-
-export {
+  API_BASE_URL,
   REMINDER_QUERY_NAME,
   getReminders,
   getReminder,
   createReminder,
   updateReminder,
   deleteReminder,
-}
+};
 
-export * from './hooks'
+export * from './hooks';
