@@ -3,6 +3,7 @@
         "formulahendry.dotnet-test-explorer",
         "ms-azuretools.vscode-docker",
         "kreativ-software.csharpextensions",
-        "ms-dotnettools.csharp"
+        "ms-dotnettools.csharp",
+        "esbenp.prettier-vscode"
     ]
 }
