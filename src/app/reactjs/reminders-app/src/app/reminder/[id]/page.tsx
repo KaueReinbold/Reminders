@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Suspense, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button, Container, Grid, CircularProgress } from '@mui/material';
 
 import { ReminderDeleteModal, ReminderForm } from '@/app/components';
-import { useRemindersContext } from '@/app/hooks';
+import { ReminderActionStatus, useRemindersContext } from '@/app/hooks';
 
 export default function Edit() {
   const router = useRouter();
@@ -18,17 +18,21 @@ export default function Edit() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await onUpdateReminder();
+    const status = await onUpdateReminder();
 
-    handleBack();
+    if (status === ReminderActionStatus.Success) {
+      handleBack();
+    }
   };
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await onDeleteReminder();
+    const status = await onDeleteReminder();
 
-    handleBack();
+    if (status === ReminderActionStatus.Success) {
+      handleBack();
+    }
   };
 
   const toggleOpenDelete = () => {
@@ -37,22 +41,24 @@ export default function Edit() {
 
   const handleBack = () => {
     router.push('/');
-  }
+  };
 
   return (
     <Suspense fallback={<CircularProgress />}>
       <Container sx={{ margin: 3 }}>
         <form onSubmit={handleSubmit} noValidate>
           <Grid container direction="column" spacing={5}>
-            <ReminderForm
-              editing
-            />
+            <ReminderForm editing />
 
             <Grid item>
               <Button type="submit" variant="contained" color="success">
                 Edit
               </Button>
-              <Button variant="contained" color="error" onClick={toggleOpenDelete}>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={toggleOpenDelete}
+              >
                 Delete
               </Button>
               <Button variant="contained" color="info" onClick={handleBack}>
@@ -71,4 +77,3 @@ export default function Edit() {
     </Suspense>
   );
 }
-

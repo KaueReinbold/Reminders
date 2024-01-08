@@ -1,3 +1,5 @@
+import { ReminderActionStatus } from '../hooks';
+
 const mockReminder = {
   id: 1,
   title: 'Test Title 1',
@@ -50,11 +52,18 @@ const jestMocks = {
       reminder: mockReminder,
       errors: {},
       dispatch: jest.fn(),
-      onCreateReminder: jest.fn(),
-      onUpdateReminder: jest.fn(),
-      onDeleteReminder: jest.fn(),
+      onCreateReminder: jest
+        .fn()
+        .mockResolvedValue(ReminderActionStatus.Success),
+      onUpdateReminder: jest
+        .fn()
+        .mockResolvedValue(ReminderActionStatus.Success),
+      onDeleteReminder: jest
+        .fn()
+        .mockResolvedValue(ReminderActionStatus.Success),
     }),
     useMutation: jest.fn(),
+    ReminderActionStatus: ReminderActionStatus,
   }),
 };
 

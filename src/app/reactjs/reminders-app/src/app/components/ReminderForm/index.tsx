@@ -33,6 +33,7 @@ export function ReminderForm({ editing = false }: Props) {
       <Grid item>
         <TextField
           label="Title"
+          placeholder="Enter title"
           defaultValue={reminder?.title}
           onChange={e => handleChange('title', e.target.value)}
           required
