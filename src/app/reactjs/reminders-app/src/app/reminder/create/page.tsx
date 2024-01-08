@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
 import { useRouter } from 'next/navigation';
 
 import { Button, Container, Grid } from '@mui/material';
 
 import { ReminderForm } from '@/app/components';
-import { useRemindersContext } from '@/app/hooks';
+import { ReminderActionStatus, useRemindersContext } from '@/app/hooks';
 
 export default function Create() {
   const router = useRouter();
@@ -15,14 +15,16 @@ export default function Create() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await onCreateReminder();
+    const status = await onCreateReminder();
 
-    handleBack();
+    if (status === ReminderActionStatus.Success) {
+      handleBack();
+    }
   };
 
   const handleBack = () => {
     router.push('/');
-  }
+  };
 
   return (
     <Container sx={{ margin: 3 }}>

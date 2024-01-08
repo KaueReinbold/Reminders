@@ -16,10 +16,15 @@ interface RemindersContextValue {
   reminder?: Reminder | null | undefined;
   errors?: Errors;
   dispatch: Dispatch<ReminderAction>;
-  onCreateReminder: () => Promise<void>;
-  onUpdateReminder: () => Promise<void>;
-  onDeleteReminder: () => Promise<void>;
+  onCreateReminder: () => Promise<ReminderActionStatus>;
+  onUpdateReminder: () => Promise<ReminderActionStatus>;
+  onDeleteReminder: () => Promise<ReminderActionStatus>;
   clearReminder: () => void;
+}
+
+export enum ReminderActionStatus {
+  Success,
+  Fail,
 }
 
 const RemindersContext = createContext<RemindersContextValue | undefined>(
@@ -89,32 +94,44 @@ export function RemindersContextProvider({
 
   const [errors, setErrors] = useState<Errors>();
 
-  const onCreateReminder = async () => {
+  const onCreateReminder = async (): Promise<ReminderActionStatus> => {
     try {
       if (reminder) {
         await createReminder.mutateAsync(reminder);
       }
     } catch (error) {
       validateErrors(error);
+
+      return ReminderActionStatus.Fail;
     }
+
+    return ReminderActionStatus.Success;
   };
 
-  const onUpdateReminder = async () => {
+  const onUpdateReminder = async (): Promise<ReminderActionStatus> => {
     try {
       if (reminder) {
         await updateReminder.mutateAsync(reminder);
       }
     } catch (error) {
       validateErrors(error);
+
+      return ReminderActionStatus.Fail;
     }
+
+    return ReminderActionStatus.Success;
   };
 
-  const onDeleteReminder = async () => {
+  const onDeleteReminder = async (): Promise<ReminderActionStatus> => {
     try {
       await deleteReminder.mutateAsync(id);
     } catch (error) {
       validateErrors(error);
+
+      return ReminderActionStatus.Fail;
     }
+
+    return ReminderActionStatus.Success;
   };
 
   const validateErrors = (error: unknown) => {
