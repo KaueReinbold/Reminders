@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import Create from './page';
+import { ReminderActionStatus } from '@/app/hooks';
 
 jest.mock(
   'next/navigation',
@@ -35,6 +36,23 @@ describe('Create Component', () => {
     expect(require('next/navigation').useRouter().push).toHaveBeenCalledWith(
       '/',
     );
+  });
+
+  it('should call onCreateReminder and not redirect', async () => {
+    jest
+      .spyOn(require('@/app/hooks').useRemindersContext(), 'onCreateReminder')
+      .mockResolvedValue(ReminderActionStatus.Fail);
+
+    render(<Create />);
+
+    fireEvent.click(screen.getByText('Create'));
+
+    await screen.findByText('Back');
+
+    expect(
+      require('@/app/hooks').useRemindersContext().onCreateReminder,
+    ).toHaveBeenCalled();
+    expect(require('next/navigation').useRouter().push).not.toHaveBeenCalled();
   });
 
   it('should handle Back button click', () => {
