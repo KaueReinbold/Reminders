@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\server\application\dotnet\Reminders.Application\Reminders.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\server\api\dotnet\Reminders.Api\Reminders.Api.csproj" />
   </ItemGroup>
   
 </Project>
