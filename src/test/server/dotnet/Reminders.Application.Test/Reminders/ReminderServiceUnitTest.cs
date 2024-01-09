@@ -10,7 +10,7 @@ using Reminders.Application.Mapper.Extensions;
 using Reminders.Application.Services;
 using Reminders.Application.Validators.Reminders.Exceptions;
 using Reminders.Application.Validators.Reminders.Exceptions.Enumerables;
-using Reminders.Application.Validators.Reminders.Resources;
+using Reminders.Api.Layers.Application.Validators.Reminders.Resources;
 using Reminders.Application.ViewModels;
 using Reminders.Domain.Contracts;
 using Reminders.Domain.Contracts.Repositories;
