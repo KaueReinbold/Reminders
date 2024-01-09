@@ -16,14 +16,6 @@ ARG NUGET_PASSWORD
 # Application
 COPY ["src/app/dotnet/Reminders.Mvc/Reminders.Mvc.csproj", "src/app/dotnet/Reminders.Mvc/"]
 
-COPY ["src/server/application/dotnet/Reminders.Application/Reminders.Application.csproj", "src/server/application/dotnet/Reminders.Application/"]
-COPY ["src/server/infrastructure/dotnet/Reminders.Infrastructure.CrossCutting/Reminders.Infrastructure.CrossCutting.csproj", "src/server/infrastructure/dotnet/Reminders.Infrastructure.CrossCutting/"]
-COPY ["src/server/domain/dotnet/Reminders.Domain/Reminders.Domain.csproj", "src/server/domain/dotnet/Reminders.Domain/"]
-
-COPY ["src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework/Reminders.Infrastructure.Data.EntityFramework.csproj", "src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework/"]
-COPY ["src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.SqlServer/Reminders.Infrastructure.Data.EntityFramework.SqlServer.csproj", "src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.SqlServer/"]
-COPY ["src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.Postgres/Reminders.Infrastructure.Data.EntityFramework.Postgres.csproj", "src/server/data/dotnet/Reminders.Infrastructure.Data.EntityFramework.Postgres/"]
-
 # Check if all required environment variables are set
 RUN if [ -n "${NUGET_SOURCE}" ] && [ -n "${NUGET_USER_NAME}" ] && [ -n "${NUGET_PASSWORD}" ]; then \
     dotnet nuget add source ${NUGET_SOURCE} -n NugetFeed -u ${NUGET_USER_NAME} -p ${NUGET_PASSWORD} --store-password-in-clear-text; \

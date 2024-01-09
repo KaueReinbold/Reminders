@@ -34,8 +34,6 @@ else
     app.UseHsts();
 }
 
-app.UseMachineNameLogging<Program>();
-
 app
     .ConfigureExceptionHandler()
     .UseHttpsRedirection()

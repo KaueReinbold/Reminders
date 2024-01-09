@@ -16,16 +16,7 @@ public static class ExceptionMiddlewareExtensions
 
                 if (contextFeature != null)
                 {
-                    var statusCode = context.Response.StatusCode;
-                    var message = "Internal Server Error.";
-
-                    if (contextFeature.Error is RemindersApplicationException remindersApplicationException)
-                    {
-                        message = remindersApplicationException.Message;
-                        context.Response.StatusCode = statusCode;
-                    }
-                    else
-                        context.Response.Redirect("/Home/Error");
+                    context.Response.Redirect("/Home/Error");
                 }
 
                 return Task.CompletedTask;

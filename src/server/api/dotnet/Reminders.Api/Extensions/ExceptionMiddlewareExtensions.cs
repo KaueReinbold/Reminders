@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Reminders.Api.Models;
 using Reminders.Application.Validators.Reminders.Exceptions;
 using System.Net;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace Reminders.Api.Extensions
 {

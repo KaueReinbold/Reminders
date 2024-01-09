@@ -32,7 +32,7 @@ services:
       context: .
       dockerfile: src/app/dotnet/Reminders.Mvc/Dockerfile
     depends_on:
-      - api
+      - nginx
     profiles:
       - all
       - mvc
@@ -44,6 +44,8 @@ services:
     build:
       context: .
       dockerfile: src/app/reactjs/reminders-app/Dockerfile
+    depends_on:
+      - nginx
     profiles:
       - all
     deploy: *shared-deploy
@@ -74,6 +76,7 @@ services:
     container_name: reminders-nginx
     depends_on:
       - api
+      - api-2
     profiles:
       - all
       - api
