@@ -26,7 +26,7 @@ const jestMocks = {
     useRouter: jest.fn().mockReturnValue({
       push: jest.fn(),
     }),
-    useParams: jest.fn(() => ({ id: 'someId' })),
+    useParams: jest.fn().mockImplementation(() => ({ id: 'someId' })),
   }),
   '@/app/api': () => ({
     useReminders: jest.fn().mockImplementation(() => ({
@@ -40,11 +40,11 @@ const jestMocks = {
     getReminder: jest.fn(),
     getReminders: jest.fn(),
     updateReminder: jest.fn(),
-    useReminderActions: jest.fn().mockReturnValue({
-      createReminder: jest.fn(),
-      updateReminder: jest.fn(),
-      deleteReminder: jest.fn(),
-    }),
+    useReminderActions: jest.fn().mockImplementation(() => ({
+      createReminder: { mutateAsync: jest.fn() },
+      updateReminder: { mutateAsync: jest.fn() },
+      deleteReminder: { mutateAsync: jest.fn() },
+    })),
   }),
   '@/app/hooks': () => ({
     useRemindersClearContext: jest.fn().mockReturnValue(jest.fn),
@@ -67,4 +67,61 @@ const jestMocks = {
   }),
 };
 
-export { jestMocks, mockReminders, mockReminder };
+const jestRemindersMocks = {
+  'next/navigation': {
+    useRouter: jest.fn().mockReturnValue({
+      push: jest.fn(),
+    }),
+    useParams: jest.fn().mockImplementation(() => ({ id: mockReminder.id })),
+  },
+  '@/app/api': {
+    useReminders: jest.fn().mockImplementation(() => ({
+      data: mockReminders,
+    })),
+    useReminder: jest.fn().mockImplementation(() => ({
+      data: mockReminder,
+    })),
+    createReminder: jest.fn(),
+    deleteReminder: jest.fn(),
+    getReminder: jest.fn(),
+    getReminders: jest.fn(),
+    updateReminder: jest.fn(),
+    useReminderActions: jest.fn().mockReturnValue({
+      createReminder: { mutateAsync: jest.fn() },
+      updateReminder: { mutateAsync: jest.fn() },
+      deleteReminder: { mutateAsync: jest.fn() },
+    }),
+    ValidationError: jest.fn().mockImplementation(() => ({
+      errors: {
+        Title: [
+          "The field Title must be a text with a maximum length of '50'.",
+        ],
+        Description: [
+          "The field Description must be a text with a maximum length of '200'.",
+        ],
+        'LimitDate.Date': ['The Limit Date should be later than Today.'],
+      },
+    })),
+  },
+  '@/app/hooks': {
+    useRemindersClearContext: jest.fn().mockReturnValue(jest.fn),
+    useRemindersContext: jest.fn().mockReturnValue({
+      reminder: mockReminder,
+      errors: {},
+      dispatch: jest.fn(),
+      onCreateReminder: jest
+        .fn()
+        .mockImplementation(() => ReminderActionStatus.Success),
+      onUpdateReminder: jest
+        .fn()
+        .mockImplementation(() => ReminderActionStatus.Success),
+      onDeleteReminder: jest
+        .fn()
+        .mockImplementation(() => ReminderActionStatus.Success),
+    }),
+    useMutation: jest.fn(),
+    ReminderActionStatus: ReminderActionStatus,
+  },
+};
+
+export { jestMocks, jestRemindersMocks, mockReminders, mockReminder };
