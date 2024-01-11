@@ -23,6 +23,7 @@ interface RemindersContextValue {
 }
 
 export enum ReminderActionStatus {
+  Unknown,
   Success,
   Fail,
 }
