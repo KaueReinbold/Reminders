@@ -40,7 +40,7 @@ describe('API functions', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('getReminders', () => {

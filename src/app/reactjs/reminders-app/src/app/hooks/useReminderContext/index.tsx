@@ -4,13 +4,7 @@ import { Dispatch, ReactNode, useEffect, useReducer, useState } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 import { useParams } from 'next/navigation';
 
-import {
-  Errors,
-  Reminder,
-  ValidationError,
-  useReminder,
-  useReminderActions,
-} from '@/app/api';
+import { Errors, Reminder, useReminder, useReminderActions } from '@/app/api';
 
 interface RemindersContextValue {
   reminder?: Reminder | null | undefined;
@@ -52,7 +46,7 @@ export function useRemindersClearContext() {
 
   if (!context) {
     throw new Error(
-      'useRemindersContext must be used within a RemindersContextProvider',
+      'useRemindersClearContext must be used within a RemindersContextProvider',
     );
   }
 
@@ -98,10 +92,16 @@ export function RemindersContextProvider({
   const onCreateReminder = async (): Promise<ReminderActionStatus> => {
     try {
       if (reminder) {
-        await createReminder.mutateAsync(reminder);
+        const result = await createReminder.mutateAsync(reminder);
+
+        if (result?.errors) {
+          setErrors(result?.errors);
+
+          return ReminderActionStatus.Fail;
+        }
       }
     } catch (error) {
-      validateErrors(error);
+      console.error(error);
 
       return ReminderActionStatus.Fail;
     }
@@ -112,10 +112,16 @@ export function RemindersContextProvider({
   const onUpdateReminder = async (): Promise<ReminderActionStatus> => {
     try {
       if (reminder) {
-        await updateReminder.mutateAsync(reminder);
+        const result = await updateReminder.mutateAsync(reminder);
+
+        if (result?.errors) {
+          setErrors(result?.errors);
+
+          return ReminderActionStatus.Fail;
+        }
       }
     } catch (error) {
-      validateErrors(error);
+      console.error(error);
 
       return ReminderActionStatus.Fail;
     }
@@ -125,22 +131,20 @@ export function RemindersContextProvider({
 
   const onDeleteReminder = async (): Promise<ReminderActionStatus> => {
     try {
-      await deleteReminder.mutateAsync(id);
+      const result = await deleteReminder.mutateAsync(id);
+
+      if (result?.errors) {
+        setErrors(result?.errors);
+
+        return ReminderActionStatus.Fail;
+      }
     } catch (error) {
-      validateErrors(error);
+      console.error(error);
 
       return ReminderActionStatus.Fail;
     }
 
     return ReminderActionStatus.Success;
-  };
-
-  const validateErrors = (error: unknown) => {
-    if (error instanceof ValidationError) {
-      setErrors(error.errors);
-    } else if (error instanceof Error) {
-      setErrors({ ServerError: error.message } as Errors);
-    }
   };
 
   const clearReminder = () => {
