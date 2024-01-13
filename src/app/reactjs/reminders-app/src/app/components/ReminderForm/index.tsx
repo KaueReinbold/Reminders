@@ -15,7 +15,7 @@ export function ReminderForm({ editing = false }: Props) {
 
   return (
     <>
-      <AlertError error={errors?.ServerError} />
+      <AlertError error={errors?.InternalServer} />
 
       {editing && (
         <Grid item>

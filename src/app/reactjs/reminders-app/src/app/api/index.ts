@@ -1,37 +1,4 @@
-type Reminder = {
-  id?: string;
-  title: string;
-  description: string;
-  limitDate: string;
-  limitDateFormatted?: string;
-  isDone: boolean;
-  isDoneFormatted?: string;
-};
-
-interface APIError {
-  type: string;
-  title: string;
-  status: number;
-  errors: Errors;
-  traceId: string;
-}
-
-interface Errors {
-  'LimitDate.Date': string[];
-  Description: string[];
-  Title: string[];
-  ServerError: string;
-}
-
-class ValidationError extends Error {
-  errors: Errors;
-
-  constructor(message: string, errors: Errors) {
-    super(message);
-    this.name = 'ValidationError';
-    this.errors = errors;
-  }
-}
+import { APIError, Errors, MutateResult, Reminder } from './types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -47,14 +14,28 @@ const formatDate = (dateString: string) => {
   return `${year}-${month}-${day}`;
 };
 
-const getErrors = async (response: Response) => {
-  const apiError = (await response.json()) as APIError;
-  const errors = Object.entries(apiError.errors).reduce(
-    (prev, [key, value]) => ({ ...prev, [key]: value[0] }),
-    {} as Errors,
-  );
+const getErrors = async (response: Response): Promise<Errors> => {
+  let errors = {} as Errors;
 
-  throw new ValidationError(apiError.title, errors);
+  try {
+    const apiError = (await response.json()) as APIError;
+
+    errors = apiError.errors;
+
+    if (Object.keys(errors).length === 0) {
+      errors = {
+        BadRequest: apiError.title,
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    
+    errors = {
+      InternalServer: 'Failed to perform errors validation',
+    } as Errors;
+  }
+
+  return errors;
 };
 
 const mapReminder = (reminder: Reminder): Reminder =>
@@ -76,7 +57,9 @@ const getReminder = (id: string): Promise<Reminder> =>
     .then(response => response.json())
     .then(mapReminder);
 
-const createReminder = async (reminder: Reminder): Promise<Reminder> => {
+const createReminder = async (
+  reminder: Reminder,
+): Promise<MutateResult<Reminder>> => {
   const body = JSON.stringify(reminder);
   const response = await fetch(`${API_BASE_URL}/api/reminders`, {
     method: 'POST',
@@ -84,18 +67,20 @@ const createReminder = async (reminder: Reminder): Promise<Reminder> => {
     body,
   });
 
-  if (!response.ok) {
-    if (response.status === 400) {
-      await getErrors(response);
-    }
+  const result = {} as MutateResult<Reminder>;
 
-    throw new Error('Failed to create reminder');
+  if (response.ok) {
+    result.result = await response.json();
+  } else {
+    result.errors = await getErrors(response);
   }
 
-  return await response.json();
+  return result;
 };
 
-const updateReminder = async (reminder: Reminder): Promise<Reminder> => {
+const updateReminder = async (
+  reminder: Reminder,
+): Promise<MutateResult<Reminder>> => {
   const body = JSON.stringify(reminder);
   const response = await fetch(`${API_BASE_URL}/api/reminders/${reminder.id}`, {
     method: 'PUT',
@@ -103,33 +88,35 @@ const updateReminder = async (reminder: Reminder): Promise<Reminder> => {
     body,
   });
 
-  if (!response.ok) {
-    if (response.status === 400) {
-      return getErrors(response);
-    }
+  const result = {} as MutateResult<Reminder>;
 
-    throw new Error('Failed to update reminder');
+  if (response.ok) {
+    result.result = await response.json();
+  } else {
+    result.errors = await getErrors(response);
   }
 
-  return await response.json();
+  return result;
 };
 
-const deleteReminder = async (id: string): Promise<string> => {
+const deleteReminder = async (id: string): Promise<MutateResult<string>> => {
   const response = await fetch(`${API_BASE_URL}/api/reminders/${id}`, {
     method: 'DELETE',
     headers,
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to delete reminder');
+  const result = {} as MutateResult<string>;
+
+  if (response.ok) {
+    result.result = id;
+  } else {
+    result.errors = await getErrors(response);
   }
 
-  return id;
+  return result;
 };
 
 export type { Reminder, Errors };
-
-export { ValidationError };
 
 export {
   API_BASE_URL,
@@ -138,6 +125,7 @@ export {
   createReminder,
   updateReminder,
   deleteReminder,
+  getErrors,
 };
 
 export * from './hooks';
