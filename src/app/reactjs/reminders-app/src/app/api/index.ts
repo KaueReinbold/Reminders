@@ -88,7 +88,7 @@ const updateReminder = async (
     body,
   });
 
-  const result = {} as MutateResult<Reminder>;
+  const result = { errors: [] } as MutateResult<Reminder>;
 
   if (response.ok) {
     result.result = await response.json();

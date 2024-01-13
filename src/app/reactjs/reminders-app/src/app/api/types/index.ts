@@ -25,6 +25,6 @@ export type Errors = {
 };
 
 export type MutateResult<T> = {
-  result: T;
-  errors: Errors;
+  result?: T;
+  errors?: Errors;
 };
