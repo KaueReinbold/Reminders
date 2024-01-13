@@ -5,8 +5,9 @@ import {
   updateReminder,
   deleteReminder,
   Reminder,
-  ValidationError,
   API_BASE_URL,
+  Errors,
+  getErrors,
 } from './index';
 
 describe('API functions', () => {
@@ -95,10 +96,10 @@ describe('API functions', () => {
         },
       );
       expect(mockResponse.json).toHaveBeenCalled();
-      expect(createdReminder).toEqual({ id: '1', ...mockReminder });
+      expect(createdReminder.result).toEqual({ id: '1', ...mockReminder });
     });
 
-    it('should return validation error when trying to create a new reminder and status code is 400', async () => {
+    it('should return validation error when trying to create a new reminder', async () => {
       const mockResponse = {
         json: jest.fn().mockResolvedValueOnce(mockValidationFail),
         ok: false,
@@ -106,25 +107,11 @@ describe('API functions', () => {
       };
       (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
 
-      expect(createReminder(mockReminder)).rejects.toThrow(
-        new ValidationError(mockValidationFail.title, {
-          Title: mockValidationFail.errors['Title'][0],
-          Description: mockValidationFail.errors['Description'][0],
-          'LimitDate.Date': mockValidationFail.errors['LimitDate.Date'],
-        } as any),
-      );
-    });
-
-    it('should throw error if create failed', async () => {
-      const mockResponse = {
-        ok: false,
-        status: 500,
-      };
-      (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
-
-      expect(createReminder(mockReminder)).rejects.toThrow(
-        'Failed to create reminder',
-      );
+      expect((await createReminder(mockReminder)).errors).toStrictEqual({
+        Title: mockValidationFail.errors['Title'],
+        Description: mockValidationFail.errors['Description'],
+        'LimitDate.Date': mockValidationFail.errors['LimitDate.Date'],
+      } as Errors);
     });
   });
 
@@ -137,7 +124,7 @@ describe('API functions', () => {
       };
       (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
 
-      const result = await updateReminder(updatedReminder);
+      const reminder = await updateReminder(updatedReminder);
 
       expect(global.fetch).toHaveBeenCalledWith(
         `${API_BASE_URL}/api/reminders/1`,
@@ -148,7 +135,7 @@ describe('API functions', () => {
         },
       );
       expect(mockResponse.json).toHaveBeenCalled();
-      expect(result).toEqual(updatedReminder);
+      expect(reminder.result).toEqual(updatedReminder);
     });
 
     it('should return validation error when trying to update a new reminder', async () => {
@@ -159,25 +146,11 @@ describe('API functions', () => {
       };
       (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
 
-      expect(updateReminder(mockReminder)).rejects.toThrow(
-        new ValidationError(mockValidationFail.title, {
-          Title: mockValidationFail.errors['Title'][0],
-          Description: mockValidationFail.errors['Description'][0],
-          'LimitDate.Date': mockValidationFail.errors['LimitDate.Date'],
-        } as any),
-      );
-    });
-
-    it('should throw error if update failed', async () => {
-      const mockResponse = {
-        ok: false,
-        status: 500,
-      };
-      (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
-
-      expect(updateReminder(mockReminder)).rejects.toThrow(
-        'Failed to update reminder',
-      );
+      expect((await updateReminder(mockReminder)).errors).toStrictEqual({
+        Title: mockValidationFail.errors['Title'],
+        Description: mockValidationFail.errors['Description'],
+        'LimitDate.Date': mockValidationFail.errors['LimitDate.Date'],
+      } as any);
     });
   });
 
@@ -199,32 +172,22 @@ describe('API functions', () => {
           },
         },
       );
-      expect(result).toEqual('1');
+      expect(result.result).toEqual('1');
     });
 
     it('should throw error if delete failed', async () => {
       const mockResponse = {
+        json: jest
+          .fn()
+          .mockResolvedValueOnce({ ...mockValidationFail, errors: [] }),
         ok: false,
+        status: 400,
       };
       (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
 
-      expect(deleteReminder('1')).rejects.toThrow('Failed to delete reminder');
-    });
-  });
-
-  describe('ValidationError', () => {
-    it('should create a ValidationError instance with errors', () => {
-      const errors = {
-        'LimitDate.Date': ['Invalid date'],
-        Description: ['Description is required'],
-        Title: ['Title is required'],
-        ServerError: 'Internal server error',
-      };
-
-      const validationError = new ValidationError('Validation error', errors);
-
-      expect(validationError.message).toEqual('Validation error');
-      expect(validationError.errors).toEqual(errors);
+      expect((await deleteReminder('1')).errors).toStrictEqual({
+        BadRequest: mockValidationFail.title,
+      } as Errors);
     });
   });
 
@@ -259,6 +222,23 @@ describe('API functions', () => {
       const reminder = await getReminder('1');
 
       expect(reminder).toEqual({ id: '1', ...copy });
+    });
+  });
+
+  describe('getErrors', () => {
+    it('should return internal error when exception occurred', async () => {
+      const consoleSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementationOnce(jest.fn);
+      const errorMessage = 'Error';
+      const mockResponse = {
+        json: jest.fn().mockRejectedValue(errorMessage),
+      } as any;
+
+      expect(await getErrors(mockResponse)).toStrictEqual({
+        InternalServer: 'Failed to perform errors validation',
+      } as Errors);
+      expect(consoleSpy).toHaveBeenCalledWith(errorMessage);
     });
   });
 });
