@@ -5,12 +5,12 @@ import { mockReminders } from '@/app/util/testMocks';
 
 jest.mock(
   'next/navigation',
-  require('@/app/util/testMocks').jestMocks['next/navigation'],
+  require('@/app/util/testMocks').jestFunctionsMock['next/navigation'],
 );
-jest.mock('@/app/api', require('@/app/util/testMocks').jestMocks['@/app/api']);
+jest.mock('@/app/api', require('@/app/util/testMocks').jestFunctionsMock['@/app/api']);
 jest.mock(
   '@/app/hooks',
-  require('@/app/util/testMocks').jestMocks['@/app/hooks'],
+  require('@/app/util/testMocks').jestFunctionsMock['@/app/hooks'],
 );
 
 describe('RemindersList', () => {

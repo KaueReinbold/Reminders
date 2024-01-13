@@ -6,7 +6,7 @@ import { mockReminder } from '@/app/util/testMocks';
 
 jest.mock(
   '@/app/hooks',
-  require('@/app/util/testMocks').jestMocks['@/app/hooks'],
+  require('@/app/util/testMocks').jestFunctionsMock['@/app/hooks'],
 );
 
 describe('ReminderForm', () => {
