@@ -11,7 +11,7 @@ import { mockReminder, mockReminders } from '@/app/util/testMocks';
 
 jest.mock(
   '@/app/api',
-  () => require('@/app/util/testMocks').jestRemindersMocks['@/app/api'],
+  () => require('@/app/util/testMocks').jestFunctionsMock['@/app/api'],
 );
 jest.mock('@/app/hooks', () => ({
   useMutation: jest.fn(),

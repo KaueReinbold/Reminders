@@ -21,60 +21,7 @@ const mockReminders = [
   },
 ];
 
-const jestMocks = {
-  'next/navigation': () => ({
-    useRouter: jest.fn().mockReturnValue({
-      push: jest.fn(),
-    }),
-    useParams: jest.fn().mockImplementation(() => ({ id: 'someId' })),
-  }),
-  '@/app/api': () => ({
-    useReminders: jest.fn().mockImplementation(() => ({
-      data: mockReminders,
-    })),
-    useReminder: jest.fn().mockImplementation(() => ({
-      data: mockReminder,
-    })),
-    createReminder: jest.fn(),
-    deleteReminder: jest.fn(),
-    getReminder: jest.fn(),
-    getReminders: jest.fn(),
-    updateReminder: jest.fn(),
-    useReminderActions: jest.fn().mockImplementation(() => ({
-      createReminder: {
-        mutateAsync: jest.fn().mockReturnValue({ errors: [] }),
-      },
-      updateReminder: {
-        mutateAsync: jest.fn().mockReturnValue({ errors: [] }),
-      },
-      deleteReminder: {
-        mutateAsync: jest.fn().mockReturnValue({ errors: [] }),
-      },
-    })),
-  }),
-  '@/app/hooks': () => ({
-    useRemindersClearContext: jest.fn().mockReturnValue(jest.fn),
-    useRemindersContext: jest.fn().mockReturnValue({
-      reminder: mockReminder,
-      errors: {},
-      dispatch: jest.fn(),
-      onCreateReminder: jest
-        .fn()
-        .mockResolvedValue(ReminderActionStatus.Success),
-      onUpdateReminder: jest
-        .fn()
-        .mockResolvedValue(ReminderActionStatus.Success),
-      onDeleteReminder: jest
-        .fn()
-        .mockResolvedValue(ReminderActionStatus.Success),
-    }),
-    useMutation: jest.fn(),
-    useQuery: jest.fn(),
-    ReminderActionStatus: ReminderActionStatus,
-  }),
-};
-
-const jestRemindersMocks = {
+const jestObjectsMock = {
   'next/navigation': {
     useRouter: jest.fn().mockReturnValue({
       push: jest.fn(),
@@ -90,8 +37,6 @@ const jestRemindersMocks = {
     })),
     createReminder: jest.fn(),
     deleteReminder: jest.fn(),
-    getReminder: jest.fn().mockImplementation(() => mockReminder),
-    getReminders: jest.fn().mockImplementation(() => mockReminders),
     updateReminder: jest.fn(),
     useReminderActions: jest.fn().mockReturnValue({
       createReminder: { mutateAsync: jest.fn() },
@@ -115,9 +60,16 @@ const jestRemindersMocks = {
         .fn()
         .mockImplementation(() => ReminderActionStatus.Success),
     }),
+    useMutation: jest.fn(),
     useQuery: jest.fn(),
     ReminderActionStatus: ReminderActionStatus,
   },
 };
 
-export { jestMocks, jestRemindersMocks, mockReminders, mockReminder };
+const jestFunctionsMock = {
+  'next/navigation': () => jestObjectsMock['next/navigation'],
+  '@/app/api': () => jestObjectsMock['@/app/api'],
+  '@/app/hooks': () => jestObjectsMock['@/app/hooks'],
+};
+
+export { jestFunctionsMock, jestObjectsMock, mockReminders, mockReminder };

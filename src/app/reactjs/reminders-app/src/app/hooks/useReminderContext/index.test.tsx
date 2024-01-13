@@ -19,11 +19,11 @@ import React from 'react';
 
 jest.mock(
   'next/navigation',
-  () => require('@/app/util/testMocks').jestRemindersMocks['next/navigation'],
+  () => require('@/app/util/testMocks').jestObjectsMock['next/navigation'],
 );
 jest.mock(
   '@/app/api',
-  () => require('@/app/util/testMocks').jestRemindersMocks['@/app/api'],
+  () => require('@/app/util/testMocks').jestObjectsMock['@/app/api'],
 );
 
 const TestingComponent = ({ title }: { title?: string }) => {
