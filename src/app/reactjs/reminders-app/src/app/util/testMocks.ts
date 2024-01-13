@@ -69,6 +69,7 @@ const jestMocks = {
         .mockResolvedValue(ReminderActionStatus.Success),
     }),
     useMutation: jest.fn(),
+    useQuery: jest.fn(),
     ReminderActionStatus: ReminderActionStatus,
   }),
 };
@@ -89,8 +90,8 @@ const jestRemindersMocks = {
     })),
     createReminder: jest.fn(),
     deleteReminder: jest.fn(),
-    getReminder: jest.fn(),
-    getReminders: jest.fn(),
+    getReminder: jest.fn().mockImplementation(() => mockReminder),
+    getReminders: jest.fn().mockImplementation(() => mockReminders),
     updateReminder: jest.fn(),
     useReminderActions: jest.fn().mockReturnValue({
       createReminder: { mutateAsync: jest.fn() },
@@ -114,7 +115,7 @@ const jestRemindersMocks = {
         .fn()
         .mockImplementation(() => ReminderActionStatus.Success),
     }),
-    useMutation: jest.fn(),
+    useQuery: jest.fn(),
     ReminderActionStatus: ReminderActionStatus,
   },
 };
