@@ -21,14 +21,14 @@ const mockReminders = [
   },
 ];
 
-const jestMocks = {
-  'next/navigation': () => ({
+const jestObjectsMock = {
+  'next/navigation': {
     useRouter: jest.fn().mockReturnValue({
       push: jest.fn(),
     }),
-    useParams: jest.fn(() => ({ id: 'someId' })),
-  }),
-  '@/app/api': () => ({
+    useParams: jest.fn().mockImplementation(() => ({ id: mockReminder.id })),
+  },
+  '@/app/api': {
     useReminders: jest.fn().mockImplementation(() => ({
       data: mockReminders,
     })),
@@ -37,16 +37,14 @@ const jestMocks = {
     })),
     createReminder: jest.fn(),
     deleteReminder: jest.fn(),
-    getReminder: jest.fn(),
-    getReminders: jest.fn(),
     updateReminder: jest.fn(),
     useReminderActions: jest.fn().mockReturnValue({
-      createReminder: jest.fn(),
-      updateReminder: jest.fn(),
-      deleteReminder: jest.fn(),
+      createReminder: { mutateAsync: jest.fn() },
+      updateReminder: { mutateAsync: jest.fn() },
+      deleteReminder: { mutateAsync: jest.fn() },
     }),
-  }),
-  '@/app/hooks': () => ({
+  },
+  '@/app/hooks': {
     useRemindersClearContext: jest.fn().mockReturnValue(jest.fn),
     useRemindersContext: jest.fn().mockReturnValue({
       reminder: mockReminder,
@@ -54,17 +52,24 @@ const jestMocks = {
       dispatch: jest.fn(),
       onCreateReminder: jest
         .fn()
-        .mockResolvedValue(ReminderActionStatus.Success),
+        .mockImplementation(() => ReminderActionStatus.Success),
       onUpdateReminder: jest
         .fn()
-        .mockResolvedValue(ReminderActionStatus.Success),
+        .mockImplementation(() => ReminderActionStatus.Success),
       onDeleteReminder: jest
         .fn()
-        .mockResolvedValue(ReminderActionStatus.Success),
+        .mockImplementation(() => ReminderActionStatus.Success),
     }),
     useMutation: jest.fn(),
+    useQuery: jest.fn(),
     ReminderActionStatus: ReminderActionStatus,
-  }),
+  },
 };
 
-export { jestMocks, mockReminders, mockReminder };
+const jestFunctionsMock = {
+  'next/navigation': () => jestObjectsMock['next/navigation'],
+  '@/app/api': () => jestObjectsMock['@/app/api'],
+  '@/app/hooks': () => jestObjectsMock['@/app/hooks'],
+};
+
+export { jestFunctionsMock, jestObjectsMock, mockReminders, mockReminder };
