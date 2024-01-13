@@ -3,60 +3,95 @@ import {
   useCreateReminder,
   useDeleteReminder,
   useReminder,
+  useReminderActions,
   useReminders,
   useUpdateReminder,
 } from '.';
+import { mockReminder, mockReminders } from '@/app/util/testMocks';
 
 jest.mock(
-  '@/app/hooks',
-  require('@/app/util/testMocks').jestMocks['@/app/hooks'],
+  '@/app/api',
+  () => require('@/app/util/testMocks').jestRemindersMocks['@/app/api'],
 );
+jest.mock('@/app/hooks', () => ({
+  useMutation: jest.fn(),
+  useQuery: jest.fn().mockImplementation(() => mockReminders),
+}));
 
 describe('Reminder Hooks', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
   });
 
-  it.skip('useReminders hook', () => {
+  it('useReminders hook', () => {
     const { result } = renderHook(() => useReminders());
 
-    expect(result.current.data).toEqual([{ id: '1', title: 'Reminder 1' }]);
-    expect(result.current.isLoading).toBe(false);
-    expect(result.current.isError).toBe(false);
+    expect(result.current).toEqual(mockReminders);
   });
 
-  it.skip('useReminder hook', () => {
+  it('useReminder hook', () => {
+    jest
+      .spyOn(require('@/app/hooks'), 'useQuery')
+      .mockImplementation(() => mockReminder);
+
     const { result } = renderHook(() => useReminder('1'));
 
-    expect(result.current.data).toEqual({ id: '1', title: 'Reminder 1' });
-    expect(result.current.isLoading).toBe(false);
-    expect(result.current.isError).toBe(false);
+    expect(result.current).toEqual(mockReminder);
   });
 
-  it.skip('useCreateReminder hook', () => {
+  it('useCreateReminder hook', () => {
+    jest
+      .spyOn(require('@/app/hooks'), 'useMutation')
+      .mockImplementation(() => ({ mutateAsync: jest.fn() }));
+
     const { result } = renderHook(() => useCreateReminder());
 
     act(() => {
-      // result.current.mutate();
+      (result.current as any).mutateAsync();
     });
-    expect(result.current.mutate).toHaveBeenCalled();
+    expect(result.current.mutateAsync).toHaveBeenCalled();
   });
 
-  it.skip('useUpdateReminder hook', () => {
+  it('useUpdateReminder hook', () => {
+    jest
+      .spyOn(require('@/app/hooks'), 'useMutation')
+      .mockImplementation(() => ({ mutateAsync: jest.fn() }));
+
     const { result } = renderHook(() => useUpdateReminder());
 
     act(() => {
-      // result.current.mutate();
+      (result.current as any).mutateAsync();
     });
-    expect(result.current.mutate).toHaveBeenCalled();
+    expect(result.current.mutateAsync).toHaveBeenCalled();
   });
 
-  it.skip('useDeleteReminder hook', () => {
+  it('useDeleteReminder hook', () => {
+    jest
+      .spyOn(require('@/app/hooks'), 'useMutation')
+      .mockImplementation(() => ({ mutateAsync: jest.fn() }));
+
     const { result } = renderHook(() => useDeleteReminder());
 
     act(() => {
-      // result.current.mutate();
+      (result.current as any).mutateAsync();
     });
-    expect(result.current.mutate).toHaveBeenCalled();
+    expect(result.current.mutateAsync).toHaveBeenCalled();
+  });
+
+  it('useReminderActions hook', () => {
+    jest
+      .spyOn(require('@/app/hooks'), 'useMutation')
+      .mockImplementation(() => ({ mutateAsync: jest.fn() }));
+
+    const { result } = renderHook(() => useReminderActions());
+
+    act(() => {
+      (result.current as any).createReminder.mutateAsync();
+      (result.current as any).updateReminder.mutateAsync();
+      (result.current as any).deleteReminder.mutateAsync();
+    });
+    expect(result.current.createReminder.mutateAsync).toHaveBeenCalled();
+    expect(result.current.updateReminder.mutateAsync).toHaveBeenCalled();
+    expect(result.current.deleteReminder.mutateAsync).toHaveBeenCalled();
   });
 });
