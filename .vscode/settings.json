@@ -1,7 +1,4 @@
 {
-    "cSpell.words": [
-        "Npgsql"
-    ],
     "conventionalCommits.scopes": [
         "docker",
         "react"
