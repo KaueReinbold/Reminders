@@ -9,6 +9,10 @@ A simple and intuitive web application for managing your daily reminders.
 - **Customization**: Customize your reminders with different colors, tags, and priority levels.
 - **Reminders Notification**: Receive timely reminders to stay on top of your tasks.
 
+# Learning Project
+
+Please note that as a learning project, the code here may not follow best practices at all times as it's a process of learning and improving. Feedback and suggestions are always welcome!
+
 ## Project Status
 
 [![Coverage Status](https://coveralls.io/repos/github/KaueReinbold/Reminders/badge.svg?branch=main)](https://coveralls.io/github/KaueReinbold/Reminders?branch=main)
