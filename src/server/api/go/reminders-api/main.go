@@ -26,7 +26,7 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/health", func(c *gin.Context) {
-		c.JSON(http.StatusOK, "Healthy")
+		c.String(http.StatusOK, "Healthy")
 	})
 	router.GET("/api/reminders", getReminders)
 	router.GET("/api/reminders/count", getCount)
@@ -35,7 +35,7 @@ func main() {
 	router.PUT("/api/reminders/:id", putReminder)
 	router.DELETE("/api/reminders/:id", deleteReminder)
 
-	router.Run("localhost:9999")
+	router.Run()
 }
 
 func getNextId() string {

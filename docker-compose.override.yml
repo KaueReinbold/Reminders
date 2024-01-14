@@ -4,7 +4,7 @@ services:
 
   # Apps
 
-  api: &api
+  dotnet-api: 
     build: 
       args: &dotnet-args
         NUGET_SOURCE: ${NUGET_SOURCE}
@@ -19,9 +19,6 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       CorsOrigins: http://reminders-react:3000,http://localhost:3000
       
-      # ConnectionStrings__DefaultConnection: Server=reminders-mssql;Database=Reminders;User ID=sa;Password=h9pJwUUV0y;MultipleActiveResultSets=True;Application Name=Reminders;Persist Security Info=True;Trust Server Certificate=True;
-      # DatabaseProvider: SqlServer
-
       ConnectionStrings__DefaultConnection: Host=reminders-postgres;Database=Reminders;Username=root;Password=h9pJwUUV0y;Pooling=true;
       DatabaseProvider: Postgres
     volumes: &dotnet-volumes
@@ -29,10 +26,14 @@ services:
       - https_certificates:/root/.aspnet/https:ro
       - data_protection_keys:/root/.aspnet/DataProtection-Keys
 
-  api-2: 
-    <<: *api
+  go-api:
+    build: 
+      args: 
+        GO_IMAGE: golang:alpine
     ports:
       - 5001:8080
+    environment:
+      ConnectionStrings__DefaultConnection: Host=reminders-postgres;Database=Reminders;Username=root;Password=h9pJwUUV0y;Pooling=true;
 
   mvc:
     build: 
