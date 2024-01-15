@@ -1,4 +1,4 @@
-module reminders-dotnet-api
+module reminders-go-api
 
 go 1.18
 
