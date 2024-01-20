@@ -1,18 +1,44 @@
 package main
 
 import (
+	"database/sql"
+	"log"
 	"net/http"
+	"os"
 	"reminders-go-api/pkg/api"
+	"strings"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+
+	_ "github.com/lib/pq"
 )
 
 func main() {
-	repo := api.NewInMemoryReminderRepository()
+	_ = godotenv.Load()
+
+	connStr := os.Getenv("PostgresDefaultConnection")
+
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	repo := api.NewPostgresReminderRepository(db)
 
 	handler := api.NewReminderHandler(repo)
 
 	router := gin.Default()
+
+	origins := strings.Split(os.Getenv("CorsOrigins"), ",")
+
+	config := cors.DefaultConfig()
+	config.AllowOrigins = origins
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
+
+	router.Use(cors.New(config))
 
 	router.GET("/health", func(c *gin.Context) {
 		c.String(http.StatusOK, "Healthy")

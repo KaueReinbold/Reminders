@@ -8,4 +8,5 @@ type Reminder struct {
 	Description string    `json:"description"`
 	LimitDate   time.Time `json:"limitDate"`
 	IsDone      bool      `json:"isDone"`
+	IsDeleted   bool      `json:"-"`
 }
