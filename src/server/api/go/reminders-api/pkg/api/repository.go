@@ -1,9 +1,13 @@
 package api
 
 import (
+	"database/sql"
 	"errors"
+	"log"
 	"reminders-go-api/pkg/models"
-	"strconv"
+
+	"github.com/google/uuid"
+	_ "github.com/lib/pq" // Postgres driver
 )
 
 var ErrorReminderNotFound = errors.New("reminder not found")
@@ -17,70 +21,176 @@ type ReminderRepository interface {
 	Delete(id string) error
 }
 
-type InMemoryReminderRepository struct {
+type PostgresReminderRepository struct {
+	db *sql.DB
+
 	reminders []models.Reminder
 }
 
-func getNextId(repository *InMemoryReminderRepository) string {
-	maxId := 0
-	for _, reminder := range repository.reminders {
-		id, _ := strconv.Atoi(reminder.Id)
-		if id > maxId {
-			maxId = id
-		}
+func NewPostgresReminderRepository(db *sql.DB) *PostgresReminderRepository {
+	return &PostgresReminderRepository{db: db, reminders: []models.Reminder{}}
+}
+
+func (repository *PostgresReminderRepository) GetAll() ([]models.Reminder, error) {
+	rows, err := repository.db.Query(`
+		SELECT 
+			"Id", 
+			"Title", 
+			"Description", 
+			"LimitDate", 
+			"IsDone"
+		FROM "Reminders"
+		WHERE
+			"IsDeleted" != true
+	`)
+
+	if err != nil {
+		log.Printf("Error querying database: %v", err)
+		return nil, err
 	}
-	return strconv.Itoa(maxId + 1)
-}
+	defer rows.Close()
 
-func NewInMemoryReminderRepository() *InMemoryReminderRepository {
-	return &InMemoryReminderRepository{}
-}
+	reminders := []models.Reminder{}
 
-func (repository *InMemoryReminderRepository) GetAll() ([]models.Reminder, error) {
-	return repository.reminders, nil
-}
+	for rows.Next() {
+		reminder := models.Reminder{}
 
-func (repository *InMemoryReminderRepository) Count() (int, error) {
-	return len(repository.reminders), nil
-}
+		err = rows.Scan(&reminder.Id, &reminder.Title, &reminder.Description, &reminder.LimitDate, &reminder.IsDone)
 
-func (repository *InMemoryReminderRepository) GetByID(id string) (models.Reminder, error) {
-	for _, reminder := range repository.reminders {
-		if reminder.Id == id {
-			return reminder, nil
+		if err != nil {
+			log.Printf("Error scanning row: %v", err)
+			return nil, err
 		}
+
+		reminders = append(reminders, reminder)
 	}
 
-	return models.Reminder{}, ErrorReminderNotFound
+	if err = rows.Err(); err != nil {
+		log.Printf("Error during rows iteration: %v", err)
+		return nil, err
+	}
+
+	return reminders, nil
 }
 
-func (repository *InMemoryReminderRepository) Create(reminder models.Reminder) (models.Reminder, error) {
-	reminder.Id = getNextId(repository)
+func (repository *PostgresReminderRepository) Count() (int, error) {
+	row := repository.db.QueryRow(`
+		SELECT 
+			COUNT(*) 
+		FROM "Reminders"
+		WHERE
+			"IsDeleted" != true
+	`)
 
-	repository.reminders = append(repository.reminders, reminder)
+	count := 0
+	err := row.Scan(&count)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return count, nil
+}
+
+func (repository *PostgresReminderRepository) GetByID(id string) (models.Reminder, error) {
+	row := repository.db.QueryRow(`
+		SELECT 
+			"Id", 
+			"Title", 
+			"Description", 
+			"LimitDate", 
+			"IsDone"
+		FROM "Reminders"
+		WHERE 
+			"Id" = $1 AND
+			"IsDeleted" != true
+	`, id)
+
+	reminder := models.Reminder{}
+
+	err := row.Scan(&reminder.Id, &reminder.Title, &reminder.Description, &reminder.LimitDate, &reminder.IsDone)
+
+	if err != nil {
+
+		if err == sql.ErrNoRows {
+			log.Printf("Error scanning row not found: %v", err)
+			return models.Reminder{}, ErrorReminderNotFound
+		}
+
+		log.Printf("Error scanning row: %v", err)
+
+		return models.Reminder{}, ErrorReminderNotFound
+	}
 
 	return reminder, nil
 }
 
-func (repository *InMemoryReminderRepository) Update(id string, reminder models.Reminder) (models.Reminder, error) {
-	for i, currentReminder := range repository.reminders {
-		if currentReminder.Id == id {
-			reminder.Id = id
-			repository.reminders[i] = reminder
-			return reminder, nil
-		}
+func (repository *PostgresReminderRepository) Create(reminder models.Reminder) (models.Reminder, error) {
+	reminder.Id = uuid.New().String()
+	reminder.IsDeleted = false
+
+	_, err := repository.db.Exec(`
+        INSERT INTO "Reminders" (
+            "Id",
+            "Title",
+            "Description",
+            "LimitDate",
+            "IsDone",
+			"IsDeleted"
+        ) VALUES (
+            $1,
+            $2,
+            $3,
+            $4,
+            $5,
+			$6
+        )
+    `, reminder.Id, reminder.Title, reminder.Description, reminder.LimitDate, reminder.IsDone, reminder.IsDeleted)
+
+	if err != nil {
+		log.Printf("Error creating new reminder: %v", err)
+		return models.Reminder{}, err
 	}
 
-	return models.Reminder{}, ErrorReminderNotFound
+	return reminder, nil
 }
 
-func (repository *InMemoryReminderRepository) Delete(id string) error {
-	for i, reminder := range repository.reminders {
-		if reminder.Id == id {
-			repository.reminders = append(repository.reminders[:i], repository.reminders[i+1:]...)
-			return nil
-		}
+func (repository *PostgresReminderRepository) Update(id string, reminder models.Reminder) (models.Reminder, error) {
+	reminder.Id = id
+
+	_, err := repository.db.Exec(`
+        UPDATE "Reminders" SET
+            "Title" = $1,
+            "Description" = $2,
+            "LimitDate" = $3,
+            "IsDone" = $4,
+            "IsDeleted" = $5
+        WHERE 
+			"Id" = $6 AND
+			"IsDeleted" != true
+    `, reminder.Title, reminder.Description, reminder.LimitDate, reminder.IsDone, reminder.IsDeleted, reminder.Id)
+
+	if err != nil {
+		log.Printf("Error updating reminder: %v", err)
+		return models.Reminder{}, err
 	}
 
-	return ErrorReminderNotFound
+	return reminder, nil
+}
+
+func (repository *PostgresReminderRepository) Delete(id string) error {
+	_, err := repository.db.Exec(`
+        UPDATE "Reminders" SET
+            "IsDeleted" = $1
+        WHERE 
+			"Id" = $2 AND
+			"IsDeleted" != true
+    `, true, id)
+
+	if err != nil {
+		log.Printf("Error deleting reminder: %v", err)
+		return err
+	}
+
+	return nil
 }
