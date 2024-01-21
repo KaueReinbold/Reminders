@@ -183,8 +183,7 @@ func (repository *PostgresReminderRepository) Delete(id string) error {
         UPDATE "Reminders" SET
             "IsDeleted" = $1
         WHERE 
-			"Id" = $2 AND
-			"IsDeleted" != true
+			"Id" = $2;
     `, true, id)
 
 	if err != nil {
