@@ -4,12 +4,11 @@ services:
 
   # Apps
 
-  api: &api
-    image: reminders-api
-    container_name: reminders-api
+  dotnet-api:
+    image: reminders-dotnet-api
+    container_name: reminders-dotnet-api
     build: 
-      context: .
-      dockerfile: src/server/api/dotnet/Reminders.Api/Dockerfile
+      context: src/server/api/dotnet/Reminders.Api
     depends_on:
       - postgres
     profiles: 
@@ -21,9 +20,17 @@ services:
           cpus: '0.25'
           memory: '0.5GB'
 
-  api-2:
-    <<: *api
-    container_name: reminders-api-2
+  go-api: 
+    image: reminders-go-api
+    container_name: reminders-go-api
+    build: 
+      context: src/server/api/go/reminders-api
+    depends_on:
+      - postgres
+    profiles: 
+      - all
+      - api
+    deploy: *shared-deploy
 
   mvc:
     image: reminders-mvc
@@ -75,8 +82,8 @@ services:
     image: nginx:latest
     container_name: reminders-nginx
     depends_on:
-      - api
-      - api-2
+      - dotnet-api
+      - go-api
     profiles:
       - all
       - api

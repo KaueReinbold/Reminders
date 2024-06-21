@@ -4,7 +4,7 @@ import { check } from 'k6';
 import { baseUrl } from './index.js';
 
 export default function () {
-  const url = `${baseUrl}/api/Reminders`;
+  const url = `${baseUrl}/api/reminders`;
   const headers = {
     'content-type': 'application/json',
   };

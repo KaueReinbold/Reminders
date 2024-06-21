@@ -4,13 +4,8 @@ services:
 
   # Apps
 
-  api:
-    image: kauereinbold/reminders-api
-    profiles:
-      - production
-  
-  api-2:
-    image: kauereinbold/reminders-api
+  dotnet-api:
+    image: kauereinbold/reminders-dotnet-api
     profiles:
       - production
 
