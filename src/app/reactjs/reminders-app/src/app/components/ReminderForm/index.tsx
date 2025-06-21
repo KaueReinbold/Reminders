@@ -1,4 +1,5 @@
 import { Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
+import type { InputHTMLAttributes } from 'react';
 import { AlertError } from '..';
 import { useRemindersContext } from '@/app/hooks';
 
@@ -84,7 +85,7 @@ export function ReminderForm({ editing = false }: Props) {
               <Checkbox
                 checked={reminder?.isDone}
                 onChange={e => handleChange('isDone', e.target.checked)}
-                inputProps={{ 'data-testid': 'isDone' } as any}
+                inputProps={{ 'data-testid': 'isDone' } as InputHTMLAttributes<HTMLInputElement>}
               />
             }
           />
