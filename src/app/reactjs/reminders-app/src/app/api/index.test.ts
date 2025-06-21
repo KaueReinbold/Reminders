@@ -29,7 +29,7 @@ describe('API functions', () => {
     title: 'Test Reminder',
     description: 'This is a test reminder',
     limitDate: '2022-01-01',
-    limitDateFormatted: '2021-12-31',
+    limitDateFormatted: '2022-01-01',
     isDone: false,
     isDoneFormatted: 'No',
   };
