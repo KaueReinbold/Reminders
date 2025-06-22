@@ -5,18 +5,24 @@ public class RemindersService
 {
     private readonly ReminderViewModelValidator validator;
     private readonly IMapper mapper;
+    private readonly ILogger<RemindersService> logger;
     private readonly IRemindersRepository remindersRepository;
+    private readonly IRemindersBlockchainService remindersBlockchainService;
     private readonly IUnitOfWork unitOfWork;
 
     public RemindersService(
-      IMapper mapper,
-      IRemindersRepository remindersRepository,
-      IUnitOfWork unitOfWork)
+        ILogger<RemindersService> logger,
+        IMapper mapper,
+        IRemindersRepository remindersRepository,
+        IRemindersBlockchainService remindersBlockchainService,
+        IUnitOfWork unitOfWork)
     {
         validator = new ReminderViewModelValidator();
 
         this.mapper = mapper;
+        this.logger = logger;
         this.remindersRepository = remindersRepository;
+        this.remindersBlockchainService = remindersBlockchainService;
         this.unitOfWork = unitOfWork;
     }
 
@@ -36,7 +42,17 @@ public class RemindersService
 
         reminder = remindersRepository.Add(reminder);
 
+        if (reminder.Title is not null)
+        {
+            var chainId = 0; // TODO: This will need to stored in a separated way.
+            var transactionHash = remindersBlockchainService.CreateReminderAsync(reminder.Title).Result;
+            var output = remindersBlockchainService.GetReminderAsync(chainId).Result;
+
+            this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner} - {transactionHash}");
+        }
+
         unitOfWork.Commit();
+
 
         return mapper.Map<ReminderViewModel>(reminder);
     }
@@ -57,6 +73,15 @@ public class RemindersService
 
         reminder = remindersRepository.Update(reminder);
 
+        if (reminder.Title is not null)
+        {
+            var chainId = 0; // TODO: This will need to stored in a separated way.
+            var transactionHash = remindersBlockchainService.UpdateReminderAsync(chainId, reminder.Title).Result;
+            var output = remindersBlockchainService.GetReminderAsync(chainId).Result;
+
+            this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner} - {transactionHash}");
+        }
+
         unitOfWork.Commit();
 
         return mapper.Map<ReminderViewModel>(reminder);
@@ -72,6 +97,12 @@ public class RemindersService
         if (reminderData is not null)
         {
             reminderData.Delete();
+
+            var chainId = 0; // TODO: This will need to stored in a separated way.
+            var output = remindersBlockchainService.GetReminderAsync(chainId).Result;
+            remindersBlockchainService.DeleteReminderAsync(chainId);
+
+            this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner}");
 
             remindersRepository.Update(reminderData);
 
@@ -94,11 +125,17 @@ public class RemindersService
 
         return remindersViewModel;
     }
+
     public ReminderViewModel Get(Guid id)
     {
         var reminder = remindersRepository
             .Get()
             .FirstOrDefault(reminder => reminder.Id == id && !reminder.IsDeleted);
+
+        var chainId = 0; // TODO: This will need to stored in a separated way.
+        var output = remindersBlockchainService.GetReminderAsync(chainId).Result;
+
+        this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner}");
 
         var reminderViewModel = mapper.Map<ReminderViewModel>(reminder);
 

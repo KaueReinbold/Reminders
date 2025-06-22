@@ -26,6 +26,7 @@ global using Reminders.Application.ViewModels;
 global using Reminders.Domain.Contracts;
 global using Reminders.Domain.Contracts.Repositories;
 global using Reminders.Domain.Models;
+global using Reminders.Domain.Models.Blockchain;
 global using Reminders.Infrastructure.CrossCutting;
 global using Reminders.Infrastructure.CrossCutting.Extensions;
 global using Reminders.Infrastructure.Data.EntityFramework.Configurations;
