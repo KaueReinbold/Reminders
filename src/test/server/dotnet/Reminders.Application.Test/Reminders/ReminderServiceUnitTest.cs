@@ -15,6 +15,7 @@ using Reminders.Application.ViewModels;
 using Reminders.Domain.Contracts;
 using Reminders.Domain.Contracts.Repositories;
 using Reminders.Domain.Models;
+using Reminders.Domain.Models.Blockchain;
 using Microsoft.Extensions.Logging;
 using Reminders.Application.Contracts;
 
@@ -34,8 +35,7 @@ namespace Reminders.Application.Test
 
         #endregion
 
-        #region Initialize
-
+        #region Initialize        
         [TestInitialize]
         public void TestInitialize()
         {
@@ -48,6 +48,36 @@ namespace Reminders.Application.Test
             unitOfWorkMock
                 .Setup(u => u.Commit())
                 .Returns(true);
+
+            // Setup repository mocks to return objects instead of null
+            repositoryMock
+                .Setup(x => x.Add(It.IsAny<Reminder>()))
+                .Returns<Reminder>(r => r);
+
+            repositoryMock
+                .Setup(x => x.Update(It.IsAny<Reminder>()))
+                .Returns<Reminder>(r => r);
+
+            // Setup blockchain service mocks
+            remindersBlockchainService
+                .Setup(x => x.CreateReminderAsync(It.IsAny<string>()))
+                .ReturnsAsync("0x1234567890abcdef");
+
+            remindersBlockchainService
+                .Setup(x => x.UpdateReminderAsync(It.IsAny<int>(), It.IsAny<string>()))
+                .ReturnsAsync("0x1234567890abcdef");
+
+            remindersBlockchainService
+                .Setup(x => x.DeleteReminderAsync(It.IsAny<int>()))
+                .ReturnsAsync("0x1234567890abcdef");
+
+            remindersBlockchainService
+                .Setup(x => x.GetReminderAsync(It.IsAny<int>()))
+                .ReturnsAsync(new GetReminderOutput 
+                { 
+                    Text = "Test reminder", 
+                    Owner = "0x742d35Cc6634C0532925a3b8D4c8FFF" 
+                });
         }
 
         private RemindersService GetRemindersService() =>
