@@ -33,19 +33,17 @@ public class Repository<TEntity>
     public virtual TEntity? Get(Guid id) =>
         DbSet.Find(id);
 
-    public virtual TEntity GetAsNoTracking(Guid id)
+    public virtual TEntity? GetAsNoTracking(Guid id)
     {
         var entity = Context.Set<TEntity>().Find(id);
 
-        Context.Entry(entity!).State = EntityState.Detached;
+        if (entity is null)
+            return null;
 
-        return entity!;
+        Context.Entry(entity).State = EntityState.Detached;
+
+        return entity;
     }
-
-    public virtual IQueryable<TEntity> Get() =>
-        DbSet;
-    public virtual IQueryable<TEntity> GetAsNoTracking() =>
-        DbSet.AsNoTracking();
 
     public bool Exists(Guid id)
     {
@@ -56,6 +54,11 @@ public class Repository<TEntity>
 
         return !entity.IsDeleted;
     }
+
+    public virtual IQueryable<TEntity> Get() =>
+        DbSet;
+    public virtual IQueryable<TEntity> GetAsNoTracking() =>
+        DbSet.AsNoTracking();
 
     public void Dispose()
     {

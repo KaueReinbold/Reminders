@@ -18,6 +18,8 @@ builder.Services
         builder.Configuration.GetValue<SupportedDatabases?>("DatabaseProvider") ?? SupportedDatabases.SqlServer)
     .AddApplicationValidations()
     .AddControllers();
+builder.Services.Configure<BlockchainSettings>(
+    builder.Configuration.GetSection("Blockchain"));
 
 var app = builder.Build();
 
