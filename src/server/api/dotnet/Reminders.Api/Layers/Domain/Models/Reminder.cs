@@ -19,7 +19,7 @@ public class Reminder
         LimitDate = limitDate;
         IsDone = isDone;
     }
-
+    
     public string Title { get; protected set; }
     public string Description { get; protected set; }
     public DateTimeOffset LimitDate { get; protected set; }
