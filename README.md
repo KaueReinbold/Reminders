@@ -31,7 +31,7 @@ Reminders MVC:
 
 Reminders API:
 
-  [![Docker Hub - Reminders API)](https://img.shields.io/docker/pulls/kauereinbold/reminders-api.svg)](https://hub.docker.com/r/kauereinbold/reminders-api)
+  [![Docker Hub - Reminders API)](https://img.shields.io/docker/pulls/kauereinbold/reminders-dotnet-api.svg)](https://hub.docker.com/r/kauereinbold/reminders-dotnet-api)
 
 ## Docker Compose Configuration
 
