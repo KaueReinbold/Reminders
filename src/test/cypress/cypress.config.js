@@ -2,7 +2,7 @@ const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:3000',
+    baseUrl: process.env.CYPRESS_baseUrl || 'https://kaueereinbold.github.io/Reminders',
     viewportWidth: 1280,
     viewportHeight: 720,
     video: true,
@@ -23,6 +23,6 @@ module.exports = defineConfig({
     },
   },
   env: {
-    apiUrl: 'http://localhost:5000',
+    apiUrl: process.env.CYPRESS_apiUrl || 'http://localhost:5000',
   },
 })
