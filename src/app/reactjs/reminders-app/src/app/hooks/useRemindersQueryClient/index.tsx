@@ -8,7 +8,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-} from 'react-query';
+} from '@tanstack/react-query';
 
 function ReminderQueryProvider({ children }: React.PropsWithChildren) {
   const [client] = useState(new QueryClient());

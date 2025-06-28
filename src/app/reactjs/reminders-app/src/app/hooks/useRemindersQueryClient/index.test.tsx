@@ -1,5 +1,5 @@
 import { act, render, screen } from '@testing-library/react';
-import { QueryClient, useQueryClient } from 'react-query';
+import { QueryClient, useQueryClient } from '@tanstack/react-query';
 import {
   ReminderQueryProvider,
   useRemindersQueryClient,
@@ -8,8 +8,8 @@ import {
 } from '.';
 import { ReactNode } from 'react';
 
-jest.mock('react-query', () => ({
-  ...jest.requireActual('react-query'),
+jest.mock('@tanstack/react-query', () => ({
+  ...jest.requireActual('@tanstack/react-query'),
   useQueryClient: jest.fn(),
   QueryClientProvider: ({ children }: { children: any }) => children,
   QueryClient: jest.fn(),

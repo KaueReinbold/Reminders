@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Button, Container, Grid } from '@mui/material';
+import { Button, Container, Stack } from '@mui/material';
 
 import { ReminderForm } from '@/app/components';
 import { ReminderActionStatus, useRemindersContext } from '@/app/hooks';
@@ -29,18 +29,18 @@ export default function Create() {
   return (
     <Container sx={{ margin: 3 }}>
       <form onSubmit={handleSubmit}>
-        <Grid container direction="column" spacing={5}>
+        <Stack spacing={5}>
           <ReminderForm />
 
-          <Grid item>
+          <Stack direction="row" spacing={2}>
             <Button type="submit" variant="contained" color="success">
               Create
             </Button>
             <Button variant="contained" color="info" onClick={handleBack}>
               Back
             </Button>
-          </Grid>
-        </Grid>
+          </Stack>
+        </Stack>
       </form>
     </Container>
   );
