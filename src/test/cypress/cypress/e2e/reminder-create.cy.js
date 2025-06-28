@@ -57,20 +57,28 @@ describe('Create Reminder', () => {
       statusCode: 400,
       body: {
         errors: {
-          Title: ['Title is required'],
-          Description: ['Description is required'],
-          'LimitDate.Date': ['Limit date is required']
+          Title: ["The field Title must be a text with a maximum length of '50'."],
+          Description: ["The field Description must be a text with a maximum length of '200'."],
+          'LimitDate.Date': ['The Limit Date should be later than Today.']
         }
       }
     }).as('createReminderError')
     
-    // Try to submit empty form
+    // Fill form with some data to trigger validation
+    cy.get('input[data-testid="title"]').type('x'.repeat(60)) // Too long
+    cy.get('input[data-testid="description"]').type('x'.repeat(250)) // Too long
+    cy.get('input[data-testid="limitDate"]').type('2020-01-01') // Past date
+    
+    // Try to submit form
     cy.get('button').contains('Create').click()
     
+    // Wait for API call
+    cy.wait('@createReminderError')
+    
     // Verify error messages are displayed
-    cy.contains('Title is required').should('be.visible')
-    cy.contains('Description is required').should('be.visible')
-    cy.contains('Limit date is required').should('be.visible')
+    cy.contains("The field Title must be a text with a maximum length of '50'.").should('be.visible')
+    cy.contains("The field Description must be a text with a maximum length of '200'.").should('be.visible')
+    cy.contains('The Limit Date should be later than Today.').should('be.visible')
     
     // Should stay on create page
     cy.url().should('include', '/reminder/create')

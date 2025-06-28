@@ -56,9 +56,47 @@ Cypress.Commands.add('goBack', () => {
 
 // API intercept helpers
 Cypress.Commands.add('mockRemindersAPI', () => {
-  cy.intercept('GET', '**/api/reminders', { fixture: 'reminders.json' }).as('getReminders')
-  cy.intercept('POST', '**/api/reminders', { statusCode: 201, body: { id: 999, title: 'New Reminder' } }).as('createReminder')
-  cy.intercept('PUT', '**/api/reminders/*', { statusCode: 200, body: { id: 1, title: 'Updated Reminder' } }).as('updateReminder')
+  cy.intercept('GET', '**/api/reminders', { 
+    statusCode: 200, 
+    fixture: 'reminders.json',
+    delay: 100
+  }).as('getReminders')
+  cy.intercept('GET', '**/api/reminders/*', { 
+    statusCode: 200, 
+    body: {
+      "id": "1",
+      "title": "Test Reminder 1",
+      "description": "This is a test reminder for Cypress testing",
+      "limitDate": "2024-12-31T00:00:00.000Z",
+      "limitDateFormatted": "2024-12-31",
+      "isDone": false,
+      "isDoneFormatted": "No"
+    }
+  }).as('getReminder')
+  cy.intercept('POST', '**/api/reminders', { 
+    statusCode: 201, 
+    body: { 
+      id: "999", 
+      title: 'New Reminder',
+      description: 'Test',
+      limitDate: "2024-12-25T00:00:00.000Z",
+      limitDateFormatted: "2024-12-25",
+      isDone: false,
+      isDoneFormatted: "No"
+    } 
+  }).as('createReminder')
+  cy.intercept('PUT', '**/api/reminders/*', { 
+    statusCode: 200, 
+    body: { 
+      id: "1", 
+      title: 'Updated Reminder',
+      description: 'Updated Description',
+      limitDate: "2024-12-31T00:00:00.000Z",
+      limitDateFormatted: "2024-12-31",
+      isDone: true,
+      isDoneFormatted: "Yes"
+    } 
+  }).as('updateReminder')
   cy.intercept('DELETE', '**/api/reminders/*', { statusCode: 204 }).as('deleteReminder')
 })
 
