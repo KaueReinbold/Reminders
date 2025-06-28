@@ -26,8 +26,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
-          cache-dependency-path: src/app/reactjs/reminders-app/package-lock.json
 
       # Install React app dependencies
       - name: Install React app dependencies
@@ -49,8 +47,6 @@ jobs:
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
           browser: chrome
-          env: 
-            CYPRESS_baseUrl: http://localhost:3000
 
       # Upload Cypress artifacts on failure
       - name: Upload Cypress screenshots
