@@ -1,0 +1,70 @@
+name: Cypress E2E Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/**/reactjs/**'
+      - 'src/test/cypress/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**/reactjs/**'
+      - 'src/test/cypress/**'
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: src/app/reactjs/reminders-app/package-lock.json
+
+      # Install React app dependencies
+      - name: Install React app dependencies
+        run: npm ci
+        working-directory: src/app/reactjs/reminders-app
+
+      # Build React app
+      - name: Build React app
+        run: npm run build
+        working-directory: src/app/reactjs/reminders-app
+
+      # Run Cypress tests using official action
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: src/test/cypress
+          start: npm start
+          start-directory: src/app/reactjs/reminders-app
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+          browser: chrome
+          env: 
+            CYPRESS_baseUrl: http://localhost:3000
+
+      # Upload Cypress artifacts on failure
+      - name: Upload Cypress screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: src/test/cypress/cypress/screenshots
+          retention-days: 7
+
+      - name: Upload Cypress videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: src/test/cypress/cypress/videos
+          retention-days: 7
