@@ -1,24 +1,27 @@
 [
   {
-    "id": 1,
+    "id": "1",
     "title": "Test Reminder 1",
     "description": "This is a test reminder for Cypress testing",
+    "limitDate": "2024-12-31T00:00:00.000Z",
     "limitDateFormatted": "2024-12-31",
     "isDone": false,
     "isDoneFormatted": "No"
   },
   {
-    "id": 2,
+    "id": "2",
     "title": "Test Reminder 2", 
     "description": "This is another test reminder for Cypress testing",
+    "limitDate": "2024-11-30T00:00:00.000Z",
     "limitDateFormatted": "2024-11-30",
     "isDone": true,
     "isDoneFormatted": "Yes"
   },
   {
-    "id": 3,
+    "id": "3",
     "title": "Test Reminder 3",
     "description": "Third test reminder with different data",
+    "limitDate": "2024-10-15T00:00:00.000Z",
     "limitDateFormatted": "2024-10-15",
     "isDone": false,
     "isDoneFormatted": "No"
