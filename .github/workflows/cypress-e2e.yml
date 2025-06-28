@@ -42,11 +42,14 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: src/test/cypress
+          install-command: npm ci
           start: npm start
           start-directory: src/app/reactjs/reminders-app
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 180
           browser: chrome
+        env:
+          CYPRESS_INSTALL_BINARY: 0
 
       # Upload Cypress artifacts on failure
       - name: Upload Cypress screenshots
