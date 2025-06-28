@@ -27,7 +27,7 @@ export function ReminderDeleteModal({
   openDelete,
   toggleOpenDelete,
   onDelete,
-}: Props) {
+}: Props): JSX.Element {
   return (
     <Modal
       open={openDelete}
