@@ -2,6 +2,8 @@
 
 A simple and intuitive web application for managing your daily reminders.
 
+🚀 **Live Demo**: [https://kaueereinbold.github.io/Reminders](https://kaueereinbold.github.io/Reminders)
+
 ## Features
 
 - **User-friendly Interface**: Easily create, edit, and delete reminders with a clean and intuitive user interface.
@@ -26,6 +28,8 @@ Please note that as a learning project, the code here may not follow best practi
   [![React - build and test](https://github.com/KaueReinbold/Reminders/actions/workflows/react-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/react-pull-request.yml)
 
   [![Cypress E2E Tests](https://github.com/KaueReinbold/Reminders/actions/workflows/cypress-e2e.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/cypress-e2e.yml)
+
+  [![Deploy to GitHub Pages](https://github.com/KaueReinbold/Reminders/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/deploy-pages.yml)
 
 ### Docker Hub
 
@@ -52,9 +56,10 @@ The ReactJS application includes unit tests using Jest and React Testing Library
 
 ### End-to-End Testing with Cypress
 
-Comprehensive E2E tests validate critical user interactions:
+Comprehensive E2E tests validate critical user interactions against the deployed application:
 
 - **Location**: `src/test/cypress/`
+- **Testing Environment**: Tests run against the deployed GitHub Pages application at `https://kaueereinbold.github.io/Reminders`
 - **Coverage**: List, Create, Edit, Delete operations
 - **Test categories**: 
   - List functionality (viewing reminders)
@@ -65,6 +70,7 @@ Comprehensive E2E tests validate critical user interactions:
 - **Run tests**: 
   - Interactive: `npm run cy:open` (in Cypress directory)
   - Headless: `npm run cy:run` (in Cypress directory)
+  - Against local dev: `CYPRESS_baseUrl=http://localhost:3000 npm run cy:run`
 
 For detailed testing setup and usage instructions, see:
 - [Cypress Testing README](src/test/cypress/README.md)

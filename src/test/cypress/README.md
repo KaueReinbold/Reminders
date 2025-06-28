@@ -41,7 +41,7 @@ src/test/cypress/
 
 Before running Cypress tests, ensure the following:
 
-1. **React Application**: The ReactJS Reminders app must be running at `http://localhost:3000`
+1. **React Application**: The ReactJS Reminders app must be deployed to GitHub Pages at `https://kaueereinbold.github.io/Reminders` (for production tests) or running locally at `http://localhost:3000` (for development)
 2. **API Backend**: The API should be available at `http://localhost:5000` (configured in cypress.config.js)
 3. **Node.js**: Node.js version 16 or higher
 
@@ -166,11 +166,23 @@ The test suite includes custom Cypress commands for common operations:
 
 Key configuration options in `cypress.config.js`:
 
-- `baseUrl`: React app URL (default: `http://localhost:3000`)
+- `baseUrl`: React app URL (default: `https://kaueereinbold.github.io/Reminders` for production, can be overridden with `CYPRESS_baseUrl` environment variable)
 - `env.apiUrl`: API backend URL (default: `http://localhost:5000`)
 - `viewportWidth/Height`: Test viewport dimensions
 - `video`: Enable/disable video recording
 - `screenshotOnRunFailure`: Enable/disable failure screenshots
+
+### Running Tests Against Different Environments
+
+**Against deployed GitHub Pages (default):**
+```bash
+npm run cy:run
+```
+
+**Against local development server:**
+```bash
+CYPRESS_baseUrl=http://localhost:3000 npm run cy:run
+```
 
 ## API Mocking
 
@@ -190,18 +202,26 @@ Test fixtures in `cypress/fixtures/` provide:
 
 ## Continuous Integration
 
-To integrate Cypress tests into CI pipeline:
+Cypress tests run automatically on pull requests and pushes to main against the deployed GitHub Pages application:
+
+1. **GitHub Pages Deployment**: The React app is automatically deployed to GitHub Pages when changes are pushed to main
+2. **Automatic Testing**: Cypress tests run against the deployed application at `https://kaueereinbold.github.io/Reminders`
+3. **Test Results**: Screenshots and videos are collected as artifacts on test failures
+
+### Local Development Testing
+
+For local development testing against a development server:
 
 1. **Install dependencies**:
    ```bash
    cd src/test/cypress && npm ci
    ```
 
-2. **Start application** (ensure React app and API are running)
+2. **Start application** (ensure React app is running at localhost:3000)
 
-3. **Run tests**:
+3. **Run tests against local server**:
    ```bash
-   npm run cy:run
+   CYPRESS_baseUrl=http://localhost:3000 npm run cy:run
    ```
 
 4. **Collect artifacts**:
@@ -220,7 +240,14 @@ Configure tests using environment variables:
 
 Example:
 ```bash
+# Test against local development server
 CYPRESS_baseUrl=http://localhost:3001 npm run cy:run
+
+# Test against staging environment
+CYPRESS_baseUrl=https://staging.example.com npm run cy:run
+
+# Override API URL
+CYPRESS_apiUrl=https://api.staging.example.com npm run cy:run
 ```
 
 ## Debugging
