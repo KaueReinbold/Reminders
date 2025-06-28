@@ -2,6 +2,10 @@
 
 This directory contains Cypress end-to-end tests for the Reminders application, ensuring the reliability and functionality of critical components.
 
+## ⚠️ CI Environment Notice
+
+**Important**: Due to network restrictions in the CI environment, Cypress binary cannot be downloaded from `download.cypress.io`. The tests are configured to run using the official Cypress GitHub Action (`cypress-io/github-action@v6`) which handles the Cypress installation in CI environments. For local development, you can install and run Cypress normally.
+
 ## Overview
 
 The Cypress test suite covers four main areas of functionality:
