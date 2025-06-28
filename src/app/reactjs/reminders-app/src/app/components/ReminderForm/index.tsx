@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import type { InputHTMLAttributes } from 'react';
 import { AlertError } from '..';
 import { useRemindersContext } from '@/app/hooks';
@@ -19,7 +19,7 @@ export function ReminderForm({ editing = false }: Props) {
       <AlertError error={errors?.InternalServer} />
 
       {editing && (
-        <Grid item>
+        <Box sx={{ mb: 2 }}>
           <TextField
             label="Id"
             defaultValue={reminder?.id}
@@ -28,10 +28,10 @@ export function ReminderForm({ editing = false }: Props) {
             InputLabelProps={{ shrink: true }}
             inputProps={{ readOnly: true, 'data-testid': 'reminderId' }}
           />
-        </Grid>
+        </Box>
       )}
 
-      <Grid item>
+      <Box sx={{ mb: 2 }}>
         <TextField
           label="Title"
           placeholder="Enter title"
@@ -44,9 +44,9 @@ export function ReminderForm({ editing = false }: Props) {
           InputLabelProps={{ shrink: true }}
           inputProps={{ 'data-testid': 'title' }}
         />
-      </Grid>
+      </Box>
 
-      <Grid item>
+      <Box sx={{ mb: 2 }}>
         <TextField
           label="Description"
           placeholder="Enter description"
@@ -59,9 +59,9 @@ export function ReminderForm({ editing = false }: Props) {
           helperText={errors?.Description}
           inputProps={{ 'data-testid': 'description' }}
         />
-      </Grid>
+      </Box>
 
-      <Grid item>
+      <Box sx={{ mb: 2 }}>
         <TextField
           label="Limit Date"
           placeholder="Enter limit date"
@@ -75,10 +75,10 @@ export function ReminderForm({ editing = false }: Props) {
           helperText={errors?.['LimitDate.Date']}
           inputProps={{ 'data-testid': 'limitDate' }}
         />
-      </Grid>
+      </Box>
 
       {editing && (
-        <Grid item>
+        <Box sx={{ mb: 2 }}>
           <FormControlLabel
             label="Done"
             control={
@@ -89,7 +89,7 @@ export function ReminderForm({ editing = false }: Props) {
               />
             }
           />
-        </Grid>
+        </Box>
       )}
     </>
   );
