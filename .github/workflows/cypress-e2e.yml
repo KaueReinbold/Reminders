@@ -27,43 +27,30 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-          cache-dependency-path: |
-            src/app/reactjs/reminders-app/package-lock.json
-            src/test/cypress/package-lock.json
+          cache-dependency-path: src/app/reactjs/reminders-app/package-lock.json
 
       # Install React app dependencies
       - name: Install React app dependencies
         run: npm ci
         working-directory: src/app/reactjs/reminders-app
 
-      # Install Cypress dependencies
-      - name: Install Cypress dependencies
-        run: npm ci
-        working-directory: src/test/cypress
-
       # Build React app
       - name: Build React app
         run: npm run build
         working-directory: src/app/reactjs/reminders-app
 
-      # Start React app in background
-      - name: Start React app
-        run: npm start &
-        working-directory: src/app/reactjs/reminders-app
-        env:
-          CI: true
-
-      # Wait for React app to be ready
-      - name: Wait for React app
-        run: npx wait-on http://localhost:3000
-        working-directory: src/test/cypress
-
-      # Run Cypress tests
-      - name: Run Cypress tests
-        run: npm run cy:run
-        working-directory: src/test/cypress
-        env:
-          CYPRESS_baseUrl: http://localhost:3000
+      # Run Cypress tests using official action
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: src/test/cypress
+          start: npm start
+          start-directory: src/app/reactjs/reminders-app
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+          browser: chrome
+          env: 
+            CYPRESS_baseUrl: http://localhost:3000
 
       # Upload Cypress artifacts on failure
       - name: Upload Cypress screenshots
@@ -81,55 +68,3 @@ jobs:
           name: cypress-videos
           path: src/test/cypress/cypress/videos
           retention-days: 7
-
-  # Job to run specific test categories
-  cypress-smoke-tests:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
-          cache-dependency-path: |
-            src/app/reactjs/reminders-app/package-lock.json
-            src/test/cypress/package-lock.json
-
-      # Install React app dependencies
-      - name: Install React app dependencies
-        run: npm ci
-        working-directory: src/app/reactjs/reminders-app
-
-      # Install Cypress dependencies
-      - name: Install Cypress dependencies
-        run: npm ci
-        working-directory: src/test/cypress
-
-      # Build React app
-      - name: Build React app
-        run: npm run build
-        working-directory: src/app/reactjs/reminders-app
-
-      # Start React app in background
-      - name: Start React app
-        run: npm start &
-        working-directory: src/app/reactjs/reminders-app
-        env:
-          CI: true
-
-      # Wait for React app to be ready
-      - name: Wait for React app
-        run: npx wait-on http://localhost:3000
-        working-directory: src/test/cypress
-
-      # Run only integration tests as smoke tests
-      - name: Run Cypress smoke tests
-        run: npx cypress run --env grep="@integration"
-        working-directory: src/test/cypress
-        env:
-          CYPRESS_baseUrl: http://localhost:3000
