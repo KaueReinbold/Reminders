@@ -45,7 +45,7 @@ jobs:
           start: npm start
           start-directory: src/app/reactjs/reminders-app
           wait-on: 'http://localhost:3000'
-          wait-on-timeout: 120
+          wait-on-timeout: 180
           browser: chrome
 
       # Upload Cypress artifacts on failure
