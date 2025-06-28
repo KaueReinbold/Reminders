@@ -13,10 +13,16 @@ on:
     paths:
       - 'src/**/reactjs/**'
       - 'src/test/cypress/**'
+  workflow_run:
+    workflows: ["Deploy React App to GitHub Pages"]
+    types:
+      - completed
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    # Only run if the deployment workflow completed successfully, or on direct push/PR
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
@@ -27,30 +33,31 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-          cache-dependency-path: src/app/reactjs/reminders-app/package-lock.json
+          cache-dependency-path: src/test/cypress/package-lock.json
 
-      # Install React app dependencies
-      - name: Install React app dependencies
+      # Install Cypress dependencies
+      - name: Install Cypress dependencies
         run: npm ci
-        working-directory: src/app/reactjs/reminders-app
+        working-directory: src/test/cypress
 
-      # Build React app
-      - name: Build React app
-        run: npm run build
-        working-directory: src/app/reactjs/reminders-app
+      # Wait for deployment to be available (if triggered by deployment)
+      - name: Wait for deployment
+        if: github.event_name == 'workflow_run'
+        run: |
+          echo "Waiting for GitHub Pages deployment to be available..."
+          sleep 30
+          curl -f https://kaueereinbold.github.io/Reminders/ || (echo "Deployment not ready, waiting more..." && sleep 60)
 
-      # Run Cypress tests using official action
+      # Run Cypress tests against deployed app
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           working-directory: src/test/cypress
-          start: npm start
-          start-directory: src/app/reactjs/reminders-app
-          wait-on: 'http://localhost:3000'
+          wait-on: 'https://kaueereinbold.github.io/Reminders'
           wait-on-timeout: 120
           browser: chrome
           env: 
-            CYPRESS_baseUrl: http://localhost:3000
+            CYPRESS_baseUrl: https://kaueereinbold.github.io/Reminders
 
       # Upload Cypress artifacts on failure
       - name: Upload Cypress screenshots
