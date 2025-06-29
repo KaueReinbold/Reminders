@@ -45,6 +45,10 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: Build and export React app
+        run: npm run export
+        working-directory: src/app/reactjs/reminders-app
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
