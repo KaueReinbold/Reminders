@@ -2,7 +2,7 @@
 
 A simple and intuitive web application for managing your daily reminders.
 
-🚀 **Live Demo**: [https://kaueereinbold.github.io/Reminders](https://kaueereinbold.github.io/Reminders)
+🚀 **Live Demo**: [https://kauereinbold.github.io/Reminders](https://kauereinbold.github.io/Reminders)
 
 ## Features
 
