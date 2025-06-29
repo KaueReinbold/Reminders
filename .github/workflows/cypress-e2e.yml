@@ -53,11 +53,11 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: src/test/cypress
-          wait-on: 'https://kaueereinbold.github.io/Reminders'
+          wait-on: 'https://kauereinbold.github.io/Reminders'
           wait-on-timeout: 120
           browser: chrome
           env: 
-            CYPRESS_baseUrl: https://kaueereinbold.github.io/Reminders
+            CYPRESS_baseUrl: https://kauereinbold.github.io/Reminders
 
       # Upload Cypress artifacts on failure
       - name: Upload Cypress screenshots
