@@ -1,12 +1,8 @@
 import './globals.css'
 
 import type { Metadata } from 'next'
-// Temporarily disabled due to network restrictions in sandbox environment
-// import { Inter } from 'next/font/google'
 
 import { ReminderQueryProvider, RemindersContextProvider } from './hooks'
-
-// const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Reminders App',
