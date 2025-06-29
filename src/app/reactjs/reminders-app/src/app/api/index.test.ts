@@ -63,6 +63,7 @@ describe('API functions', () => {
   describe('getReminder', () => {
     it('should fetch a single reminder from the API', async () => {
       const mockResponse = {
+        ok: true,
         json: jest.fn().mockResolvedValueOnce({ id: '1', ...mockReminder }),
       };
       (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
@@ -74,6 +75,16 @@ describe('API functions', () => {
       );
       expect(mockResponse.json).toHaveBeenCalled();
       expect(reminder).toEqual({ id: '1', ...mockReminder });
+    });
+
+    it('should throw error when API returns 404', async () => {
+      const mockResponse = {
+        ok: false,
+        status: 404,
+      };
+      (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
+
+      await expect(getReminder('999')).rejects.toThrow('HTTP 404');
     });
   });
 
@@ -199,6 +210,7 @@ describe('API functions', () => {
         limitDateFormatted: '',
       };
       const mockResponse = {
+        ok: true,
         json: jest.fn().mockResolvedValueOnce({ id: '1', ...copy }),
       };
       (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
@@ -215,6 +227,7 @@ describe('API functions', () => {
         isDoneFormatted: 'Yes',
       };
       const mockResponse = {
+        ok: true,
         json: jest.fn().mockResolvedValueOnce({ id: '1', ...copy }),
       };
       (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
