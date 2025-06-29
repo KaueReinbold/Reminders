@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Button, Modal, Typography } from '@mui/material';
 
 const style = {
@@ -27,7 +28,7 @@ export function ReminderDeleteModal({
   openDelete,
   toggleOpenDelete,
   onDelete,
-}: Props): JSX.Element {
+}: Props): React.ReactElement {
   return (
     <Modal
       open={openDelete}

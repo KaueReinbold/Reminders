@@ -113,16 +113,26 @@ describe('Delete Reminder', () => {
   it('should handle 404 error for non-existent reminder', { tags: '@delete' }, () => {
     // Mock API to return 404 for reminder
     cy.intercept('GET', '**/api/reminders/999', {
-      statusCode: 404,
-      body: { error: 'Reminder not found' }
+      statusCode: 404
     }).as('getReminderNotFound')
     
     // Visit edit page for non-existent reminder
-    cy.visit('/reminder/999')
+    cy.visit('/reminder/999', { failOnStatusCode: false })
     
-    // Should handle 404 gracefully
-    // This test depends on how the app handles 404 errors
-    // It might redirect or show an error message
+    // Verify page elements
+    cy.get('form').should('be.visible')
+    
+    // Verify form fields are present and populated
+    cy.get('input[data-testid="reminderId"]').should('be.visible').and('be.disabled').and('have.value', '')
+    cy.get('input[data-testid="title"]').should('be.visible').and('have.value', '')
+    cy.get('input[data-testid="description"]').should('be.visible').and('have.value', '')
+    cy.get('input[data-testid="limitDate"]').should('be.visible').and('have.value', '')
+    cy.get('input[data-testid="isDone"]').should('exist').and('not.be.checked')
+    
+    // Verify buttons
+    cy.get('button').contains('Edit').should('be.visible')
+    cy.get('button').contains('Delete').should('be.visible')
+    cy.get('button').contains('Back').should('be.visible')
   })
 
   it('should allow multiple modal open/close cycles', { tags: '@delete' }, () => {

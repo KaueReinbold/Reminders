@@ -4,6 +4,7 @@ const mockReminder = {
   id: 1,
   title: 'Test Title 1',
   description: 'Test Description 1',
+  limitDate: '',
   limitDateFormatted: '2023-01-01',
   isDone: true,
   isDoneFormatted: 'Yes',

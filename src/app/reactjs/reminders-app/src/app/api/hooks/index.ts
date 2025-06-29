@@ -9,21 +9,34 @@ import { useMutation, useQuery } from '@/app/hooks';
 
 const REMINDER_QUERY_NAME = 'reminders';
 
-const useReminders = () => useQuery(REMINDER_QUERY_NAME, getReminders);
+const useReminders = () => useQuery({
+  queryKey: [REMINDER_QUERY_NAME],
+  queryFn: getReminders,
+});
 
 const useReminder = (id: string) =>
-  useQuery(['reminder', id], () => getReminder(id), { enabled: Boolean(id) });
+  useQuery({
+    queryKey: ['reminder', id],
+    queryFn: () => getReminder(id),
+    enabled: Boolean(id),
+  });
 
 const useCreateReminder = () => {
-  return useMutation(createReminder);
+  return useMutation({
+    mutationFn: createReminder,
+  });
 };
 
 const useUpdateReminder = () => {
-  return useMutation(updateReminder);
+  return useMutation({
+    mutationFn: updateReminder,
+  });
 };
 
 const useDeleteReminder = () => {
-  return useMutation(deleteReminder);
+  return useMutation({
+    mutationFn: deleteReminder,
+  });
 };
 
 const useReminderActions = () => {

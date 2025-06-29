@@ -26,7 +26,7 @@ services:
       DatabaseProvider: Postgres
 
       Blockchain__PrivateKey: 0xc87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3
-      Blockchain__NodeUrl: reminders-blockchain
+      Blockchain__NodeUrl: http://reminders-blockchain:8545
       Blockchain__ContractAddress: 0xf204a4Ef082f5c04bB89F7D5E6568B796096735a
     volumes: &dotnet-volumes
       - user_secrets:/root/.microsoft/usersecrets:ro
