@@ -1,11 +1,79 @@
-import EditClient from './edit-client';
+'use client';
 
-// For static export - dynamic routes require generateStaticParams
-export async function generateStaticParams() {
-  // Return empty array for client-side routing
-  return [];
-}
+import { Suspense, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function EditPage() {
-  return <EditClient />;
+import { Button, Container, Stack, CircularProgress } from '@mui/material';
+
+import { ReminderDeleteModal, ReminderForm } from '@/app/components';
+import { ReminderActionStatus, useRemindersContext } from '@/app/hooks';
+
+export default function Edit() {
+  const router = useRouter();
+
+  const { onUpdateReminder, onDeleteReminder } = useRemindersContext();
+
+  const [openDelete, setOpenDelete] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const status = await onUpdateReminder();
+
+    if (status === ReminderActionStatus.Success) {
+      handleBack();
+    }
+  };
+
+  const handleDelete = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const status = await onDeleteReminder();
+
+    if (status === ReminderActionStatus.Success) {
+      handleBack();
+    }
+  };
+
+  const toggleOpenDelete = () => {
+    setOpenDelete(state => !state);
+  };
+
+  const handleBack = () => {
+    router.push('/');
+  };
+
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      <Container sx={{ margin: 3 }}>
+        <form onSubmit={handleSubmit} noValidate>
+          <Stack spacing={5}>
+            <ReminderForm editing />
+
+            <Stack direction="row" spacing={2}>
+              <Button type="submit" variant="contained" color="success">
+                Edit
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={toggleOpenDelete}
+              >
+                Delete
+              </Button>
+              <Button variant="contained" color="info" onClick={handleBack}>
+                Back
+              </Button>
+            </Stack>
+          </Stack>
+        </form>
+
+        <ReminderDeleteModal
+          openDelete={openDelete}
+          toggleOpenDelete={toggleOpenDelete}
+          onDelete={handleDelete}
+        />
+      </Container>
+    </Suspense>
+  );
 }
