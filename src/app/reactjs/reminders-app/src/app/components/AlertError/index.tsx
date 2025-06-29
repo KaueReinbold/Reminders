@@ -1,10 +1,11 @@
+import React from 'react';
 import { Alert, Stack } from '@mui/material';
 
 interface Props {
   error?: string;
 }
 
-export function AlertError({ error }: Props): JSX.Element | null {
+export function AlertError({ error }: Props): React.ReactElement | null {
   if (!error) {
     return null;
   }

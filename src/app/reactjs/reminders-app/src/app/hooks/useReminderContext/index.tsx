@@ -82,10 +82,21 @@ export function RemindersContextProvider({
   const { id } = useParams<{ id: string }>();
 
   const { data: reminderData } = useReminder(id);
+  const { createReminder, updateReminder, deleteReminder } = useReminderActions();
 
-  const { createReminder, updateReminder, deleteReminder } =
-    useReminderActions();
-  const [reminder, dispatch] = useReducer(reminderReducer, null);
+  // Default reminder for creation
+  const defaultReminder = {
+    title: '',
+    description: '',
+    limitDate: '',
+    isDone: false,
+  };
+
+  // If on create page (no id), initialize with defaultReminder
+  const [reminder, dispatch] = useReducer(
+    reminderReducer,
+    id ? null : defaultReminder
+  );
 
   const [errors, setErrors] = useState<Errors>();
 
@@ -94,7 +105,7 @@ export function RemindersContextProvider({
       if (reminder) {
         const result = await createReminder.mutateAsync(reminder);
 
-        if (result?.errors) {
+        if (result?.errors && Object.keys(result?.errors).length > 0) {
           setErrors(result?.errors);
 
           return ReminderActionStatus.Fail;
@@ -114,7 +125,7 @@ export function RemindersContextProvider({
       if (reminder) {
         const result = await updateReminder.mutateAsync(reminder);
 
-        if (result?.errors) {
+        if (result?.errors && Object.keys(result?.errors).length > 0) {
           setErrors(result?.errors);
 
           return ReminderActionStatus.Fail;
@@ -154,7 +165,7 @@ export function RemindersContextProvider({
 
   useEffect(() => {
     if (reminderData) {
-      dispatch({ type: 'SET_REMINDER', payload: reminderData });
+      dispatch({ type: 'SET_REMINDER', payload: { ...defaultReminder, ...reminderData } });
     }
   }, [dispatch, reminderData]);
 
