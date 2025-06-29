@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation';
 
 import { Button, Container, Grid, CircularProgress } from '@mui/material';
 
-import { ReminderDeleteModal, ReminderForm } from '@/app/components';
+import { ReminderDeleteModal, ReminderForm, NotFoundReminder } from '@/app/components';
 import { ReminderActionStatus, useRemindersContext } from '@/app/hooks';
 
 export default function EditClient() {
   const router = useRouter();
 
-  const { onUpdateReminder, onDeleteReminder } = useRemindersContext();
+  const { onUpdateReminder, onDeleteReminder, error } = useRemindersContext();
 
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -45,35 +45,39 @@ export default function EditClient() {
 
   return (
     <Suspense fallback={<CircularProgress />}>
-      <Container sx={{ margin: 3 }}>
-        <form onSubmit={handleSubmit} noValidate>
-          <Grid container direction="column" spacing={5}>
-            <ReminderForm editing />
+      {error?.message?.includes('404') ? (
+        <NotFoundReminder />
+      ) : (
+        <Container sx={{ margin: 3 }}>
+          <form onSubmit={handleSubmit} noValidate>
+            <Grid container direction="column" spacing={5}>
+              <ReminderForm editing />
 
-            <Grid item>
-              <Button type="submit" variant="contained" color="success">
-                Edit
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={toggleOpenDelete}
-              >
-                Delete
-              </Button>
-              <Button variant="contained" color="info" onClick={handleBack}>
-                Back
-              </Button>
+              <Grid item>
+                <Button type="submit" variant="contained" color="success">
+                  Edit
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={toggleOpenDelete}
+                >
+                  Delete
+                </Button>
+                <Button variant="contained" color="info" onClick={handleBack}>
+                  Back
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
+          </form>
 
-        <ReminderDeleteModal
-          openDelete={openDelete}
-          toggleOpenDelete={toggleOpenDelete}
-          onDelete={handleDelete}
-        />
-      </Container>
+          <ReminderDeleteModal
+            openDelete={openDelete}
+            toggleOpenDelete={toggleOpenDelete}
+            onDelete={handleDelete}
+          />
+        </Container>
+      )}
     </Suspense>
   );
 }

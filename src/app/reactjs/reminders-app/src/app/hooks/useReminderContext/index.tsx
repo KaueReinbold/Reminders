@@ -9,6 +9,7 @@ import { Errors, Reminder, useReminder, useReminderActions } from '@/app/api';
 interface RemindersContextValue {
   reminder?: Reminder | null | undefined;
   errors?: Errors;
+  error?: Error | null;
   dispatch: Dispatch<ReminderAction>;
   onCreateReminder: () => Promise<ReminderActionStatus>;
   onUpdateReminder: () => Promise<ReminderActionStatus>;
@@ -81,7 +82,9 @@ export function RemindersContextProvider({
 }) {
   const { id } = useParams<{ id: string }>();
 
-  const { data: reminderData } = useReminder(id);
+  const { data: reminderData, error } = useReminder(id);
+
+  const queryError = error as Error | null;
 
   const { createReminder, updateReminder, deleteReminder } =
     useReminderActions();
@@ -161,6 +164,7 @@ export function RemindersContextProvider({
   const value: RemindersContextValue = {
     reminder,
     errors,
+    error: queryError,
     dispatch,
     onCreateReminder,
     onUpdateReminder,

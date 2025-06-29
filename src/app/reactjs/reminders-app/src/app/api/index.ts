@@ -54,7 +54,12 @@ const getReminders = (): Promise<Reminder[]> =>
 
 const getReminder = (id: string): Promise<Reminder> =>
   fetch(`${API_BASE_URL}/api/reminders/${id}`)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return response.json();
+    })
     .then(mapReminder);
 
 const createReminder = async (

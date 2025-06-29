@@ -120,9 +120,18 @@ describe('Delete Reminder', () => {
     // Visit edit page for non-existent reminder
     cy.visit('/reminder/999')
     
-    // Should handle 404 gracefully
-    // This test depends on how the app handles 404 errors
-    // It might redirect or show an error message
+    // Wait for the API call to complete
+    cy.wait('@getReminderNotFound')
+    
+    // Should display 404 page
+    cy.contains('404 - Reminder Not Found').should('be.visible')
+    cy.contains('The reminder you're looking for doesn't exist or may have been deleted.').should('be.visible')
+    
+    // Should have a "Back to Home" button that works
+    cy.get('button').contains('Back to Home').should('be.visible').click()
+    
+    // Should redirect to home page
+    cy.url().should('eq', Cypress.config().baseUrl + '/')
   })
 
   it('should allow multiple modal open/close cycles', { tags: '@delete' }, () => {
