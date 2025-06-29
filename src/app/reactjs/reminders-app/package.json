@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watchAll",
-    "export": "next build"
+    "export": "npm run build && node scripts/export.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
