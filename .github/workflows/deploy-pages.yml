@@ -45,7 +45,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      - name: Build and export React app
+      - name: Export React app for GitHub Pages
         run: npm run export
         working-directory: src/app/reactjs/reminders-app
 
