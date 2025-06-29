@@ -1,0 +1,20 @@
+{
+  "name": "reminders-cypress-tests",
+  "version": "1.0.0",
+  "description": "Cypress E2E tests for Reminders application",
+  "main": "index.js",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:chrome": "cypress run --browser chrome",
+    "cy:run:firefox": "cypress run --browser firefox",
+    "test": "cypress run"
+  },
+  "keywords": ["cypress", "e2e", "testing", "reminders"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^13.0.0",
+    "@cypress/grep": "^4.0.1"
+  }
+}

@@ -2,6 +2,8 @@
 
 A simple and intuitive web application for managing your daily reminders.
 
+🚀 **Live Demo**: [https://kauereinbold.github.io/Reminders](https://kauereinbold.github.io/Reminders)
+
 ## Features
 
 - **User-friendly Interface**: Easily create, edit, and delete reminders with a clean and intuitive user interface.
@@ -23,6 +25,12 @@ Please note that as a learning project, the code here may not follow best practi
 
   [![docker - build - pull request](https://github.com/KaueReinbold/Reminders/actions/workflows/docker-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/docker-pull-request.yml)
 
+  [![React - build and test](https://github.com/KaueReinbold/Reminders/actions/workflows/react-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/react-pull-request.yml)
+
+  [![Cypress E2E Tests](https://github.com/KaueReinbold/Reminders/actions/workflows/cypress-e2e.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/cypress-e2e.yml)
+
+  [![Deploy to GitHub Pages](https://github.com/KaueReinbold/Reminders/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/deploy-pages.yml)
+
 ### Docker Hub
 
 Reminders MVC:
@@ -32,6 +40,47 @@ Reminders MVC:
 Reminders API:
 
   [![Docker Hub - Reminders API)](https://img.shields.io/docker/pulls/kauereinbold/reminders-api.svg)](https://hub.docker.com/r/kauereinbold/reminders-api)
+
+## Testing
+
+The Reminders application includes comprehensive testing to ensure reliability and functionality:
+
+### Unit Testing with Jest
+
+The ReactJS application includes unit tests using Jest and React Testing Library:
+
+- **Location**: `src/app/reactjs/reminders-app/src/`
+- **Coverage**: Components, hooks, API layers, and pages
+- **Run tests**: `npm test` (in the React app directory)
+- **Coverage report**: `npm test -- --coverage`
+
+### End-to-End Testing with Cypress
+
+Comprehensive E2E tests validate critical user interactions against the deployed application:
+
+- **Location**: `src/test/cypress/`
+- **Testing Environment**: Tests run against the deployed GitHub Pages application at `https://kaueereinbold.github.io/Reminders`
+- **Coverage**: List, Create, Edit, Delete operations
+- **Test categories**: 
+  - List functionality (viewing reminders)
+  - Creation workflow (create new reminder)
+  - Editing workflow (modify existing reminder)  
+  - Deletion workflow (remove reminder with confirmation)
+  - Integration tests (full user journeys)
+- **Run tests**: 
+  - Interactive: `npm run cy:open` (in Cypress directory)
+  - Headless: `npm run cy:run` (in Cypress directory)
+  - Against local dev: `CYPRESS_baseUrl=http://localhost:3000 npm run cy:run`
+
+For detailed testing setup and usage instructions, see:
+- [Cypress Testing README](src/test/cypress/README.md)
+
+### Continuous Integration
+
+All tests run automatically on pull requests:
+- Jest unit tests via GitHub Actions
+- Cypress E2E tests via GitHub Actions
+- Coverage reporting and artifact collection
 
 ## Docker Compose Configuration
 

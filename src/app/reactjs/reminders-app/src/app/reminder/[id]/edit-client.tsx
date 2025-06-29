@@ -3,12 +3,12 @@
 import { Suspense, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { Button, Container, Stack, CircularProgress } from '@mui/material';
+import { Button, Container, Grid, CircularProgress } from '@mui/material';
 
 import { ReminderDeleteModal, ReminderForm } from '@/app/components';
 import { ReminderActionStatus, useRemindersContext } from '@/app/hooks';
 
-export default function Edit() {
+export default function EditClient() {
   const router = useRouter();
 
   const { onUpdateReminder, onDeleteReminder } = useRemindersContext();
@@ -47,10 +47,10 @@ export default function Edit() {
     <Suspense fallback={<CircularProgress />}>
       <Container sx={{ margin: 3 }}>
         <form onSubmit={handleSubmit} noValidate>
-          <Stack spacing={5}>
+          <Grid container direction="column" spacing={5}>
             <ReminderForm editing />
 
-            <Stack direction="row" spacing={2}>
+            <Grid item>
               <Button type="submit" variant="contained" color="success">
                 Edit
               </Button>
@@ -64,8 +64,8 @@ export default function Edit() {
               <Button variant="contained" color="info" onClick={handleBack}>
                 Back
               </Button>
-            </Stack>
-          </Stack>
+            </Grid>
+          </Grid>
         </form>
 
         <ReminderDeleteModal
@@ -76,3 +76,4 @@ export default function Edit() {
       </Container>
     </Suspense>
   );
+}
