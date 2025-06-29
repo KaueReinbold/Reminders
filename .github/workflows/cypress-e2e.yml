@@ -17,6 +17,7 @@ on:
     workflows: ["Deploy React App to GitHub Pages"]
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
   cypress-run:
