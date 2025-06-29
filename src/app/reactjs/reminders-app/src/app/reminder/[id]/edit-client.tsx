@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { Button, Container, Grid, CircularProgress } from '@mui/material';
+import { Button, Container, CircularProgress, Stack } from '@mui/material';
 
 import { ReminderDeleteModal, ReminderForm } from '@/app/components';
 import { ReminderActionStatus, useRemindersContext } from '@/app/hooks';
@@ -19,7 +19,7 @@ export default function EditClient() {
     e.preventDefault();
 
     const status = await onUpdateReminder();
-
+    
     if (status === ReminderActionStatus.Success) {
       handleBack();
     }
@@ -47,10 +47,10 @@ export default function EditClient() {
     <Suspense fallback={<CircularProgress />}>
       <Container sx={{ margin: 3 }}>
         <form onSubmit={handleSubmit} noValidate>
-          <Grid container direction="column" spacing={5}>
+          <Stack spacing={5}>
             <ReminderForm editing />
 
-            <Grid item>
+            <Stack direction="row" spacing={2}>
               <Button type="submit" variant="contained" color="success">
                 Edit
               </Button>
@@ -64,8 +64,8 @@ export default function EditClient() {
               <Button variant="contained" color="info" onClick={handleBack}>
                 Back
               </Button>
-            </Grid>
-          </Grid>
+            </Stack>
+          </Stack>
         </form>
 
         <ReminderDeleteModal

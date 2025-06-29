@@ -1,6 +1,6 @@
 import './globals.css'
 
-import type { Metadata } from 'next'
+import type { Metadata } from 'next/types'
 
 import { ReminderQueryProvider, RemindersContextProvider } from './hooks'
 
@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning={true}>
         <ReminderQueryProvider>
           <RemindersContextProvider>
             {children}

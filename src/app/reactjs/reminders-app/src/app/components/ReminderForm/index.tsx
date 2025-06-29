@@ -22,7 +22,7 @@ export function ReminderForm({ editing = false }: Props) {
         <Box sx={{ mb: 2 }}>
           <TextField
             label="Id"
-            defaultValue={reminder?.id}
+            defaultValue={reminder?.id || ''}
             disabled
             fullWidth
             InputLabelProps={{ shrink: true }}
@@ -35,7 +35,7 @@ export function ReminderForm({ editing = false }: Props) {
         <TextField
           label="Title"
           placeholder="Enter title"
-          defaultValue={reminder?.title}
+          defaultValue={reminder?.title || ''}
           onChange={e => handleChange('title', e.target.value)}
           required
           fullWidth
@@ -50,7 +50,7 @@ export function ReminderForm({ editing = false }: Props) {
         <TextField
           label="Description"
           placeholder="Enter description"
-          defaultValue={reminder?.description}
+          defaultValue={reminder?.description || ''}
           onChange={e => handleChange('description', e.target.value)}
           required
           fullWidth
@@ -65,7 +65,7 @@ export function ReminderForm({ editing = false }: Props) {
         <TextField
           label="Limit Date"
           placeholder="Enter limit date"
-          defaultValue={reminder?.limitDateFormatted}
+          defaultValue={reminder?.limitDateFormatted || ''}
           onChange={e => handleChange('limitDate', e.target.value)}
           required
           type="date"
@@ -83,7 +83,7 @@ export function ReminderForm({ editing = false }: Props) {
             label="Done"
             control={
               <Checkbox
-                checked={reminder?.isDone}
+                checked={reminder?.isDone || false}
                 onChange={e => handleChange('isDone', e.target.checked)}
                 inputProps={{ 'data-testid': 'isDone' } as InputHTMLAttributes<HTMLInputElement>}
               />
