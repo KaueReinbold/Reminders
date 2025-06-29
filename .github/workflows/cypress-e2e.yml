@@ -22,7 +22,7 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     # Only run if the deployment workflow completed successfully, or on direct push/PR
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run != null && github.event.workflow_run.conclusion == 'success') }}
 
     steps:
       - name: Checkout code
