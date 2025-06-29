@@ -47,7 +47,7 @@ jobs:
         run: |
           echo "Waiting for GitHub Pages deployment to be available..."
           sleep 30
-          curl -f https://kaueereinbold.github.io/Reminders/ || (echo "Deployment not ready, waiting more..." && sleep 60)
+          curl -f https://kauereinbold.github.io/Reminders/ || (echo "Deployment not ready, waiting more..." && sleep 60)
 
       # Run Cypress tests against deployed app
       - name: Cypress run
