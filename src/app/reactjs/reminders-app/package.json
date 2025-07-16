@@ -8,7 +8,13 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watchAll",
-    "export": "npm run build && node scripts/export.js"
+    "export": "npm run build && node scripts/export.js",
+    "metrics": "node scripts/code-metrics.js",
+    "metrics:complexity": "npx eslint src --config .eslintrc.metrics.json",
+    "metrics:duplicates": "npx jscpd src --min-lines 5 --min-tokens 50",
+    "metrics:dependencies": "npx madge src --circular --extensions ts,tsx,js,jsx",
+    "metrics:loc": "npx sloc src --format cli-table",
+    "metrics:all": "npm run metrics && npm run metrics:duplicates && npm run metrics:dependencies && npm run metrics:loc"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
@@ -35,9 +41,13 @@
     "eslint": "^8.56.0",
     "eslint-config-next": "14.0.4",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-complexity": "^1.0.2",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jscpd": "^4.0.5",
+    "madge": "^8.0.0",
     "prettier": "^3.1.1",
+    "sloc": "^0.3.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
