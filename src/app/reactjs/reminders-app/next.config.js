@@ -7,7 +7,6 @@ const nextConfig = {
   trailingSlash: true,
   reactStrictMode: false,
   ...(isProd && isGitHubPages && {
-    output: 'export',
     basePath: '/Reminders',
     assetPrefix: '/Reminders/',
     images: { unoptimized: true }
