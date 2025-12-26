@@ -42,6 +42,7 @@ jobs:
         run: npm run build
         working-directory: src/app/reactjs/reminders-app
         env:
+          NODE_ENV: 'production'
           GITHUB_PAGES: 'true'
 
       - name: Setup Pages
