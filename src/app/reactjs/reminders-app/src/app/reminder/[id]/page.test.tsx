@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import Edit from './page';
+import EditClient from './edit-client';
 import { ReminderActionStatus } from '@/app/hooks';
 
 jest.mock(
@@ -17,7 +17,7 @@ describe('Edit Component', () => {
   });
 
   it('should render Edit component', () => {
-    render(<Edit />);
+    render(<EditClient />);
 
     expect(screen.getByText('Edit')).toBeInTheDocument();
     expect(screen.getByText('Delete')).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe('Edit Component', () => {
   });
 
   it('should call onUpdateReminder and handles form submission', async () => {
-    render(<Edit />);
+    render(<EditClient />);
 
     fireEvent.click(screen.getByText('Edit'));
 
@@ -44,7 +44,7 @@ describe('Edit Component', () => {
       .spyOn(require('@/app/hooks').useRemindersContext(), 'onUpdateReminder')
       .mockResolvedValue(ReminderActionStatus.Fail);
 
-    render(<Edit />);
+    render(<EditClient />);
 
     fireEvent.click(screen.getByText('Edit'));
 
@@ -57,7 +57,7 @@ describe('Edit Component', () => {
   });
 
   it('should call onDeleteReminder and handles delete button click', async () => {
-    render(<Edit />);
+    render(<EditClient />);
 
     fireEvent.click(screen.getByText('Delete'));
 
@@ -81,7 +81,7 @@ describe('Edit Component', () => {
       .spyOn(require('@/app/hooks').useRemindersContext(), 'onDeleteReminder')
       .mockResolvedValue(ReminderActionStatus.Fail);
 
-    render(<Edit />);
+    render(<EditClient />);
 
     fireEvent.click(screen.getByText('Delete'));
 
@@ -99,7 +99,7 @@ describe('Edit Component', () => {
   });
 
   it('should handle Back button click', () => {
-    render(<Edit />);
+    render(<EditClient />);
 
     fireEvent.click(screen.getByText('Back'));
 

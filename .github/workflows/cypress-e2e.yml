@@ -1,29 +1,20 @@
 name: Cypress E2E Tests
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - 'src/**/reactjs/**'
-      - 'src/test/cypress/**'
-  push:
-    branches:
-      - main
-    paths:
-      - 'src/**/reactjs/**'
-      - 'src/test/cypress/**'
+  # Only run after GitHub Pages deployment completes successfully
+  # This ensures tests run against the actually deployed code
   workflow_run:
     workflows: ["Deploy React App to GitHub Pages"]
     types:
       - completed
+  # Allow manual trigger for debugging
   workflow_dispatch:
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    # Only run if the deployment workflow completed successfully, or on direct push/PR
-    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run != null && github.event.workflow_run.conclusion == 'success') }}
+    # Only run if the deployment workflow completed successfully
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run != null && github.event.workflow_run.conclusion == 'success') }}
 
     steps:
       - name: Checkout code
@@ -41,9 +32,8 @@ jobs:
         run: npm ci
         working-directory: src/test/cypress
 
-      # Wait for deployment to be available (if triggered by deployment)
+      # Wait for deployment to be fully available
       - name: Wait for deployment
-        if: github.event_name == 'workflow_run'
         run: |
           echo "Waiting for GitHub Pages deployment to be available..."
           sleep 30

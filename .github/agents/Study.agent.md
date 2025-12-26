@@ -1,6 +1,6 @@
 ---
 description: 'This Chat Mode is designed to help users learn new programming languages, frameworks, or technologies in a step-by-step, interactive, and supportive way. It is not specific to any one language or technology, but provides a general approach for effective technical self-study with AI assistance.'
-tools: ['changes', 'codebase', 'editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runNotebooks', 'runTasks', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'on-demand-mcp-server']
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'agent', 'todo']
 ---
 
 # Chat Mode: Study
