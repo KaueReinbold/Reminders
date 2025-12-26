@@ -6,6 +6,7 @@ const isGitHubPages = process.env.GITHUB_PAGES === 'true';
 const nextConfig = {
   trailingSlash: true,
   reactStrictMode: false,
+  output: 'export',
   ...(isProd && isGitHubPages && {
     basePath: '/Reminders',
     assetPrefix: '/Reminders/',
