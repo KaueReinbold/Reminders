@@ -4,39 +4,29 @@ const fs = require('fs');
 const path = require('path');
 
 // Simple export script to work around Next.js static export issues with dynamic routes
-console.log('Creating static export for GitHub Pages...');
+console.log('Preparing static export for GitHub Pages...');
 
-// Ensure out directory exists
 const outDir = 'out';
+
+// Ensure out directory exists (Next.js should have created it)
 if (!fs.existsSync(outDir)) {
-  fs.mkdirSync(outDir);
+  console.error('Error: out directory does not exist. Make sure to run "next build" first.');
+  process.exit(1);
 }
 
-// Copy static assets
-if (fs.existsSync('.next/static')) {
-  fs.cpSync('.next/static', path.join(outDir, '_next', 'static'), { recursive: true });
+// Copy 404.html from public to out directory for SPA routing support
+const source404 = path.join('public', '404.html');
+const dest404 = path.join(outDir, '404.html');
+
+if (fs.existsSync(source404)) {
+  fs.copyFileSync(source404, dest404);
+  console.log('Copied 404.html for GitHub Pages SPA routing support');
+} else {
+  console.warn('Warning: public/404.html not found');
 }
 
-// Copy public assets
-if (fs.existsSync('public')) {
-  fs.cpSync('public', outDir, { recursive: true });
-}
+// Create .nojekyll file to prevent GitHub Pages from ignoring files starting with _
+fs.writeFileSync(path.join(outDir, '.nojekyll'), '');
+console.log('Created .nojekyll file');
 
-// Create a simple index.html that redirects to the app with base path
-const indexHtml = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Reminders App</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=/Reminders/">
-  <link rel="canonical" href="/Reminders/">
-</head>
-<body>
-  <p>Redirecting to <a href="/Reminders/">Reminders App</a>...</p>
-</body>
-</html>`;
-
-fs.writeFileSync(path.join(outDir, 'index.html'), indexHtml);
-
-console.log('Static export completed successfully');
+console.log('Static export preparation completed successfully');
