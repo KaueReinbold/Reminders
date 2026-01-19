@@ -2,8 +2,8 @@ services:
 
   # Apps
 
-  api:
-    image: reminders-api:debug
+  dotnet-api:
+    image: reminders-dotnet-api:debug
     build: 
       args:
         DOTNET_CONFIGURATION: Debug

@@ -34,6 +34,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseRemindersCors();
 
+// Add server identifier header so callers can know which backend answered
+app.Use(async (context, next) =>
+{
+    context.Response.OnStarting(() =>
+    {
+        context.Response.Headers["X-Server"] = "dotnet";
+        return System.Threading.Tasks.Task.CompletedTask;
+    });
+
+    await next();
+});
+
 app.UseMachineNameLogging<Program>();
 
 app.MapHealthChecks("/health");

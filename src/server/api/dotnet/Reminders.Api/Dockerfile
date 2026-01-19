@@ -14,7 +14,7 @@ ARG NUGET_USER_NAME
 ARG NUGET_PASSWORD
 
 # Application
-COPY ["src/server/api/dotnet/Reminders.Api/Reminders.Api.csproj", "src/server/api/dotnet/Reminders.Api/"]
+COPY . .
 
 # Check if all required environment variables are set
 RUN if [ -n "${NUGET_SOURCE}" ] && [ -n "${NUGET_USER_NAME}" ] && [ -n "${NUGET_PASSWORD}" ]; then \
@@ -23,11 +23,10 @@ else \
     echo "One or more required environment variables are not set. Skipping nuget source addition."; \
 fi
 
-RUN dotnet restore "src/server/api/dotnet/Reminders.Api/Reminders.Api.csproj"
+RUN dotnet restore "Reminders.Api.csproj"
 
 # Build
-COPY ./src .
-WORKDIR "/src/server/api/dotnet/Reminders.Api"
+COPY . .
 
 ARG DOTNET_CONFIGURATION=Release
 
