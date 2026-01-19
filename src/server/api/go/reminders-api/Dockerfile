@@ -36,10 +36,19 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/main ./cmd/app/main.
 
 # Finally our multi-stage to build a small image
 # Start a new stage from scratch
-FROM scratch
+FROM alpine:3.18
+
+# Install runtime deps for the wait script (curl)
+RUN apk add --no-cache ca-certificates curl
 
 # Copy the Pre-built binary file
-COPY --from=builder /app/bin/main .
+COPY --from=builder /app/bin/main /main
 
-# Run executable
-CMD ["./main"]
+# Copy wait script from builder stage so final image can wait for dotnet
+COPY --from=builder /app/wait-for-dotnet.sh /wait-for-dotnet.sh
+
+RUN chmod +x /wait-for-dotnet.sh /main
+
+# Make the wait script the container entrypoint so the Go binary starts
+# only after the Dotnet API health check passes.
+ENTRYPOINT ["/wait-for-dotnet.sh", "/main"]

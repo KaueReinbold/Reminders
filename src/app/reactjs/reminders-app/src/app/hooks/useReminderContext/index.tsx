@@ -1,6 +1,6 @@
 'use client';
 
-import { Dispatch, ReactNode, useEffect, useReducer, useState } from 'react';
+import { Dispatch, ReactNode, useEffect, useReducer, useState, useMemo } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 import { useParams } from 'next/navigation';
 
@@ -84,13 +84,13 @@ export function RemindersContextProvider({
   const { data: reminderData } = useReminder(id);
   const { createReminder, updateReminder, deleteReminder } = useReminderActions();
 
-  // Default reminder for creation
-  const defaultReminder = {
+  // Default reminder for creation (memoized so identity is stable)
+  const defaultReminder = useMemo(() => ({
     title: '',
     description: '',
     limitDate: '',
     isDone: false,
-  };
+  }), []);
 
   // If on create page (no id), initialize with defaultReminder
   const [reminder, dispatch] = useReducer(
@@ -167,7 +167,7 @@ export function RemindersContextProvider({
     if (reminderData) {
       dispatch({ type: 'SET_REMINDER', payload: { ...defaultReminder, ...reminderData } });
     }
-  }, [dispatch, reminderData]);
+  }, [dispatch, reminderData, defaultReminder]);
 
   const value: RemindersContextValue = {
     reminder,

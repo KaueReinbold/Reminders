@@ -22,7 +22,7 @@ export function ReminderForm({ editing = false }: Props) {
         <Box sx={{ mb: 2 }}>
           <TextField
             label="Id"
-            defaultValue={reminder?.id || ''}
+            value={reminder?.id || ''}
             disabled
             fullWidth
             InputLabelProps={{ shrink: true }}
@@ -35,7 +35,7 @@ export function ReminderForm({ editing = false }: Props) {
         <TextField
           label="Title"
           placeholder="Enter title"
-          defaultValue={reminder?.title || ''}
+          value={reminder?.title || ''}
           onChange={e => handleChange('title', e.target.value)}
           required
           fullWidth
@@ -50,7 +50,7 @@ export function ReminderForm({ editing = false }: Props) {
         <TextField
           label="Description"
           placeholder="Enter description"
-          defaultValue={reminder?.description || ''}
+          value={reminder?.description || ''}
           onChange={e => handleChange('description', e.target.value)}
           required
           fullWidth
@@ -65,7 +65,7 @@ export function ReminderForm({ editing = false }: Props) {
         <TextField
           label="Limit Date"
           placeholder="Enter limit date"
-          defaultValue={reminder?.limitDateFormatted || ''}
+          value={reminder?.limitDate || reminder?.limitDateFormatted || ''}
           onChange={e => handleChange('limitDate', e.target.value)}
           required
           type="date"

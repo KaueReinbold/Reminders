@@ -87,6 +87,10 @@ services:
       - all
       - api
     deploy: *shared-deploy
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./infrastructure/nginx.conf:/etc/nginx/nginx.conf:ro
 
   # Blockchain
   ganache:

@@ -71,7 +71,8 @@ services:
   postgres:
     environment:
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: h9pJwUUV0y 
+      POSTGRES_PASSWORD: h9pJwUUV0y
+      POSTGRES_DB: Reminders
     ports:
       - 5432:5432
 

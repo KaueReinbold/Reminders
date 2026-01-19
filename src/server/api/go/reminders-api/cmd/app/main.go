@@ -31,6 +31,12 @@ func main() {
 
 	router := gin.Default()
 
+	// Add server identifier header so callers can know which backend answered
+	router.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("X-Server", "go")
+		c.Next()
+	})
+
 	origins := strings.Split(os.Getenv("CorsOrigins"), ",")
 
 	config := cors.DefaultConfig()
