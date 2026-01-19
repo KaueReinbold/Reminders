@@ -17,13 +17,14 @@ public static class ApplicationConfiguration
                 services.RegisterDataServicesPostgres(connectionString);
             else
                 services.RegisterDataServicesSqlServer(connectionString);
-        } 
-        else 
+        }
+        else
         {
             throw new ArgumentException("Connection string is not provided.");
         }
 
         services.AddScoped<IRemindersService, RemindersService>();
+        services.AddScoped<IRemindersBlockchainService, RemindersBlockchainService>();
 
         return services;
     }

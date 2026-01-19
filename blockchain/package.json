@@ -1,0 +1,25 @@
+{
+  "name": "blockchain",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx hardhat test",
+    "deploy": "npx hardhat run scripts/deploy.js --network local",
+    "create": "npx hardhat run scripts/create.js --network local",
+    "get": "npx hardhat run scripts/get.js --network local",
+    "count": "npx hardhat run scripts/count.js --network local",
+    "monitor": "npx hardhat run scripts/monitor.js --network local"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.24.3"
+  },
+  "overrides": {
+    "tmp": "^0.2.4"
+  }
+}

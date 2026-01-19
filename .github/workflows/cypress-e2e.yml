@@ -1,0 +1,68 @@
+name: Cypress E2E Tests
+
+on:
+  # Only run after GitHub Pages deployment completes successfully
+  # This ensures tests run against the actually deployed code
+  workflow_run:
+    workflows: ["Deploy React App to GitHub Pages"]
+    types:
+      - completed
+  # Allow manual trigger for debugging
+  workflow_dispatch:
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    # Only run if the deployment workflow completed successfully
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run != null && github.event.workflow_run.conclusion == 'success') }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: src/test/cypress/package-lock.json
+
+      # Install Cypress dependencies
+      - name: Install Cypress dependencies
+        run: npm ci
+        working-directory: src/test/cypress
+
+      # Wait for deployment to be fully available
+      - name: Wait for deployment
+        run: |
+          echo "Waiting for GitHub Pages deployment to be available..."
+          sleep 30
+          curl -f https://kauereinbold.github.io/Reminders/ || (echo "Deployment not ready, waiting more..." && sleep 60)
+
+      # Run Cypress tests against deployed app
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: src/test/cypress
+          wait-on: 'https://kauereinbold.github.io/Reminders'
+          wait-on-timeout: 120
+          browser: chrome
+        env: 
+          CYPRESS_baseUrl: https://kauereinbold.github.io/Reminders
+
+      # Upload Cypress artifacts on failure
+      - name: Upload Cypress screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: src/test/cypress/cypress/screenshots
+          retention-days: 7
+
+      - name: Upload Cypress videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: src/test/cypress/cypress/videos
+          retention-days: 7

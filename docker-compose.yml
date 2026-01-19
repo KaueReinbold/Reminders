@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
 
   # Apps
@@ -11,6 +9,7 @@ services:
       context: src/server/api/dotnet/Reminders.Api
     depends_on:
       - postgres
+      - ganache
     profiles: 
       - all
       - api
@@ -88,6 +87,40 @@ services:
       - all
       - api
     deploy: *shared-deploy
+
+  # Blockchain
+  ganache:
+    image: trufflesuite/ganache
+    container_name: reminders-blockchain
+    ports:
+      - "8545:8545"
+    command:
+      - --accounts=10
+      - --defaultBalanceEther=1000
+      - --mnemonic="candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"
+    restart: unless-stopped
+
+  # blockscout:
+  #   image: blockscout/blockscout:latest
+  #   ports:
+  #     - "4000:4000"
+  #   environment:
+  #     - ETHEREUM_JSONRPC_VARIANT=ganache
+  #     - ETHEREUM_JSONRPC_HTTP_URL=http://ganache:8545
+  #     - ETHEREUM_JSONRPC_WS_URL=ws://ganache:8545
+  #     - DATABASE_URL=postgresql://postgres:password@db:5432/blockscout
+  #     - SECRET_KEY_BASE=56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN
+  #   depends_on:
+  #     - ganache
+  #     - db
+
+  # db:
+  #   image: postgres:13
+  #   environment:
+  #     - POSTGRES_PASSWORD=password
+  #     - POSTGRES_DB=blockscout
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
 
 networks:
   default:

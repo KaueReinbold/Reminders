@@ -1,4 +1,5 @@
-import { Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import type { InputHTMLAttributes } from 'react';
 import { AlertError } from '..';
 import { useRemindersContext } from '@/app/hooks';
 
@@ -18,23 +19,23 @@ export function ReminderForm({ editing = false }: Props) {
       <AlertError error={errors?.InternalServer} />
 
       {editing && (
-        <Grid item>
+        <Box sx={{ mb: 2 }}>
           <TextField
             label="Id"
-            defaultValue={reminder?.id}
+            defaultValue={reminder?.id || ''}
             disabled
             fullWidth
             InputLabelProps={{ shrink: true }}
             inputProps={{ readOnly: true, 'data-testid': 'reminderId' }}
           />
-        </Grid>
+        </Box>
       )}
 
-      <Grid item>
+      <Box sx={{ mb: 2 }}>
         <TextField
           label="Title"
           placeholder="Enter title"
-          defaultValue={reminder?.title}
+          defaultValue={reminder?.title || ''}
           onChange={e => handleChange('title', e.target.value)}
           required
           fullWidth
@@ -43,13 +44,13 @@ export function ReminderForm({ editing = false }: Props) {
           InputLabelProps={{ shrink: true }}
           inputProps={{ 'data-testid': 'title' }}
         />
-      </Grid>
+      </Box>
 
-      <Grid item>
+      <Box sx={{ mb: 2 }}>
         <TextField
           label="Description"
           placeholder="Enter description"
-          defaultValue={reminder?.description}
+          defaultValue={reminder?.description || ''}
           onChange={e => handleChange('description', e.target.value)}
           required
           fullWidth
@@ -58,13 +59,13 @@ export function ReminderForm({ editing = false }: Props) {
           helperText={errors?.Description}
           inputProps={{ 'data-testid': 'description' }}
         />
-      </Grid>
+      </Box>
 
-      <Grid item>
+      <Box sx={{ mb: 2 }}>
         <TextField
           label="Limit Date"
           placeholder="Enter limit date"
-          defaultValue={reminder?.limitDateFormatted}
+          defaultValue={reminder?.limitDateFormatted || ''}
           onChange={e => handleChange('limitDate', e.target.value)}
           required
           type="date"
@@ -74,21 +75,21 @@ export function ReminderForm({ editing = false }: Props) {
           helperText={errors?.['LimitDate.Date']}
           inputProps={{ 'data-testid': 'limitDate' }}
         />
-      </Grid>
+      </Box>
 
       {editing && (
-        <Grid item>
+        <Box sx={{ mb: 2 }}>
           <FormControlLabel
             label="Done"
             control={
               <Checkbox
-                checked={reminder?.isDone}
+                checked={reminder?.isDone || false}
                 onChange={e => handleChange('isDone', e.target.checked)}
-                inputProps={{ 'data-testid': 'isDone' } as any}
+                inputProps={{ 'data-testid': 'isDone' } as InputHTMLAttributes<HTMLInputElement>}
               />
             }
           />
-        </Grid>
+        </Box>
       )}
     </>
   );
