@@ -201,6 +201,33 @@ All tests run automatically on pull requests:
 
 This section describes the Docker Compose configuration for deploying the Reminders application.
 
+### Local dev — Compose healthcheck & migrations
+
+- The `postgres` service includes a `healthcheck` to report when the database is ready. The API service (`dotnet-api`) now uses `depends_on` with `condition: service_healthy` so it will wait for Postgres to become healthy before starting.
+- We removed the previous `infrastructure/wait-for.sh` custom startup script in favor of the Compose-native healthcheck.
+- The API applies EF Core migrations on startup. Migrations for different providers (Postgres vs SQL Server) may be compiled in the repo — the startup now detects and applies only the Postgres-specific migrations when running against Postgres.
+- Runtime configuration for the startup retry behavior is available in `appsettings.Development.json` (keys under `DatabaseRetry`) or via environment variables:
+
+```text
+DatabaseRetry:MaxAttempts = 5
+DatabaseRetry:BaseSeconds = 2
+```
+
+To bring up only the API stack (useful for local dev):
+
+```bash
+# start postgres, ganache and api-related services
+docker compose --profile api up -d --build
+
+# verify postgres health
+docker ps --filter name=reminders-postgres --format "{{.Names}}\t{{.Status}}"
+
+# check API health (after postgres is healthy)
+curl -i http://localhost:5000/health
+```
+
+If you see a SQL Server migration error in logs when using Postgres, that error is harmless — the Postgres migration will be applied and the app will continue to start. See the `Troubleshooting` section below for details.
+
 ## Usage
 
 To deploy the Reminders application using Docker Compose, follow these steps:

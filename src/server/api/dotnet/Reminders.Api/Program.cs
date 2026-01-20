@@ -21,7 +21,11 @@ builder.Services
 builder.Services.Configure<BlockchainSettings>(
     builder.Configuration.GetSection("Blockchain"));
 
+
 var app = builder.Build();
+
+// Ensure database is available before proceeding to full startup.
+app.EnsureDatabaseAvailable();
 
 // Configure the HTTP request pipeline.http://localhost:3000/
 if (app.Environment.IsDevelopment())
