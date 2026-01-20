@@ -13,6 +13,11 @@ services:
         DOTNET_SDK_IMAGE: mcr.microsoft.com/dotnet/sdk:8.0
     ports:
       - 5000:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ganache:
+        condition: service_started
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       CorsOrigins: http://reminders-react:3000,http://localhost:3000
