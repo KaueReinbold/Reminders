@@ -40,3 +40,5 @@ global using System.ComponentModel.DataAnnotations;
 global using System.Data;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Linq;
+global using Microsoft.Extensions.Logging;
+global using Polly;
