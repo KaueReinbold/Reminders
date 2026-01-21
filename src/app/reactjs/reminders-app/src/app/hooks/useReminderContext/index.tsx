@@ -5,6 +5,7 @@ import { createContext, useContextSelector } from 'use-context-selector';
 import { useParams } from 'next/navigation';
 
 import { Errors, Reminder, useReminder, useReminderActions } from '@/app/api';
+import ValidationService from '@/app/services/ValidationService';
 
 interface RemindersContextValue {
   reminder?: Reminder | null | undefined;
@@ -14,6 +15,7 @@ interface RemindersContextValue {
   onUpdateReminder: () => Promise<ReminderActionStatus>;
   onDeleteReminder: () => Promise<ReminderActionStatus>;
   clearReminder: () => void;
+  clearFieldError?: ClearFieldErrorFn;
 }
 
 export enum ReminderActionStatus {
@@ -37,6 +39,8 @@ export function useRemindersContext() {
 
   return context;
 }
+
+export type ClearFieldErrorFn = (field?: string) => void;
 
 export function useRemindersClearContext() {
   const context = useContextSelector(
@@ -95,21 +99,38 @@ export function RemindersContextProvider({
   // If on create page (no id), initialize with defaultReminder
   const [reminder, dispatch] = useReducer(
     reminderReducer,
-    id ? null : defaultReminder
+    defaultReminder
   );
 
   const [errors, setErrors] = useState<Errors>();
 
   const onCreateReminder = async (): Promise<ReminderActionStatus> => {
     try {
-      if (reminder) {
-        const result = await createReminder.mutateAsync(reminder);
+      const payload = reminder ?? reminderData ?? defaultReminder;
 
-        if (result?.errors && Object.keys(result?.errors).length > 0) {
-          setErrors(result?.errors);
+      // Client-side validation before sending to API
+      const clientErrors: Errors = {} as Errors;
 
-          return ReminderActionStatus.Fail;
-        }
+      const titleError = ValidationService.validateTitle(payload.title);
+      if (titleError) clientErrors.Title = [titleError];
+
+      const descError = ValidationService.validateDescription(payload.description);
+      if (descError) clientErrors.Description = [descError];
+
+      const dateError = ValidationService.validateLimitDate(payload.limitDate ?? '');
+      if (dateError) clientErrors['LimitDate.Date'] = [dateError];
+
+      if (Object.keys(clientErrors).length > 0) {
+        setErrors(clientErrors);
+        return ReminderActionStatus.Fail;
+      }
+
+      const result = await createReminder.mutateAsync(payload as any);
+
+      if (result?.errors && Object.keys(result?.errors).length > 0) {
+        setErrors(result?.errors);
+
+        return ReminderActionStatus.Fail;
       }
     } catch (error) {
       console.error(error);
@@ -122,14 +143,31 @@ export function RemindersContextProvider({
 
   const onUpdateReminder = async (): Promise<ReminderActionStatus> => {
     try {
-      if (reminder) {
-        const result = await updateReminder.mutateAsync(reminder);
+      const payload = reminder ?? reminderData ?? defaultReminder;
 
-        if (result?.errors && Object.keys(result?.errors).length > 0) {
-          setErrors(result?.errors);
+      // Client-side validation before sending to API
+      const clientErrors: Errors = {} as Errors;
 
-          return ReminderActionStatus.Fail;
-        }
+      const titleError = ValidationService.validateTitle(payload.title);
+      if (titleError) clientErrors.Title = [titleError];
+
+      const descError = ValidationService.validateDescription(payload.description);
+      if (descError) clientErrors.Description = [descError];
+
+      const dateError = ValidationService.validateLimitDate(payload.limitDate ?? '');
+      if (dateError) clientErrors['LimitDate.Date'] = [dateError];
+
+      if (Object.keys(clientErrors).length > 0) {
+        setErrors(clientErrors);
+        return ReminderActionStatus.Fail;
+      }
+
+      const result = await updateReminder.mutateAsync(payload as any);
+
+      if (result?.errors && Object.keys(result?.errors).length > 0) {
+        setErrors(result?.errors);
+
+        return ReminderActionStatus.Fail;
       }
     } catch (error) {
       console.error(error);
@@ -163,6 +201,18 @@ export function RemindersContextProvider({
     setErrors(undefined);
   };
 
+  const clearFieldError = (field?: string) => {
+    if (!field) return;
+
+    setErrors(prev => {
+      if (!prev) return undefined;
+      const copy = { ...prev } as Record<string, any>;
+      if (copy[field]) delete copy[field];
+      const keys = Object.keys(copy);
+      return keys.length > 0 ? (copy as Errors) : undefined;
+    });
+  };
+
   useEffect(() => {
     if (reminderData) {
       dispatch({ type: 'SET_REMINDER', payload: { ...defaultReminder, ...reminderData } });
@@ -177,6 +227,7 @@ export function RemindersContextProvider({
     onUpdateReminder,
     onDeleteReminder,
     clearReminder,
+    clearFieldError,
   };
 
   return (
