@@ -60,15 +60,7 @@ const getReminder = (id: string): Promise<Reminder> =>
 const createReminder = async (
   reminder: Reminder,
 ): Promise<MutateResult<Reminder>> => {
-  const payload = {
-    ...reminder,
-    limitDate: reminder.limitDate
-      ? reminder.limitDate.includes('T')
-        ? reminder.limitDate
-        : `${reminder.limitDate}T00:00:00Z`
-      : '',
-  };
-  const body = JSON.stringify(payload);
+  const body = JSON.stringify(reminder);
   const response = await fetch(`${API_BASE_URL}/api/reminders`, {
     method: 'POST',
     headers,
@@ -89,15 +81,7 @@ const createReminder = async (
 const updateReminder = async (
   reminder: Reminder,
 ): Promise<MutateResult<Reminder>> => {
-  const payload = {
-    ...reminder,
-    limitDate: reminder.limitDate
-      ? reminder.limitDate.includes('T')
-        ? reminder.limitDate
-        : `${reminder.limitDate}T00:00:00Z`
-      : '',
-  };
-  const body = JSON.stringify(payload);
+  const body = JSON.stringify(reminder);
   const response = await fetch(`${API_BASE_URL}/api/reminders/${reminder.id}`, {
     method: 'PUT',
     headers,
