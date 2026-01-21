@@ -33,7 +33,15 @@ export default function Create() {
           <ReminderForm />
 
           <Stack direction="row" spacing={2}>
-            <Button type="submit" variant="contained" color="success">
+            <Button
+              type="submit"
+              variant="contained"
+              color="success"
+              onClick={async () => {
+                const status = await onCreateReminder();
+                if (status === ReminderActionStatus.Success) handleBack();
+              }}
+            >
               Create
             </Button>
             <Button variant="contained" color="info" onClick={handleBack}>
