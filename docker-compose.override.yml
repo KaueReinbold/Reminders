@@ -2,6 +2,23 @@ services:
 
   # Apps
 
+  migrations:
+    build:
+      args:
+        DOTNET_ASPNET_IMAGE: mcr.microsoft.com/dotnet/aspnet:8.0
+        DOTNET_SDK_IMAGE: mcr.microsoft.com/dotnet/sdk:8.0
+    ports:
+      - 8081:8081
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://0.0.0.0:8081
+      
+      ConnectionStrings__DefaultConnection: Host=reminders-postgres;Database=Reminders;Username=root;Password=h9pJwUUV0y;Pooling=true;
+      DatabaseProvider: Postgres
+      
+      MigrationRunner__MaxRetryAttempts: 5
+      MigrationRunner__RetryBaseDelaySeconds: 2
+
   dotnet-api: 
     build: 
       args: &dotnet-args

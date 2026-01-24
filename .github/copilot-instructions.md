@@ -15,16 +15,18 @@ This is a **full-stack learning project** for managing reminders with multiple c
 
 ```
 src/
-├── server/api/dotnet/Reminders.Api/          # API with layered architecture
-│   ├── Controllers/                          # API endpoints
-│   ├── Layers/
-│   │   ├── Application/                      # Business logic & services
-│   │   ├── Domain/                           # Domain models & contracts
-│   │   ├── Data/EntityFramework/             # Data access layer
-│   │   │   ├── Postgres/Migrations/          # PostgreSQL migrations
-│   │   │   └── SqlServer/Migrations/         # SQL Server migrations (legacy)
-│   │   └── CrossCutting/                     # Shared infrastructure
-│   └── Extensions/                           # Middleware & DI extensions
+├── server/
+│   ├── services/dotnet/Reminders.MigrationsRunner/ # Database migration runner (console app)
+│   ├── api/dotnet/Reminders.Api/          # API with layered architecture
+│   │   ├── Controllers/                          # API endpoints
+│   │   ├── Layers/
+│   │   │   ├── Application/                      # Business logic & services
+│   │   │   ├── Domain/                           # Domain models & contracts
+│   │   │   ├── Data/EntityFramework/             # Data access layer
+│   │   │   │   ├── Postgres/Migrations/          # PostgreSQL migrations
+│   │   │   │   └── SqlServer/Migrations/         # SQL Server migrations (legacy)
+│   │   │   └── CrossCutting/                     # Shared infrastructure
+│   │   └── Extensions/                           # Middleware & DI extensions
 ├── app/
 │   ├── reactjs/reminders-app/                # Next.js App Router app
 │   └── dotnet/Reminders.Mvc/                 # ASP.NET MVC app
@@ -55,9 +57,20 @@ docker compose --profile production -f docker-compose.yml -f docker-compose.prod
 
 ### Database Migrations
 
+**Migration Runner Service**: Database schema updates are managed by a dedicated console application (`src/server/services/dotnet/Reminders.MigrationsRunner/`) that runs before API instances start.
+
+**Architecture**:
+- **Execution Model**: Runs once per deployment, exits after completion (not long-running)
+- **Orchestration**: Docker Compose ensures `migrations` service completes successfully before starting `dotnet-api` and `go-api`
+- **Health Endpoint**: Exposes `/healthz` on port 8081 (development only)
+  - HTTP 500: Migrations pending, running, or failed
+  - HTTP 200: Migrations completed successfully
+- **Retry Logic**: Exponential backoff with jitter (5 attempts, 2s base delay)
+- **Provider-Specific**: Automatically detects and applies only relevant migrations (Postgres vs SQL Server)
+
 **Dual Database Support**: Both PostgreSQL and SQL Server migrations exist. Default is PostgreSQL.
 
-**Expected Behavior**: When using PostgreSQL, SQL Server migration errors are harmless and expected.
+**Expected Behavior**: When using PostgreSQL, SQL Server migration errors in logs are harmless and expected.
 
 **Creating Migrations**:
 
@@ -75,7 +88,21 @@ dotnet ef migrations add MigrationName \
   --output-dir Layers/Data/EntityFramework/SqlServer/Migrations
 ```
 
-**Applying Migrations**: The API auto-applies migrations on startup via `app.MigrateRemindersDatabase()` in [Program.cs](../src/server/api/dotnet/Reminders.Api/Program.cs).
+**Applying Migrations**:
+- **Docker Compose (recommended)**: Migrations run automatically via the `migrations` service before APIs start
+- **Manual Execution**: `cd src/server/services/dotnet/Reminders.MigrationsRunner && dotnet run`
+- **Note**: The API no longer runs migrations on startup — this is now handled by the dedicated migration runner service
+
+**Migration Service Dependencies**:
+```
+postgres (healthy) → migrations (completed successfully) → APIs (start)
+```
+
+**Configuration**: Set via `appsettings.json` or environment variables:
+- `ConnectionStrings__DefaultConnection`: Database connection string
+- `DatabaseProvider`: "Postgres" or "SqlServer"
+- `MigrationRunner__MaxRetryAttempts`: Number of retry attempts (default: 5)
+- `MigrationRunner__RetryBaseDelaySeconds`: Base delay for exponential backoff (default: 2)
 
 ### Building & Testing
 
