@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.2" />
+    <PackageReference Include="Polly" Version="8.6.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\api\dotnet/Reminders.Api\Reminders.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.MigrationRunner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!-- Exclude API's appsettings.json from publish output -->
+  <ItemGroup>
+    <Content Remove="..\..\..\api\dotnet\Reminders.Api\appsettings.json" />
+    <Content Remove="..\..\..\api\dotnet\Reminders.Api\appsettings.Development.json" />
+    <Content Remove="..\..\..\api\dotnet\Reminders.Api\appsettings.Production.json" />
+    <None Remove="..\..\..\api\dotnet\Reminders.Api\appsettings*.json" />
+  </ItemGroup>
+
+</Project>

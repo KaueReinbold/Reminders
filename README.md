@@ -201,32 +201,186 @@ All tests run automatically on pull requests:
 
 This section describes the Docker Compose configuration for deploying the Reminders application.
 
+### Database Migrations
+
+The Reminders application uses a **dedicated migration runner service** to manage database schema updates. This design decouples migration execution from API startup, providing better reliability and orchestration.
+
+#### Migration Runner Service
+
+- **Purpose**: Applies Entity Framework Core migrations before API instances start
+- **Technology**: .NET 8.0 console application with embedded HTTP health endpoint
+- **Execution**: Runs once per deployment, exits after completion (not a long-running service)
+- **Health Endpoint**: `http://localhost:8081/healthz` (exposed in development mode only)
+- **Location**: `src/server/services/dotnet/Reminders.MigrationsRunner/`
+
+#### How It Works
+
+1. **Database Ready**: PostgreSQL container starts and reports healthy via healthcheck
+2. **Migrations Run**: Migration runner service starts, applies all pending migrations with retry logic (exponential backoff, 5 attempts)
+3. **Health Check**: Runner exposes HTTP 500 while running, HTTP 200 on success
+4. **APIs Start**: Once migration runner exits successfully (code 0), both API instances start simultaneously
+5. **Production Ready**: APIs are guaranteed to have correct schema before handling requests
+
+#### Docker Compose Orchestration
+
+```yaml
+services:
+  migrations:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"  # Run once, do not restart
+    
+  dotnet-api:
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+```
+
+#### Running Migrations Manually
+
+**Local Development** (without Docker):
+
+```bash
+# Navigate to migration runner directory
+cd src/server/services/dotnet/Reminders.MigrationsRunner
+
+# Configure connection in appsettings.json or via environment
+export ConnectionStrings__DefaultConnection="Host=localhost;Database=Reminders;Username=postgres;Password=yourpassword"
+export DatabaseProvider="Postgres"
+
+# Run migrations
+dotnet run
+
+# Check health endpoint (in another terminal)
+curl http://localhost:8081/healthz
+```
+
+**Docker Compose** (recommended):
+
+```bash
+# Full stack with migrations
+docker compose --profile all up -d
+
+# Check migration runner logs
+docker compose logs migrations
+
+# Verify migration completed successfully
+docker compose ps migrations
+# Should show "Exited (0)" status
+```
+
+**Creating New Migrations**:
+
+```bash
+# From repository root
+cd src/server/api/dotnet/Reminders.Api
+
+# Create new migration for PostgreSQL
+dotnet ef migrations add YourMigrationName \
+  --context RemindersContext \
+  --output-dir Layers/Data/EntityFramework/Postgres/Migrations
+
+# Or for SQL Server (legacy)
+dotnet ef migrations add YourMigrationName \
+  --context RemindersContext \
+  --output-dir Layers/Data/EntityFramework/SqlServer/Migrations
+```
+
+#### Configuration
+
+Migration runner settings in `appsettings.json`:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=postgres;Database=Reminders;..."
+  },
+  "DatabaseProvider": "Postgres",
+  "MigrationRunner": {
+    "MaxRetryAttempts": 5,
+    "RetryBaseDelaySeconds": 2
+  }
+}
+```
+
+Environment variables override (Docker):
+
+```bash
+ConnectionStrings__DefaultConnection="..."
+DatabaseProvider="Postgres"
+MigrationRunner__MaxRetryAttempts=5
+MigrationRunner__RetryBaseDelaySeconds=2
+```
+
+#### Troubleshooting Migrations
+
+**Migration Runner Fails to Start**:
+
+```bash
+# Check logs
+docker compose logs migrations
+
+# Common causes:
+# - Database not ready (wait for postgres healthcheck)
+# - Invalid connection string
+# - Missing environment variables
+```
+
+**Migrations Fail to Apply**:
+
+```bash
+# Check detailed error in logs
+docker compose logs migrations
+
+# Manually test connection
+docker compose exec postgres psql -U root -d Reminders -c "\dt"
+
+# Reset database (caution: deletes all data)
+docker compose down -v
+docker compose --profile all up -d
+```
+
+**API Won't Start After Migration Failure**:
+
+The migration runner must exit with code 0 for APIs to start. Check:
+
+```bash
+# Migration runner exit code
+docker compose ps migrations
+
+# If exit code is 1, fix the issue and restart
+docker compose up migrations -d --force-recreate
+```
+
+**Multiple Providers Warning**:
+
+When using PostgreSQL (default), you may see SQL Server migration errors in logs. This is **expected and harmless** — the migration runner applies only the provider-specific migrations.
+
 ### Local dev — Compose healthcheck & migrations
 
-- The `postgres` service includes a `healthcheck` to report when the database is ready. The API service (`dotnet-api`) now uses `depends_on` with `condition: service_healthy` so it will wait for Postgres to become healthy before starting.
-- We removed the previous `infrastructure/wait-for.sh` custom startup script in favor of the Compose-native healthcheck.
-- The API applies EF Core migrations on startup. Migrations for different providers (Postgres vs SQL Server) may be compiled in the repo — the startup now detects and applies only the Postgres-specific migrations when running against Postgres.
-- Runtime configuration for the startup retry behavior is available in `appsettings.Development.json` (keys under `DatabaseRetry`) or via environment variables:
-
-```text
-DatabaseRetry:MaxAttempts = 5
-DatabaseRetry:BaseSeconds = 2
-```
+- The `postgres` service includes a `healthcheck` to report when the database is ready
+- The `migrations` service depends on `postgres` with `condition: service_healthy` and runs database migrations before APIs start
+- API services (`dotnet-api`, `go-api`) depend on `migrations` with `condition: service_completed_successfully`, ensuring they only start after successful migration
+- The migration runner uses retry logic with exponential backoff (5 attempts, 2s base) to handle transient connection issues
+- Runtime configuration for the migration runner is available in `appsettings.json` or via environment variables
 
 To bring up only the API stack (useful for local dev):
 
 ```bash
-# start postgres, ganache and api-related services
+# start postgres, migrations, ganache and api-related services
 docker compose --profile api up -d --build
 
 # verify postgres health
 docker ps --filter name=reminders-postgres --format "{{.Names}}\t{{.Status}}"
 
-# check API health (after postgres is healthy)
+# check migration runner completed
+docker ps --filter name=reminders-migrations-runner --format "{{.Names}}\t{{.Status}}"
+
+# check API health (after migrations complete)
 curl -i http://localhost:5000/health
 ```
 
-If you see a SQL Server migration error in logs when using Postgres, that error is harmless — the Postgres migration will be applied and the app will continue to start. See the `Troubleshooting` section below for details.
 
 ## Usage
 

@@ -2,6 +2,14 @@ services:
 
   # Apps
 
+  migrations:
+    image: kauereinbold/reminders-migrations-runner
+    profiles:
+      - production
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      # Connection string and other sensitive config should come from environment or secrets
+
   dotnet-api:
     image: kauereinbold/reminders-dotnet-api
     profiles:

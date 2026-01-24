@@ -2,14 +2,31 @@ services:
 
   # Apps
 
+  migrations:
+    image: reminders-migrations-runner
+    container_name: reminders-migrations-runner
+    build:
+      context: .
+      dockerfile: src/server/services/dotnet/Reminders.MigrationsRunner/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+    profiles:
+      - all
+      - api
+      - mvc
+
   dotnet-api:
     image: reminders-dotnet-api
     container_name: reminders-dotnet-api
     build: 
       context: src/server/api/dotnet/Reminders.Api
     depends_on:
-      - postgres
-      - ganache
+      migrations:
+        condition: service_completed_successfully
+      ganache:
+        condition: service_started
     profiles: 
       - all
       - api
@@ -25,7 +42,8 @@ services:
     build: 
       context: src/server/api/go/reminders-api
     depends_on:
-      - postgres
+      migrations:
+        condition: service_completed_successfully
     profiles: 
       - all
       - api
