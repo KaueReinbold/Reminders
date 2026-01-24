@@ -61,6 +61,7 @@ app
     .UseAuthorization()
     .UseEndpoints(endpoints => endpoints.MapControllers());
 
-app.MigrateRemindersDatabase();
+// Migrations now handled by separate Reminders.MigrationsRunner service
+// app.MigrateRemindersDatabase(); // REMOVED - decoupled from API startup
 
 app.Run();
