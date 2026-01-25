@@ -17,17 +17,9 @@ public static class DatabaseExtensions
         var maxRetryAttempts = app.Configuration.GetValue<int?>("DatabaseRetry:MaxAttempts") ?? 5;
         var baseSeconds = app.Configuration.GetValue<int?>("DatabaseRetry:BaseSeconds") ?? 2;
 
+        // Redact connection string for logging (never store password in cleartext variables)
         var configuredConn = app.Configuration.GetConnectionString("DefaultConnection") ?? "(none)";
-        string connPreview;
-        try
-        {
-            // redact password for logs
-            connPreview = configuredConn.Replace("Password=", "Password=***");
-        }
-        catch
-        {
-            connPreview = "(invalid)";
-        }
+        var connPreview = RedactPassword(configuredConn);
 
         var policy = Policy.Handle<Exception>()
             .WaitAndRetry(maxRetryAttempts, retryAttempt =>
@@ -65,5 +57,25 @@ public static class DatabaseExtensions
         }
 
         return app;
+    }
+
+    private static string RedactPassword(string connectionString)
+    {
+        if (string.IsNullOrWhiteSpace(connectionString))
+            return "(none)";
+
+        try
+        {
+            // Use regex to redact password value
+            return System.Text.RegularExpressions.Regex.Replace(
+                connectionString,
+                @"(Password|Pwd)\s*=\s*[^;]*",
+                "$1=***",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        }
+        catch
+        {
+            return "(invalid)";
+        }
     }
 }
