@@ -54,10 +54,7 @@ var migrationTask = Task.Run(async () =>
         migrationStatus = MigrationStatus.Running;
         startTime = DateTime.UtcNow;
         
-        // Redact password from connection string for logging
-        var redactedConnectionString = RedactConnectionString(connectionString);
-        logger.LogInformation("Migration runner starting with provider: {Provider}, connection: {Connection}", 
-            provider, redactedConnectionString);
+        logger.LogInformation("Migration runner starting with provider: {Provider}", provider);
 
         using var scope = app.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<RemindersContext>();
@@ -206,24 +203,6 @@ await app.StopAsync();
 
 // Exit with appropriate code
 Environment.Exit(migrationStatus == MigrationStatus.Completed ? 0 : 1);
-
-// Helper method to redact passwords from connection strings
-static string RedactConnectionString(string connectionString)
-{
-    var parts = connectionString.Split(';', StringSplitOptions.RemoveEmptyEntries);
-    var redacted = parts.Select(part =>
-    {
-        var keyValue = part.Split('=', 2);
-        if (keyValue.Length == 2 && 
-            (keyValue[0].Trim().Equals("Password", StringComparison.OrdinalIgnoreCase) ||
-             keyValue[0].Trim().Equals("Pwd", StringComparison.OrdinalIgnoreCase)))
-        {
-            return $"{keyValue[0]}=***";
-        }
-        return part;
-    });
-    return string.Join(";", redacted);
-}
 
 // MigrationStatus enum for tracking execution state
 enum MigrationStatus
