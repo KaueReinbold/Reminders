@@ -1,4 +1,6 @@
-﻿namespace Reminders.Mvc.Controllers;
+﻿using System.Web;
+
+namespace Reminders.Mvc.Controllers;
 
 // FIXME: Do not redirect user to a different page when an error occurred. Show a friendly message.
 public class RemindersController : Controller
@@ -112,7 +114,9 @@ public class RemindersController : Controller
             {
                 foreach (var error in errors)
                 {
-                    ModelState.AddModelError(key, error);
+                    // Encode the error message to prevent XSS attacks
+                    var encodedError = HttpUtility.HtmlEncode(error);
+                    ModelState.AddModelError(key, encodedError);
                 }
             }
         }
