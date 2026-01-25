@@ -17,9 +17,8 @@ public static class DatabaseExtensions
         var maxRetryAttempts = app.Configuration.GetValue<int?>("DatabaseRetry:MaxAttempts") ?? 5;
         var baseSeconds = app.Configuration.GetValue<int?>("DatabaseRetry:BaseSeconds") ?? 2;
 
-        // Redact connection string for logging (never store password in cleartext variables)
-        var configuredConn = app.Configuration.GetConnectionString("DefaultConnection") ?? "(none)";
-        var connPreview = RedactPassword(configuredConn);
+        // Redact connection string immediately for logging (never store password in cleartext)
+        var connPreview = RedactPassword(app.Configuration.GetConnectionString("DefaultConnection") ?? "(none)");
 
         var policy = Policy.Handle<Exception>()
             .WaitAndRetry(maxRetryAttempts, retryAttempt =>
