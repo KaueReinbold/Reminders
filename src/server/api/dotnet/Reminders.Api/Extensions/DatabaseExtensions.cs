@@ -17,9 +17,6 @@ public static class DatabaseExtensions
         var maxRetryAttempts = app.Configuration.GetValue<int?>("DatabaseRetry:MaxAttempts") ?? 5;
         var baseSeconds = app.Configuration.GetValue<int?>("DatabaseRetry:BaseSeconds") ?? 2;
 
-        // Get redacted connection string for logging (password never stored)
-        var connPreview = GetRedactedConnectionString(app.Configuration);
-
         var policy = Policy.Handle<Exception>()
             .WaitAndRetry(maxRetryAttempts, retryAttempt =>
             {
@@ -27,7 +24,7 @@ public static class DatabaseExtensions
                 return TimeSpan.FromSeconds(Math.Pow(baseSeconds, retryAttempt)) + jitter;
             }, (exception, timeSpan, retryCount, context) =>
             {
-                logger?.LogWarning(exception, "Database connectivity attempt {RetryCount} failed for {ConnectionPreview}. Next retry in {Delay}.", retryCount, connPreview, timeSpan);
+                logger?.LogWarning(exception, "Database connectivity attempt {RetryCount} failed. Next retry in {Delay}.", retryCount, timeSpan);
             });
 
         try
@@ -52,35 +49,9 @@ public static class DatabaseExtensions
         }
         catch (Exception ex)
         {
-            logger?.LogError(ex, "Database connectivity could not be established after {Attempts} attempts to {ConnectionPreview}. Verify the database is running and the connection settings (env/.env). Startup will continue; migrations may fail.", maxRetryAttempts, connPreview);
+            logger?.LogError(ex, "Database connectivity could not be established after {Attempts} attempts. Verify the database is running and the connection settings (env/.env). Startup will continue; migrations may fail.", maxRetryAttempts);
         }
 
         return app;
-    }
-
-    private static string GetRedactedConnectionString(IConfiguration configuration)
-    {
-        var conn = configuration.GetConnectionString("DefaultConnection");
-        return RedactPassword(conn ?? "(none)");
-    }
-
-    private static string RedactPassword(string connectionString)
-    {
-        if (string.IsNullOrWhiteSpace(connectionString))
-            return "(none)";
-
-        try
-        {
-            // Use regex to redact password value
-            return System.Text.RegularExpressions.Regex.Replace(
-                connectionString,
-                @"(Password|Pwd)\s*=\s*[^;]*",
-                "$1=***",
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-        }
-        catch
-        {
-            return "(invalid)";
-        }
     }
 }
