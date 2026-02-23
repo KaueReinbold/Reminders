@@ -1,3 +1,5 @@
+# Triggers on PR when Go API code changes
+# Tests across multiple Go versions (matrix strategy)
 name: go - build - pull request
 
 on:
@@ -5,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - 'src/**/go/**'
+      - 'src/server/api/go/reminders-api/**'
 
 jobs:
   build:
