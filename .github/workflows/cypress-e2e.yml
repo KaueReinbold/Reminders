@@ -1,5 +1,8 @@
 name: Cypress E2E Tests
 
+permissions:
+  contents: read
+
 on:
   # Only run after GitHub Pages deployment completes successfully
   # This ensures tests run against the actually deployed code

@@ -1,5 +1,8 @@
 name: pull request - check
 
+permissions:
+  contents: read
+
 on:
   pull_request:
     branches:
