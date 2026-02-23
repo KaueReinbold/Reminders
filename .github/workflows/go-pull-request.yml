@@ -9,6 +9,9 @@ on:
     paths:
       - 'src/server/api/go/reminders-api/**'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
