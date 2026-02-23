@@ -17,18 +17,18 @@ describe('ReminderForm', () => {
   it('should render without errors', async () => {
     render(<ReminderForm />);
 
-    expect(screen.findByLabelText('Title')).resolves.toBeInTheDocument();
-    expect(screen.findByLabelText('Description')).resolves.toBeInTheDocument();
-    expect(screen.findByLabelText('Limit Date')).resolves.toBeInTheDocument();
+    expect(screen.getByTestId('title')).toBeInTheDocument();
+    expect(screen.getByTestId('description')).toBeInTheDocument();
+    expect(screen.getByTestId('limitDate')).toBeInTheDocument();
   });
 
   it('should render without errors editing', async () => {
     render(<ReminderForm editing />);
 
-    expect(screen.queryByLabelText('Id')).toBeInTheDocument();
-    expect(screen.findByLabelText('Title')).resolves.toBeInTheDocument();
-    expect(screen.findByLabelText('Description')).resolves.toBeInTheDocument();
-    expect(screen.findByLabelText('Limit Date')).resolves.toBeInTheDocument();
+    expect(screen.getByTestId('reminderId')).toBeInTheDocument();
+    expect(screen.getByTestId('title')).toBeInTheDocument();
+    expect(screen.getByTestId('description')).toBeInTheDocument();
+    expect(screen.getByTestId('limitDate')).toBeInTheDocument();
     expect(screen.queryByLabelText('Done')).toBeInTheDocument();
     expect(screen.queryByLabelText('Done')).toBeChecked();
   });
