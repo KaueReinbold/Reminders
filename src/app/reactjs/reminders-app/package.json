@@ -52,5 +52,8 @@
     "sloc": "^0.3.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
+  },
+  "overrides": {
+    "minimatch": ">=10.2.1"
   }
 }
