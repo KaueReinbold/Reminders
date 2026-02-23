@@ -28,7 +28,7 @@ jobs:
           cache-dependency-path: blockchain/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
         working-directory: blockchain
 
       - name: Run Hardhat tests
