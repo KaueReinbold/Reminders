@@ -1,3 +1,4 @@
+// Workflow test: cypress-e2e
 const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({

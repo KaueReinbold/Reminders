@@ -1,3 +1,4 @@
+// Workflow test: go-pull-request
 package main
 
 import (
