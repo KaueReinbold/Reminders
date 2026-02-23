@@ -1,3 +1,5 @@
+# Triggers on PR when .NET code changes (API, MVC, or tests)
+# Validates build and runs unit tests with coverage
 name: dotnet - build - pull request
 
 on:
@@ -5,7 +7,10 @@ on:
     branches:
       - main
     paths:
-      - 'src/**/dotnet/**'
+      - 'src/server/api/dotnet/**'
+      - 'src/app/dotnet/**'
+      - 'src/server/services/dotnet/**'
+      - 'src/test/server/dotnet/**'
 
 jobs:
   build:

@@ -90,15 +90,25 @@ docker compose --profile all down
 
 ### Build Status
 
-  [![dotnet - build - pull request](https://github.com/KaueReinbold/Reminders/actions/workflows/dotnet-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/dotnet-pull-request.yml)
+#### Pull Request Checks
 
-  [![docker - build - pull request](https://github.com/KaueReinbold/Reminders/actions/workflows/docker-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/docker-pull-request.yml)
+  [![.NET - Build & Test](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/dotnet-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/dotnet-pull-request.yml)
 
-  [![React - build and test](https://github.com/KaueReinbold/Reminders/actions/workflows/react-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/react-pull-request.yml)
+  [![Go - Build & Test](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/go-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/go-pull-request.yml)
+
+  [![React - Build & Test](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/react-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/react-pull-request.yml)
+
+  [![Blockchain - Hardhat Tests](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/blockchain-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/blockchain-pull-request.yml)
+
+  [![Infrastructure Check](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request-check.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request-check.yml)
+
+#### Deployment & Testing
+
+  [![Deploy to GitHub Pages](https://github.com/KaueReinbold/Reminders/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/deploy-pages.yml)
 
   [![Cypress E2E Tests](https://github.com/KaueReinbold/Reminders/actions/workflows/cypress-e2e.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/cypress-e2e.yml)
 
-  [![Deploy to GitHub Pages](https://github.com/KaueReinbold/Reminders/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/deploy-pages.yml)
+  [![.NET Code Coverage](https://github.com/KaueReinbold/Reminders/actions/workflows/tests/dotnet-code-coverage.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/tests/dotnet-code-coverage.yml)
 
 ### Docker Hub
 

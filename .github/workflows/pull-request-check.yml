@@ -1,3 +1,5 @@
+# Triggers on PR when infrastructure files change
+# Validates Docker Compose and workflow configurations
 name: pull request - check
 
 permissions:
@@ -7,6 +9,11 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'docker-compose*.yml'
+      - '.github/workflows/**'
+      - 'infrastructure/**'
+      - 'Dockerfile*'
 
 jobs:
   build:
