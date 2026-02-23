@@ -5,7 +5,7 @@
 This is a **full-stack learning project** for managing reminders with multiple client interfaces (React, ASP.NET MVC), a load-balanced .NET API, and blockchain integration.
 
 ### Tech Stack
-- **Backend**: ASP.NET Core 8.0 Web API (2 instances behind Nginx load balancer)
+- **Backend**: ASP.NET Core 8.0 Web API + Go Gin API (2 instances behind Nginx load balancer)
 - **Frontend**: Next.js 15 (React 19) + ASP.NET MVC
 - **Database**: PostgreSQL (primary) or SQL Server (legacy support)
 - **Blockchain**: Hardhat + Solidity smart contracts on Ganache
@@ -17,16 +17,24 @@ This is a **full-stack learning project** for managing reminders with multiple c
 src/
 ├── server/
 │   ├── services/dotnet/Reminders.MigrationsRunner/ # Database migration runner (console app)
-│   ├── api/dotnet/Reminders.Api/          # API with layered architecture
-│   │   ├── Controllers/                          # API endpoints
-│   │   ├── Layers/
-│   │   │   ├── Application/                      # Business logic & services
-│   │   │   ├── Domain/                           # Domain models & contracts
-│   │   │   ├── Data/EntityFramework/             # Data access layer
-│   │   │   │   ├── Postgres/Migrations/          # PostgreSQL migrations
-│   │   │   │   └── SqlServer/Migrations/         # SQL Server migrations (legacy)
-│   │   │   └── CrossCutting/                     # Shared infrastructure
-│   │   └── Extensions/                           # Middleware & DI extensions
+│   ├── api/
+│   │   ├── dotnet/Reminders.Api/          # .NET API with layered architecture
+│   │   │   ├── Controllers/                      # API endpoints
+│   │   │   ├── Layers/
+│   │   │   │   ├── Application/                  # Business logic & services
+│   │   │   │   ├── Domain/                       # Domain models & contracts
+│   │   │   │   ├── Data/EntityFramework/         # Data access layer
+│   │   │   │   │   ├── Postgres/Migrations/      # PostgreSQL migrations
+│   │   │   │   │   └── SqlServer/Migrations/     # SQL Server migrations (legacy)
+│   │   │   │   └── CrossCutting/                 # Shared infrastructure
+│   │   │   └── Extensions/                       # Middleware & DI extensions
+│   │   └── go/reminders-api/              # Go (Gin) API - lightweight implementation
+│   │       ├── cmd/app/                          # Application entry point
+│   │       ├── internal/                         # Internal packages
+│   │       │   ├── handlers/                     # HTTP handlers
+│   │       │   ├── repository/                   # Data access
+│   │       │   └── models/                       # Domain models
+│   │       └── wait-for-dotnet.sh                # Startup helper script
 ├── app/
 │   ├── reactjs/reminders-app/                # Next.js App Router app
 │   └── dotnet/Reminders.Mvc/                 # ASP.NET MVC app
@@ -195,7 +203,22 @@ API_BASE_URL=http://reminders-nginx:9999
 ## Integration Points
 
 ### Load Balancing
-Two API instances (`api`, `api-2`) run behind Nginx ([infrastructure/nginx.conf](../infrastructure/nginx.conf)). Requests to port 9999 are load-balanced.
+Two API instances (`dotnet-api` running .NET, `go-api` running Go) behind Nginx ([infrastructure/nginx.conf](../infrastructure/nginx.conf)). Requests to port 9999 are load-balanced round-robin between both backends.
+
+**Architecture Notes**:
+- Both APIs implement the same REST endpoints for reminders CRUD
+- .NET API: Layered architecture with full blockchain integration
+- Go API: Lightweight Gin-based implementation, shares same PostgreSQL database
+- Both APIs add `X-Server` header to responses (`dotnet` or `go`) for identification
+
+**Go API Specifics**:
+- Uses Gin web framework
+- Repository pattern with direct PostgreSQL access
+- Environment: `PostgresDefaultConnection` connection string
+- Healthcheck: `GET /health` returns `"Healthy"`
+- No blockchain integration (API-only service)
+
+See [src/server/api/go/reminders-api/README.md](../src/server/api/go/reminders-api/README.md) for details.
 
 ### Blockchain Integration
 - API calls smart contracts via `IRemindersBlockchainService` ([Layers/Application/Contracts/IBlockchainReminderService.cs](../src/server/api/dotnet/Reminders.Api/Layers/Application/Contracts/IBlockchainReminderService.cs))
@@ -207,6 +230,15 @@ CORS configured via `AddRemindersCors()` extension in [Extensions/CorsExtensions
 
 ## Debugging
 
+### VS Code Tasks
+
+Available tasks in `.vscode/tasks.json`:
+- **Docker Compose**: `compose up`, `compose down`, `compose up debug`, `compose down debug`, `compose up production`, `compose down production`
+- **Entity Framework**: `dotnet: ef migrations add`, `dotnet: ef migrations remove`, `dotnet: ef database update`, `dotnet: ef migrations script`
+- **Build**: `build` (builds .NET solution), `publish` (publishes .NET solution)
+
+Use `Ctrl+Shift+P` → `Tasks: Run Task` to execute.
+
 ### Remote Debugging .NET in Docker
 Use `debug` profile which mounts `~/.vsdbg` and builds with `Debug` configuration:
 
@@ -216,10 +248,12 @@ docker compose --profile debug -f docker-compose.yml -f docker-compose.debug.yml
 
 ### Viewing Logs
 ```bash
-docker compose logs -f api          # API instance 1
-docker compose logs -f api-2        # API instance 2
-docker compose logs -f react        # React app
-docker compose logs -f postgres     # Database
+docker compose logs -f dotnet-api    # .NET API instance
+docker compose logs -f go-api        # Go API instance
+docker compose logs -f migrations    # Migration runner
+docker compose logs -f react         # React app
+docker compose logs -f postgres      # Database
+docker compose logs -f nginx         # Load balancer
 ```
 
 ## Common Tasks
