@@ -2,6 +2,7 @@
 
 [Route("api/reminders")]
 [ApiController]
+[IgnoreAntiforgeryToken] // REST API - uses CORS instead of anti-forgery tokens
 public class RemindersController
     : ControllerBase
 {
