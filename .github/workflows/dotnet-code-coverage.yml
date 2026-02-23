@@ -12,6 +12,10 @@ on:
       - 'src/server/services/dotnet/**'
       - 'src/test/server/dotnet/**'
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
