@@ -1,3 +1,5 @@
+# Triggers after successful Pages deployment or on Cypress test changes
+# Runs E2E tests against deployed app at kauereinbold.github.io/Reminders
 name: Cypress E2E Tests
 
 permissions:
@@ -10,14 +12,20 @@ on:
     workflows: ["Deploy React App to GitHub Pages"]
     types:
       - completed
+  # Run when Cypress tests themselves change
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/test/cypress/**'
   # Allow manual trigger for debugging
   workflow_dispatch:
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    # Only run if the deployment workflow completed successfully
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run != null && github.event.workflow_run.conclusion == 'success') }}
+    # Run if: manual trigger, PR on cypress paths, or successful deployment
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' || (github.event.workflow_run != null && github.event.workflow_run.conclusion == 'success') }}
 
     steps:
       - name: Checkout code

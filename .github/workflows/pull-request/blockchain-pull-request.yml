@@ -1,0 +1,33 @@
+# Triggers on PR when blockchain smart contracts or tests change
+# Runs Hardhat tests for Solidity contracts
+name: Blockchain - Hardhat Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'blockchain/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: blockchain/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: blockchain
+
+      - name: Run Hardhat tests
+        run: npm test
+        working-directory: blockchain

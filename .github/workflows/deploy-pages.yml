@@ -1,3 +1,5 @@
+# Triggers on push to main when React app changes
+# Builds and deploys to GitHub Pages at kauereinbold.github.io/Reminders
 name: Deploy React App to GitHub Pages
 
 on:
@@ -5,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - 'src/**/reactjs/**'
+      - 'src/app/reactjs/reminders-app/**'
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages

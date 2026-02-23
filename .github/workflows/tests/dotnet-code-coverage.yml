@@ -1,3 +1,5 @@
+# Triggers on push to main when .NET code changes
+# Builds, tests, and publishes code coverage to Coveralls
 name: dotnet - build - code coverage
 
 on:
@@ -5,7 +7,10 @@ on:
     branches:
       - main
     paths:
-      - 'src/**/dotnet/**'
+      - 'src/server/api/dotnet/**'
+      - 'src/app/dotnet/**'
+      - 'src/server/services/dotnet/**'
+      - 'src/test/server/dotnet/**'
 
 jobs:
   build:

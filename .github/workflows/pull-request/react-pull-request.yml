@@ -1,3 +1,5 @@
+# Triggers on PR when React app code changes
+# Runs Jest tests with coverage and validates build
 name: Build and Test React App
 
 on:
@@ -5,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - 'src/**/reactjs/**'
+      - 'src/app/reactjs/reminders-app/**'
 
 jobs:
   build-and-test:
