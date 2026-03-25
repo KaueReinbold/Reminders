@@ -1,5 +1,5 @@
 # Triggers after successful Pages deployment or on Cypress test changes
-# Runs E2E tests against deployed app at kauereinbold.github.io/Reminders
+# Runs E2E tests against deployed app at jumperck.github.io/Reminders
 name: Cypress E2E Tests
 
 permissions:
@@ -48,18 +48,18 @@ jobs:
         run: |
           echo "Waiting for GitHub Pages deployment to be available..."
           sleep 30
-          curl -f https://kauereinbold.github.io/Reminders/ || (echo "Deployment not ready, waiting more..." && sleep 60)
+          curl -f https://jumperck.github.io/Reminders/ || (echo "Deployment not ready, waiting more..." && sleep 60)
 
       # Run Cypress tests against deployed app
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           working-directory: src/test/cypress
-          wait-on: 'https://kauereinbold.github.io/Reminders'
+          wait-on: 'https://jumperck.github.io/Reminders'
           wait-on-timeout: 120
           browser: chrome
         env: 
-          CYPRESS_baseUrl: https://kauereinbold.github.io/Reminders
+          CYPRESS_baseUrl: https://jumperck.github.io/Reminders
 
       # Upload Cypress artifacts on failure
       - name: Upload Cypress screenshots

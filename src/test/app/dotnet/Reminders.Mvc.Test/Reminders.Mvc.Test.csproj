@@ -5,7 +5,7 @@
     <LangVersion>11.0</LangVersion>
     <Version>8.0.0</Version>
     <PackageDescription>Reminders Mvc Test</PackageDescription>
-    <RepositoryUrl>https://github.com/KaueReinbold/Reminders</RepositoryUrl>
+    <RepositoryUrl>https://github.com/jumperck/Reminders</RepositoryUrl>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

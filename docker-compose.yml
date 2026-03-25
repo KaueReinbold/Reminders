@@ -49,6 +49,19 @@ services:
       - api
     deploy: *shared-deploy
 
+  cpp-api:
+    image: reminders-cpp-api
+    container_name: reminders-cpp-api
+    build:
+      context: src/server/api/cpp/reminders-api
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+    profiles:
+      - all
+      - api
+    deploy: *shared-deploy
+
   mvc:
     image: reminders-mvc
     container_name: reminders-mvc
@@ -107,6 +120,7 @@ services:
     depends_on:
       - dotnet-api
       - go-api
+      - cpp-api
     profiles:
       - all
       - api

@@ -3,7 +3,7 @@ services:
   # Apps
 
   migrations:
-    image: kauereinbold/reminders-migrations-runner
+    image: jumperck/reminders-migrations-runner
     profiles:
       - production
     environment:
@@ -11,12 +11,12 @@ services:
       # Connection string and other sensitive config should come from environment or secrets
 
   dotnet-api:
-    image: kauereinbold/reminders-dotnet-api
+    image: jumperck/reminders-dotnet-api
     profiles:
       - production
 
   mvc:
-    image: kauereinbold/reminders-mvc
+    image: jumperck/reminders-mvc
     profiles:
       - production
 

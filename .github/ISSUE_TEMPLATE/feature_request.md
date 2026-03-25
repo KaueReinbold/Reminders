@@ -3,7 +3,7 @@ name: Feature request
 about: Suggest an idea for this project
 title: ''
 labels: ["feat", "triage"]
-projects: ["KaueReinbold/7"]
+projects: ["jumperck/7"]
 assignees: ''
 
 ---

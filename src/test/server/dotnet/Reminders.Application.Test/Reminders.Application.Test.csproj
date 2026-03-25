@@ -5,7 +5,7 @@
     <LangVersion>11.0</LangVersion>
     <Version>8.0.0</Version>
     <PackageDescription>Reminders Application Test</PackageDescription>
-    <RepositoryUrl>https://github.com/KaueReinbold/reminders-library</RepositoryUrl>
+    <RepositoryUrl>https://github.com/jumperck/reminders-library</RepositoryUrl>
     <IsPackable>false</IsPackable>
     <DebugType>Full</DebugType>
   </PropertyGroup>

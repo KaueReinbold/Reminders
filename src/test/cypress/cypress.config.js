@@ -2,7 +2,7 @@ const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: process.env.CYPRESS_baseUrl || 'https://kauereinbold.github.io/Reminders',
+    baseUrl: process.env.CYPRESS_baseUrl || 'https://jumperck.github.io/Reminders',
     viewportWidth: 1280,
     viewportHeight: 720,
     video: true,

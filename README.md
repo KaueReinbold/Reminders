@@ -2,7 +2,7 @@
 
 A simple and intuitive web application for managing your daily reminders.
 
-🚀 **Live Demo**: [https://kauereinbold.github.io/Reminders](https://kauereinbold.github.io/Reminders)
+🚀 **Live Demo**: [https://jumperck.github.io/Reminders](https://jumperck.github.io/Reminders)
 
 ## Features
 
@@ -48,7 +48,7 @@ Get the application running in 3 simple steps:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/KaueReinbold/Reminders.git
+git clone https://github.com/jumperck/Reminders.git
 cd Reminders
 
 # 2. Set up environment variables
@@ -86,39 +86,39 @@ docker compose --profile all down
 
 ## Project Status
 
-[![Coverage Status](https://coveralls.io/repos/github/KaueReinbold/Reminders/badge.svg?branch=main)](https://coveralls.io/github/KaueReinbold/Reminders?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/jumperck/Reminders/badge.svg?branch=main)](https://coveralls.io/github/jumperck/Reminders?branch=main)
 
 ### Build Status
 
 #### Pull Request Checks
 
-  [![.NET - Build & Test](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/dotnet-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/dotnet-pull-request.yml)
+  [![.NET - Build & Test](https://github.com/jumperck/Reminders/actions/workflows/pull-request/dotnet-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/pull-request/dotnet-pull-request.yml)
 
-  [![Go - Build & Test](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/go-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/go-pull-request.yml)
+  [![Go - Build & Test](https://github.com/jumperck/Reminders/actions/workflows/pull-request/go-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/pull-request/go-pull-request.yml)
 
-  [![React - Build & Test](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/react-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/react-pull-request.yml)
+  [![React - Build & Test](https://github.com/jumperck/Reminders/actions/workflows/pull-request/react-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/pull-request/react-pull-request.yml)
 
-  [![Blockchain - Hardhat Tests](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/blockchain-pull-request.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request/blockchain-pull-request.yml)
+  [![Blockchain - Hardhat Tests](https://github.com/jumperck/Reminders/actions/workflows/pull-request/blockchain-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/pull-request/blockchain-pull-request.yml)
 
-  [![Infrastructure Check](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request-check.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/pull-request-check.yml)
+  [![Infrastructure Check](https://github.com/jumperck/Reminders/actions/workflows/pull-request-check.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/pull-request-check.yml)
 
 #### Deployment & Testing
 
-  [![Deploy to GitHub Pages](https://github.com/KaueReinbold/Reminders/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/deploy-pages.yml)
+  [![Deploy to GitHub Pages](https://github.com/jumperck/Reminders/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/deploy-pages.yml)
 
-  [![Cypress E2E Tests](https://github.com/KaueReinbold/Reminders/actions/workflows/cypress-e2e.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/cypress-e2e.yml)
+  [![Cypress E2E Tests](https://github.com/jumperck/Reminders/actions/workflows/cypress-e2e.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/cypress-e2e.yml)
 
-  [![.NET Code Coverage](https://github.com/KaueReinbold/Reminders/actions/workflows/tests/dotnet-code-coverage.yml/badge.svg)](https://github.com/KaueReinbold/Reminders/actions/workflows/tests/dotnet-code-coverage.yml)
+  [![.NET Code Coverage](https://github.com/jumperck/Reminders/actions/workflows/tests/dotnet-code-coverage.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/tests/dotnet-code-coverage.yml)
 
 ### Docker Hub
 
 Reminders MVC:
 
-  [![Docker Hub - Reminders MVC)](https://img.shields.io/docker/pulls/kauereinbold/reminders-mvc.svg)](https://hub.docker.com/r/kauereinbold/reminders-mvc)
+  [![Docker Hub - Reminders MVC)](https://img.shields.io/docker/pulls/jumperck/reminders-mvc.svg)](https://hub.docker.com/r/jumperck/reminders-mvc)
 
 Reminders API:
 
-  [![Docker Hub - Reminders API)](https://img.shields.io/docker/pulls/kauereinbold/reminders-dotnet-api.svg)](https://hub.docker.com/r/kauereinbold/reminders-dotnet-api)
+  [![Docker Hub - Reminders API)](https://img.shields.io/docker/pulls/jumperck/reminders-dotnet-api.svg)](https://hub.docker.com/r/jumperck/reminders-dotnet-api)
 
 ## Testing
 
@@ -396,7 +396,7 @@ curl -i http://localhost:5000/health
 
 To deploy the Reminders application using Docker Compose, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/KaueReinbold/Reminders.git`
+1. Clone the repository: `git clone https://github.com/jumperck/Reminders.git`
 2. Navigate to the project directory: `cd Reminders`
 3. Run Docker Compose: `docker compose up -d`
 
@@ -472,7 +472,7 @@ Subsequent builds will be much faster thanks to Docker's layer caching.
 ### Getting Help
 
 - Check [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines
-- Check the [Issues](https://github.com/KaueReinbold/Reminders/issues) page for known problems
+- Check the [Issues](https://github.com/jumperck/Reminders/issues) page for known problems
 - Open a new issue if you encounter a bug
 
 ## Contributing
@@ -487,4 +487,4 @@ We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for det
 
 ## Support
 
-If you encounter any issues or have suggestions, we encourage you to open an issue on the [GitHub Issues](https://github.com/KaueReinbold/Reminders/issues) page.
+If you encounter any issues or have suggestions, we encourage you to open an issue on the [GitHub Issues](https://github.com/jumperck/Reminders/issues) page.

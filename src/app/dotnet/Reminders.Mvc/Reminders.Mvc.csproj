@@ -5,7 +5,7 @@
     <LangVersion>11.0</LangVersion>
     <Version>8.0.0</Version>
     <PackageDescription>Reminders Mvc</PackageDescription>
-    <RepositoryUrl>https://github.com/KaueReinbold/Reminders</RepositoryUrl>
+    <RepositoryUrl>https://github.com/jumperck/Reminders</RepositoryUrl>
     <UserSecretsId>b8555d52-fe93-4d86-80d9-1fb03fc18baa</UserSecretsId>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>

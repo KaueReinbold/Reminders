@@ -1,5 +1,5 @@
 # Triggers on push to main when React app changes
-# Builds and deploys to GitHub Pages at kauereinbold.github.io/Reminders
+# Builds and deploys to GitHub Pages at jumperck.github.io/Reminders
 name: Deploy React App to GitHub Pages
 
 on:

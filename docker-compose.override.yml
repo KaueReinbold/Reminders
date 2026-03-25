@@ -30,6 +30,11 @@ services:
         DOTNET_SDK_IMAGE: mcr.microsoft.com/dotnet/sdk:8.0
     ports:
       - 5000:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '1GB'
     depends_on:
       postgres:
         condition: service_healthy
@@ -56,6 +61,24 @@ services:
         GO_IMAGE: golang:alpine
     ports:
       - 5001:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '1GB'
+    environment:
+      PostgresDefaultConnection: postgresql://root:h9pJwUUV0y@reminders-postgres/Reminders?sslmode=disable
+
+      CorsOrigins: http://reminders-react:3000,http://localhost:3000
+
+  cpp-api:
+    ports:
+      - 5002:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '1GB'
     environment:
       PostgresDefaultConnection: postgresql://root:h9pJwUUV0y@reminders-postgres/Reminders?sslmode=disable
 
