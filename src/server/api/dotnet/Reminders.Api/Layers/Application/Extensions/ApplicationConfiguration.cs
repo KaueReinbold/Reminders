@@ -12,7 +12,7 @@ public static class ApplicationConfiguration
         SupportedDatabases supportedDatabases = SupportedDatabases.SqlServer)
     {
         services
-            .AddSingleton(AutoMapperConfiguration.CreateMapper());
+            .AddSingleton<IMapper>(sp => AutoMapperConfiguration.CreateMapper(sp.GetService<ILoggerFactory>()));
 
         if (connectionString is not null)
         {
