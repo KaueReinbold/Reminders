@@ -47,7 +47,7 @@ cp .env.example .env
 # Edit .env and configure your settings
 
 # Start infrastructure services
-docker compose up postgres ganache -d
+docker compose --profile api up postgres ganache -d
 
 # Build the API
 cd src/server/api/dotnet/Reminders.Api
@@ -62,22 +62,25 @@ npm install
 
 ```text
 Reminders/
-├── blockchain/              # Hardhat smart contracts
-│   ├── contracts/          # Solidity contracts
-│   ├── scripts/            # Deployment scripts
-│   └── test/              # Contract tests
-├── docs/                   # GitHub Pages documentation
-├── infrastructure/         # Nginx configs, k6 tests
+├── blockchain/                    # Hardhat smart contracts
+│   ├── contracts/                # Solidity contracts
+│   ├── scripts/                  # Deployment scripts
+│   └── test/                     # Contract tests
+├── docs/                          # GitHub Pages documentation
+├── infrastructure/                # Nginx configs, k6 tests
 ├── src/
 │   ├── app/
-│   │   ├── dotnet/        # ASP.NET MVC application
-│   │   └── reactjs/       # Next.js React application
-│   └── server/
-│       ├── api/dotnet/    # ASP.NET Core Web API
-│       └── data/          # Data access layers
-└── test/                  # Test projects
-    ├── cypress/           # E2E tests
-    └── server/dotnet/     # API unit tests
+│   │   ├── dotnet/                # ASP.NET MVC application
+│   │   └── reactjs/               # Next.js React application
+│   ├── server/
+│   │   ├── api/
+│   │   │   ├── dotnet/            # ASP.NET Core Web API
+│   │   │   ├── go/                # Go (Gin) API
+│   │   │   └── cpp/               # C++ API
+│   │   └── services/dotnet/       # Migration runner service
+│   └── test/
+│       ├── cypress/               # E2E tests
+│       └── server/dotnet/         # API unit tests
 ```
 
 ## Database Migrations
@@ -91,7 +94,7 @@ The project supports both **PostgreSQL** (default) and **SQL Server**. Migration
 
 ### Expected Behavior
 
-When starting the API with PostgreSQL (default configuration), you may see a migration error message for SQL Server migrations. **This is expected and harmless**. The PostgreSQL migrations apply successfully, and the SQL Server migration fails because you're using PostgreSQL.
+Migrations are applied by a **dedicated migration runner service** (`src/server/services/dotnet/Reminders.MigrationsRunner/`), not by the API itself. Docker Compose starts `postgres`, waits for it to report healthy, then runs `migrations` to completion before either API instance starts. When PostgreSQL is the active provider (default), the runner also attempts the SQL Server migration set and logs an expected failure for it - **this is expected and harmless**. Only the PostgreSQL migrations are actually applied.
 
 ### Creating New Migrations
 
@@ -150,7 +153,7 @@ refactor: Improve error handling
 ```bash
 # .NET API Integration Tests (requires running API)
 # Start API first:
-docker compose up postgres ganache -d
+docker compose --profile api up postgres ganache -d
 cd src/server/api/dotnet/Reminders.Api
 dotnet run &
 
@@ -163,7 +166,7 @@ cd src/app/reactjs/reminders-app
 npm test
 
 # Cypress E2E Tests
-cd test/cypress
+cd src/test/cypress
 npm run cy:run
 
 # Blockchain Tests (all passing ✅)
@@ -223,7 +226,7 @@ Example: [feat] Add email notification for reminders
 
 ```bash
 # Just the database
-docker compose up postgres -d
+docker compose --profile api up postgres -d
 
 # Just the blockchain
 docker compose up ganache -d
