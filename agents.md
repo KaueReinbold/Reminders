@@ -8,9 +8,7 @@
 
 A full-stack learning project for managing reminders with multiple client interfaces, load-balanced APIs, and blockchain integration.
 
-**Tech Stack**: .NET 8.0, Go (Gin), Next.js 15, PostgreSQL, Solidity, Docker Compose
-
-**Repository**: Multi-workspace (specs + application)
+**Tech Stack**: .NET 8.0, Go (Gin), C++, Next.js 15, PostgreSQL, Solidity, Docker Compose
 
 ## Quick Start for Agents
 
@@ -18,7 +16,8 @@ A full-stack learning project for managing reminders with multiple client interf
 
 ```bash
 # Clone and setup
-cd /home/kaue/repos/reminders/Reminders
+git clone https://github.com/jumperck/Reminders.git
+cd Reminders
 cp .env.example .env
 
 # Start all services
@@ -32,6 +31,7 @@ docker compose logs -f dotnet-api go-api migrations
 
 - **API (.NET)**: `src/server/api/dotnet/Reminders.Api/`
 - **API (Go)**: `src/server/api/go/reminders-api/`
+- **API (C++)**: `src/server/api/cpp/reminders-api/`
 - **Migration Runner**: `src/server/services/dotnet/Reminders.MigrationsRunner/`
 - **React Frontend**: `src/app/reactjs/reminders-app/`
 - **Smart Contracts**: `blockchain/contracts/Reminders.sol`
@@ -87,19 +87,20 @@ dotnet ef migrations add MigrationName \
 
 **Important Notes**:
 - Migration runner has retry logic (5 attempts, exponential backoff)
-- Health endpoint at `/healthz:8081` (dev only)
+- Migration runner health endpoint: `GET /healthz` on port 8081 (dev only) - distinct from the Go API's own `GET /health` on port 8080/5001, see below
 - Provider-specific migrations applied automatically
 - Expected: SQL Server migration errors when using PostgreSQL (harmless)
 
 ### Load Balancing
 
-Two backend instances behind Nginx:
+Three backend instances behind Nginx:
 - **dotnet-api**: .NET Core with full blockchain integration
 - **go-api**: Lightweight Go (Gin) implementation
+- **cpp-api**: C++ implementation
 
-Both share the same PostgreSQL database. Load balanced round-robin on port 9999.
+All three share the same PostgreSQL database. Load balanced round-robin on port 9999.
 
-**Server Identification**: Check `X-Server` response header (`dotnet` or `go`)
+**Server Identification**: Check `X-Server` response header (`dotnet`, `go`, or `cpp`)
 
 ## Coding Standards
 
@@ -193,7 +194,8 @@ export default function EditClient() {
 - **Repository Pattern**: Direct PostgreSQL access
 - **Error Handling**: Gin's built-in error handling
 - **Server Header**: Always add `X-Server: go` header
-- **Health Endpoint**: `GET /health` returns `"Healthy"`
+- **Health Endpoint**: `GET /health` returns `"Healthy"` (container port 8080, published as host port 5001 via Docker Compose)
+- **Layout**: `cmd/app/main.go` (entry point), `pkg/api/` (handlers + repository), `pkg/models/` (domain models)
 
 ## Environment Configuration
 
@@ -206,8 +208,9 @@ CONNECTION_STRING=Host=reminders-postgres;Database=Reminders;Username=postgres;P
 
 # Blockchain
 BLOCKCHAIN_NODE_URL=http://reminders-blockchain:8545
-BLOCKCHAIN_PRIVATE_KEY=0xc87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3
-BLOCKCHAIN_CONTRACT_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3
+BLOCKCHAIN_PRIVATE_KEY=<test-account-private-key-from-.env.example>
+BLOCKCHAIN_CONTRACT_ADDRESS=<deployed-contract-address>
+# See .env.example for the actual local development values (Ganache test keys only)
 
 # API
 CORS_ORIGINS=http://localhost:3000,http://localhost:5000
@@ -305,13 +308,13 @@ public async Task AddRangeAsync(IEnumerable<Reminder> reminders)
 
 ```bash
 # Start dependencies
-docker compose up postgres ganache -d
+docker compose --profile api up postgres ganache -d
 
 # Run API
 cd src/server/api/dotnet/Reminders.Api && dotnet run &
 
 # Run tests
-cd test/server/dotnet/Reminders.Api.Test && dotnet test
+cd src/test/server/dotnet/Reminders.Api.Test && dotnet test
 ```
 
 ### React Tests
@@ -334,7 +337,7 @@ npm test                    # Hardhat tests with Chai
 ### E2E Tests
 
 ```bash
-cd test/cypress
+cd src/test/cypress
 npm install
 npm run cy:open            # Interactive mode
 npm run cy:run             # Headless mode
@@ -447,7 +450,7 @@ foreach (var reminder in reminders)
 
 **Solutions**:
 1. Check both API instances are healthy: `docker compose ps dotnet-api go-api`
-2. Test each API directly: `curl http://localhost:8080/health` (bypasses Nginx)
+2. Test each API directly, bypassing Nginx: `curl http://localhost:5000/health` (.NET), `curl http://localhost:5001/health` (Go)
 3. Review Nginx config: `infrastructure/nginx.conf`
 4. Check Nginx logs: `docker compose logs nginx`
 
@@ -488,10 +491,9 @@ foreach (var reminder in reminders)
 
 ## Resources
 
-- **Project README**: `/home/kaue/repos/reminders/Reminders/README.md`
-- **Contributing Guide**: `/home/kaue/repos/reminders/Reminders/CONTRIBUTING.md`
-- **Specs Repository**: `/home/kaue/repos/reminders/reminders-specs/specs/`
-- **API Documentation**: `http://localhost:8080/swagger` (when running)
+- **Project README**: [`README.md`](README.md)
+- **Contributing Guide**: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- **API Documentation**: `http://localhost:5000/swagger` (when running .NET API via Docker Compose)
 - **Blockchain Explorer**: `http://localhost:8545` (Ganache)
 
 ## Contact & Support
