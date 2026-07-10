@@ -1,47 +1,100 @@
-# Reminders App
+# Reminders App (React / Next.js)
 
-This is a React.js application built with Next.js and TypeScript. It's a simple reminders app that allows users to create, update, and delete reminders.
+The React frontend for Reminders, built with Next.js App Router, TypeScript, and Material-UI.
 
-## Recent Updates
+## Stack
 
-- **Upgraded to React 19**: Updated React to version 19.1.0 and React DOM to 19.1.0, taking advantage of the latest React features and improvements.
-- **Upgraded to Next.js 15**: Updated Next.js to version 15.3.4 for better React 19 compatibility and latest framework features.
-- **Upgraded to Material-UI v7**: Updated @mui/material to version 7.1.2 for React 19 compatibility and latest design components.
-- **Migrated to @tanstack/react-query**: Replaced deprecated react-query with @tanstack/react-query v5.81.5 for better performance and React 19 support.
-- **Updated TypeScript types**: Updated @types/react and @types/react-dom to latest versions for React 19 compatibility.
-- **Fixed UI components**: Updated Grid components to use Stack layout for better compatibility with Material-UI v7.
-- **Maintained test coverage**: All existing tests pass with 99.6% code coverage after the upgrade.
-- **Note**: Google Fonts import is temporarily disabled in the sandbox environment due to network restrictions. In production, uncomment the Inter font import in layout.tsx.
-- Added ESLint for linting and code quality checks. The ESLint configuration includes recommended rules from ESLint, React, and TypeScript.
-- Added Prettier for code formatting. The Prettier configuration ensures consistent code style across the project.
-- Fixed various linting issues in the codebase. The code now adheres to the rules specified in the ESLint configuration.
-- Updated the project structure to use the `@/app` alias for imports, improving the readability and maintainability of import statements.
+- **Next.js 15** (App Router) + **React 19**
+- **TypeScript**, strict mode enabled
+- **Material-UI v7** for components
+- **@tanstack/react-query** for API data fetching
+- **Jest** + **React Testing Library** for unit tests
 
-## Getting Started
+## Features
 
-First, run the development server:
+- List, create, edit, and delete reminders
+- Form validation on create/edit
+- Toggle reminder "done" status
+- Responsive layout via Material-UI
+
+## Prerequisites
+
+- Node.js 18+
+- npm (or yarn/pnpm/bun)
+- A running Reminders API reachable at the URL configured below (see the repository root [README](../../../../README.md) for starting the full stack via Docker Compose)
+
+## Environment Variables
+
+Copy `.env.example` to `.env` and set:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Base URL the app calls for API requests
+NEXT_PUBLIC_API_BASE_URL=http://localhost:9999
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- For local development against the full Docker Compose stack, use the Nginx load balancer URL (`http://localhost:9999`).
+- For a GitHub Pages / production deployment, point this at your deployed API's public URL.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Local Development
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+# Install dependencies
+npm install
 
-## Learn More
+# Set up environment
+cp .env.example .env
 
-To learn more about Next.js, take a look at the following resources:
+# Start the dev server
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open [http://localhost:3000](http://localhost:3000) in your browser. The page auto-updates as you edit files under `src/app/`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Running with Docker
+
+The app is built and served via the project's root `docker-compose.yml`/`docker-compose.override.yml`:
+
+```bash
+# From the repository root
+docker compose --profile all up react -d
+```
+
+`NEXT_PUBLIC_API_BASE_URL` is baked in at build time as a Docker build argument (see `Dockerfile`); set it via the root `.env` file before building.
+
+## Testing
+
+```bash
+# Run unit tests (Jest + React Testing Library)
+npm test
+
+# Run tests with coverage
+npm test -- --coverage
+```
+
+Tests live alongside the code they cover, e.g. `src/app/components/ReminderForm/index.test.tsx`.
+
+## Build
+
+```bash
+npm run build
+npm start
+```
+
+## Linting
+
+```bash
+npm run lint
+```
+
+## Project Structure
+
+```text
+src/app/
+├── api/            # API client, hooks, and types
+├── components/     # Reusable UI components (AlertError, ReminderForm, ReminderDeleteModal)
+├── constants/       # Shared constants
+├── hooks/          # Custom React hooks (context, query client)
+├── reminder/       # Route segments: list, create, edit (App Router)
+├── services/       # Validation and other client-side services
+└── util/           # Utility helpers
+```

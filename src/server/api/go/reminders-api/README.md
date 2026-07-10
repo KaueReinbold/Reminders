@@ -19,10 +19,10 @@ This service is a lightweight Go implementation of the Reminders API used for lo
 - `GET /api/reminders/count`
   - Returns `{ "count": <number> }`.
 
-- `GET /api/reminder/:id`
-  - Returns the reminder by `id`.
+- `GET /api/reminders/:id`
+  - Returns the reminder by `id` (uuid).
 
-- `POST /api/reminder`
+- `POST /api/reminders`
   - Creates a new reminder.
   - Expected JSON body:
     ```json
@@ -34,10 +34,10 @@ This service is a lightweight Go implementation of the Reminders API used for lo
     }
     ```
 
-- `PUT /api/reminder/:id`
+- `PUT /api/reminders/:id`
   - Updates an existing reminder. Same body shape as POST.
 
-- `DELETE /api/reminder/:id`
+- `DELETE /api/reminders/:id`
   - Deletes the reminder.
 
 Responses follow standard HTTP status codes: 200 for success, 201 for created, 400 for invalid input, 404 for not found, 500 for server errors.
@@ -83,14 +83,18 @@ docker build -t reminders-go-api:local .
 docker run --env PostgresDefaultConnection="$CONN" -p 8080:8080 reminders-go-api:local
 ```
 
+The service listens on port `8080` inside the container. In the project's Docker Compose stack this is published on host port `5001` (see `docker-compose.override.yml`).
+
 The Docker image contains a `wait-for-dotnet.sh` helper that can be used in Compose to delay start until the .NET API is healthy. See the project `docker-compose` for usage.
 
 ## Examples
 
+The examples below assume the service is reachable directly on port `8080` (a local `docker run` or `go run`). When running via the project's Docker Compose stack, use port `5001` instead.
+
 Create reminder:
 
 ```bash
-curl -X POST http://localhost:8080/api/reminder \
+curl -X POST http://localhost:8080/api/reminders \
   -H 'Content-Type: application/json' \
   -d '{"title":"Buy milk","description":"2 liters","limitDate":"2030-12-12T00:00:00Z","isDone":false}'
 ```
@@ -104,12 +108,10 @@ curl http://localhost:8080/api/reminders
 Get by id:
 
 ```bash
-curl http://localhost:8080/api/reminder/1
+curl http://localhost:8080/api/reminders/3fa85f64-5717-4562-b3fc-2c963f66afa6
 ```
 
 ## Notes
 
 - The service adds an `X-Server: go` response header to help distinguish responses when load-balanced with the .NET API.
 - For production or CI, prefer running the service inside the project's Docker Compose stack which configures networking and DB initialization.
-
-If you want OpenAPI/Swagger documentation added, I can generate a minimal spec or add annotations to the handlers.

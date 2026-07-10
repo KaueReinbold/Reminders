@@ -47,7 +47,7 @@ cp .env.example .env
 # Edit .env and configure your settings
 
 # Start infrastructure services
-docker compose up postgres ganache -d
+docker compose --profile api up postgres ganache -d
 
 # Build the API
 cd src/server/api/dotnet/Reminders.Api
@@ -62,22 +62,25 @@ npm install
 
 ```text
 Reminders/
-├── blockchain/              # Hardhat smart contracts
-│   ├── contracts/          # Solidity contracts
-│   ├── scripts/            # Deployment scripts
-│   └── test/              # Contract tests
-├── docs/                   # GitHub Pages documentation
-├── infrastructure/         # Nginx configs, k6 tests
+├── blockchain/                    # Hardhat smart contracts
+│   ├── contracts/                # Solidity contracts
+│   ├── scripts/                  # Deployment scripts
+│   └── test/                     # Contract tests
+├── docs/                          # GitHub Pages documentation
+├── infrastructure/                # Nginx configs, k6 tests
 ├── src/
 │   ├── app/
-│   │   ├── dotnet/        # ASP.NET MVC application
-│   │   └── reactjs/       # Next.js React application
-│   └── server/
-│       ├── api/dotnet/    # ASP.NET Core Web API
-│       └── data/          # Data access layers
-└── test/                  # Test projects
-    ├── cypress/           # E2E tests
-    └── server/dotnet/     # API unit tests
+│   │   ├── dotnet/                # ASP.NET MVC application
+│   │   └── reactjs/               # Next.js React application
+│   ├── server/
+│   │   ├── api/
+│   │   │   ├── dotnet/            # ASP.NET Core Web API
+│   │   │   ├── go/                # Go (Gin) API
+│   │   │   └── cpp/               # C++ API
+│   │   └── services/dotnet/       # Migration runner service
+│   └── test/
+│       ├── cypress/               # E2E tests
+│       └── server/dotnet/         # API unit tests
 ```
 
 ## Database Migrations
@@ -91,7 +94,65 @@ The project supports both **PostgreSQL** (default) and **SQL Server**. Migration
 
 ### Expected Behavior
 
-When starting the API with PostgreSQL (default configuration), you may see a migration error message for SQL Server migrations. **This is expected and harmless**. The PostgreSQL migrations apply successfully, and the SQL Server migration fails because you're using PostgreSQL.
+Migrations are applied by a **dedicated migration runner service** (`src/server/services/dotnet/Reminders.MigrationsRunner/`), not by the API itself. Docker Compose starts `postgres`, waits for it to report healthy, then runs `migrations` to completion before either API instance starts. When PostgreSQL is the active provider (default), the runner also attempts the SQL Server migration set and logs an expected failure for it - **this is expected and harmless**. Only the PostgreSQL migrations are actually applied.
+
+### How the Runner Works
+
+- **Technology**: .NET 8.0 console app with an embedded HTTP health endpoint (`http://localhost:8081/healthz`, development mode only). Runs once per deployment and exits, it is not a long-running service.
+- **Order**: `postgres` starts and reports healthy, then `migrations` runs with retry logic (exponential backoff, 5 attempts, 2s base delay), and once it exits with code 0 both `dotnet-api` and `go-api` start (each depends on `migrations` with `condition: service_completed_successfully`).
+- **Health signal**: the runner exposes HTTP 500 while running and HTTP 200 once migrations succeed.
+
+### Running Migrations Manually
+
+**Local development (without Docker):**
+
+```bash
+cd src/server/services/dotnet/Reminders.MigrationsRunner
+
+export ConnectionStrings__DefaultConnection="Host=localhost;Database=Reminders;Username=postgres;Password=yourpassword"
+export DatabaseProvider="Postgres"
+
+dotnet run
+
+# check health endpoint in another terminal
+curl http://localhost:8081/healthz
+```
+
+**Via Docker Compose (recommended):**
+
+```bash
+docker compose --profile all up -d
+
+# check migration runner logs
+docker compose logs migrations
+
+# verify it completed successfully - should show "Exited (0)"
+docker compose ps migrations
+```
+
+### Runner Configuration
+
+Settings live in `appsettings.json`, or override via environment variables:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=postgres;Database=Reminders;..."
+  },
+  "DatabaseProvider": "Postgres",
+  "MigrationRunner": {
+    "MaxRetryAttempts": 5,
+    "RetryBaseDelaySeconds": 2
+  }
+}
+```
+
+```bash
+ConnectionStrings__DefaultConnection="..."
+DatabaseProvider="Postgres"
+MigrationRunner__MaxRetryAttempts=5
+MigrationRunner__RetryBaseDelaySeconds=2
+```
 
 ### Creating New Migrations
 
@@ -114,6 +175,12 @@ dotnet ef migrations add MigrationName \
   --context RemindersContext \
   --output-dir Layers/Data/EntityFramework/SqlServer/Migrations
 ```
+
+### Troubleshooting Migrations
+
+- **Runner fails to start**: check `docker compose logs migrations`. Usual causes are the database not being ready yet, an invalid connection string, or missing environment variables.
+- **Migrations fail to apply**: check the logs for the detailed error, then test the connection directly with `docker compose exec postgres psql -U root -d Reminders -c "\dt"`. As a last resort, `docker compose down -v && docker compose --profile all up -d` resets the database (this deletes all data).
+- **API won't start after a migration failure**: the runner must exit with code 0 for the APIs to start. Check `docker compose ps migrations`; if the exit code is non-zero, fix the underlying issue and run `docker compose up migrations -d --force-recreate`.
 
 ## Making Changes
 
@@ -150,7 +217,7 @@ refactor: Improve error handling
 ```bash
 # .NET API Integration Tests (requires running API)
 # Start API first:
-docker compose up postgres ganache -d
+docker compose --profile api up postgres ganache -d
 cd src/server/api/dotnet/Reminders.Api
 dotnet run &
 
@@ -163,7 +230,7 @@ cd src/app/reactjs/reminders-app
 npm test
 
 # Cypress E2E Tests
-cd test/cypress
+cd src/test/cypress
 npm run cy:run
 
 # Blockchain Tests (all passing ✅)
@@ -223,7 +290,7 @@ Example: [feat] Add email notification for reminders
 
 ```bash
 # Just the database
-docker compose up postgres -d
+docker compose --profile api up postgres -d
 
 # Just the blockchain
 docker compose up ganache -d
@@ -248,11 +315,17 @@ npm run dev
 #### Port Already in Use
 
 ```bash
-# Find and kill process using port 5000
+# Find and kill process using a port (example: 5000)
 lsof -ti:5000 | xargs kill -9
+
+# Or stop all containers and try again
+docker compose down
+docker compose --profile all up -d
 ```
 
-#### Docker Build Fails
+#### Docker Build Fails or Takes Too Long
+
+The first build can take 10+ minutes since Docker has to download base images (.NET, Node.js, PostgreSQL, Nginx, Ganache) and install all dependencies. Subsequent builds are much faster thanks to layer caching. If a build is actually failing:
 
 ```bash
 # Clean Docker cache
@@ -262,9 +335,15 @@ docker compose down -v
 
 #### Database Connection Issues
 
-- Ensure PostgreSQL container is running: `docker compose ps`
+- Ensure PostgreSQL container is running and healthy: `docker compose ps` / `docker logs reminders-postgres`
 - Check `.env` file has correct credentials
-- Verify port 5432 is not blocked
+- Verify port 5432 is not blocked, and give PostgreSQL a few seconds to finish initializing
+
+#### React App Shows API Connection Error
+
+- Ensure the API is reachable: `curl http://localhost:9999/health`
+- Check CORS configuration in your `.env` file
+- Verify Nginx is running: `docker compose ps reminders-nginx`
 
 ## Questions or Need Help?
 
