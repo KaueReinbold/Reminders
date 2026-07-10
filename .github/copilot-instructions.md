@@ -2,10 +2,10 @@
 
 ## Architecture Overview
 
-This is a **full-stack learning project** for managing reminders with multiple client interfaces (React, ASP.NET MVC), a load-balanced .NET API, and blockchain integration.
+This is a **full-stack learning project** for managing reminders with multiple client interfaces (React, ASP.NET MVC), three load-balanced API backends (.NET, Go, C++), and blockchain integration.
 
 ### Tech Stack
-- **Backend**: ASP.NET Core 8.0 Web API + Go Gin API (2 instances behind Nginx load balancer)
+- **Backend**: ASP.NET Core 8.0 Web API + Go (Gin) API + C++ API (3 instances behind Nginx load balancer)
 - **Frontend**: Next.js 15 (React 19) + ASP.NET MVC
 - **Database**: PostgreSQL (primary) or SQL Server (legacy support)
 - **Blockchain**: Hardhat + Solidity smart contracts on Ganache
@@ -28,18 +28,17 @@ src/
 │   │   │   │   │   └── SqlServer/Migrations/     # SQL Server migrations (legacy)
 │   │   │   │   └── CrossCutting/                 # Shared infrastructure
 │   │   │   └── Extensions/                       # Middleware & DI extensions
-│   │   └── go/reminders-api/              # Go (Gin) API - lightweight implementation
-│   │       ├── cmd/app/                          # Application entry point
-│   │       ├── internal/                         # Internal packages
-│   │       │   ├── handlers/                     # HTTP handlers
-│   │       │   ├── repository/                   # Data access
-│   │       │   └── models/                       # Domain models
-│   │       └── wait-for-dotnet.sh                # Startup helper script
+│   │   ├── go/reminders-api/              # Go (Gin) API - lightweight implementation
+│   │   │   ├── cmd/app/                          # Application entry point (main.go)
+│   │   │   ├── pkg/api/                          # HTTP handlers + repository (Postgres)
+│   │   │   ├── pkg/models/                       # Domain models
+│   │   │   └── wait-for-dotnet.sh                # Startup helper script
+│   │   └── cpp/reminders-api/              # C++ API - third load-balanced instance
 ├── app/
 │   ├── reactjs/reminders-app/                # Next.js App Router app
 │   └── dotnet/Reminders.Mvc/                 # ASP.NET MVC app
-blockchain/                                    # Hardhat smart contracts
-test/cypress/                                  # E2E tests
+└── test/cypress/                                # E2E tests
+blockchain/                                    # Hardhat smart contracts (repo root, alongside src/)
 ```
 
 ## Critical Workflows
@@ -70,7 +69,7 @@ docker compose --profile production -f docker-compose.yml -f docker-compose.prod
 **Architecture**:
 - **Execution Model**: Runs once per deployment, exits after completion (not long-running)
 - **Orchestration**: Docker Compose ensures `migrations` service completes successfully before starting `dotnet-api` and `go-api`
-- **Health Endpoint**: Exposes `/healthz` on port 8081 (development only)
+- **Health Endpoint**: Exposes `GET /healthz` on port 8081 (development only) - this is the migration runner's own health check, distinct from the Go API's `GET /health` described under "Go API Specifics" below
   - HTTP 500: Migrations pending, running, or failed
   - HTTP 200: Migrations completed successfully
 - **Retry Logic**: Exponential backoff with jitter (5 attempts, 2s base delay)
@@ -125,12 +124,12 @@ cd src/app/reactjs/reminders-app && npm test
 cd blockchain && npm test
 
 # Run Cypress E2E tests
-cd test/cypress && npm run cy:run
+cd src/test/cypress && npm run cy:run
 
 # Run .NET API tests (requires running API)
-docker compose up postgres ganache -d
+docker compose --profile api up postgres ganache -d
 cd src/server/api/dotnet/Reminders.Api && dotnet run &
-cd test/server/dotnet/Reminders.Api.Test && dotnet test
+cd src/test/server/dotnet/Reminders.Api.Test && dotnet test
 ```
 
 ### Blockchain Development
@@ -195,7 +194,7 @@ Uses **Next.js App Router** with:
 DATABASE_PROVIDER=Postgres
 CONNECTION_STRING=Host=reminders-postgres;Database=Reminders;Username=postgres;Password=YOUR_PASSWORD_HERE
 BLOCKCHAIN_NODE_URL=http://reminders-blockchain:8545
-BLOCKCHAIN_PRIVATE_KEY=0xc87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3
+BLOCKCHAIN_PRIVATE_KEY=<test-account-private-key-from-.env.example>
 CORS_ORIGINS=http://localhost:3000
 API_BASE_URL=http://reminders-nginx:9999
 ```
@@ -203,19 +202,20 @@ API_BASE_URL=http://reminders-nginx:9999
 ## Integration Points
 
 ### Load Balancing
-Two API instances (`dotnet-api` running .NET, `go-api` running Go) behind Nginx ([infrastructure/nginx.conf](../infrastructure/nginx.conf)). Requests to port 9999 are load-balanced round-robin between both backends.
+Three API instances (`dotnet-api`, `go-api`, `cpp-api`) behind Nginx ([infrastructure/nginx.conf](../infrastructure/nginx.conf)). Requests to port 9999 are load-balanced round-robin across all three backends.
 
 **Architecture Notes**:
-- Both APIs implement the same REST endpoints for reminders CRUD
+- All three APIs implement the same REST endpoints for reminders CRUD
 - .NET API: Layered architecture with full blockchain integration
 - Go API: Lightweight Gin-based implementation, shares same PostgreSQL database
-- Both APIs add `X-Server` header to responses (`dotnet` or `go`) for identification
+- C++ API: Third load-balanced instance, shares the same PostgreSQL database
+- All three APIs add an `X-Server` response header for identification
 
 **Go API Specifics**:
 - Uses Gin web framework
 - Repository pattern with direct PostgreSQL access
 - Environment: `PostgresDefaultConnection` connection string
-- Healthcheck: `GET /health` returns `"Healthy"`
+- Healthcheck: `GET /health` returns `"Healthy"` (container port 8080, published as host port 5001 via Docker Compose)
 - No blockchain integration (API-only service)
 
 See [src/server/api/go/reminders-api/README.md](../src/server/api/go/reminders-api/README.md) for details.
