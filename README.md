@@ -35,7 +35,9 @@ Before you begin, ensure you have the following installed on your system:
 
 Make sure the following ports are available on your system:
 
-- **5000, 5001** - API instances
+- **5000** - .NET API instance
+- **5001** - Go API instance
+- **5002** - C++ API instance
 - **5050** - MVC application
 - **3000** - React application
 - **9999** - Nginx load balancer
@@ -68,8 +70,9 @@ Once all containers are running:
 - **React App**: [http://localhost:3000](http://localhost:3000)
 - **MVC App**: [http://localhost:5050](http://localhost:5050)
 - **API (via Load Balancer)**: [http://localhost:9999](http://localhost:9999)
-- **API Instance 1**: [http://localhost:5000](http://localhost:5000)
-- **API Instance 2**: [http://localhost:5001](http://localhost:5001)
+- **.NET API**: [http://localhost:5000](http://localhost:5000)
+- **Go API**: [http://localhost:5001](http://localhost:5001)
+- **C++ API**: [http://localhost:5002](http://localhost:5002)
 
 ### Verify Everything is Running
 
@@ -92,13 +95,13 @@ docker compose --profile all down
 
 #### Pull Request Checks
 
-  [![.NET - Build & Test](https://github.com/jumperck/Reminders/actions/workflows/pull-request/dotnet-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/pull-request/dotnet-pull-request.yml)
+  [![.NET - Build & Test](https://github.com/jumperck/Reminders/actions/workflows/dotnet-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/dotnet-pull-request.yml)
 
-  [![Go - Build & Test](https://github.com/jumperck/Reminders/actions/workflows/pull-request/go-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/pull-request/go-pull-request.yml)
+  [![Go - Build & Test](https://github.com/jumperck/Reminders/actions/workflows/go-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/go-pull-request.yml)
 
-  [![React - Build & Test](https://github.com/jumperck/Reminders/actions/workflows/pull-request/react-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/pull-request/react-pull-request.yml)
+  [![React - Build & Test](https://github.com/jumperck/Reminders/actions/workflows/react-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/react-pull-request.yml)
 
-  [![Blockchain - Hardhat Tests](https://github.com/jumperck/Reminders/actions/workflows/pull-request/blockchain-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/pull-request/blockchain-pull-request.yml)
+  [![Blockchain - Hardhat Tests](https://github.com/jumperck/Reminders/actions/workflows/blockchain-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/blockchain-pull-request.yml)
 
   [![Infrastructure Check](https://github.com/jumperck/Reminders/actions/workflows/pull-request-check.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/pull-request-check.yml)
 
@@ -108,7 +111,7 @@ docker compose --profile all down
 
   [![Cypress E2E Tests](https://github.com/jumperck/Reminders/actions/workflows/cypress-e2e.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/cypress-e2e.yml)
 
-  [![.NET Code Coverage](https://github.com/jumperck/Reminders/actions/workflows/tests/dotnet-code-coverage.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/tests/dotnet-code-coverage.yml)
+  [![.NET Code Coverage](https://github.com/jumperck/Reminders/actions/workflows/dotnet-code-coverage.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/dotnet-code-coverage.yml)
 
 ### Docker Hub
 
@@ -163,7 +166,7 @@ This will run:
 Comprehensive E2E tests validate critical user interactions against the deployed application:
 
 - **Location**: `src/test/cypress/`
-- **Testing Environment**: Tests run against the deployed GitHub Pages application at `https://kaueereinbold.github.io/Reminders`
+- **Testing Environment**: Tests run against the deployed GitHub Pages application at `https://jumperck.github.io/Reminders`
 - **Coverage**: List, Create, Edit, Delete operations
 - **Test categories**:
   - List functionality (viewing reminders)
@@ -188,7 +191,7 @@ For detailed testing setup and usage instructions, see:
 
 ```bash
 # 1. Start the API and database
-docker compose up postgres ganache -d
+docker compose --profile api up postgres ganache -d
 cd src/server/api/dotnet/Reminders.Api
 dotnet run
 
