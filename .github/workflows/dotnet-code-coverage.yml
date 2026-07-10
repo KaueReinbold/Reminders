@@ -11,6 +11,7 @@ on:
       - 'src/app/dotnet/**'
       - 'src/server/services/dotnet/**'
       - 'src/test/server/dotnet/**'
+      - '!**/*.md'
 
 permissions:
   contents: read

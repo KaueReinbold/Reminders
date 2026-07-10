@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - 'src/server/api/go/reminders-api/**'
+      - '!src/server/api/go/reminders-api/**/*.md'
 
 permissions:
   contents: read

@@ -18,6 +18,7 @@ on:
       - main
     paths:
       - 'src/test/cypress/**'
+      - '!src/test/cypress/**/*.md'
   # Allow manual trigger for debugging
   workflow_dispatch:
 

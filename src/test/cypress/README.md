@@ -2,9 +2,9 @@
 
 This directory contains Cypress end-to-end tests for the Reminders application, ensuring the reliability and functionality of critical components.
 
-## ⚠️ CI Environment Notice
+## Continuous Integration
 
-**Important**: Due to network restrictions in the CI environment, Cypress binary cannot be downloaded from `download.cypress.io`. The tests are configured to run using the official Cypress GitHub Action (`cypress-io/github-action@v6`) which handles the Cypress installation in CI environments. For local development, you can install and run Cypress normally.
+CI runs use the official [`cypress-io/github-action`](https://github.com/cypress-io/github-action), which installs and caches the Cypress binary automatically. For local development, install and run Cypress normally via `npm install` and the scripts below.
 
 ## Overview
 
@@ -41,7 +41,7 @@ src/test/cypress/
 
 Before running Cypress tests, ensure the following:
 
-1. **React Application**: The ReactJS Reminders app must be deployed to GitHub Pages at `https://kaueereinbold.github.io/Reminders` (for production tests) or running locally at `http://localhost:3000` (for development)
+1. **React Application**: The ReactJS Reminders app must be deployed to GitHub Pages at `https://kauereinbold.github.io/Reminders` (for production tests) or running locally at `http://localhost:3000` (for development)
 2. **API Backend**: The API should be available at `http://localhost:5000` (configured in cypress.config.js)
 3. **Node.js**: Node.js version 16 or higher
 
@@ -166,7 +166,7 @@ The test suite includes custom Cypress commands for common operations:
 
 Key configuration options in `cypress.config.js`:
 
-- `baseUrl`: React app URL (default: `https://kaueereinbold.github.io/Reminders` for production, can be overridden with `CYPRESS_baseUrl` environment variable)
+- `baseUrl`: React app URL (default: `https://kauereinbold.github.io/Reminders` for production, can be overridden with `CYPRESS_baseUrl` environment variable)
 - `env.apiUrl`: API backend URL (default: `http://localhost:5000`)
 - `viewportWidth/Height`: Test viewport dimensions
 - `video`: Enable/disable video recording
@@ -205,7 +205,7 @@ Test fixtures in `cypress/fixtures/` provide:
 Cypress tests run automatically on pull requests and pushes to main against the deployed GitHub Pages application:
 
 1. **GitHub Pages Deployment**: The React app is automatically deployed to GitHub Pages when changes are pushed to main
-2. **Automatic Testing**: Cypress tests run against the deployed application at `https://kaueereinbold.github.io/Reminders`
+2. **Automatic Testing**: Cypress tests run against the deployed application at `https://kauereinbold.github.io/Reminders`
 3. **Test Results**: Screenshots and videos are collected as artifacts on test failures
 
 ### Local Development Testing
