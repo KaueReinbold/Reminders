@@ -35,6 +35,20 @@ Five dimensions. Every issue gets exactly one type label; add scope/initiative/s
 - Closed issues move to Done automatically; do not set Done by hand.
 - Todo means prioritized and ready to start; Backlog means not yet prioritized.
 
+### Sprints and check-in ritual
+
+Work is scheduled on the board's `Sprint` iteration field (2-week cadence). Agents act as scrum master at session start:
+
+1. Determine the current sprint from today's date (`gh project field-list 7 --owner jumperck` for iterations).
+2. Report sprint progress: items Done / In Progress / not started in the current sprint.
+3. Flag spillover: unfinished items from past sprints and unscheduled Todo items.
+4. Propose carryover or rescheduling; the user decides. Never move sprint dates or reassign items without explicit approval.
+
+Rules:
+- Assign prioritized (Todo) issues to a sprint; Backlog/P2 items stay unscheduled; parent plan issues never get a sprint.
+- Sprint dates and durations are set by the maintainer; do not change them.
+- Warning: rewriting the Sprint field configuration recreates iterations and wipes all item assignments; reassign afterwards.
+
 ## Architecture Decision Records (ADRs)
 
 Decisions persist in `docs/adr/` so all agents share the same memory. Format: `NNNN-short-title.md` (see `docs/adr/0000-template.md`).
