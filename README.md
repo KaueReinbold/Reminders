@@ -142,3 +142,7 @@ We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for det
 ## Support
 
 If you encounter any issues or have suggestions, we encourage you to open an issue on the [GitHub Issues](https://github.com/kauereinbold/Reminders/issues) page.
+
+## Project Planning
+
+Work is planned and tracked on the [Reminders project board](https://github.com/users/kauereinbold/projects/7). Progress updates follow GitHub's [sharing project updates](https://docs.github.com/en/issues/planning-and-tracking-with-projects/sharing-project-updates) guide.
