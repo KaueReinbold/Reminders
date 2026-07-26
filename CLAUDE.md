@@ -49,6 +49,8 @@ Rules:
 - Sprint dates and durations are set by the maintainer; do not change them.
 - Warning: rewriting the Sprint field configuration recreates iterations and wipes all item assignments; reassign afterwards.
 
+Sprint naming: each quarter has a theme chosen by the maintainer; sprint names take sequential alphabetical initials, and the sequence continues across quarters (Q3 ends at E, Q4 starts at F). 2026 Q3/Q4 theme: Lord of the Rings (Aragorn ... Isildur). When creating sprints for a new quarter, ask the maintainer for the theme and continue from the last letter used.
+
 ## Architecture Decision Records (ADRs)
 
 Decisions persist in `docs/adr/` so all agents share the same memory. Format: `NNNN-short-title.md` (see `docs/adr/0000-template.md`).
