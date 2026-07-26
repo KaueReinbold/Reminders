@@ -26,6 +26,15 @@ Five dimensions. Every issue gets exactly one type label; add scope/initiative/s
 | Status | `triage`, `hold`, `duplicate`, `invalid` | Workflow state |
 | Phase | `phase-1`, `phase-2`, `phase-3` | Audit plan only |
 
+### Project board
+
+[Project 7](https://github.com/users/kauereinbold/projects/7) is the execution view of the backlog (see ADR-0002). Columns: Backlog, Todo, In Progress, Done. Extra fields: Priority (P0/P1/P2), Initiative (audit/redesign/learning).
+
+- When claiming an issue, move its board item to In Progress.
+- New issues are auto-added to the board; set Priority and Initiative when triaging.
+- Closed issues move to Done automatically; do not set Done by hand.
+- Todo means prioritized and ready to start; Backlog means not yet prioritized.
+
 ## Architecture Decision Records (ADRs)
 
 Decisions persist in `docs/adr/` so all agents share the same memory. Format: `NNNN-short-title.md` (see `docs/adr/0000-template.md`).
