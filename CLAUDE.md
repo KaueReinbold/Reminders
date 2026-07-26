@@ -1,0 +1,133 @@
+# CLAUDE.md
+
+Guidance for Claude Code when working in this repository.
+
+> Architecture, service layout, and coding standards live in [agents.md](agents.md). Read it before making structural changes. This file covers **workflow rules only**.
+
+## Project Context
+
+Professional portfolio project. Purpose: demonstrate system design skills and technologies being learned. Code quality and clear history matter more than feature velocity: every change should be something worth showing.
+
+## Backlog
+
+GitHub Issues is the backlog. Work items, bugs, and ideas are tracked as issues in `kauereinbold/Reminders`. Reference issues in PRs (`Closes #123`). Check open issues before proposing new work.
+
+**Backlog first**: at session start, run `gh issue list` to see current backlog. Every piece of work should map to an issue; if none exists, propose creating one before coding.
+
+## Architecture Decision Records (ADRs)
+
+Decisions persist in `docs/adr/` so all agents share the same memory. Format: `NNNN-short-title.md` (see `docs/adr/0000-template.md`).
+
+- Write an ADR for any decision that shapes architecture, workflow, or tooling (new dependency, new service, pattern change, process rule).
+- Read existing ADRs before proposing changes that might contradict them. Superseding an old ADR: new ADR references it, old one gets status `superseded`.
+- ADRs are short: context, decision, consequences. One page max.
+
+## Multi-Agent Coordination
+
+Multiple agents may work this repo in parallel. Rules:
+
+- Claim work by assigning yourself or commenting on the issue before starting.
+- One issue = one branch = one PR. Never share branches between agents.
+- Do not start an issue already claimed by another agent (check assignees/comments).
+- State that outlives your session goes in: GitHub Issues (status, findings), ADRs (decisions), PR descriptions (implementation notes). Never assume other agents share your conversation context.
+
+## Development Workflow: Trunk-Based Development
+
+- `main` is the trunk. It must always be releasable (green CI, deployable).
+- Work in short-lived branches off `main`: merge within 1-2 days max. No long-lived feature branches.
+- Branch naming: `<type>/<short-description>` (e.g. `feat/redis-cache`, `fix/async-service-chain`, `ci/infra-validation`).
+- Keep PRs small and focused: one logical change per PR.
+- Rebase on `main` before merging; prefer squash merge to keep trunk history linear.
+- Never commit directly to `main`: always via PR so CI workflows validate the change.
+- Incomplete features: hide behind configuration/profile, never leave trunk broken.
+
+## Conventional Commits
+
+All commits and PR titles follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+<type>(<scope>): <description>
+```
+
+**Types**: `feat`, `fix`, `refactor`, `test`, `docs`, `ci`, `chore`, `perf`, `build`
+
+**Scopes** (match service/area):
+- `api`: .NET API (`src/server/api/dotnet/`)
+- `go`: Go API
+- `cpp`: C++ API
+- `react`: Next.js app
+- `mvc`: ASP.NET MVC app
+- `blockchain`: Solidity/Hardhat
+- `migrations`: MigrationsRunner / EF migrations
+- `infra`: Docker, Nginx, k6
+- `ci`: GitHub Actions
+
+Examples:
+- `feat(api): add Redis caching for reminder queries`
+- `fix(api): remove blocking .Result calls in RemindersService`
+- `ci(infra): validate docker compose config on PR`
+
+Rules:
+- Subject: imperative mood, lowercase, no trailing period, ≤72 chars.
+- Body explains **why** when not obvious from the diff.
+- Breaking changes: `!` after type/scope and a `BREAKING CHANGE:` footer.
+
+## Versioning & Tags
+
+Semantic Versioning (`vMAJOR.MINOR.PATCH`). Existing tags: `v1.0.0` … `v5.0.0`.
+
+**Git tags**: created on `main` after merging a release-worthy change:
+- `MAJOR`: breaking API/schema changes
+- `MINOR`: new features (`feat`)
+- `PATCH`: fixes (`fix`), small improvements
+
+```bash
+git tag -a v5.1.0 -m "feat(api): describe the release"
+git push origin v5.1.0
+```
+
+**Docker image tags**: mirror the git tag plus a moving `latest`:
+
+```bash
+docker build -t reminders-api:v5.1.0 -t reminders-api:latest src/server/api/dotnet/
+```
+
+Rules:
+- Never retag/move a published version tag: publish a new one.
+- Docker version tags are immutable; only `latest` moves.
+- Ask before creating/pushing tags: releases are a user decision.
+
+## Commands
+
+```bash
+# Full stack
+docker compose --profile all up --build -d
+
+# Backend only
+docker compose --profile api up -d
+
+# .NET tests
+dotnet test src/test/server/dotnet/Reminders.Application.Test/
+
+# React tests
+cd src/app/reactjs/reminders-app && npm test
+
+# Blockchain tests
+cd blockchain && npx hardhat test
+
+# Validate compose files
+docker compose config -q
+```
+
+## Writing Style
+
+Never use em dash (—) or en dash (–) anywhere: docs, comments, commit messages, issues, PRs, AI responses. Use colon, comma, or hyphen instead.
+
+## Rules for Claude
+
+- **Always on, every session in this repo**: caveman (terse output: drop filler, keep all technical substance) and ponytail (minimal code: smallest change that works, prefer platform/stdlib over new dependencies, delete before adding).
+- Read `agents.md` for architecture patterns before editing service code.
+- Database changes require migrations for **both** Postgres and SqlServer providers (see agents.md).
+- Do not commit, push, tag, or open PRs unless explicitly asked.
+- Run the relevant test suite after code changes.
+- No secrets in code or compose files: use `.env` (gitignored); `.env.example` holds placeholders only.
