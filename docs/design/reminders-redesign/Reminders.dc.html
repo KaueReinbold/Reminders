@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #F3F0E9; }
+  body { font-family: "DM Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #B4451F; text-decoration: none; }
+  a:hover { color: #8E3415; text-decoration: underline; }
+  input, textarea, button { font: inherit; color: inherit; }
+  input:focus, textarea:focus { outline: 2px solid #B4451F; outline-offset: 1px; }
+  ::placeholder { color: #A8A093; }
+  input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; }
+  @keyframes sheetIn { from { transform: translateY(16px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F3F0E9; color: #1B1A17; display: flex; flex-direction: column;">
+
+  <sc-if value="{{ isWide }}" hint-placeholder-val="{{ true }}">
+  <header style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 22px clamp(24px, 4vw, 48px); border-bottom: 1px solid #E0DACD; background: #F3F0E9; position: sticky; top: 0; z-index: 5;">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-right: auto;">
+      <span style="font-family: 'Instrument Serif', serif; font-size: 30px; line-height: 1; letter-spacing: -0.01em;">Reminders</span>
+      <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 19px; color: #8C8577;">{{ todayLabel }}</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; background: #FBFAF7; border: 1px solid #E0DACD; border-radius: 999px; padding: 9px 16px; min-width: 220px; flex: 0 1 300px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8C8577" stroke-width="2.2" style="flex: none;"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4.2-4.2"></path></svg>
+      <input type="text" placeholder="Search reminders" value="{{ query }}" onChange="{{ onQuery }}" style-focus="outline: none;" style="border: none; background: transparent; width: 100%; font-size: 14.5px;" />
+    </div>
+    <button type="button" onClick="{{ startCreate }}" style="display: flex; align-items: center; gap: 8px; background: #1B1A17; color: #F7F5F0; border: none; border-radius: 999px; padding: 12px 20px; font-size: 14.5px; font-weight: 500; cursor: pointer; min-height: 44px;" style-hover="background: #B4451F;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"></path></svg>
+      New reminder
+    </button>
+  </header>
+  </sc-if>
+
+  <sc-if value="{{ isMobile }}">
+  <header style="display: flex; flex-direction: column; gap: 14px; padding: 16px 18px 12px; border-bottom: 1px solid #E0DACD; background: #F3F0E9; position: sticky; top: 0; z-index: 5;">
+    <sc-if value="{{ safeTop }}"><div style="height: 40px;"></div></sc-if>
+    <div style="display: flex; align-items: baseline; gap: 9px;">
+      <span style="font-family: 'Instrument Serif', serif; font-size: 25px; line-height: 1;">Reminders</span>
+      <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-size: 15px; color: #8C8577; margin-left: auto;">{{ shortDateLabel }}</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; background: #FBFAF7; border: 1px solid #E0DACD; border-radius: 999px; padding: 10px 15px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8C8577" stroke-width="2.2" style="flex: none;"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4.2-4.2"></path></svg>
+      <input type="text" placeholder="Search reminders" value="{{ query }}" onChange="{{ onQuery }}" style-focus="outline: none;" style="border: none; background: transparent; width: 100%; font-size: 15px;" />
+    </div>
+    <div style="display: flex; gap: 7px; overflow-x: auto; margin: 0 -18px; padding: 2px 18px 4px; scrollbar-width: none;">
+      <sc-for list="{{ views }}" as="v" hint-placeholder-count="4">
+        <sc-if value="{{ v.active }}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{ v.select }}" style="display: flex; align-items: center; gap: 7px; flex: none; background: #1B1A17; color: #F7F5F0; border: none; border-radius: 999px; padding: 9px 15px; font-size: 14px; font-weight: 500; cursor: pointer; min-height: 40px; white-space: nowrap;">
+            <span>{{ v.label }}</span>
+            <span style="font-size: 12.5px; opacity: 0.65; font-variant-numeric: tabular-nums;">{{ v.count }}</span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ v.inactive }}">
+          <button type="button" onClick="{{ v.select }}" style="display: flex; align-items: center; gap: 7px; flex: none; background: #FBFAF7; color: #55503f; border: 1px solid #E0DACD; border-radius: 999px; padding: 9px 15px; font-size: 14px; cursor: pointer; min-height: 40px; white-space: nowrap;" style-hover="border-color: #1B1A17; color: #1B1A17;">
+            <span>{{ v.label }}</span>
+            <span style="font-size: 12.5px; color: #8C8577; font-variant-numeric: tabular-nums;">{{ v.count }}</span>
+          </button>
+        </sc-if>
+      </sc-for>
+    </div>
+  </header>
+  <sc-if value="{{ showProgress }}">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: #EFEBE1; border-bottom: 1px solid #E0DACD;">
+      <span style="font-family: 'Instrument Serif', serif; font-size: 22px; line-height: 1; flex: none;">{{ progressLabel }}</span>
+      <div style="flex: 1; height: 5px; border-radius: 999px; background: #DFD8C8; overflow: hidden;">
+        <div style="height: 100%; background: #B4451F; border-radius: 999px; width: {{ progressWidth }};"></div>
+      </div>
+      <span style="font-size: 12.5px; color: #6E6759; flex: none; max-width: 44%; text-align: right; line-height: 1.35;">{{ progressCaption }}</span>
+    </div>
+  </sc-if>
+  </sc-if>
+
+  <div style="display: flex; align-items: flex-start; gap: clamp(24px, 4vw, 56px); padding: clamp(18px, 4vw, 44px) clamp(18px, 4vw, 48px) 120px; flex-wrap: wrap; max-width: 1280px; width: 100%; margin: 0 auto;">
+
+    <sc-if value="{{ isWide }}">
+    <aside style="flex: 1 1 210px; max-width: 260px; min-width: 190px; display: flex; flex-direction: column; gap: 28px; position: sticky; top: 112px;">
+      <nav style="display: flex; flex-direction: column; gap: 2px;">
+        <sc-for list="{{ views }}" as="v" hint-placeholder-count="4">
+          <sc-if value="{{ v.active }}" hint-placeholder-val="{{ true }}">
+            <button type="button" onClick="{{ v.select }}" style="display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: #E7E2D6; border: none; border-radius: 10px; padding: 11px 14px; font-size: 15px; font-weight: 500; color: #1B1A17; cursor: pointer; min-height: 44px;">
+              <span style="width: 5px; height: 5px; border-radius: 50%; background: #B4451F; flex: none;"></span>
+              <span style="margin-right: auto;">{{ v.label }}</span>
+              <span style="font-size: 13px; color: #6E6759; font-variant-numeric: tabular-nums;">{{ v.count }}</span>
+            </button>
+          </sc-if>
+          <sc-if value="{{ v.inactive }}">
+            <button type="button" onClick="{{ v.select }}" style="display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: transparent; border: none; border-radius: 10px; padding: 11px 14px; font-size: 15px; color: #55503f; cursor: pointer; min-height: 44px;" style-hover="background: #EBE7DC; color: #1B1A17;">
+              <span style="width: 5px; height: 5px; border-radius: 50%; background: transparent; flex: none;"></span>
+              <span style="margin-right: auto;">{{ v.label }}</span>
+              <span style="font-size: 13px; color: #8C8577; font-variant-numeric: tabular-nums;">{{ v.count }}</span>
+            </button>
+          </sc-if>
+        </sc-for>
+      </nav>
+
+      <sc-if value="{{ showProgress }}" hint-placeholder-val="{{ true }}">
+        <div style="border-top: 1px solid #E0DACD; padding-top: 24px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #8C8577;">This week</div>
+          <div style="font-family: 'Instrument Serif', serif; font-size: 40px; line-height: 1;">{{ progressLabel }}</div>
+          <div style="height: 5px; border-radius: 999px; background: #E0DACD; overflow: hidden;">
+            <div style="height: 100%; background: #B4451F; border-radius: 999px; width: {{ progressWidth }};"></div>
+          </div>
+          <div style="font-size: 13.5px; color: #6E6759; line-height: 1.5;">{{ progressCaption }}</div>
+        </div>
+      </sc-if>
+    </aside>
+    </sc-if>
+
+    <main style="flex: 999 1 460px; min-width: 300px; display: flex; flex-direction: column; gap: 30px;">
+      <sc-if value="{{ isEmpty }}">
+        <div style="border: 1px dashed #D5CEBE; border-radius: 18px; padding: 64px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; background: #F8F6F1;">
+          <span style="font-family: 'Instrument Serif', serif; font-size: 27px;">{{ emptyTitle }}</span>
+          <span style="font-size: 15px; color: #6E6759; max-width: 320px; line-height: 1.55;">{{ emptyBody }}</span>
+          <button type="button" onClick="{{ startCreate }}" style="margin-top: 8px; background: #1B1A17; color: #F7F5F0; border: none; border-radius: 999px; padding: 12px 22px; font-size: 14.5px; cursor: pointer; min-height: 44px;" style-hover="background: #B4451F;">Add a reminder</button>
+        </div>
+      </sc-if>
+
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+        <section style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 2px;">
+            <h2 style="margin: 0; font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; letter-spacing: -0.01em;">{{ g.label }}</h2>
+            <span style="font-size: 13px; color: #8C8577; font-variant-numeric: tabular-nums;">{{ g.count }}</span>
+            <span style="flex: 1; height: 1px; background: #E0DACD;"></span>
+          </div>
+
+          <sc-for list="{{ g.items }}" as="item" hint-placeholder-count="3">
+            <article style="display: flex; align-items: center; gap: 14px; background: #FBFAF7; border: 1px solid #E7E2D6; border-radius: 14px; padding: 16px 18px;" style-hover="border-color: #CFC7B5;">
+              <sc-if value="{{ item.isDone }}" hint-placeholder-val="{{ true }}">
+                <button type="button" onClick="{{ item.toggle }}" aria-label="Mark not done" style="flex: none; width: 24px; height: 24px; border-radius: 50%; border: none; background: #4C6B4F; color: #FBFAF7; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M5 13l4.5 4.5L19 7"></path></svg>
+                </button>
+              </sc-if>
+              <sc-if value="{{ item.notDone }}">
+                <button type="button" onClick="{{ item.toggle }}" aria-label="Mark done" style="flex: none; width: 24px; height: 24px; border-radius: 50%; border: 1.6px solid #C6BDA9; background: transparent; cursor: pointer;" style-hover="border-color: #4C6B4F; background: #EDF1EC;"></button>
+              </sc-if>
+
+              <div style="display: flex; flex-direction: column; gap: 5px; margin-right: auto; min-width: 0;">
+                <sc-if value="{{ item.isDone }}">
+                  <span style="font-size: 15.5px; font-weight: 500; color: #9A9385; text-decoration: line-through;">{{ item.title }}</span>
+                </sc-if>
+                <sc-if value="{{ item.notDone }}">
+                  <span style="font-size: 15.5px; font-weight: 500; line-height: 1.35;">{{ item.title }}</span>
+                </sc-if>
+                <sc-if value="{{ item.hasDescription }}">
+                  <span style="font-size: 13.8px; color: #6E6759; line-height: 1.5; text-wrap: pretty;">{{ item.description }}</span>
+                </sc-if>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 6px; flex: none;">
+                <sc-if value="{{ item.isOverdue }}">
+                  <span style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; color: #B4451F; background: #F6E4DC; border-radius: 999px; padding: 6px 11px; white-space: nowrap;">{{ item.dateLabel }}</span>
+                </sc-if>
+                <sc-if value="{{ item.isPlain }}">
+                  <span style="font-size: 12.5px; color: #6E6759; background: #F0EDE4; border-radius: 999px; padding: 6px 11px; white-space: nowrap; font-variant-numeric: tabular-nums;">{{ item.dateLabel }}</span>
+                </sc-if>
+                <button type="button" onClick="{{ item.edit }}" aria-label="Edit reminder" style="width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; border-radius: 9px; color: #8C8577; cursor: pointer;" style-hover="background: #EBE7DC; color: #1B1A17;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17v3z"></path></svg>
+                </button>
+              </div>
+            </article>
+          </sc-for>
+        </section>
+      </sc-for>
+    </main>
+  </div>
+
+  <sc-if value="{{ isMobile }}">
+    <button type="button" onClick="{{ startCreate }}" aria-label="New reminder" style="position: fixed; right: 18px; bottom: 22px; z-index: 20; display: flex; align-items: center; gap: 9px; background: #1B1A17; color: #F7F5F0; border: none; border-radius: 999px; padding: 15px 22px; font-size: 15px; font-weight: 500; cursor: pointer; min-height: 52px; box-shadow: 0 10px 26px rgba(27,26,23,0.28);" style-active="background: #B4451F;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"></path></svg>
+      New
+    </button>
+  </sc-if>
+
+  <sc-if value="{{ sheetOpen }}">
+    <div style="position: fixed; inset: 0; background: rgba(27,26,23,0.34); z-index: 40; display: flex; align-items: center; justify-content: center; padding: 24px; animation: fadeIn 0.16s ease;" onClick="{{ closeSheet }}">
+      <div onClick="{{ stop }}" style="width: 100%; max-width: 560px; background: #FBFAF7; border-radius: 20px; padding: 28px clamp(20px, 4vw, 34px) 26px; box-shadow: 0 18px 50px rgba(27,26,23,0.22); animation: sheetIn 0.22s cubic-bezier(.22,.9,.25,1); max-height: 92vh; overflow: auto;">
+        <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 22px;">
+          <span style="font-family: 'Instrument Serif', serif; font-size: 27px;">{{ sheetTitle }}</span>
+          <button type="button" onClick="{{ closeSheet }}" style="margin-left: auto; background: transparent; border: none; color: #8C8577; font-size: 14px; cursor: pointer; padding: 8px;" style-hover="color: #1B1A17;">Close</button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <label style="display: flex; flex-direction: column; gap: 7px;">
+            <span style="font-size: 11.5px; letter-spacing: 0.09em; text-transform: uppercase; color: #8C8577;">Title</span>
+            <input type="text" value="{{ draftTitle }}" onChange="{{ onDraftTitle }}" placeholder="Call the notary" style="border: 1px solid #DDD7C9; background: #F7F5F0; border-radius: 10px; padding: 13px 14px; font-size: 15.5px; min-height: 46px;" />
+          </label>
+          <label style="display: flex; flex-direction: column; gap: 7px;">
+            <span style="font-size: 11.5px; letter-spacing: 0.09em; text-transform: uppercase; color: #8C8577;">Description</span>
+            <textarea rows="3" value="{{ draftDescription }}" onChange="{{ onDraftDescription }}" placeholder="Optional detail" style="border: 1px solid #DDD7C9; background: #F7F5F0; border-radius: 10px; padding: 13px 14px; font-size: 15px; line-height: 1.5; resize: vertical;"></textarea>
+          </label>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <label style="display: flex; flex-direction: column; gap: 7px; flex: 1 1 190px;">
+              <span style="font-size: 11.5px; letter-spacing: 0.09em; text-transform: uppercase; color: #8C8577;">Limit date</span>
+              <input type="date" value="{{ draftDate }}" onChange="{{ onDraftDate }}" style="border: 1px solid #DDD7C9; background: #F7F5F0; border-radius: 10px; padding: 0 14px; font-size: 15px; height: 48px; cursor: pointer;" />
+            </label>
+            <div style="display: flex; flex-direction: column; gap: 7px; flex: 1 1 190px;">
+              <span style="font-size: 11.5px; letter-spacing: 0.09em; text-transform: uppercase; color: #8C8577;">Status</span>
+              <button type="button" onClick="{{ toggleDraftDone }}" style="display: flex; align-items: center; gap: 10px; border: 1px solid #DDD7C9; background: #F7F5F0; border-radius: 10px; padding: 0 14px; font-size: 15px; cursor: pointer; height: 48px; text-align: left;" style-hover="border-color: #C6BDA9;">
+                <span style="width: 20px; height: 20px; border-radius: 6px; border: 1.6px solid #C6BDA9; background: #FBFAF7; display: flex; align-items: center; justify-content: center; flex: none; color: #4C6B4F;">{{ draftCheck }}</span>
+                <span>{{ draftStatusLabel }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 26px; flex-wrap: wrap;">
+          <button type="button" onClick="{{ saveDraft }}" style="background: #1B1A17; color: #F7F5F0; border: none; border-radius: 999px; padding: 13px 26px; font-size: 15px; font-weight: 500; cursor: pointer; min-height: 46px;" style-hover="background: #B4451F;">{{ saveLabel }}</button>
+          <button type="button" onClick="{{ closeSheet }}" style="background: transparent; border: 1px solid #DDD7C9; border-radius: 999px; padding: 13px 22px; font-size: 15px; cursor: pointer; min-height: 46px;" style-hover="border-color: #1B1A17;">Cancel</button>
+          <sc-if value="{{ isEditing }}">
+            <button type="button" onClick="{{ askDelete }}" style="margin-left: auto; background: transparent; border: none; color: #B4451F; font-size: 14.5px; cursor: pointer; padding: 12px; min-height: 46px;" style-hover="text-decoration: underline;">Delete reminder</button>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ confirmOpen }}">
+    <div style="position: fixed; inset: 0; background: rgba(27,26,23,0.42); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 24px; animation: fadeIn 0.14s ease;" onClick="{{ cancelDelete }}">
+      <div onClick="{{ stop }}" style="width: 100%; max-width: 400px; background: #FBFAF7; border-radius: 16px; padding: 28px; box-shadow: 0 20px 50px rgba(27,26,23,0.24); display: flex; flex-direction: column; gap: 12px;">
+        <span style="font-family: 'Instrument Serif', serif; font-size: 24px;">Delete this reminder?</span>
+        <span style="font-size: 14.5px; color: #6E6759; line-height: 1.55;">{{ confirmBody }}</span>
+        <div style="display: flex; gap: 10px; margin-top: 12px;">
+          <button type="button" onClick="{{ confirmDelete }}" style="background: #B4451F; color: #FBFAF7; border: none; border-radius: 999px; padding: 12px 22px; font-size: 14.5px; font-weight: 500; cursor: pointer; min-height: 44px;" style-hover="background: #8E3415;">Delete</button>
+          <button type="button" onClick="{{ cancelDelete }}" style="background: transparent; border: 1px solid #DDD7C9; border-radius: 999px; padding: 12px 20px; font-size: 14.5px; cursor: pointer; min-height: 44px;" style-hover="border-color: #1B1A17;">Keep it</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;layout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;mobile&quot;,&quot;desktop&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto' | 'mobile' | 'desktop'&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;safeArea&quot;:{&quot;editor&quot;:null,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;groupBy&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;date&quot;,&quot;status&quot;,&quot;none&quot;],&quot;default&quot;:&quot;date&quot;,&quot;tsType&quot;:&quot;'date' | 'status' | 'none'&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;showProgress&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;showDescriptions&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behavior&quot;}}">
+const TODAY = new Date(2026, 6, 26);
+
+function iso(d) { return d.toISOString().slice(0, 10); }
+function shift(days) { const d = new Date(TODAY); d.setDate(d.getDate() + days); return iso(d); }
+
+class Component extends DCLogic {
+  state = {
+    width: typeof window === "undefined" ? 1280 : window.innerWidth,
+    query: "",
+    view: "All",
+    sheet: null,
+    confirmId: null,
+    draft: null,
+    nextId: 9,
+    items: [
+      { id: 1, title: "Send signed lease addendum", description: "Scan page 3 with the initials before sending to the agent.", limitDate: shift(-2), isDone: false },
+      { id: 2, title: "Renew car insurance", description: "", limitDate: shift(-6), isDone: false },
+      { id: 3, title: "Book dentist for Mara", description: "Preferably a Thursday afternoon.", limitDate: shift(0), isDone: false },
+      { id: 4, title: "Pay quarterly VAT", description: "Reference number is in the accounting folder.", limitDate: shift(0), isDone: false },
+      { id: 5, title: "Order espresso beans", description: "", limitDate: shift(3), isDone: false },
+      { id: 6, title: "Draft Q3 hiring plan", description: "Two engineers, one designer — share with Nadia first.", limitDate: shift(9), isDone: false },
+      { id: 7, title: "Move standing desk order", description: "", limitDate: shift(21), isDone: false },
+      { id: 8, title: "Cancel gym trial", description: "", limitDate: shift(-1), isDone: true }
+    ]
+  };
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ width: window.innerWidth });
+    window.addEventListener("resize", this.onResize);
+    this.onResize();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.onResize);
+  }
+
+  dayDiff(dateStr) {
+    const parts = dateStr.split("-").map(Number);
+    const d = new Date(parts[0], parts[1] - 1, parts[2]);
+    return Math.round((d - TODAY) / 86400000);
+  }
+
+  dateLabel(dateStr) {
+    const diff = this.dayDiff(dateStr);
+    if (diff === 0) return "Today";
+    if (diff === 1) return "Tomorrow";
+    if (diff === -1) return "Yesterday";
+    if (diff < 0) return Math.abs(diff) + " days late";
+    const parts = dateStr.split("-").map(Number);
+    const d = new Date(parts[0], parts[1] - 1, parts[2]);
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  }
+
+  bucket(item) {
+    if (item.isDone) return "Done";
+    const diff = this.dayDiff(item.limitDate);
+    if (diff < 0) return "Overdue";
+    if (diff === 0) return "Today";
+    return "Upcoming";
+  }
+
+  decorate(item) {
+    const overdue = !item.isDone && this.dayDiff(item.limitDate) < 0;
+    return {
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      hasDescription: !!item.description && (this.props.showDescriptions ?? true),
+      dateLabel: this.dateLabel(item.limitDate),
+      isDone: item.isDone,
+      notDone: !item.isDone,
+      isOverdue: overdue,
+      isPlain: !overdue,
+      toggle: () => this.setState(s => ({ items: s.items.map(i => i.id === item.id ? { ...i, isDone: !i.isDone } : i) })),
+      edit: () => this.setState({ sheet: "edit", draft: { ...item } })
+    };
+  }
+
+  renderVals() {
+    const groupBy = this.props.groupBy ?? "date";
+    const showProgress = this.props.showProgress ?? true;
+    const q = this.state.query.trim().toLowerCase();
+    const all = this.state.items;
+
+    const matches = all.filter(i => {
+      if (this.state.view === "Today") return this.bucket(i) === "Today";
+      if (this.state.view === "Upcoming") return !i.isDone && this.dayDiff(i.limitDate) > 0;
+      if (this.state.view === "Done") return i.isDone;
+      return true;
+    }).filter(i => !q || i.title.toLowerCase().includes(q) || (i.description || "").toLowerCase().includes(q));
+
+    const sorted = matches.slice().sort((a, b) => a.limitDate.localeCompare(b.limitDate));
+    let groups;
+    if (groupBy === "none") {
+      groups = [{ label: this.state.view === "All" ? "All reminders" : this.state.view, count: sorted.length, items: sorted.map(i => this.decorate(i)) }];
+    } else if (groupBy === "status") {
+      groups = [["Open", sorted.filter(i => !i.isDone)], ["Completed", sorted.filter(i => i.isDone)]]
+        .filter(g => g[1].length)
+        .map(g => ({ label: g[0], count: g[1].length, items: g[1].map(i => this.decorate(i)) }));
+    } else {
+      const order = ["Overdue", "Today", "Upcoming", "Done"];
+      groups = order.map(name => {
+        const items = sorted.filter(i => this.bucket(i) === name);
+        return { label: name, count: items.length, items: items.map(i => this.decorate(i)) };
+      }).filter(g => g.items.length);
+    }
+
+    const counts = {
+      All: all.length,
+      Today: all.filter(i => this.bucket(i) === "Today").length,
+      Upcoming: all.filter(i => !i.isDone && this.dayDiff(i.limitDate) > 0).length,
+      Done: all.filter(i => i.isDone).length
+    };
+    const views = ["All", "Today", "Upcoming", "Done"].map(label => ({
+      label,
+      count: counts[label],
+      active: this.state.view === label,
+      inactive: this.state.view !== label,
+      select: () => this.setState({ view: label })
+    }));
+
+    const week = all.filter(i => this.dayDiff(i.limitDate) <= 7);
+    const weekDone = week.filter(i => i.isDone).length;
+    const pct = week.length ? Math.round((weekDone / week.length) * 100) : 0;
+    const overdueCount = all.filter(i => this.bucket(i) === "Overdue").length;
+
+    const layout = this.props.layout ?? "auto";
+    const mob = layout === "mobile" || (layout === "auto" && this.state.width < 760);
+    const d = this.state.draft;
+    const emptyByView = {
+      All: ["Nothing on the list", "Everything is clear. Add a reminder when something needs to come back to you."],
+      Today: ["Today is clear", "No reminders due today — check Upcoming to get ahead."],
+      Upcoming: ["Nothing scheduled", "No future reminders yet."],
+      Done: ["Nothing completed yet", "Tick something off and it will land here."]
+    };
+    const empty = q ? ["No matches", "No reminder matches “" + this.state.query + "”."] : emptyByView[this.state.view];
+    const target = this.state.confirmId ? all.find(i => i.id === this.state.confirmId) : null;
+
+    return {
+      isMobile: mob,
+      isWide: !mob,
+      safeTop: !!(this.props.safeArea ?? false),
+      todayLabel: TODAY.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
+      shortDateLabel: TODAY.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }),
+      query: this.state.query,
+      onQuery: e => this.setState({ query: e.target.value }),
+      views,
+      groups,
+      isEmpty: !sorted.length,
+      emptyTitle: empty[0],
+      emptyBody: empty[1],
+      showProgress,
+      progressLabel: pct + "%",
+      progressWidth: pct + "%",
+      progressCaption: overdueCount ? overdueCount + (overdueCount === 1 ? " reminder is overdue" : " reminders are overdue") : weekDone + " of " + week.length + " done in the next 7 days",
+
+      startCreate: () => this.setState({ sheet: "create", draft: { title: "", description: "", limitDate: shift(1), isDone: false } }),
+      sheetOpen: !!this.state.sheet,
+      isEditing: this.state.sheet === "edit",
+      sheetTitle: this.state.sheet === "edit" ? "Edit reminder" : "New reminder",
+      saveLabel: this.state.sheet === "edit" ? "Save changes" : "Create reminder",
+      draftTitle: d ? d.title : "",
+      draftDescription: d ? d.description : "",
+      draftDate: d ? d.limitDate : "",
+      draftCheck: d && d.isDone ? "✓" : "",
+      draftStatusLabel: d && d.isDone ? "Done" : "Not done yet",
+      onDraftTitle: e => this.setState(s => ({ draft: { ...s.draft, title: e.target.value } })),
+      onDraftDescription: e => this.setState(s => ({ draft: { ...s.draft, description: e.target.value } })),
+      onDraftDate: e => this.setState(s => ({ draft: { ...s.draft, limitDate: e.target.value } })),
+      toggleDraftDone: () => this.setState(s => ({ draft: { ...s.draft, isDone: !s.draft.isDone } })),
+      closeSheet: () => this.setState({ sheet: null, draft: null }),
+      stop: e => e.stopPropagation(),
+      saveDraft: () => this.setState(s => {
+        const draft = s.draft;
+        if (!draft || !draft.title.trim()) return { sheet: null, draft: null };
+        if (draft.id) return { items: s.items.map(i => i.id === draft.id ? { ...draft } : i), sheet: null, draft: null };
+        return { items: s.items.concat([{ ...draft, id: s.nextId }]), nextId: s.nextId + 1, sheet: null, draft: null };
+      }),
+
+      askDelete: () => this.setState(s => ({ confirmId: s.draft ? s.draft.id : null })),
+      confirmOpen: !!this.state.confirmId,
+      confirmBody: target ? "“" + target.title + "” will be removed permanently." : "",
+      cancelDelete: () => this.setState({ confirmId: null }),
+      confirmDelete: () => this.setState(s => ({ items: s.items.filter(i => i.id !== s.confirmId), confirmId: null, sheet: null, draft: null }))
+    };
+  }
+}
+</script>
+</body>
+</html>
