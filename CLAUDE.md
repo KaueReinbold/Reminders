@@ -14,6 +14,18 @@ GitHub Issues is the backlog. Work items, bugs, and ideas are tracked as issues 
 
 **Backlog first**: at session start, run `gh issue list` to see current backlog. Every piece of work should map to an issue; if none exists, propose creating one before coding.
 
+### Labels
+
+Five dimensions. Every issue gets exactly one type label; add scope/initiative/status/phase as applicable. Do not create new labels without updating this table.
+
+| Dimension | Labels | Rule |
+|---|---|---|
+| Type | `feature`, `task`, `bug`, `chore`, `docs`, `dependencies` | Exactly one. `feature` = parent plan or standalone idea; `task` = child of a feature |
+| Scope | `api`, `go`, `react`, `mvc`, `blockchain`, `infra`, `ci`, `flutter`, `testing` | Mirrors commit scopes; add `cpp`/`migrations` when first needed |
+| Initiative | `audit`, `redesign`, `learning` | Groups related work |
+| Status | `triage`, `hold`, `duplicate`, `invalid` | Workflow state |
+| Phase | `phase-1`, `phase-2`, `phase-3` | Audit plan only |
+
 ## Architecture Decision Records (ADRs)
 
 Decisions persist in `docs/adr/` so all agents share the same memory. Format: `NNNN-short-title.md` (see `docs/adr/0000-template.md`).
