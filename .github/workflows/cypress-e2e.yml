@@ -44,23 +44,54 @@ jobs:
         run: npm ci
         working-directory: src/test/cypress
 
+      # PR runs test the app built from the PR branch, so app and spec
+      # changes can be validated together before merge. Deployment runs
+      # keep testing the live Pages site.
+      - name: Install app dependencies
+        if: github.event_name == 'pull_request'
+        run: npm ci
+        working-directory: src/app/reactjs/reminders-app
+
+      - name: Build app
+        if: github.event_name == 'pull_request'
+        run: npm run build
+        working-directory: src/app/reactjs/reminders-app
+
+      - name: Cypress run (PR branch build)
+        if: github.event_name == 'pull_request'
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: src/test/cypress
+          start: npm start --prefix ../../app/reactjs/reminders-app
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+          browser: chrome
+        env:
+          CYPRESS_baseUrl: http://localhost:3000
+          # No backend in CI; skip real-api specs
+          CYPRESS_grepTags: '-@api'
+
       # Wait for deployment to be fully available
       - name: Wait for deployment
+        if: github.event_name != 'pull_request'
         run: |
           echo "Waiting for GitHub Pages deployment to be available..."
           sleep 30
           curl -f https://kauereinbold.github.io/Reminders/ || (echo "Deployment not ready, waiting more..." && sleep 60)
 
       # Run Cypress tests against deployed app
-      - name: Cypress run
+      - name: Cypress run (deployed pages)
+        if: github.event_name != 'pull_request'
         uses: cypress-io/github-action@v6
         with:
           working-directory: src/test/cypress
           wait-on: 'https://kauereinbold.github.io/Reminders'
           wait-on-timeout: 120
           browser: chrome
-        env: 
+        env:
           CYPRESS_baseUrl: https://kauereinbold.github.io/Reminders
+          # Pages deployment has no backend; skip real-api specs
+          CYPRESS_grepTags: '-@api'
 
       # Upload Cypress artifacts on failure
       - name: Upload Cypress screenshots

@@ -1,5 +1,6 @@
 import './globals.css'
 
+import { Suspense } from 'react'
 import type { Metadata } from 'next/types'
 
 import { ReminderQueryProvider, RemindersContextProvider } from './hooks'
@@ -18,9 +19,12 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning={true}>
         <ReminderQueryProvider>
-          <RemindersContextProvider>
-            {children}
-          </RemindersContextProvider>
+          {/* Suspense required: RemindersContextProvider reads useSearchParams */}
+          <Suspense>
+            <RemindersContextProvider>
+              {children}
+            </RemindersContextProvider>
+          </Suspense>
         </ReminderQueryProvider>
       </body>
     </html>

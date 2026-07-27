@@ -239,7 +239,8 @@ describe('RemindersContextProvider Tests', () => {
 
       const { deleteReminder } = useReminderActions();
 
-      expect(deleteReminder.mutateAsync).toHaveBeenCalledWith(mockReminder.id);
+      // id comes from the URL search params, so it is always a string
+      expect(deleteReminder.mutateAsync).toHaveBeenCalledWith(String(mockReminder.id));
 
       expect(
         screen.getByText(ReminderActionStatus.Success),

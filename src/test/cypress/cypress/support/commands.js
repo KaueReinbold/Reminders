@@ -46,7 +46,7 @@ Cypress.Commands.add('goToEditReminder', (reminderId) => {
   cy.get('tbody tr').contains(reminderId).parent().within(() => {
     cy.get('button').contains('Edit').click()
   })
-  cy.url().should('include', `/reminder/${reminderId}`)
+  cy.url().should('include', `/reminder/edit/?id=${reminderId}`)
 })
 
 Cypress.Commands.add('goBack', () => {
