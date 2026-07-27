@@ -56,7 +56,7 @@ describe('RemindersList', () => {
 
     expect(require('@/app/hooks').useRemindersClearContext).toHaveBeenCalled();
     expect(require('next/navigation').useRouter().push).toHaveBeenCalledWith(
-      '/reminder/1',
+      '/reminder/edit?id=1',
     );
   });
 });

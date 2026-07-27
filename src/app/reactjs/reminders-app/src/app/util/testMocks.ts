@@ -27,7 +27,9 @@ const jestObjectsMock = {
     useRouter: jest.fn().mockReturnValue({
       push: jest.fn(),
     }),
-    useParams: jest.fn().mockImplementation(() => ({ id: mockReminder.id })),
+    useSearchParams: jest.fn().mockImplementation(
+      () => new URLSearchParams({ id: String(mockReminder.id) }),
+    ),
   },
   '@/app/api': {
     useReminders: jest.fn().mockImplementation(() => ({

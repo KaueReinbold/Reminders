@@ -16,7 +16,7 @@ describe('Delete Reminder', () => {
     }).as('getReminder')
     
     // Visit edit page for reminder with ID 1
-    cy.visit('/reminder/1')
+    cy.visit('/reminder/edit/?id=1')
     
     // Wait for page to load
     cy.wait('@getReminder')
@@ -51,7 +51,7 @@ describe('Delete Reminder', () => {
     cy.get('[role="presentation"]').should('not.exist')
     
     // Should still be on edit page
-    cy.url().should('include', '/reminder/1')
+    cy.url().should('include', '/reminder/edit/?id=1')
     cy.get('button').contains('Edit').should('be.visible')
   })
 
@@ -103,7 +103,7 @@ describe('Delete Reminder', () => {
     cy.wait('@deleteReminderError')
     
     // Should stay on edit page (not redirect on error)
-    cy.url().should('include', '/reminder/1')
+    cy.url().should('include', '/reminder/edit/?id=1')
     
     // Modal should still be visible or error should be shown
     // (depends on how the app handles errors)
@@ -117,7 +117,7 @@ describe('Delete Reminder', () => {
     }).as('getReminderNotFound')
     
     // Visit edit page for non-existent reminder
-    cy.visit('/reminder/999', { failOnStatusCode: false })
+    cy.visit('/reminder/edit/?id=999', { failOnStatusCode: false })
     
     // Verify page elements
     cy.get('form').should('be.visible')
@@ -153,7 +153,7 @@ describe('Delete Reminder', () => {
     cy.get('[role="presentation"]').should('not.exist')
     
     // Should still be on edit page
-    cy.url().should('include', '/reminder/1')
+    cy.url().should('include', '/reminder/edit/?id=1')
   })
 
   it('should verify modal accessibility', { tags: '@delete' }, () => {

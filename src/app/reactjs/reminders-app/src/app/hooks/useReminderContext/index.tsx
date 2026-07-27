@@ -2,7 +2,7 @@
 
 import { Dispatch, ReactNode, useEffect, useReducer, useState, useMemo } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 import { Errors, Reminder, useReminder, useReminderActions } from '@/app/api';
 import ValidationService from '@/app/services/ValidationService';
@@ -83,7 +83,7 @@ export function RemindersContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const { id } = useParams<{ id: string }>();
+  const id = useSearchParams().get('id') ?? '';
 
   const { data: reminderData } = useReminder(id);
   const { createReminder, updateReminder, deleteReminder } = useReminderActions();
