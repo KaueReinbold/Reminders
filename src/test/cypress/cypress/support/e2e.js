@@ -19,5 +19,7 @@ import './commands'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-// Add grep support
-import '@cypress/grep'
+// Add grep support (must be called to register the filter)
+import registerCypressGrep from '@cypress/grep'
+
+registerCypressGrep()
