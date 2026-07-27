@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -149,7 +150,7 @@ namespace Reminders.Application.Test.Controllers
         #region GET By Id Tests
 
         [TestMethod]
-        public void Should_GetById_ReturnOkResult_WithReminder()
+        public async Task Should_GetById_ReturnOkResult_WithReminder()
         {
             // arrange
             var reminderId = Guid.NewGuid();
@@ -161,11 +162,11 @@ namespace Reminders.Application.Test.Controllers
             };
 
             mockRemindersService
-                .Setup(s => s.Get(reminderId))
-                .Returns(expectedReminder);
+                .Setup(s => s.GetAsync(reminderId))
+                .ReturnsAsync(expectedReminder);
 
             // act
-            var result = controller.Get(reminderId);
+            var result = await controller.Get(reminderId);
 
             // assert
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
@@ -177,21 +178,21 @@ namespace Reminders.Application.Test.Controllers
             Assert.AreEqual(reminderId, reminder.Id);
             Assert.AreEqual("Test Reminder", reminder.Title);
             
-            mockRemindersService.Verify(s => s.Get(reminderId), Times.Once);
+            mockRemindersService.Verify(s => s.GetAsync(reminderId), Times.Once);
         }
 
         [TestMethod]
-        public void Should_GetById_ReturnOkResult_WithNull_WhenNotFound()
+        public async Task Should_GetById_ReturnOkResult_WithNull_WhenNotFound()
         {
             // arrange
             var reminderId = Guid.NewGuid();
 
             mockRemindersService
-                .Setup(s => s.Get(reminderId))
-                .Returns((ReminderViewModel)null);
+                .Setup(s => s.GetAsync(reminderId))
+                .ReturnsAsync((ReminderViewModel)null);
 
             // act
-            var result = controller.Get(reminderId);
+            var result = await controller.Get(reminderId);
 
             // assert
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
@@ -205,7 +206,7 @@ namespace Reminders.Application.Test.Controllers
         #region POST Tests
 
         [TestMethod]
-        public void Should_Post_ReturnCreatedReminder()
+        public async Task Should_Post_ReturnCreatedReminder()
         {
             // arrange
             var inputReminder = new ReminderViewModel
@@ -224,18 +225,18 @@ namespace Reminders.Application.Test.Controllers
             };
 
             mockRemindersService
-                .Setup(s => s.Insert(inputReminder))
-                .Returns(createdReminder);
+                .Setup(s => s.InsertAsync(inputReminder))
+                .ReturnsAsync(createdReminder);
 
             // act
-            var result = controller.Post(inputReminder);
+            var result = await controller.Post(inputReminder);
 
             // assert
             Assert.IsNotNull(result);
             Assert.AreEqual(createdReminder.Id, result.Id);
             Assert.AreEqual(createdReminder.Title, result.Title);
             
-            mockRemindersService.Verify(s => s.Insert(inputReminder), Times.Once);
+            mockRemindersService.Verify(s => s.InsertAsync(inputReminder), Times.Once);
         }
 
         #endregion
@@ -243,7 +244,7 @@ namespace Reminders.Application.Test.Controllers
         #region PUT Tests
 
         [TestMethod]
-        public void Should_Put_ReturnUpdatedReminder()
+        public async Task Should_Put_ReturnUpdatedReminder()
         {
             // arrange
             var reminderId = Guid.NewGuid();
@@ -264,18 +265,18 @@ namespace Reminders.Application.Test.Controllers
             };
 
             mockRemindersService
-                .Setup(s => s.Edit(reminderId, inputReminder))
-                .Returns(updatedReminder);
+                .Setup(s => s.EditAsync(reminderId, inputReminder))
+                .ReturnsAsync(updatedReminder);
 
             // act
-            var result = controller.Put(reminderId, inputReminder);
+            var result = await controller.Put(reminderId, inputReminder);
 
             // assert
             Assert.IsNotNull(result);
             Assert.AreEqual(reminderId, result.Id);
             Assert.AreEqual("Updated Reminder", result.Title);
             
-            mockRemindersService.Verify(s => s.Edit(reminderId, inputReminder), Times.Once);
+            mockRemindersService.Verify(s => s.EditAsync(reminderId, inputReminder), Times.Once);
         }
 
         #endregion
@@ -283,19 +284,20 @@ namespace Reminders.Application.Test.Controllers
         #region DELETE Tests
 
         [TestMethod]
-        public void Should_Delete_CallServiceDelete()
+        public async Task Should_Delete_CallServiceDelete()
         {
             // arrange
             var reminderId = Guid.NewGuid();
 
             mockRemindersService
-                .Setup(s => s.Delete(reminderId));
+                .Setup(s => s.DeleteAsync(reminderId))
+                .Returns(Task.CompletedTask);
 
             // act
-            controller.Delete(reminderId);
+            await controller.Delete(reminderId);
 
             // assert
-            mockRemindersService.Verify(s => s.Delete(reminderId), Times.Once);
+            mockRemindersService.Verify(s => s.DeleteAsync(reminderId), Times.Once);
         }
 
         #endregion

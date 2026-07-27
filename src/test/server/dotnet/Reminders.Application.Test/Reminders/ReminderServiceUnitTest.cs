@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -94,7 +95,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_Insert()
+        public async Task Should_Insert()
         {
             // arrange
             var reminder = new ReminderViewModel()
@@ -107,7 +108,7 @@ namespace Reminders.Application.Test
             // act
             var service = GetRemindersService();
 
-            service.Insert(reminder);
+            await service.InsertAsync(reminder);
 
             // assert
             repositoryMock.Verify(repository =>
@@ -121,7 +122,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_IsDoneAsFalseOnInsert()
+        public async Task Should_IsDoneAsFalseOnInsert()
         {
             // arrange
             var reminderViewModel = new ReminderViewModel
@@ -135,7 +136,7 @@ namespace Reminders.Application.Test
             // act
             var service = GetRemindersService();
 
-            service.Insert(reminderViewModel);
+            await service.InsertAsync(reminderViewModel);
 
             // assert
             repositoryMock.Verify(repository =>
@@ -145,7 +146,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_LimitDateAfterTodayOnInsert()
+        public async Task Should_LimitDateAfterTodayOnInsert()
         {
             // arrange
             var reminderViewModel = new ReminderViewModel
@@ -158,7 +159,7 @@ namespace Reminders.Application.Test
             // act
             var service = GetRemindersService();
 
-            var exception = Assert.ThrowsException<ValidationException>(() => service.Insert(reminderViewModel));
+            var exception = await Assert.ThrowsExceptionAsync<ValidationException>(() => service.InsertAsync(reminderViewModel));
 
             // assert
             Assert.IsTrue(exception.Message.Contains(RemindersResources.InvalidLimitDate));
@@ -170,7 +171,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_Edit()
+        public async Task Should_Edit()
         {
             // arrange
             var reminder = new ReminderViewModel()
@@ -188,7 +189,7 @@ namespace Reminders.Application.Test
             // act
             var service = GetRemindersService();
 
-            service.Edit(reminder.Id.Value, reminder);
+            await service.EditAsync(reminder.Id.Value, reminder);
 
             // assert
             repositoryMock.Verify(repository =>
@@ -201,7 +202,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_LimitDateAfterTodayOnEdit()
+        public async Task Should_LimitDateAfterTodayOnEdit()
         {
             // arrange
             var reminder = new ReminderViewModel()
@@ -215,7 +216,7 @@ namespace Reminders.Application.Test
             // act
             var service = GetRemindersService();
 
-            var exception = Assert.ThrowsException<ValidationException>(() => service.Edit(reminder.Id.Value, reminder));
+            var exception = await Assert.ThrowsExceptionAsync<ValidationException>(() => service.EditAsync(reminder.Id.Value, reminder));
 
             // assert
             Assert.IsTrue(exception.Message.Contains(RemindersResources.InvalidLimitDate));
@@ -223,7 +224,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_NotFoundOnEdit()
+        public async Task Should_NotFoundOnEdit()
         {
             // arrange
             var reminder = new ReminderViewModel()
@@ -241,8 +242,8 @@ namespace Reminders.Application.Test
             // act
             var service = GetRemindersService();
 
-            var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
-               service.Edit(reminder.Id.Value, reminder));
+            var exception = await Assert.ThrowsExceptionAsync<RemindersApplicationException>(() =>
+               service.EditAsync(reminder.Id.Value, reminder));
 
             // assert
             Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);
@@ -251,7 +252,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_IdsDoNotMatchOnEdit()
+        public async Task Should_IdsDoNotMatchOnEdit()
         {
             // arrange
             var reminder = new ReminderViewModel()
@@ -269,8 +270,8 @@ namespace Reminders.Application.Test
             // act
             var service = GetRemindersService();
 
-            var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
-               service.Edit(Guid.NewGuid(), reminder));
+            var exception = await Assert.ThrowsExceptionAsync<RemindersApplicationException>(() =>
+               service.EditAsync(Guid.NewGuid(), reminder));
 
             // assert
             Assert.IsTrue(exception.StatusCode == ValidationStatus.IdsDoNotMatch);
@@ -283,7 +284,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_Delete()
+        public async Task Should_Delete()
         {
             // arrange
             var reminder = new Reminder("My Title", "My Description", DateTime.UtcNow, false);
@@ -299,7 +300,7 @@ namespace Reminders.Application.Test
             // act
             var service = GetRemindersService();
 
-            service.Delete(reminder.Id);
+            await service.DeleteAsync(reminder.Id);
 
             // assert
             repositoryMock
@@ -315,7 +316,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_NotFoundOnDelete()
+        public async Task Should_NotFoundOnDelete()
         {
             // arrange
             repositoryMock
@@ -325,8 +326,8 @@ namespace Reminders.Application.Test
             // act
             var service = GetRemindersService();
 
-            var exception = Assert.ThrowsException<RemindersApplicationException>(() =>
-               service.Delete(Guid.NewGuid()));
+            var exception = await Assert.ThrowsExceptionAsync<RemindersApplicationException>(() =>
+               service.DeleteAsync(Guid.NewGuid()));
 
             // assert
             Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);
@@ -393,7 +394,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_GetById()
+        public async Task Should_GetById()
         {
             // arrange
             var reminder = new Reminder("My Title", "My Description", DateTime.UtcNow, false);
@@ -408,7 +409,7 @@ namespace Reminders.Application.Test
             var service = GetRemindersService();
 
             // act
-            var result = service.Get(reminder.Id);
+            var result = await service.GetAsync(reminder.Id);
 
             // assert
             Assert.AreEqual(reminder.Title, result.Title);
@@ -416,7 +417,7 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public void Should_NotGetById()
+        public async Task Should_NotGetById()
         {
             // arrange
             var reminder = new Reminder("My Title", "My Description", DateTime.UtcNow, false);
@@ -433,7 +434,7 @@ namespace Reminders.Application.Test
             var service = GetRemindersService();
 
             // act
-            var result = service.Get(reminder.Id);
+            var result = await service.GetAsync(reminder.Id);
 
             // assert
             Assert.IsNull(result);
