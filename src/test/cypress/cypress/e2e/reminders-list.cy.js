@@ -79,7 +79,7 @@ describe('Reminders List', () => {
     cy.goToEditReminder('1')
     
     // Verify we're on the edit page
-    cy.url().should('include', '/reminder/1')
+    cy.url().should('include', '/reminder/edit/?id=1')
     cy.get('button').contains('Edit').should('be.visible')
     cy.get('button').contains('Delete').should('be.visible')
     cy.get('button').contains('Back').should('be.visible')

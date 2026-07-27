@@ -113,7 +113,7 @@ describe('Reminders Integration Tests', () => {
       
       // Step 4: DELETE - Delete the reminder (if we're not on the edit page, go there)
       cy.url().then((url) => {
-        if (!url.includes('/reminder/4')) {
+        if (!url.includes('/reminder/edit/?id=4')) {
           cy.goToEditReminder('4')
           cy.wait('@getReminder')
         }
@@ -191,28 +191,16 @@ describe('Reminders Integration Tests', () => {
       // Test create form validation
       cy.visit('/reminder/create')
       
-      // Mock API to return validation errors
-      cy.intercept('POST', '**/api/reminders', {
-        statusCode: 400,
-        body: {
-          errors: {
-            Title: ["The field Title must be a text with a maximum length of '50'."],
-            Description: ["The field Description must be a text with a maximum length of '200'."],
-            'LimitDate.Date': ['The Limit Date should be later than Today.']
-          }
-        }
-      }).as('createReminderValidationError')
-      
-      // Fill form with invalid data (but valid format for date input)
+      // Client-side validation blocks the submit before any API call,
+      // mirroring the server-side messages (see ValidationService).
       cy.get('input[data-testid="title"]').type('a'.repeat(60)) // Too long
       cy.get('input[data-testid="description"]').type('b'.repeat(250)) // Too long
       cy.get('input[data-testid="limitDate"]').type('2020-01-01') // Past date
-      
+
       // Submit form
       cy.get('button').contains('Create').click()
-      
-      // Wait for API call and verify validation errors are displayed
-      cy.wait('@createReminderValidationError')
+
+      // Verify validation errors are displayed
       cy.contains("The field Title must be a text with a maximum length of '50'.").should('be.visible')
     })
 

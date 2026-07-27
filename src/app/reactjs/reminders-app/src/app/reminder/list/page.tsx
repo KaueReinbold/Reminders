@@ -32,7 +32,7 @@ export default function RemindersList() {
 
   const handleEditClick = (id?: string) => {
     clearReminder();
-    router.push(`/reminder/${id}`);
+    router.push(`/reminder/edit?id=${id}`);
   };
 
   return (

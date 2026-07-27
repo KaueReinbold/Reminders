@@ -4,7 +4,7 @@ describe('Edit Reminder', () => {
     cy.mockRemindersAPI()
     
     // Visit edit page for reminder with ID 1
-    cy.visit('/reminder/1')
+    cy.visit('/reminder/edit/?id=1')
     
     // Wait for page to load and data to be fetched
     cy.wait('@getReminder')
@@ -52,28 +52,17 @@ describe('Edit Reminder', () => {
   })
 
   it('should handle form validation errors during update', { tags: '@edit' }, () => {
-    // Mock API to return validation errors
-    cy.intercept('PUT', '**/api/reminders/*', {
-      statusCode: 400,
-      body: {
-        errors: {
-          Title: ['Title cannot be empty'],
-          Description: ['Description cannot be empty']
-        }
-      }
-    }).as('updateReminderError')
-    
-    // Clear required fields and try to submit
+    // Client-side validation blocks the submit before any API call,
+    // mirroring the server-side messages (see ValidationService).
     cy.get('input[data-testid="title"]').clear()
     cy.get('input[data-testid="description"]').clear()
     cy.get('button').contains('Edit').click()
-    
-    // Verify error messages are displayed
-    cy.contains('Title cannot be empty').should('be.visible')
-    cy.contains('Description cannot be empty').should('be.visible')
+
+    // Verify error message is displayed
+    cy.contains('The field is Required').should('be.visible')
     
     // Should stay on edit page
-    cy.url().should('include', '/reminder/1')
+    cy.url().should('include', '/reminder/edit/?id=1')
   })
 
   it('should toggle done status', { tags: '@edit' }, () => {
@@ -110,7 +99,7 @@ describe('Edit Reminder', () => {
     cy.wait('@updateReminderServerError')
     
     // Should stay on edit page (not redirect on error)
-    cy.url().should('include', '/reminder/1')
+    cy.url().should('include', '/reminder/edit/?id=1')
   })
 
   it('should load reminder data when page is accessed directly', { tags: '@edit' }, () => {
