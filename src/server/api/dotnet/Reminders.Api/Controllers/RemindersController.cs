@@ -23,21 +23,21 @@ public class RemindersController
 
     // GET: api/Reminders/5
     [HttpGet("{id}", Name = "Get")]
-    public IActionResult Get(Guid id) =>
-        Ok(remindersService.Get(id));
+    public async Task<IActionResult> Get(Guid id) =>
+        Ok(await remindersService.GetAsync(id));
 
     // POST: api/Reminders
     [HttpPost]
-    public ReminderViewModel Post([FromBody] ReminderViewModel reminderViewModel) =>
-        remindersService.Insert(reminderViewModel);
+    public Task<ReminderViewModel> Post([FromBody] ReminderViewModel reminderViewModel) =>
+        remindersService.InsertAsync(reminderViewModel);
 
     // PUT: api/Reminders/5
     [HttpPut("{id}")]
-    public ReminderViewModel Put(Guid id, [FromBody] ReminderViewModel reminderViewModel) =>
-        remindersService.Edit(id, reminderViewModel);
+    public Task<ReminderViewModel> Put(Guid id, [FromBody] ReminderViewModel reminderViewModel) =>
+        remindersService.EditAsync(id, reminderViewModel);
 
     // DELETE: api/Reminders/5
     [HttpDelete("{id}")]
-    public void Delete(Guid id) =>
-        remindersService.Delete(id);
+    public Task Delete(Guid id) =>
+        remindersService.DeleteAsync(id);
 }
