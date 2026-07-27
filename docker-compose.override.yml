@@ -51,9 +51,23 @@ services:
       Blockchain__NodeUrl: http://reminders-blockchain:8545
       Blockchain__ContractAddress: 0xf204a4Ef082f5c04bB89F7D5E6568B796096735a
     volumes: &dotnet-volumes
-      - user_secrets:/root/.microsoft/usersecrets:ro
-      - https_certificates:/root/.aspnet/https:ro
-      - data_protection_keys:/root/.aspnet/DataProtection-Keys
+      - type: bind
+        source: ${HOME}/.microsoft/usersecrets
+        target: /root/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ${HOME}/.aspnet/https
+        target: /root/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ${HOME}/.aspnet/DataProtection-Keys
+        target: /root/.aspnet/DataProtection-Keys
+        bind:
+          create_host_path: true
 
   go-api:
     build: 
@@ -130,26 +144,5 @@ services:
       - "9999:9999"
 
 volumes:
-
-  user_secrets:
-    driver: local
-    driver_opts:
-      type: none
-      device: $HOME/.microsoft/usersecrets
-      o: bind
-
-  https_certificates:
-    driver: local
-    driver_opts:
-      type: none
-      device: $HOME/.aspnet/https
-      o: bind
-  
-  data_protection_keys:
-    driver: local
-    driver_opts:
-      type: none
-      device: $HOME/.aspnet/DataProtection-Keys
-      o: bind
 
   postgres_data:
