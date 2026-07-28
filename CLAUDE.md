@@ -59,6 +59,13 @@ Decisions persist in `docs/adr/` so all agents share the same memory. Format: `N
 - Read existing ADRs before proposing changes that might contradict them. Superseding an old ADR: new ADR references it, old one gets status `superseded`.
 - ADRs are short: context, decision, consequences. One page max.
 
+## Product Docs (PRDs)
+
+Product intent lives in `docs/product/` (vision, PRD template, index). Feature-sized work traces to a one-page PRD; small fixes and chores do not (see ADR-0006).
+
+- Flow: Ideas discussion, then PRD, then ADRs during implementation, then issues/PRs/release.
+- Agents keep PRD status current (draft, active, shipped, validated) and fill the Validation section with evidence after release.
+
 ## Multi-Agent Coordination
 
 Multiple agents may work this repo in parallel. Rules:
