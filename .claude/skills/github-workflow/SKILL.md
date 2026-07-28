@@ -33,11 +33,10 @@ Fetch fresh if commands fail; these are stable otherwise.
 gh issue list --limit 50                      # backlog scan (session start)
 gh issue view <n>                             # details
 gh issue edit <n> --add-assignee @me          # claim (required before starting)
-gh issue comment <n> --body "Claiming: ..."   # announce claim
 gh issue create --title "type(scope): desc" --label <type>,<scope> --body "..."
 ```
 
-Claim ritual: assign + comment, then move board item to In Progress. One issue = one branch = one PR. Never start an issue already assigned or claimed in comments.
+Claim ritual: assign yourself + move board item to In Progress. No claiming comment. One issue = one branch = one PR. Never start an issue already assigned or claimed in comments.
 
 ## Project board
 
