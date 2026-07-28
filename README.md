@@ -184,4 +184,14 @@ If you encounter any issues or have suggestions, we encourage you to open an iss
 
 ## Project Planning
 
-Work is planned and tracked on the [Reminders project board](https://github.com/users/jumperck/projects/7). The [roadmap view](https://github.com/users/jumperck/projects/7/views/2) shows the plan on a timeline by sprint, and [milestones](https://github.com/jumperck/Reminders/milestones) group issues into planned releases. Progress updates follow GitHub's [sharing project updates](https://docs.github.com/en/issues/planning-and-tracking-with-projects/sharing-project-updates) guide. Product direction and PRDs live in [docs/product/](docs/product/README.md).
+[![v5.1.0 progress](https://img.shields.io/github/milestones/progress-percent/jumperck/Reminders/5?label=v5.1.0%20audit%20hardening)](https://github.com/jumperck/Reminders/milestone/5)
+[![Planned releases](https://img.shields.io/github/milestones/open/jumperck/Reminders?label=planned%20releases)](https://github.com/jumperck/Reminders/milestones)
+
+| Where | What |
+|---|---|
+| [Project board](https://github.com/users/jumperck/projects/7) | Backlog and sprint execution (Backlog, Todo, In Progress, Done) |
+| [Roadmap view](https://github.com/users/jumperck/projects/7/views/2) | Plan on a timeline by sprint |
+| [Milestones](https://github.com/jumperck/Reminders/milestones) | Issues grouped into planned releases |
+| [Product docs](docs/product/README.md) | Vision and PRDs |
+
+Progress updates follow GitHub's [sharing project updates](https://docs.github.com/en/issues/planning-and-tracking-with-projects/sharing-project-updates) guide.
