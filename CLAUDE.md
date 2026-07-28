@@ -173,6 +173,7 @@ Never use em dash (—) or en dash (–) anywhere: docs, comments, commit messag
 - Read `agents.md` for architecture patterns before editing service code.
 - Database changes require migrations for **both** Postgres and SqlServer providers (see agents.md).
 - Do not commit, push, tag, or open PRs unless explicitly asked.
+- Never merge a PR without explicit human approval of that specific PR, given as a PR review/approval or in chat. After opening a PR, share the URL and wait.
 - No AI attribution anywhere: no Co-Authored-By trailers, session links, or "Generated with" footers in commits, PR bodies, or comments. Commit author is the maintainer.
 - Agent branches follow the repo convention `<type>/<short-description>` (e.g. `chore/repo-governance`), never `claude/...` or any other auto-generated prefix. If the session assigns a `claude/...` branch, recreate the work on a convention-named branch before opening a PR.
 - Run the relevant test suite after code changes.
