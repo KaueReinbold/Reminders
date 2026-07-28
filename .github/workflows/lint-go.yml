@@ -1,0 +1,46 @@
+# gofmt and go vet for the Go API (build and tests live in go-pull-request.yml)
+name: Lint Go
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/server/api/go/reminders-api/**'
+      - '!src/server/api/go/reminders-api/**/*.md'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/server/api/go/reminders-api/**'
+      - '!src/server/api/go/reminders-api/**/*.md'
+
+permissions:
+  contents: read
+
+jobs:
+  lint-go:
+    name: Lint Go API (gofmt, go vet)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.25'
+
+      - name: Check gofmt
+        working-directory: src/server/api/go/reminders-api
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "Files not gofmt-formatted:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      - name: Run go vet
+        working-directory: src/server/api/go/reminders-api
+        run: go vet ./...
