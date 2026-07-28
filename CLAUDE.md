@@ -166,5 +166,6 @@ Never use em dash (—) or en dash (–) anywhere: docs, comments, commit messag
 - Read `agents.md` for architecture patterns before editing service code.
 - Database changes require migrations for **both** Postgres and SqlServer providers (see agents.md).
 - Do not commit, push, tag, or open PRs unless explicitly asked.
+- No AI attribution anywhere: no Co-Authored-By trailers, session links, or "Generated with" footers in commits, PR bodies, or comments. Commit author is the maintainer.
 - Run the relevant test suite after code changes.
 - No secrets in code or compose files: use `.env` (gitignored); `.env.example` holds placeholders only.
