@@ -11,6 +11,7 @@ Decisions that shape architecture, workflow, or tooling are recorded here so hum
 | [0003](0003-multi-implementation-api.md) | Same REST API in .NET, Go and C++ behind Nginx | accepted | 2026-07-28 |
 | [0004](0004-dual-database-migrations-runner.md) | Dual database providers with a dedicated migrations runner | accepted | 2026-07-28 |
 | [0005](0005-blockchain-integration.md) | Solidity contracts with a local Ganache node in the stack | accepted | 2026-07-28 |
+| [0006](0006-product-docs-and-prd-workflow.md) | Product docs and PRD workflow | accepted | 2026-07-28 |
 
 ## Process
 
