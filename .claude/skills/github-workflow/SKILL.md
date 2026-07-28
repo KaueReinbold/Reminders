@@ -1,6 +1,6 @@
 ---
 name: github-workflow
-description: Manage the jumperck/Reminders backlog on GitHub: issues, labels, Project 7 board (status, priority, sprints), discussions, and PRs. Use when claiming work, triaging, running the sprint check-in ritual, or opening/merging PRs.
+description: "Manage the jumperck/Reminders backlog on GitHub: issues, labels, Project 7 board (status, priority, sprints), discussions, and PRs. Use when claiming work, triaging, running the sprint check-in ritual, or opening/merging PRs."
 ---
 
 # GitHub workflow for jumperck/Reminders
