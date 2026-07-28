@@ -23,14 +23,15 @@ This is a learning project, and we welcome contributions from developers of all 
 Every change follows the same path:
 
 1. **Discussion (RFC)**: questions and ideas that need debate start as a [GitHub Discussion](https://github.com/jumperck/Reminders/discussions).
-2. **ADR**: decisions that shape architecture, workflow, or tooling are recorded in [docs/adr/](docs/adr/README.md) before implementation.
-3. **Issue**: every piece of work maps to a GitHub Issue with explicit acceptance criteria. Check open issues before proposing new work.
-4. **Branch**: short-lived branch off `main`, named `<type>/<short-description>` (e.g. `feat/redis-cache`).
-5. **PR**: small and focused, follows the PR template, references the issue (`Closes #123`).
-6. **Review**: maintainer review is required (CODEOWNERS); CI must be green.
-7. **Merge**: squash merge onto `main`, which must always stay releasable.
+2. **PRD**: feature-sized work gets a one-page PRD in [docs/product/](docs/product/README.md) capturing problem, users, success criteria, and scope before implementation.
+3. **ADR**: decisions that shape architecture, workflow, or tooling are recorded in [docs/adr/](docs/adr/README.md) before implementation.
+4. **Issue**: every piece of work maps to a GitHub Issue with explicit acceptance criteria. Check open issues before proposing new work.
+5. **Branch**: short-lived branch off `main`, named `<type>/<short-description>` (e.g. `feat/redis-cache`).
+6. **PR**: small and focused, follows the PR template, references the issue (`Closes #123`).
+7. **Review**: maintainer review is required (CODEOWNERS); CI must be green.
+8. **Merge**: squash merge onto `main`, which must always stay releasable.
 
-Small fixes can skip steps 1-2 and start at the issue. See [ADR-0001](docs/adr/0001-development-workflow.md) for the reasoning behind this workflow.
+Small fixes can skip steps 1-3 and start at the issue. See [ADR-0001](docs/adr/0001-development-workflow.md) and [ADR-0006](docs/adr/0006-product-docs-and-prd-workflow.md) for the reasoning behind this workflow.
 
 ## Getting Started
 
@@ -223,6 +224,7 @@ test(api): add unit tests for reminder service
 - **.NET**: Follow Microsoft's C# coding conventions
 - **TypeScript/React**: Follow the existing ESLint configuration
 - **Solidity**: Follow Solidity style guide
+- **UI**: changes follow the [design system](docs/design/reminders-redesign/design-system.md)
 
 ## Testing
 

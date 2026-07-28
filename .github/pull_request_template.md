@@ -6,9 +6,9 @@
 
 <!-- Motivation, if not obvious from the issue -->
 
-## Related ADR
+## Related PRD / ADR
 
-<!-- Link docs/adr/NNNN-*.md if this implements or changes a recorded decision; write "none" otherwise -->
+<!-- Link docs/product/NNNN-*.md or docs/adr/NNNN-*.md if this implements a PRD or a recorded decision; write "none" otherwise -->
 
 ## How to test
 
