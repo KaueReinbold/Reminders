@@ -1,0 +1,73 @@
+# Lint and config validation not covered by the per-service build workflows
+# (dotnet/go/react/blockchain-pull-request.yml handle build and tests)
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  lint-react:
+    name: Lint React app (ESLint)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: src/app/reactjs/reminders-app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: src/app/reactjs/reminders-app
+
+      - name: Run ESLint
+        run: npm run lint
+        working-directory: src/app/reactjs/reminders-app
+
+  lint-go:
+    name: Lint Go API (gofmt, go vet)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.25'
+
+      - name: Check gofmt
+        working-directory: src/server/api/go/reminders-api
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "Files not gofmt-formatted:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      - name: Run go vet
+        working-directory: src/server/api/go/reminders-api
+        run: go vet ./...
+
+  validate-compose:
+    name: Validate Docker Compose config
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Validate compose files
+        run: docker compose config -q

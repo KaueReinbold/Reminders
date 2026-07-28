@@ -85,6 +85,45 @@ docker compose logs -f
 docker compose --profile all down
 ```
 
+## Architecture
+
+One REST contract, three interchangeable API implementations behind an Nginx load balancer, two frontends, and a dedicated migrations runner that prepares the database before any API starts. A local Ganache node backs the smart contract integration.
+
+```mermaid
+flowchart LR
+    subgraph Clients
+        react[React app :3000]
+        mvc[MVC app :5050]
+    end
+
+    nginx[Nginx load balancer :9999]
+
+    subgraph "API implementations"
+        dotnet[.NET API :5000]
+        goapi[Go API :5001]
+        cpp[C++ API :5002]
+    end
+
+    migrations[Migrations runner]
+    pg[(PostgreSQL :5432)]
+    ganache[Ganache node :8545]
+
+    react --> nginx
+    mvc --> nginx
+    nginx --> dotnet
+    nginx --> goapi
+    nginx --> cpp
+    dotnet --> pg
+    goapi --> pg
+    cpp --> pg
+    dotnet --> ganache
+    migrations --> pg
+```
+
+The migrations runner executes once per deployment and must complete before the APIs start. PostgreSQL is the default provider; SQL Server is supported as an alternative with its own migration set.
+
+Architecture and workflow decisions are recorded as ADRs: see the [ADR index](docs/adr/README.md).
+
 ## Project Status
 
 [![Coverage Status](https://coveralls.io/repos/github/jumperck/Reminders/badge.svg?branch=main)](https://coveralls.io/github/jumperck/Reminders?branch=main)

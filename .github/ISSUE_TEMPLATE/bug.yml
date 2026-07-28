@@ -1,0 +1,45 @@
+name: Bug report
+description: Something does not work as expected
+labels: ["bug", "triage"]
+projects: ["jumperck/7"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened
+      description: Clear description of the bug and where it shows up (service, app, endpoint).
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Verifiable conditions that mean this bug is fixed.
+      placeholder: |
+        - [ ] ...
+        - [ ] Regression test added
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Environment and context
+      description: OS, browser, logs, screenshots, anything else useful.
+    validations:
+      required: false

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and RFCs
+    url: https://github.com/jumperck/Reminders/discussions
+    about: Open questions, ideas and RFCs start as a Discussion before becoming an ADR or an issue.
