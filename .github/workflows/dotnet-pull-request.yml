@@ -26,7 +26,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Setup dotnet
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: "8.0.x"
         source-url: https://nuget.pkg.github.com/jumperck/index.json
@@ -40,4 +40,4 @@ jobs:
       run: dotnet build ./src -c Release
 
     - name: Test
-      run: dotnet test -c Release ./src/test/server/dotnet/Reminders.Application.Test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov /p:Exclude=\"[Reminders.Infrastructure.CrossCutting]*,[Reminders.Infrastructure.Data.EntityFramework]*\" /p:ExcludeByFile=\"**/*.Designer.cs,**/*Entity.cs\"
+      run: dotnet test -c Release ./src/test/server/dotnet/Reminders.Application.Test '/p:CollectCoverage=true' '/p:CoverletOutput=TestResults/' '/p:CoverletOutputFormat=lcov' '/p:Exclude="[Reminders.Infrastructure.CrossCutting]*,[Reminders.Infrastructure.Data.EntityFramework]*"' '/p:ExcludeByFile="**/*.Designer.cs,**/*Entity.cs"'

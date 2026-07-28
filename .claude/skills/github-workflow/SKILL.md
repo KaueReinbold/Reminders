@@ -73,7 +73,7 @@ gh project item-edit --id <ITEM_ID> \
   --field-id PVTSSF_lAHOAVmfxM4AaN1gzgQza3U --single-select-option-id 05b1b492
 ```
 
-Rules: never set Done by hand (closes auto-move). Set Priority and Initiative when triaging. New issues auto-add to board.
+Rules: set Priority and Initiative when triaging. After closing an issue or merging a PR, verify the board item moved to Done and the item exists on the board at all (auto-add can lag or miss); fix status by hand if the automation did not.
 
 ## Sprints
 
