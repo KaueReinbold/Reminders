@@ -184,4 +184,23 @@ If you encounter any issues or have suggestions, we encourage you to open an iss
 
 ## Project Planning
 
-Work is planned and tracked on the [Reminders project board](https://github.com/users/kauereinbold/projects/7). The [roadmap view](https://github.com/users/kauereinbold/projects/7/views/2) shows the plan on a timeline by sprint. Progress updates follow GitHub's [sharing project updates](https://docs.github.com/en/issues/planning-and-tracking-with-projects/sharing-project-updates) guide. Product direction and PRDs live in [docs/product/](docs/product/README.md).
+| Where | What |
+|---|---|
+| [Project board](https://github.com/users/kauereinbold/projects/7) | Backlog and sprint execution (Backlog, Todo, In Progress, Done) |
+| [Roadmap view](https://github.com/users/kauereinbold/projects/7/views/2) | Plan on a timeline by sprint |
+| [Milestones](https://github.com/kauereinbold/Reminders/milestones) | Issues grouped into planned releases |
+| [Product docs](docs/product/README.md) | Vision and PRDs |
+
+### Release roadmap
+
+| Release | Theme | Progress |
+|---|---|---|
+| [v5.1.0](https://github.com/kauereinbold/Reminders/milestone/5) | Audit hardening | ![progress](https://img.shields.io/github/milestones/progress-percent/kauereinbold/Reminders/5?label=%20) |
+| [v6.0.0](https://github.com/kauereinbold/Reminders/milestone/6) | Redesign | ![progress](https://img.shields.io/github/milestones/progress-percent/kauereinbold/Reminders/6?label=%20) |
+| [v6.1.0](https://github.com/kauereinbold/Reminders/milestone/7) | Observability and release automation | ![progress](https://img.shields.io/github/milestones/progress-percent/kauereinbold/Reminders/7?label=%20) |
+| [v6.2.0](https://github.com/kauereinbold/Reminders/milestone/8) | Demo and AI integrations | ![progress](https://img.shields.io/github/milestones/progress-percent/kauereinbold/Reminders/8?label=%20) |
+| [v6.3.0](https://github.com/kauereinbold/Reminders/milestone/11) | Agentic workflow automation | ![progress](https://img.shields.io/github/milestones/progress-percent/kauereinbold/Reminders/11?label=%20) |
+| [v7.0.0](https://github.com/kauereinbold/Reminders/milestone/9) | Polyglot APIs and experiments | ![progress](https://img.shields.io/github/milestones/progress-percent/kauereinbold/Reminders/9?label=%20) |
+| [v8.0.0](https://github.com/kauereinbold/Reminders/milestone/10) | Cloud deployment | ![progress](https://img.shields.io/github/milestones/progress-percent/kauereinbold/Reminders/10?label=%20) |
+
+Progress updates follow GitHub's [sharing project updates](https://docs.github.com/en/issues/planning-and-tracking-with-projects/sharing-project-updates) guide.
