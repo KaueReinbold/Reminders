@@ -194,4 +194,16 @@ If you encounter any issues or have suggestions, we encourage you to open an iss
 | [Milestones](https://github.com/jumperck/Reminders/milestones) | Issues grouped into planned releases |
 | [Product docs](docs/product/README.md) | Vision and PRDs |
 
+### Release roadmap
+
+| Release | Theme | Progress |
+|---|---|---|
+| [v5.1.0](https://github.com/jumperck/Reminders/milestone/5) | Audit hardening | ![progress](https://img.shields.io/github/milestones/progress-percent/jumperck/Reminders/5?label=%20) |
+| [v6.0.0](https://github.com/jumperck/Reminders/milestone/6) | Redesign | ![progress](https://img.shields.io/github/milestones/progress-percent/jumperck/Reminders/6?label=%20) |
+| [v6.1.0](https://github.com/jumperck/Reminders/milestone/7) | Observability and release automation | ![progress](https://img.shields.io/github/milestones/progress-percent/jumperck/Reminders/7?label=%20) |
+| [v6.2.0](https://github.com/jumperck/Reminders/milestone/8) | Demo and AI integrations | ![progress](https://img.shields.io/github/milestones/progress-percent/jumperck/Reminders/8?label=%20) |
+| [v6.3.0](https://github.com/jumperck/Reminders/milestone/11) | Agentic workflow automation | ![progress](https://img.shields.io/github/milestones/progress-percent/jumperck/Reminders/11?label=%20) |
+| [v7.0.0](https://github.com/jumperck/Reminders/milestone/9) | Polyglot APIs and experiments | ![progress](https://img.shields.io/github/milestones/progress-percent/jumperck/Reminders/9?label=%20) |
+| [v8.0.0](https://github.com/jumperck/Reminders/milestone/10) | Cloud deployment | ![progress](https://img.shields.io/github/milestones/progress-percent/jumperck/Reminders/10?label=%20) |
+
 Progress updates follow GitHub's [sharing project updates](https://docs.github.com/en/issues/planning-and-tracking-with-projects/sharing-project-updates) guide.
