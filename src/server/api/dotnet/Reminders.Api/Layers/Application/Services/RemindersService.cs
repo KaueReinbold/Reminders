@@ -1,4 +1,6 @@
-﻿namespace Reminders.Application.Services;
+﻿using Microsoft.Extensions.Options;
+
+namespace Reminders.Application.Services;
 
 public class RemindersService
   : IRemindersService
@@ -9,13 +11,15 @@ public class RemindersService
     private readonly IRemindersRepository remindersRepository;
     private readonly IRemindersBlockchainService remindersBlockchainService;
     private readonly IUnitOfWork unitOfWork;
+    private readonly BlockchainSettings blockchainSettings;
 
     public RemindersService(
         ILogger<RemindersService> logger,
         IMapper mapper,
         IRemindersRepository remindersRepository,
         IRemindersBlockchainService remindersBlockchainService,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IOptions<BlockchainSettings> blockchainSettings)
     {
         validator = new ReminderViewModelValidator();
 
@@ -24,6 +28,7 @@ public class RemindersService
         this.remindersRepository = remindersRepository;
         this.remindersBlockchainService = remindersBlockchainService;
         this.unitOfWork = unitOfWork;
+        this.blockchainSettings = blockchainSettings.Value;
     }
 
     public async Task<ReminderViewModel> InsertAsync(ReminderViewModel reminderViewModel)
@@ -46,7 +51,7 @@ public class RemindersService
         {
             try
             {
-                var chainId = 0; // TODO: This will need to stored in a separated way.
+                var chainId = blockchainSettings.ChainId;
                 var transactionHash = await remindersBlockchainService.CreateReminderAsync(reminder.Title);
                 var output = await remindersBlockchainService.GetReminderAsync(chainId);
 
@@ -84,7 +89,7 @@ public class RemindersService
         {
             try
             {
-                var chainId = 0; // TODO: This will need to stored in a separated way.
+                var chainId = blockchainSettings.ChainId;
                 var transactionHash = await remindersBlockchainService.UpdateReminderAsync(chainId, reminder.Title);
                 var output = await remindersBlockchainService.GetReminderAsync(chainId);
 
@@ -114,7 +119,7 @@ public class RemindersService
 
             try
             {
-                var chainId = 0; // TODO: This will need to stored in a separated way.
+                var chainId = blockchainSettings.ChainId;
                 var output = await remindersBlockchainService.GetReminderAsync(chainId);
                 await remindersBlockchainService.DeleteReminderAsync(chainId);
 
@@ -155,7 +160,7 @@ public class RemindersService
 
         try
         {
-            var chainId = 0; // TODO: This will need to stored in a separated way.
+            var chainId = blockchainSettings.ChainId;
             var output = await remindersBlockchainService.GetReminderAsync(chainId);
 
             this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner}");
