@@ -3,6 +3,7 @@ using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using Nethereum.Contracts;
 using Nethereum.Hex.HexTypes;
+using Polly.CircuitBreaker;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 
@@ -63,13 +64,40 @@ public class ReminderContractFunctions
 
 public class RemindersBlockchainService : IRemindersBlockchainService
 {
+    // Shared across scoped instances so failures accumulate into one circuit.
+    private static readonly AsyncCircuitBreakerPolicy CircuitBreaker =
+        Policy
+            .Handle<Exception>()
+            .CircuitBreakerAsync(
+                exceptionsAllowedBeforeBreaking: 3,
+                durationOfBreak: TimeSpan.FromSeconds(30));
+
+    private readonly AsyncPolicy resiliencePolicy;
+    private readonly ILogger<RemindersBlockchainService> logger;
     private readonly BlockchainSettings settings;
     private readonly Web3 web3;
     private readonly Contract contract;
 
-    public RemindersBlockchainService(IOptions<BlockchainSettings> settings)
+    public RemindersBlockchainService(
+        ILogger<RemindersBlockchainService> logger,
+        IOptions<BlockchainSettings> settings)
     {
+        this.logger = logger;
         this.settings = settings.Value;
+
+        var retry = Policy
+            .Handle<Exception>(exception => exception is not BrokenCircuitException)
+            .WaitAndRetryAsync(
+                retryCount: 3,
+                sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt - 1)),
+                onRetry: (exception, delay, attempt, _) =>
+                    this.logger.LogWarning(
+                        exception,
+                        "Blockchain call failed (attempt {Attempt}), retrying in {Delay}s",
+                        attempt,
+                        delay.TotalSeconds));
+
+        resiliencePolicy = retry.WrapAsync(CircuitBreaker);
 
         web3 = new Web3(new Account(this.settings.PrivateKey), this.settings.NodeUrl);
         var abiJson = System.Text.Json.JsonSerializer.Serialize(this.settings.Abi, new JsonSerializerOptions
@@ -85,13 +113,14 @@ public class RemindersBlockchainService : IRemindersBlockchainService
     {
         var createFunction = this.contract.GetFunction(ReminderContractFunctions.Create);
 
-        var receipt = await createFunction.SendTransactionAndWaitForReceiptAsync(
-            this.web3.TransactionManager.Account.Address,
-            new HexBigInteger(300000),
-            null,
-            null,
-            text
-        );
+        var receipt = await resiliencePolicy.ExecuteAsync(() =>
+            createFunction.SendTransactionAndWaitForReceiptAsync(
+                this.web3.TransactionManager.Account.Address,
+                new HexBigInteger(300000),
+                null,
+                null,
+                text
+            ));
 
         return receipt.TransactionHash;
     }
@@ -105,7 +134,8 @@ public class RemindersBlockchainService : IRemindersBlockchainService
 
         var getFunction = this.contract.GetFunction(ReminderContractFunctions.Get);
 
-        var result = await getFunction.CallDeserializingToObjectAsync<GetReminderOutput>(id);
+        var result = await resiliencePolicy.ExecuteAsync(() =>
+            getFunction.CallDeserializingToObjectAsync<GetReminderOutput>(id));
 
         return result;
     }
@@ -114,7 +144,7 @@ public class RemindersBlockchainService : IRemindersBlockchainService
     {
         var countFunction = this.contract.GetFunction(ReminderContractFunctions.Count); // Add this to your Solidity contract
 
-        var count = await countFunction.CallAsync<int>();
+        var count = await resiliencePolicy.ExecuteAsync(() => countFunction.CallAsync<int>());
 
         return count;
     }
@@ -123,13 +153,14 @@ public class RemindersBlockchainService : IRemindersBlockchainService
     {
         var deleteFunction = this.contract.GetFunction(ReminderContractFunctions.Delete);
 
-        var receipt = await deleteFunction.SendTransactionAndWaitForReceiptAsync(
-            this.web3.TransactionManager.Account.Address,
-            new HexBigInteger(300000),
-            null,
-            null,
-            id
-        );
+        var receipt = await resiliencePolicy.ExecuteAsync(() =>
+            deleteFunction.SendTransactionAndWaitForReceiptAsync(
+                this.web3.TransactionManager.Account.Address,
+                new HexBigInteger(300000),
+                null,
+                null,
+                id
+            ));
 
         return receipt.TransactionHash;
     }
@@ -138,14 +169,15 @@ public class RemindersBlockchainService : IRemindersBlockchainService
     {
         var updateFunction = this.contract.GetFunction(ReminderContractFunctions.Update);
 
-        var receipt = await updateFunction.SendTransactionAndWaitForReceiptAsync(
-            this.web3.TransactionManager.Account.Address,
-            new HexBigInteger(300000),
-            null,
-            null,
-            id,
-            text
-        );
+        var receipt = await resiliencePolicy.ExecuteAsync(() =>
+            updateFunction.SendTransactionAndWaitForReceiptAsync(
+                this.web3.TransactionManager.Account.Address,
+                new HexBigInteger(300000),
+                null,
+                null,
+                id,
+                text
+            ));
 
         return receipt.TransactionHash;
     }
