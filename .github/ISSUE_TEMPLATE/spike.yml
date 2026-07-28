@@ -1,0 +1,41 @@
+name: Spike
+description: Time-boxed investigation to answer a question before committing to work
+labels: ["task", "triage"]
+projects: ["jumperck/7"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Question to answer
+      description: The single question this spike must resolve.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Why we need the answer and what decision it unblocks.
+    validations:
+      required: true
+  - type: dropdown
+    id: timebox
+    attributes:
+      label: Time box
+      description: Stop when the time is up, even without a full answer.
+      options:
+        - 2 hours
+        - 4 hours
+        - 1 day
+        - 2 days
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: What the spike must produce to be considered done.
+      placeholder: |
+        - [ ] Findings written as a comment on this issue
+        - [ ] Recommendation given (go / no-go / needs ADR)
+    validations:
+      required: true
