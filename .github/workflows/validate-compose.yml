@@ -1,0 +1,32 @@
+# Compose config validation, runs only when compose or infra files change
+name: Validate Compose
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docker-compose*.yml'
+      - 'Dockerfile*'
+      - 'infrastructure/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docker-compose*.yml'
+      - 'Dockerfile*'
+      - 'infrastructure/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-compose:
+    name: Validate Docker Compose config
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Validate compose files
+        run: docker compose config -q
