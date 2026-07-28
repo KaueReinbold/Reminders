@@ -121,13 +121,6 @@ services:
 
   # Database
 
-  mssql:
-    environment:
-      SA_PASSWORD: h9pJwUUV0y
-      ACCEPT_EULA: Y
-    ports:
-      - '1433:1433'
-  
   postgres:
     environment:
       POSTGRES_USER: root
@@ -143,7 +136,3 @@ services:
       - ./infrastructure/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "9999:9999"
-
-volumes:
-
-  postgres_data:
