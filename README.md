@@ -184,9 +184,6 @@ If you encounter any issues or have suggestions, we encourage you to open an iss
 
 ## Project Planning
 
-[![v5.1.0 progress](https://img.shields.io/github/milestones/progress-percent/jumperck/Reminders/5?label=v5.1.0%20audit%20hardening)](https://github.com/jumperck/Reminders/milestone/5)
-[![Planned releases](https://img.shields.io/github/milestones/open/jumperck/Reminders?label=planned%20releases)](https://github.com/jumperck/Reminders/milestones)
-
 | Where | What |
 |---|---|
 | [Project board](https://github.com/users/jumperck/projects/7) | Backlog and sprint execution (Backlog, Todo, In Progress, Done) |
