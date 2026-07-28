@@ -184,4 +184,4 @@ If you encounter any issues or have suggestions, we encourage you to open an iss
 
 ## Project Planning
 
-Work is planned and tracked on the [Reminders project board](https://github.com/users/jumperck/projects/7). Progress updates follow GitHub's [sharing project updates](https://docs.github.com/en/issues/planning-and-tracking-with-projects/sharing-project-updates) guide. Product direction and PRDs live in [docs/product/](docs/product/README.md).
+Work is planned and tracked on the [Reminders project board](https://github.com/users/jumperck/projects/7). The [roadmap view](https://github.com/users/jumperck/projects/7/views/2) shows the plan on a timeline by sprint. Progress updates follow GitHub's [sharing project updates](https://docs.github.com/en/issues/planning-and-tracking-with-projects/sharing-project-updates) guide. Product direction and PRDs live in [docs/product/](docs/product/README.md).
