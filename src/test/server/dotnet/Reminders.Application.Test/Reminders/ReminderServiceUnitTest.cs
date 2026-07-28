@@ -442,6 +442,125 @@ namespace Reminders.Application.Test
 
         #endregion
 
+        #region Blockchain degradation
+
+        [Timeout(1000)]
+        [TestMethod]
+        public async Task Should_InsertWhenBlockchainFails()
+        {
+            // arrange
+            remindersBlockchainService
+                .Setup(x => x.CreateReminderAsync(It.IsAny<string>()))
+                .ThrowsAsync(new Exception("node down"));
+
+            var reminder = new ReminderViewModel()
+            {
+                Title = "Title",
+                Description = "Description",
+                LimitDate = DateTime.UtcNow.AddDays(1)
+            };
+
+            // act
+            var service = GetRemindersService();
+
+            var result = await service.InsertAsync(reminder);
+
+            // assert
+            Assert.IsNotNull(result);
+            repositoryMock.Verify(repository => repository.Add(It.IsAny<Reminder>()), Times.Once);
+            unitOfWorkMock.Verify(unitOfWork => unitOfWork.Commit(), Times.Once);
+        }
+
+        [Timeout(1000)]
+        [TestMethod]
+        public async Task Should_EditWhenBlockchainFails()
+        {
+            // arrange
+            remindersBlockchainService
+                .Setup(x => x.UpdateReminderAsync(It.IsAny<int>(), It.IsAny<string>()))
+                .ThrowsAsync(new Exception("node down"));
+
+            var reminder = new ReminderViewModel()
+            {
+                Id = Guid.NewGuid(),
+                Title = "Title",
+                Description = "Description",
+                LimitDate = DateTime.UtcNow.AddDays(1)
+            };
+
+            repositoryMock
+                .Setup(repository => repository.Exists(It.IsAny<Guid>()))
+                .Returns(true);
+
+            // act
+            var service = GetRemindersService();
+
+            await service.EditAsync(reminder.Id.Value, reminder);
+
+            // assert
+            repositoryMock.Verify(repository => repository.Update(It.IsAny<Reminder>()), Times.Once);
+            unitOfWorkMock.Verify(unitOfWork => unitOfWork.Commit(), Times.Once);
+        }
+
+        [Timeout(1000)]
+        [TestMethod]
+        public async Task Should_DeleteWhenBlockchainFails()
+        {
+            // arrange
+            remindersBlockchainService
+                .Setup(x => x.GetReminderAsync(It.IsAny<int>()))
+                .ThrowsAsync(new Exception("node down"));
+
+            var reminder = new Reminder("My Title", "My Description", DateTime.UtcNow, false);
+
+            repositoryMock
+                .Setup(repository => repository.Exists(It.IsAny<Guid>()))
+                .Returns(true);
+
+            repositoryMock
+                .Setup(repository => repository.Get(It.IsAny<Guid>()))
+                .Returns(reminder);
+
+            // act
+            var service = GetRemindersService();
+
+            await service.DeleteAsync(reminder.Id);
+
+            // assert
+            repositoryMock.Verify(repository =>
+                repository.Update(It.Is<Reminder>(r => r.IsDeleted)), Times.Once);
+            unitOfWorkMock.Verify(unitOfWork => unitOfWork.Commit(), Times.Once);
+        }
+
+        [Timeout(1000)]
+        [TestMethod]
+        public async Task Should_GetByIdWhenBlockchainFails()
+        {
+            // arrange
+            remindersBlockchainService
+                .Setup(x => x.GetReminderAsync(It.IsAny<int>()))
+                .ThrowsAsync(new Exception("node down"));
+
+            var reminder = new Reminder("My Title", "My Description", DateTime.UtcNow, false);
+
+            repositoryMock
+                .Setup(repository => repository.Get())
+                .Returns(new List<Reminder>
+                {
+                    reminder
+                }.AsQueryable());
+
+            var service = GetRemindersService();
+
+            // act
+            var result = await service.GetAsync(reminder.Id);
+
+            // assert
+            Assert.AreEqual(reminder.Title, result.Title);
+        }
+
+        #endregion
+
         #region Instance
 
         [Timeout(1000)]

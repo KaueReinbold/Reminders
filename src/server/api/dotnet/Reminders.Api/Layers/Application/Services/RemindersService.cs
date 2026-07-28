@@ -44,11 +44,18 @@ public class RemindersService
 
         if (reminder.Title is not null)
         {
-            var chainId = 0; // TODO: This will need to stored in a separated way.
-            var transactionHash = await remindersBlockchainService.CreateReminderAsync(reminder.Title);
-            var output = await remindersBlockchainService.GetReminderAsync(chainId);
+            try
+            {
+                var chainId = 0; // TODO: This will need to stored in a separated way.
+                var transactionHash = await remindersBlockchainService.CreateReminderAsync(reminder.Title);
+                var output = await remindersBlockchainService.GetReminderAsync(chainId);
 
-            this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner} - {transactionHash}");
+                this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner} - {transactionHash}");
+            }
+            catch (Exception exception)
+            {
+                this.logger.LogError(exception, "Blockchain create failed, reminder saved to database only");
+            }
         }
 
         unitOfWork.Commit();
@@ -75,11 +82,18 @@ public class RemindersService
 
         if (reminder.Title is not null)
         {
-            var chainId = 0; // TODO: This will need to stored in a separated way.
-            var transactionHash = await remindersBlockchainService.UpdateReminderAsync(chainId, reminder.Title);
-            var output = await remindersBlockchainService.GetReminderAsync(chainId);
+            try
+            {
+                var chainId = 0; // TODO: This will need to stored in a separated way.
+                var transactionHash = await remindersBlockchainService.UpdateReminderAsync(chainId, reminder.Title);
+                var output = await remindersBlockchainService.GetReminderAsync(chainId);
 
-            this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner} - {transactionHash}");
+                this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner} - {transactionHash}");
+            }
+            catch (Exception exception)
+            {
+                this.logger.LogError(exception, "Blockchain update failed, reminder saved to database only");
+            }
         }
 
         unitOfWork.Commit();
@@ -98,11 +112,18 @@ public class RemindersService
         {
             reminderData.Delete();
 
-            var chainId = 0; // TODO: This will need to stored in a separated way.
-            var output = await remindersBlockchainService.GetReminderAsync(chainId);
-            await remindersBlockchainService.DeleteReminderAsync(chainId);
+            try
+            {
+                var chainId = 0; // TODO: This will need to stored in a separated way.
+                var output = await remindersBlockchainService.GetReminderAsync(chainId);
+                await remindersBlockchainService.DeleteReminderAsync(chainId);
 
-            this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner}");
+                this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner}");
+            }
+            catch (Exception exception)
+            {
+                this.logger.LogError(exception, "Blockchain delete failed, reminder deleted from database only");
+            }
 
             remindersRepository.Update(reminderData);
 
@@ -132,10 +153,17 @@ public class RemindersService
             .Get()
             .FirstOrDefault(reminder => reminder.Id == id && !reminder.IsDeleted);
 
-        var chainId = 0; // TODO: This will need to stored in a separated way.
-        var output = await remindersBlockchainService.GetReminderAsync(chainId);
+        try
+        {
+            var chainId = 0; // TODO: This will need to stored in a separated way.
+            var output = await remindersBlockchainService.GetReminderAsync(chainId);
 
-        this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner}");
+            this.logger.LogInformation($"Blockchain: {output.Text} - {output.Owner}");
+        }
+        catch (Exception exception)
+        {
+            this.logger.LogError(exception, "Blockchain read failed, returning database data only");
+        }
 
         var reminderViewModel = mapper.Map<ReminderViewModel>(reminder);
 
