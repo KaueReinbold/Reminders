@@ -5,6 +5,7 @@ Thank you for your interest in contributing to the Reminders project! This docum
 ## Table of Contents
 
 - [Code of Conduct](#code-of-conduct)
+- [Change Workflow](#change-workflow)
 - [Getting Started](#getting-started)
 - [Development Setup](#development-setup)
 - [Project Structure](#project-structure)
@@ -16,6 +17,20 @@ Thank you for your interest in contributing to the Reminders project! This docum
 ## Code of Conduct
 
 This is a learning project, and we welcome contributions from developers of all skill levels. Please be respectful, constructive, and supportive of others.
+
+## Change Workflow
+
+Every change follows the same path:
+
+1. **Discussion (RFC)**: questions and ideas that need debate start as a [GitHub Discussion](https://github.com/kauereinbold/Reminders/discussions).
+2. **ADR**: decisions that shape architecture, workflow, or tooling are recorded in [docs/adr/](docs/adr/README.md) before implementation.
+3. **Issue**: every piece of work maps to a GitHub Issue with explicit acceptance criteria. Check open issues before proposing new work.
+4. **Branch**: short-lived branch off `main`, named `<type>/<short-description>` (e.g. `feat/redis-cache`).
+5. **PR**: small and focused, follows the PR template, references the issue (`Closes #123`).
+6. **Review**: maintainer review is required (CODEOWNERS); CI must be green.
+7. **Merge**: squash merge onto `main`, which must always stay releasable.
+
+Small fixes can skip steps 1-2 and start at the issue. See [ADR-0001](docs/adr/0001-development-workflow.md) for the reasoning behind this workflow.
 
 ## Getting Started
 
@@ -186,22 +201,21 @@ dotnet ef migrations add MigrationName \
 
 ### Branching Strategy
 
-- `main` - Production-ready code
-- `develop` - Development branch (if used)
-- `feature/your-feature-name` - New features
-- `bugfix/issue-description` - Bug fixes
-- `hotfix/critical-fix` - Urgent production fixes
+Trunk-based development (see [ADR-0001](docs/adr/0001-development-workflow.md)):
+
+- `main` is the trunk and must always be releasable
+- Work in short-lived branches off `main`, named `<type>/<short-description>` (e.g. `feat/redis-cache`, `fix/async-service-chain`)
+- Rebase on `main` before merging; squash merge keeps trunk history linear
 
 ### Commit Messages
 
-Use clear, descriptive commit messages:
+All commits follow [Conventional Commits](https://www.conventionalcommits.org/): `<type>(<scope>): <description>`, imperative mood, lowercase, no trailing period. See [CLAUDE.md](CLAUDE.md#conventional-commits) for the full list of types and scopes.
 
 ```text
-feat: Add reminder notification feature
-fix: Resolve database connection timeout
-docs: Update API documentation
-test: Add unit tests for reminder service
-refactor: Improve error handling
+feat(api): add redis caching for reminder queries
+fix(react): resolve reminder edit route crash
+docs: update api documentation
+test(api): add unit tests for reminder service
 ```
 
 ### Code Style
@@ -277,11 +291,12 @@ Ensure all tests pass:
 
 ### PR Title Format
 
-```text
-[Type] Brief description
+PR titles follow the same Conventional Commits format as commits and are validated by the PR Title Check workflow:
 
-Types: feat, fix, docs, test, refactor, chore
-Example: [feat] Add email notification for reminders
+```text
+<type>(<scope>): <description>
+
+Example: feat(api): add email notification for reminders
 ```
 
 ## Development Tips

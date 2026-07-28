@@ -1,0 +1,21 @@
+# Architecture Decision Records
+
+Decisions that shape architecture, workflow, or tooling are recorded here so humans and agents share the same memory. Each ADR follows [0000-template.md](0000-template.md): context, options considered with trade-offs, decision, consequences. One page max.
+
+## Index
+
+| ADR | Title | Status | Date |
+|---|---|---|---|
+| [0001](0001-development-workflow.md) | Development workflow: trunk-based, conventional commits, issues as backlog | accepted | 2026-07-26 |
+| [0002](0002-project-board.md) | GitHub Project board as execution view of the backlog | accepted | 2026-07-26 |
+| [0003](0003-multi-implementation-api.md) | Same REST API in .NET, Go and C++ behind Nginx | accepted | 2026-07-28 |
+| [0004](0004-dual-database-migrations-runner.md) | Dual database providers with a dedicated migrations runner | accepted | 2026-07-28 |
+| [0005](0005-blockchain-integration.md) | Solidity contracts with a local Ganache node in the stack | accepted | 2026-07-28 |
+
+## Process
+
+1. Ideas that need debate start as a GitHub Discussion (RFC).
+2. Draft the ADR as `NNNN-short-title.md` with status `proposed`, in a PR.
+3. Review and merge: status becomes `accepted`.
+4. Superseding: the new ADR references the old one; the old one gets status `superseded by ADR-NNNN`.
+5. Add every new ADR to the index table above in the same PR.
