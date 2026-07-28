@@ -14,6 +14,7 @@ public class BlockchainSettings
     public string PrivateKey { get; set; } = string.Empty;
     public string NodeUrl { get; set; } = string.Empty;
     public string ContractAddress { get; set; } = string.Empty;
+    public int ChainId { get; set; }
     public List<AbiItem> Abi { get; set; } = new();
 }
 

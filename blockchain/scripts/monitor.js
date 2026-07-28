@@ -1,5 +1,5 @@
 async function monitor() {
-  const contractAddress = "0xbaAA2a3237035A2c7fA2A33c76B44a8C6Fe18e87";
+  const contractAddress = process.env.BLOCKCHAIN_CONTRACT_ADDRESS || "0xf204a4Ef082f5c04bB89F7D5E6568B796096735a";
   const Reminders = await ethers.getContractFactory("Reminders");
   const reminders = await Reminders.attach(contractAddress);
 

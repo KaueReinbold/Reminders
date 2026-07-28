@@ -87,7 +87,8 @@ namespace Reminders.Application.Test
                 mapperMock,
                 repositoryMock.Object,
                 remindersBlockchainService.Object,
-                unitOfWorkMock.Object);
+                unitOfWorkMock.Object,
+                Microsoft.Extensions.Options.Options.Create(new BlockchainSettings()));
 
         #endregion
 
