@@ -1,0 +1,33 @@
+# hadolint for all Dockerfiles
+# failure-threshold error: existing warnings (apk pinning, root user) are follow-up work
+name: Lint Docker
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/Dockerfile*'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**/Dockerfile*'
+
+permissions:
+  contents: read
+
+jobs:
+  lint-docker:
+    name: Lint Dockerfiles (hadolint)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Run hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          recursive: true
+          dockerfile: '**/Dockerfile'
+          failure-threshold: error
