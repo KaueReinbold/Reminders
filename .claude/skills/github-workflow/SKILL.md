@@ -7,11 +7,20 @@ description: "Manage the jumperck/Reminders backlog on GitHub: issues, labels, P
 
 Repo: `jumperck/Reminders`. Backlog lives in GitHub Issues, execution view is Project 7. Views: [board](https://github.com/users/jumperck/projects/7) (columns) and [roadmap](https://github.com/users/jumperck/projects/7/views/2) (timeline by sprint; link this when pointing people at the plan). Rules below complement CLAUDE.md (label taxonomy, sprint ritual, commit conventions); this skill holds the command recipes.
 
-## Environment notes
+## Ground rules
 
-- `jq` is NOT installed. Use `gh --jq` (built-in) instead of piping to jq.
+- Use gh's built-in `--jq` flag for JSON filtering; do not assume `jq` is installed on the machine.
 - Never add AI attribution to commits, PRs, or comments.
 - No em/en dashes anywhere.
+- Never merge a PR yourself: open it, share the URL, wait for the maintainer's review and approval.
+
+## Finding something to work on
+
+1. `gh issue list --limit 50` for the open backlog.
+2. Query the current sprint (see Sprints below) and pick from its unassigned Todo items, highest priority first (P0 > P1 > P2).
+3. No sprint items left: pick an unassigned Todo item from the board. Backlog-status items are not yet prioritized; propose before starting.
+4. Skip issues that are assigned, or labeled `hold`/`triage`. Parent `feature` issues track plans; work their child `task` issues.
+5. Claim it: assign yourself + move the board item to In Progress (no comment), then branch off main.
 
 ## Stable IDs (Project 7)
 
