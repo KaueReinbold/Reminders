@@ -122,6 +122,8 @@ flowchart LR
 
 The migrations runner executes once per deployment and must complete before the APIs start. PostgreSQL is the default provider; SQL Server is supported as an alternative with its own migration set.
 
+A Flutter mobile app ([src/app/flutter/reminders_app](src/app/flutter/reminders_app/)) is in progress and will consume the same REST API; see its README for on-device testing.
+
 Architecture and workflow decisions are recorded as ADRs: see the [ADR index](docs/adr/README.md).
 
 ## Project Status
@@ -137,6 +139,8 @@ Architecture and workflow decisions are recorded as ADRs: see the [ADR index](do
   [![Go - Build & Test](https://github.com/jumperck/Reminders/actions/workflows/go-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/go-pull-request.yml)
 
   [![React - Build & Test](https://github.com/jumperck/Reminders/actions/workflows/react-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/react-pull-request.yml)
+
+  [![Flutter - Analyze & Test](https://github.com/jumperck/Reminders/actions/workflows/flutter-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/flutter-pull-request.yml)
 
   [![Blockchain - Hardhat Tests](https://github.com/jumperck/Reminders/actions/workflows/blockchain-pull-request.yml/badge.svg)](https://github.com/jumperck/Reminders/actions/workflows/blockchain-pull-request.yml)
 
