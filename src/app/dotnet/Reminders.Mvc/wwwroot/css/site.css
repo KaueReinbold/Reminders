@@ -1,3 +1,46 @@
+:root {
+  /* Color */
+  --canvas: #f3f0e9;
+  --panel: #efebe1;
+  --surface: #fbfaf7;
+  --input-fill: #f7f5f0;
+  --ink: #1b1a17;
+  --body-muted: #6e6759;
+  --faint: #8c8577;
+  --disabled: #9a9385;
+  --border-page: #e0dacd;
+  --border-card: #e7e2d6;
+  --border-input: #ddd7c9;
+  --border-hover: #cfc7b5;
+  --border-hover-strong: #c6bda9;
+  --accent: #b4451f;
+  --accent-hover: #8e3415;
+  --accent-tint: #f6e4dc;
+  --success: #4c6b4f;
+  --success-tint: #edf1ec;
+  --scrim: rgba(27, 26, 23, 0.38);
+  --pill-neutral-bg: #f0ede4;
+
+  /* Type */
+  --font-display: 'Instrument Serif', serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+
+  /* Shape */
+  --radius-pill: 999px;
+  --radius-card: 14px;
+  --radius-modal: 18px;
+  --radius-input: 10px;
+  --radius-nav: 10px;
+
+  /* Space */
+  --pad-card: 16px 18px;
+  --pad-modal: 28px;
+  --gutter-page: clamp(20px, 4vw, 48px);
+  --gap-cards: 10px;
+  --gap-sections: 30px;
+  --gap-fields: 18px;
+}
+
 html {
   font-size: 14px;
 }
@@ -19,4 +62,7 @@ html {
 
 body {
   margin-bottom: 60px;
+  color: var(--ink);
+  background-color: var(--canvas);
+  font-family: var(--font-sans);
 }
