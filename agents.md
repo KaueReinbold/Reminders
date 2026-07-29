@@ -34,6 +34,7 @@ docker compose logs -f dotnet-api go-api migrations
 - **API (C++)**: `src/server/api/cpp/reminders-api/`
 - **Migration Runner**: `src/server/services/dotnet/Reminders.MigrationsRunner/`
 - **React Frontend**: `src/app/reactjs/reminders-app/`
+- **Flutter App**: `src/app/flutter/reminders_app/` (Android only; see its README)
 - **Smart Contracts**: `blockchain/contracts/Reminders.sol`
 - **Infrastructure**: `infrastructure/nginx.conf`, `docker-compose.yml`
 
