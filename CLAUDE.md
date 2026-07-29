@@ -101,6 +101,7 @@ All commits and PR titles follow [Conventional Commits](https://www.conventional
 - `cpp`: C++ API
 - `react`: Next.js app
 - `mvc`: ASP.NET MVC app
+- `flutter`: Flutter app (`src/app/flutter/reminders_app/`)
 - `blockchain`: Solidity/Hardhat
 - `migrations`: MigrationsRunner / EF migrations
 - `infra`: Docker, Nginx, k6
@@ -155,6 +156,9 @@ dotnet test src/test/server/dotnet/Reminders.Application.Test/
 
 # React tests
 cd src/app/reactjs/reminders-app && npm test
+
+# Flutter tests
+cd src/app/flutter/reminders_app && flutter analyze && flutter test
 
 # Blockchain tests
 cd blockchain && npx hardhat test

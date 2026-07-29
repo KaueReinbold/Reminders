@@ -8,7 +8,7 @@
 
 A full-stack learning project for managing reminders with multiple client interfaces, load-balanced APIs, and blockchain integration.
 
-**Tech Stack**: .NET 8.0, Go (Gin), C++, Next.js 15, PostgreSQL, Solidity, Docker Compose
+**Tech Stack**: .NET 8.0, Go (Gin), C++, Next.js 15, Flutter, PostgreSQL, Solidity, Docker Compose
 
 ## Quick Start for Agents
 
