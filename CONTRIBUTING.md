@@ -87,6 +87,7 @@ Reminders/
 ├── src/
 │   ├── app/
 │   │   ├── dotnet/                # ASP.NET MVC application
+│   │   ├── flutter/               # Flutter mobile app (Android)
 │   │   └── reactjs/               # Next.js React application
 │   ├── server/
 │   │   ├── api/
@@ -244,6 +245,10 @@ dotnet test
 # React Unit Tests (all passing ✅)
 cd src/app/reactjs/reminders-app
 npm test
+
+# Flutter Tests
+cd src/app/flutter/reminders_app
+flutter analyze && flutter test
 
 # Cypress E2E Tests
 cd src/test/cypress

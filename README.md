@@ -94,6 +94,7 @@ flowchart LR
     subgraph Clients
         react[React app :3000]
         mvc[MVC app :5050]
+        flutter[Flutter app]
     end
 
     nginx[Nginx load balancer :9999]
@@ -110,6 +111,7 @@ flowchart LR
 
     react --> nginx
     mvc --> nginx
+    flutter -.-> nginx
     nginx --> dotnet
     nginx --> goapi
     nginx --> cpp
@@ -122,7 +124,7 @@ flowchart LR
 
 The migrations runner executes once per deployment and must complete before the APIs start. PostgreSQL is the default provider; SQL Server is supported as an alternative with its own migration set.
 
-A Flutter mobile app ([src/app/flutter/reminders_app](src/app/flutter/reminders_app/)) is in progress and will consume the same REST API; see its README for on-device testing.
+The Flutter mobile app ([src/app/flutter/reminders_app](src/app/flutter/reminders_app/), dashed above) is in progress and will consume the same REST API; see its README for on-device testing.
 
 Architecture and workflow decisions are recorded as ADRs: see the [ADR index](docs/adr/README.md).
 
@@ -166,7 +168,7 @@ Reminders API:
 
 ## Testing
 
-The project has unit tests (React/Jest), smart contract tests (Hardhat), .NET integration tests, and end-to-end tests (Cypress) covering the core reminder workflows. Run `./run-tests.sh` from the repository root for the automated suite, or see [CONTRIBUTING.md](CONTRIBUTING.md#testing) and the [Cypress Testing README](src/test/cypress/README.md) for how to run each suite individually.
+The project has unit tests (React/Jest), Flutter widget tests, smart contract tests (Hardhat), .NET integration tests, and end-to-end tests (Cypress) covering the core reminder workflows. Run `./run-tests.sh` from the repository root for the automated suite, or see [CONTRIBUTING.md](CONTRIBUTING.md#testing) and the [Cypress Testing README](src/test/cypress/README.md) for how to run each suite individually.
 
 Migrations are applied by a dedicated runner service before the APIs start - see [CONTRIBUTING.md](CONTRIBUTING.md#database-migrations) for how that works and how to troubleshoot it.
 
