@@ -179,6 +179,7 @@ Never use em dash (—) or en dash (–) anywhere: docs, comments, commit messag
 - Do not commit, push, tag, or open PRs unless explicitly asked.
 - Never merge a PR without explicit human approval of that specific PR, given as a PR review/approval or in chat. After opening a PR, share the URL and wait.
 - No AI attribution anywhere: no Co-Authored-By trailers, session links, or "Generated with" footers in commits, PR bodies, or comments. Commit author is the maintainer.
+- Squash merges always pass an explicit message so GitHub uses it verbatim and cannot inject Co-authored-by trailers: `gh pr merge N --squash --subject "<conventional title> (#N)" --body "<body>"`.
 - Agent branches follow the repo convention `<type>/<short-description>` (e.g. `chore/repo-governance`), never `claude/...` or any other auto-generated prefix. If the session assigns a `claude/...` branch, recreate the work on a convention-named branch before opening a PR.
 - Run the relevant test suite after code changes.
 - Work in a git worktree off `origin/main`; never switch branches or create commits in the main checkout (see ADR-0007). Remove the worktree after merge.
