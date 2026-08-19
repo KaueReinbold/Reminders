@@ -181,5 +181,7 @@ Never use em dash (—) or en dash (–) anywhere: docs, comments, commit messag
 - No AI attribution anywhere: no Co-Authored-By trailers, session links, or "Generated with" footers in commits, PR bodies, or comments. Commit author is the maintainer.
 - Agent branches follow the repo convention `<type>/<short-description>` (e.g. `chore/repo-governance`), never `claude/...` or any other auto-generated prefix. If the session assigns a `claude/...` branch, recreate the work on a convention-named branch before opening a PR.
 - Run the relevant test suite after code changes.
+- Work in a git worktree off `origin/main`; never switch branches or create commits in the main checkout (see ADR-0007). Remove the worktree after merge.
+- Changes touching the React UI or the API contract update the matching Cypress specs (`src/test/cypress/cypress/e2e/`) and run them locally before the PR; new user-facing flows get a new spec.
 - Changes to compose files, Dockerfiles, or `infrastructure/` require a runtime smoke test before opening the PR: boot the affected profile (`docker compose --profile api up --build -d`), hit an endpoint, then tear down. `docker compose config -q` alone is not enough.
 - No secrets in code or compose files: use `.env` (gitignored); `.env.example` holds placeholders only.

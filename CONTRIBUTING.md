@@ -208,6 +208,14 @@ Trunk-based development (see [ADR-0001](docs/adr/0001-development-workflow.md)):
 - `main` is the trunk and must always be releasable
 - Work in short-lived branches off `main`, named `<type>/<short-description>` (e.g. `feat/redis-cache`, `fix/async-service-chain`)
 - Rebase on `main` before merging; squash merge keeps trunk history linear
+- Work in a dedicated git worktree, never by switching branches in the main checkout (see [ADR-0007](docs/adr/0007-agent-contribution-workflow.md)):
+
+  ```bash
+  git fetch origin
+  git worktree add ../wt-<short-description> -b <type>/<short-description> origin/main
+  # after merge
+  git worktree remove ../wt-<short-description>
+  ```
 
 ### Commit Messages
 
@@ -277,6 +285,8 @@ Ensure all tests pass:
 - Integration tests
 - E2E tests
 - Linting checks
+
+Changes touching the React UI or the API contract must update the matching Cypress specs in `src/test/cypress/cypress/e2e/` and run them locally against a dev build before the PR; a new user-facing flow requires a new spec (see [ADR-0007](docs/adr/0007-agent-contribution-workflow.md)).
 
 ## Pull Request Process
 
