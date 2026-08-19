@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -8,12 +9,17 @@ import {
   useReminders,
   useUpdateReminder,
 } from '@/app/api';
-import { ReminderCard } from '@/app/components';
+import { AppHeader, ReminderCard, Sidebar } from '@/app/components';
 import {
   useRemindersClearContext,
   useRemindersQueryClient,
 } from '@/app/hooks';
-import { groupReminders } from '@/app/util/reminderGroups';
+import {
+  ViewName,
+  groupReminders,
+  viewCounts,
+  weekProgress,
+} from '@/app/util/reminderGroups';
 
 import styles from './list.module.css';
 
@@ -24,6 +30,11 @@ export default function RemindersList() {
   const clearReminder = useRemindersClearContext();
   const queryClient = useRemindersQueryClient();
   const updateReminder = useUpdateReminder();
+
+  // Search and view filtering of the list itself lands with the filters
+  // issue; the shell only renders the controls and active states.
+  const [query, setQuery] = useState('');
+  const [view, setView] = useState<ViewName>('All');
 
   const handleCreateClick = () => {
     clearReminder();
@@ -50,36 +61,48 @@ export default function RemindersList() {
     }
   };
 
-  const groups = groupReminders(reminders ?? []);
+  const items = reminders ?? [];
+  const groups = groupReminders(items);
 
   return (
-    <div className={styles.list}>
-      <button
-        type="button"
-        className={styles.createButton}
-        onClick={handleCreateClick}
-      >
-        Create Reminder
-      </button>
+    <>
+      <AppHeader
+        query={query}
+        onQueryChange={setQuery}
+        onCreate={handleCreateClick}
+      />
 
-      {groups.map(group => (
-        <section key={group.label} className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>{group.label}</h2>
-            <span className={styles.sectionCount}>{group.items.length}</span>
-            <span className={styles.sectionRule} />
-          </div>
+      <div className={styles.body}>
+        <Sidebar
+          view={view}
+          counts={viewCounts(items)}
+          onSelectView={setView}
+          progress={weekProgress(items)}
+        />
 
-          {group.items.map(reminder => (
-            <ReminderCard
-              key={reminder.id}
-              reminder={reminder}
-              onToggle={handleToggle}
-              onEdit={handleEditClick}
-            />
+        <main className={styles.list}>
+          {groups.map(group => (
+            <section key={group.label} className={styles.section}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>{group.label}</h2>
+                <span className={styles.sectionCount}>
+                  {group.items.length}
+                </span>
+                <span className={styles.sectionRule} />
+              </div>
+
+              {group.items.map(reminder => (
+                <ReminderCard
+                  key={reminder.id}
+                  reminder={reminder}
+                  onToggle={handleToggle}
+                  onEdit={handleEditClick}
+                />
+              ))}
+            </section>
           ))}
-        </section>
-      ))}
-    </div>
+        </main>
+      </div>
+    </>
   );
 }

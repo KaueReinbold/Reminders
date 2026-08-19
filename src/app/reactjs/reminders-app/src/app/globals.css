@@ -20,6 +20,9 @@
   --success-tint: #edf1ec;
   --scrim: rgba(27, 26, 23, 0.38);
   --pill-neutral-bg: #f0ede4;
+  --nav-active-bg: #e7e2d6;
+  --nav-hover-bg: #ebe7dc;
+  --nav-ink-soft: #55503f;
 
   /* Type */
   --font-display: var(--font-instrument-serif), serif;

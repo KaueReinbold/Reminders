@@ -66,7 +66,7 @@ describe('Delete Reminder', () => {
     
     // Should redirect to home page after successful deletion
     cy.url().should('eq', Cypress.config().baseUrl + '/')
-    cy.get('button').contains('Create Reminder').should('be.visible')
+    cy.get('button').contains('New reminder').should('be.visible')
   })
 
   it('should handle delete confirmation flow step by step', { tags: '@delete' }, () => {

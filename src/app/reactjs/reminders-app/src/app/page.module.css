@@ -1,7 +1,0 @@
-.main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 48px var(--gutter-page);
-  min-height: 100vh;
-}

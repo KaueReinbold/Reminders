@@ -137,9 +137,10 @@ describe('Reminders Integration Tests', () => {
       cy.visit('/')
       cy.wait('@getRemindersError')
       
-      // App should handle API error gracefully
-      // This depends on how the app handles errors
-      cy.get('main').should('be.visible')
+      // App should handle API error gracefully: shell still renders even
+      // though the list column is empty
+      cy.get('header').contains('New reminder').should('be.visible')
+      cy.get('aside').should('be.visible')
       
       // Try to create reminder
       cy.visit('/reminder/create')
@@ -177,7 +178,7 @@ describe('Reminders Integration Tests', () => {
       cy.wait('@getReminders')
       
       // Verify we're back on homepage with all elements
-      cy.get('button').contains('Create Reminder').should('be.visible')
+      cy.get('button').contains('New reminder').should('be.visible')
       cy.get('article').should('have.length', 3)
     })
   })
@@ -237,7 +238,7 @@ describe('Reminders Integration Tests', () => {
       cy.wait('@getReminders')
       
       // Verify elements are still accessible
-      cy.get('button').contains('Create Reminder').should('be.visible')
+      cy.get('button').contains('New reminder').should('be.visible')
       cy.get('article').should('have.length', 3)
       
       // Test navigation on mobile
@@ -255,7 +256,7 @@ describe('Reminders Integration Tests', () => {
       cy.wait('@getReminders')
       
       // Verify layout is appropriate for tablet
-      cy.get('button').contains('Create Reminder').should('be.visible')
+      cy.get('button').contains('New reminder').should('be.visible')
       cy.get('article').should('have.length', 3)
     })
   })

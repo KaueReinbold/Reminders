@@ -25,11 +25,13 @@ describe('RemindersList', () => {
   it('renders reminders grouped with section headers', () => {
     render(<RemindersList />);
 
-    expect(screen.getByText('Create Reminder')).toBeInTheDocument();
+    expect(screen.getByText('New reminder')).toBeInTheDocument();
 
     // Mock dates are in the past: open reminder is Overdue, done one is Done.
-    expect(screen.getByText('Overdue')).toBeInTheDocument();
-    expect(screen.getByText('Done')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Overdue' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Done' })).toBeInTheDocument();
 
     mockReminders.forEach(mockReminder => {
       expect(screen.getByText(mockReminder.title)).toBeInTheDocument();
@@ -37,10 +39,35 @@ describe('RemindersList', () => {
     });
   });
 
-  it('handles Create Reminder click', () => {
+  it('renders sidebar nav with counts and week progress', () => {
     render(<RemindersList />);
 
-    fireEvent.click(screen.getByText('Create Reminder'));
+    // 2 reminders total, 1 done, both past dates: 1 overdue.
+    const allNav = screen.getByRole('button', { name: 'All 2' });
+    expect(allNav).toHaveAttribute('aria-current', 'true');
+    expect(screen.getByRole('button', { name: 'Done 1' })).toBeInTheDocument();
+    expect(screen.getByText('This week')).toBeInTheDocument();
+    expect(screen.getByText('50%')).toBeInTheDocument();
+    expect(screen.getByText('1 reminder is overdue')).toBeInTheDocument();
+  });
+
+  it('moves the active state when a view is selected', () => {
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Upcoming 0' }));
+
+    expect(
+      screen.getByRole('button', { name: 'Upcoming 0' }),
+    ).toHaveAttribute('aria-current', 'true');
+    expect(screen.getByRole('button', { name: 'All 2' })).not.toHaveAttribute(
+      'aria-current',
+    );
+  });
+
+  it('handles New reminder click', () => {
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getByText('New reminder'));
 
     expect(require('@/app/hooks').useRemindersClearContext).toHaveBeenCalled();
     expect(require('next/navigation').useRouter().push).toHaveBeenCalledWith(

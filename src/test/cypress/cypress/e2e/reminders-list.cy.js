@@ -15,8 +15,8 @@ describe('Reminders List', () => {
     cy.title().should('contain', 'Reminders App')
     cy.get('main').should('be.visible')
 
-    // Verify Create Reminder button is present
-    cy.get('button').contains('Create Reminder').should('be.visible')
+    // Verify New reminder button is present
+    cy.get('button').contains('New reminder').should('be.visible')
 
     // Wait for API call and verify data is loaded
     cy.wait('@getReminders')
@@ -41,6 +41,30 @@ describe('Reminders List', () => {
     cy.get('button[aria-label="Mark not done"]').should('have.length', 1)
   })
 
+  it('should display the desktop shell', { tags: '@list' }, () => {
+    cy.wait('@getReminders')
+
+    // Header: title, search pill, New reminder button
+    cy.get('header').within(() => {
+      cy.contains('Reminders').should('be.visible')
+      cy.get('input[placeholder="Search reminders"]').should('be.visible')
+      cy.get('button').contains('New reminder').should('be.visible')
+    })
+
+    // Sidebar nav: All active by default, counts from the 3 fixtures (1 done)
+    cy.get('aside nav button').should('have.length', 4)
+    cy.get('aside nav button[aria-current="true"]').should('contain', 'All')
+    cy.contains('aside nav button', 'Done').should('contain', '1')
+
+    // Clicking a view moves the active state
+    cy.contains('aside nav button', 'Upcoming').click()
+    cy.get('aside nav button[aria-current="true"]').should('contain', 'Upcoming')
+
+    // Week progress block: fixture dates are past, so 2 open reminders overdue
+    cy.get('aside').contains('This week').should('be.visible')
+    cy.get('aside').contains('2 reminders are overdue').should('be.visible')
+  })
+
   it('should handle loading state', { tags: '@list' }, () => {
     // Intercept with a delay to test loading state
     cy.intercept('GET', '**/api/reminders', {
@@ -57,7 +81,7 @@ describe('Reminders List', () => {
     cy.wait('@getRemindersDelayed')
 
     // Content should be visible after loading
-    cy.get('button').contains('Create Reminder').should('be.visible')
+    cy.get('button').contains('New reminder').should('be.visible')
     cy.get('article').should('have.length', 3)
   })
 
@@ -84,7 +108,7 @@ describe('Reminders List', () => {
   })
 
   it('should navigate to create reminder page', { tags: '@list' }, () => {
-    // Click Create Reminder button
+    // Click New reminder button
     cy.goToCreateReminder()
 
     // Verify we're on the create page

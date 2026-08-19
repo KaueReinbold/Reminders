@@ -6,6 +6,8 @@ import {
   groupReminders,
   isOverdue,
   limitDateOnly,
+  viewCounts,
+  weekProgress,
 } from './reminderGroups';
 
 const TODAY = new Date(2023, 0, 5);
@@ -88,5 +90,59 @@ describe('groupReminders', () => {
 
   it('returns no groups for an empty list', () => {
     expect(groupReminders([], TODAY)).toEqual([]);
+  });
+});
+
+describe('viewCounts', () => {
+  it('counts reminders per view', () => {
+    const reminders = [
+      reminder({ id: 'a', limitDateFormatted: '2023-01-01' }),
+      reminder({ id: 'b', limitDateFormatted: '2023-01-05' }),
+      reminder({ id: 'c', limitDateFormatted: '2023-01-09' }),
+      reminder({ id: 'd', limitDateFormatted: '2023-01-09', isDone: true }),
+    ];
+
+    expect(viewCounts(reminders, TODAY)).toEqual({
+      All: 4,
+      Today: 1,
+      Upcoming: 1,
+      Done: 1,
+    });
+  });
+});
+
+describe('weekProgress', () => {
+  it('computes percent done of reminders due within 7 days', () => {
+    const reminders = [
+      reminder({ id: 'a', limitDateFormatted: '2023-01-06', isDone: true }),
+      reminder({ id: 'b', limitDateFormatted: '2023-01-08', isDone: true }),
+      reminder({ id: 'c', limitDateFormatted: '2023-01-10' }),
+      // Beyond the 7-day window: excluded from the percentage.
+      reminder({ id: 'd', limitDateFormatted: '2023-02-01' }),
+    ];
+
+    expect(weekProgress(reminders, TODAY)).toEqual({
+      pct: 67,
+      caption: '2 of 3 done in the next 7 days',
+    });
+  });
+
+  it('surfaces overdue count in the caption', () => {
+    const reminders = [
+      reminder({ id: 'a', limitDateFormatted: '2023-01-01' }),
+      reminder({ id: 'b', limitDateFormatted: '2023-01-06', isDone: true }),
+    ];
+
+    expect(weekProgress(reminders, TODAY)).toEqual({
+      pct: 50,
+      caption: '1 reminder is overdue',
+    });
+  });
+
+  it('returns 0 percent for an empty week', () => {
+    expect(weekProgress([], TODAY)).toEqual({
+      pct: 0,
+      caption: '0 of 0 done in the next 7 days',
+    });
   });
 });
