@@ -22,6 +22,13 @@ const mockReminders = [
   },
 ];
 
+const mockUpdateMutateAsync = jest.fn().mockResolvedValue({});
+
+const mockQueryClient = {
+  getQueryData: jest.fn().mockReturnValue(mockReminders),
+  setQueryData: jest.fn(),
+};
+
 const jestObjectsMock = {
   'next/navigation': {
     useRouter: jest.fn().mockReturnValue({
@@ -38,6 +45,10 @@ const jestObjectsMock = {
     useReminder: jest.fn().mockImplementation(() => ({
       data: mockReminder,
     })),
+    REMINDERS_QUERY_KEY: ['reminders'],
+    useUpdateReminder: jest.fn().mockReturnValue({
+      mutateAsync: mockUpdateMutateAsync,
+    }),
     createReminder: jest.fn(),
     deleteReminder: jest.fn(),
     updateReminder: jest.fn(),
@@ -49,6 +60,7 @@ const jestObjectsMock = {
   },
   '@/app/hooks': {
     useRemindersClearContext: jest.fn().mockReturnValue(jest.fn),
+    useRemindersQueryClient: jest.fn().mockReturnValue(mockQueryClient),
     useRemindersContext: jest.fn().mockReturnValue({
       reminder: mockReminder,
       errors: {},
@@ -75,4 +87,11 @@ const jestFunctionsMock = {
   '@/app/hooks': () => jestObjectsMock['@/app/hooks'],
 };
 
-export { jestFunctionsMock, jestObjectsMock, mockReminders, mockReminder };
+export {
+  jestFunctionsMock,
+  jestObjectsMock,
+  mockReminders,
+  mockReminder,
+  mockQueryClient,
+  mockUpdateMutateAsync,
+};

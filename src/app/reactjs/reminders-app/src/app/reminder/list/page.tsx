@@ -1,29 +1,29 @@
 'use client';
 
-import { Suspense } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-  CircularProgress,
-} from '@mui/material';
+  REMINDERS_QUERY_KEY,
+  Reminder,
+  useReminders,
+  useUpdateReminder,
+} from '@/app/api';
+import { ReminderCard } from '@/app/components';
+import {
+  useRemindersClearContext,
+  useRemindersQueryClient,
+} from '@/app/hooks';
+import { groupReminders } from '@/app/util/reminderGroups';
 
-import { useRemindersClearContext } from '@/app/hooks';
-import { useReminders } from '@/app/api';
+import styles from './list.module.css';
 
 export default function RemindersList() {
   const router = useRouter();
 
   const { data: reminders } = useReminders();
   const clearReminder = useRemindersClearContext();
+  const queryClient = useRemindersQueryClient();
+  const updateReminder = useUpdateReminder();
 
   const handleCreateClick = () => {
     clearReminder();
@@ -35,57 +35,51 @@ export default function RemindersList() {
     router.push(`/reminder/edit?id=${id}`);
   };
 
+  const handleToggle = async (reminder: Reminder) => {
+    const toggled = { ...reminder, isDone: !reminder.isDone };
+    const previous = queryClient.getQueryData<Reminder[]>(REMINDERS_QUERY_KEY);
+
+    queryClient.setQueryData<Reminder[]>(REMINDERS_QUERY_KEY, current =>
+      current?.map(item => (item.id === reminder.id ? toggled : item)),
+    );
+
+    const { errors } = await updateReminder.mutateAsync(toggled);
+
+    if (errors) {
+      queryClient.setQueryData(REMINDERS_QUERY_KEY, previous);
+    }
+  };
+
+  const groups = groupReminders(reminders ?? []);
+
   return (
-    <Suspense fallback={<CircularProgress />}>
-      <Link
-        href={'#'}
-        onClick={e => {
-          e.preventDefault();
-          handleCreateClick();
-        }}
+    <div className={styles.list}>
+      <button
+        type="button"
+        className={styles.createButton}
+        onClick={handleCreateClick}
       >
-        <Button variant="contained" color="primary">
-          Create Reminder
-        </Button>
-      </Link>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Limit Date</TableCell>
-              <TableCell>Done</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {reminders?.map(reminder => (
-              <TableRow key={reminder.id}>
-                <TableCell>{reminder.id}</TableCell>
-                <TableCell>{reminder.title}</TableCell>
-                <TableCell>{reminder.description}</TableCell>
-                <TableCell>{reminder.limitDateFormatted}</TableCell>
-                <TableCell>{reminder.isDoneFormatted}</TableCell>
-                <TableCell>
-                  <Link
-                    href={'#'}
-                    onClick={e => {
-                      e.preventDefault();
-                      handleEditClick(reminder.id);
-                    }}
-                  >
-                    <Button variant="contained" color="primary">
-                      Edit
-                    </Button>
-                  </Link>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Suspense>
+        Create Reminder
+      </button>
+
+      {groups.map(group => (
+        <section key={group.label} className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>{group.label}</h2>
+            <span className={styles.sectionCount}>{group.items.length}</span>
+            <span className={styles.sectionRule} />
+          </div>
+
+          {group.items.map(reminder => (
+            <ReminderCard
+              key={reminder.id}
+              reminder={reminder}
+              onToggle={handleToggle}
+              onEdit={handleEditClick}
+            />
+          ))}
+        </section>
+      ))}
+    </div>
   );
 }

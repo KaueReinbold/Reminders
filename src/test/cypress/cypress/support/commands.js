@@ -42,9 +42,9 @@ Cypress.Commands.add('goToCreateReminder', () => {
   cy.url().should('include', '/reminder/create')
 })
 
-Cypress.Commands.add('goToEditReminder', (reminderId) => {
-  cy.get('tbody tr').contains(reminderId).parent().within(() => {
-    cy.get('button').contains('Edit').click()
+Cypress.Commands.add('goToEditReminder', (reminderId, title) => {
+  cy.get('article').contains(title).parents('article').within(() => {
+    cy.get('button[aria-label="Edit reminder"]').click()
   })
   cy.url().should('include', `/reminder/edit/?id=${reminderId}`)
 })
@@ -106,12 +106,10 @@ Cypress.Commands.add('waitForAppReady', () => {
   cy.get('button').contains('Create Reminder', { timeout: 10000 }).should('be.visible')
 })
 
-// Verify reminder in list
+// Verify reminder card in list
 Cypress.Commands.add('verifyReminderInList', (id, title, description, limitDate, isDone) => {
-  cy.get('tbody tr').contains(id).parent().within(() => {
-    cy.contains(title).should('be.visible')
+  cy.get('article').contains(title).parents('article').within(() => {
     cy.contains(description).should('be.visible')
-    cy.contains(limitDate).should('be.visible')
-    cy.contains(isDone ? 'Yes' : 'No').should('be.visible')
+    cy.get(`button[aria-label="${isDone ? 'Mark not done' : 'Mark done'}"]`).should('exist')
   })
 })

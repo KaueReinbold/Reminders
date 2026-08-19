@@ -45,7 +45,7 @@ describe('Reminders Integration Tests', () => {
       cy.wait('@getReminders')
       
       // Verify initial list
-      cy.get('tbody tr').should('have.length', 3)
+      cy.get('article').should('have.length', 3)
       
       // Step 1: CREATE - Navigate to create page and create reminder
       cy.goToCreateReminder()
@@ -96,14 +96,14 @@ describe('Reminders Integration Tests', () => {
       // Refresh to see new reminder
       cy.reload()
       cy.wait('@getRemindersWithNew')
-      cy.get('tbody tr').should('have.length', 4)
-      
-      // Verify the new reminder exists in the table (just check that it exists)
-      cy.get('tbody tr').contains('Integration Test Reminder').should('be.visible')
+      cy.get('article').should('have.length', 4)
+
+      // Verify the new reminder card exists (just check that it exists)
+      cy.get('article').contains('Integration Test Reminder').should('be.visible')
       // Skip checking the exact date for now to focus on the main functionality
       
       // Step 3: UPDATE - Edit the reminder
-      cy.goToEditReminder('4')
+      cy.goToEditReminder('4', 'Integration Test Reminder')
       cy.wait('@getReminder')
       cy.editReminder('Updated Integration Test Reminder', 'Updated via integration test', '2024-12-30', true)
       cy.wait('@updateReminder')
@@ -114,7 +114,7 @@ describe('Reminders Integration Tests', () => {
       // Step 4: DELETE - Delete the reminder (if we're not on the edit page, go there)
       cy.url().then((url) => {
         if (!url.includes('/reminder/edit/?id=4')) {
-          cy.goToEditReminder('4')
+          cy.goToEditReminder('4', 'Integration Test Reminder')
           cy.wait('@getReminder')
         }
       })
@@ -170,7 +170,7 @@ describe('Reminders Integration Tests', () => {
       cy.wait('@getReminders')
       
       // Navigate to edit page
-      cy.goToEditReminder('1')
+      cy.goToEditReminder('1', 'Test Reminder 1')
       
       // Navigate back from edit page
       cy.goBack()
@@ -178,7 +178,7 @@ describe('Reminders Integration Tests', () => {
       
       // Verify we're back on homepage with all elements
       cy.get('button').contains('Create Reminder').should('be.visible')
-      cy.get('tbody tr').should('have.length', 3)
+      cy.get('article').should('have.length', 3)
     })
   })
 
@@ -238,7 +238,7 @@ describe('Reminders Integration Tests', () => {
       
       // Verify elements are still accessible
       cy.get('button').contains('Create Reminder').should('be.visible')
-      cy.get('table').should('be.visible')
+      cy.get('article').should('have.length', 3)
       
       // Test navigation on mobile
       cy.goToCreateReminder()
@@ -256,7 +256,7 @@ describe('Reminders Integration Tests', () => {
       
       // Verify layout is appropriate for tablet
       cy.get('button').contains('Create Reminder').should('be.visible')
-      cy.get('table').should('be.visible')
+      cy.get('article').should('have.length', 3)
     })
   })
 })
