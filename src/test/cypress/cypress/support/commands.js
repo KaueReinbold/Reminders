@@ -38,7 +38,7 @@ Cypress.Commands.add('deleteReminder', () => {
 
 // Navigation helpers
 Cypress.Commands.add('goToCreateReminder', () => {
-  cy.get('button').contains('Create Reminder').should('be.visible').click()
+  cy.get('button').contains('New reminder').should('be.visible').click()
   cy.url().should('include', '/reminder/create')
 })
 
@@ -103,7 +103,7 @@ Cypress.Commands.add('mockRemindersAPI', () => {
 // Command to wait for app to be ready
 Cypress.Commands.add('waitForAppReady', () => {
   cy.get('main', { timeout: 15000 }).should('be.visible')
-  cy.get('button').contains('Create Reminder', { timeout: 10000 }).should('be.visible')
+  cy.get('button').contains('New reminder', { timeout: 10000 }).should('be.visible')
 })
 
 // Verify reminder card in list

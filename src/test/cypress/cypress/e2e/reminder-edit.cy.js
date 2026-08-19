@@ -82,7 +82,7 @@ describe('Edit Reminder', () => {
     
     // Verify we're back on home page
     cy.url().should('eq', Cypress.config().baseUrl + '/')
-    cy.get('button').contains('Create Reminder').should('be.visible')
+    cy.get('button').contains('New reminder').should('be.visible')
   })
 
   it('should handle server errors gracefully during update', { tags: '@edit' }, () => {

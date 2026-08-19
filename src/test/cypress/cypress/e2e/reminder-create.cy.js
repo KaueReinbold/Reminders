@@ -75,7 +75,7 @@ describe('Create Reminder', () => {
     
     // Verify we're back on home page
     cy.url().should('eq', Cypress.config().baseUrl + '/')
-    cy.get('button').contains('Create Reminder').should('be.visible')
+    cy.get('button').contains('New reminder').should('be.visible')
   })
 
   it('should surface a flat { message } 400 error from the API', { tags: '@create' }, () => {

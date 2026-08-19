@@ -2,6 +2,15 @@ import { Reminder } from '@/app/api/types';
 
 export type GroupName = 'Overdue' | 'Today' | 'Upcoming' | 'Done';
 
+export type ViewName = 'All' | 'Today' | 'Upcoming' | 'Done';
+
+export const VIEW_ORDER: ViewName[] = ['All', 'Today', 'Upcoming', 'Done'];
+
+export type WeekProgress = {
+  pct: number;
+  caption: string;
+};
+
 export type ReminderGroup = {
   label: GroupName;
   items: Reminder[];
@@ -66,4 +75,42 @@ const groupReminders = (
   })).filter(group => group.items.length > 0);
 };
 
-export { bucketOf, dateLabel, dayDiff, groupReminders, isOverdue, limitDateOnly };
+const viewCounts = (
+  reminders: Reminder[],
+  today: Date = startOfToday(),
+): Record<ViewName, number> => ({
+  All: reminders.length,
+  Today: reminders.filter(r => bucketOf(r, today) === 'Today').length,
+  Upcoming: reminders.filter(r => bucketOf(r, today) === 'Upcoming').length,
+  Done: reminders.filter(r => r.isDone).length,
+});
+
+// Week progress: % done of reminders due within the next 7 days (overdue
+// included, matching the design prototype). Caption surfaces overdue count
+// when any exist.
+const weekProgress = (
+  reminders: Reminder[],
+  today: Date = startOfToday(),
+): WeekProgress => {
+  const week = reminders.filter(r => dayDiff(limitDateOnly(r), today) <= 7);
+  const done = week.filter(r => r.isDone).length;
+  const pct = week.length ? Math.round((done / week.length) * 100) : 0;
+  const overdue = reminders.filter(r => isOverdue(r, today)).length;
+
+  const caption = overdue
+    ? `${overdue} ${overdue === 1 ? 'reminder is' : 'reminders are'} overdue`
+    : `${done} of ${week.length} done in the next 7 days`;
+
+  return { pct, caption };
+};
+
+export {
+  bucketOf,
+  dateLabel,
+  dayDiff,
+  groupReminders,
+  isOverdue,
+  limitDateOnly,
+  viewCounts,
+  weekProgress,
+};
