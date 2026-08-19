@@ -1,7 +1,11 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import RemindersList from './page';
-import { mockReminders } from '@/app/util/testMocks';
+import {
+  mockQueryClient,
+  mockReminders,
+  mockUpdateMutateAsync,
+} from '@/app/util/testMocks';
 
 jest.mock(
   'next/navigation',
@@ -15,30 +19,25 @@ jest.mock(
 
 describe('RemindersList', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
-  it('should render without errors', async () => {
+  it('renders reminders grouped with section headers', () => {
     render(<RemindersList />);
 
     expect(screen.getByText('Create Reminder')).toBeInTheDocument();
 
-    await waitFor(async () => {
-      mockReminders.forEach(mockReminder => {
-        expect(screen.getByText(mockReminder.id)).toBeInTheDocument();
-        expect(screen.getByText(mockReminder.title)).toBeInTheDocument();
-        expect(screen.getByText(mockReminder.description)).toBeInTheDocument();
-        expect(
-          screen.getByText(mockReminder.limitDateFormatted),
-        ).toBeInTheDocument();
-        expect(
-          screen.getByText(mockReminder.isDoneFormatted),
-        ).toBeInTheDocument();
-      });
+    // Mock dates are in the past: open reminder is Overdue, done one is Done.
+    expect(screen.getByText('Overdue')).toBeInTheDocument();
+    expect(screen.getByText('Done')).toBeInTheDocument();
+
+    mockReminders.forEach(mockReminder => {
+      expect(screen.getByText(mockReminder.title)).toBeInTheDocument();
+      expect(screen.getByText(mockReminder.description)).toBeInTheDocument();
     });
   });
 
-  it('should handle Create Reminder click correctly', () => {
+  it('handles Create Reminder click', () => {
     render(<RemindersList />);
 
     fireEvent.click(screen.getByText('Create Reminder'));
@@ -49,14 +48,50 @@ describe('RemindersList', () => {
     );
   });
 
-  it('should handle Edit click correctly', async () => {
+  it('handles edit click on a card', () => {
     render(<RemindersList />);
 
-    fireEvent.click(screen.getAllByText('Edit')[0]);
+    // First card is the open reminder (Overdue group renders before Done).
+    fireEvent.click(screen.getAllByLabelText('Edit reminder')[0]);
 
     expect(require('@/app/hooks').useRemindersClearContext).toHaveBeenCalled();
     expect(require('next/navigation').useRouter().push).toHaveBeenCalledWith(
-      '/reminder/edit?id=1',
+      '/reminder/edit?id=2',
     );
+  });
+
+  it('toggles a reminder optimistically', async () => {
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getByLabelText('Mark done'));
+
+    const openReminder = mockReminders.find(reminder => !reminder.isDone);
+    const toggled = { ...openReminder, isDone: true };
+
+    expect(mockQueryClient.setQueryData).toHaveBeenCalledWith(
+      ['reminders'],
+      expect.any(Function),
+    );
+
+    await waitFor(() => {
+      expect(mockUpdateMutateAsync).toHaveBeenCalledWith(toggled);
+    });
+  });
+
+  it('rolls back the optimistic toggle when the update fails', async () => {
+    mockUpdateMutateAsync.mockResolvedValueOnce({
+      errors: { BadRequest: 'failed' },
+    });
+
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getByLabelText('Mark done'));
+
+    await waitFor(() => {
+      expect(mockQueryClient.setQueryData).toHaveBeenLastCalledWith(
+        ['reminders'],
+        mockReminders,
+      );
+    });
   });
 });

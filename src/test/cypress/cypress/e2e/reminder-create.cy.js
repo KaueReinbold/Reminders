@@ -78,6 +78,21 @@ describe('Create Reminder', () => {
     cy.get('button').contains('Create Reminder').should('be.visible')
   })
 
+  it('should surface a flat { message } 400 error from the API', { tags: '@create' }, () => {
+    // Go/C++ APIs reject with { message } instead of dotnet problem details
+    cy.intercept('POST', '**/api/reminders', {
+      statusCode: 400,
+      body: { message: 'Invalid body' }
+    }).as('createReminderFlatError')
+
+    cy.createReminder('Test Title', 'Test Description', '2024-12-31')
+    cy.wait('@createReminderFlatError')
+
+    // Error message is shown and we stay on the create page
+    cy.contains('Invalid body').should('be.visible')
+    cy.url().should('include', '/reminder/create')
+  })
+
   it('should handle server errors gracefully', { tags: '@create' }, () => {
     // Mock API to return server error
     cy.intercept('POST', '**/api/reminders', {

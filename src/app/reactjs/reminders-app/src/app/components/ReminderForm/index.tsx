@@ -89,7 +89,7 @@ export function ReminderForm({ editing = false }: Props) {
 
   return (
     <>
-      <AlertError error={errors?.InternalServer} />
+      <AlertError error={errors?.InternalServer ?? errors?.BadRequest} />
 
       {editing && (
         <Box sx={{ mb: 2 }}>

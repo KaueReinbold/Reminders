@@ -2,6 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 6rem;
+  padding: 48px var(--gutter-page);
   min-height: 100vh;
 }

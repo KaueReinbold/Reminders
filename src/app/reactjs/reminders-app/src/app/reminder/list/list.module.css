@@ -1,0 +1,57 @@
+.list {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sections);
+}
+
+.createButton {
+  align-self: flex-start;
+  background: var(--ink);
+  color: var(--input-fill);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 12px 22px;
+  font-size: 14.5px;
+  font-family: inherit;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.createButton:hover {
+  background: var(--accent);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-cards);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 2px;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.sectionCount {
+  font-size: 13px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.sectionRule {
+  flex: 1;
+  height: 1px;
+  background: var(--border-page);
+}

@@ -226,6 +226,26 @@ describe('API functions', () => {
   });
 
   describe('getErrors', () => {
+    it('should map a { message } error body to BadRequest', async () => {
+      const mockResponse = {
+        json: jest.fn().mockResolvedValue({ message: 'Invalid body' }),
+      } as any;
+
+      expect(await getErrors(mockResponse)).toStrictEqual({
+        BadRequest: 'Invalid body',
+      } as Errors);
+    });
+
+    it('should fall back to a generic message when the body has no details', async () => {
+      const mockResponse = {
+        json: jest.fn().mockResolvedValue({}),
+      } as any;
+
+      expect(await getErrors(mockResponse)).toStrictEqual({
+        BadRequest: 'Request failed',
+      } as Errors);
+    });
+
     it('should return internal error when exception occurred', async () => {
       const consoleSpy = jest
         .spyOn(console, 'error')

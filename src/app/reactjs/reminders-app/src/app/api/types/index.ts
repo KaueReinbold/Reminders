@@ -14,6 +14,7 @@ export type APIError = {
   status: number;
   errors: Errors;
   traceId: string;
+  message?: string;
 };
 
 export type Errors = {

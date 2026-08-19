@@ -9,6 +9,8 @@ import { useMutation, useQuery } from '@/app/hooks';
 
 const REMINDER_QUERY_NAME = 'reminders';
 
+const REMINDERS_QUERY_KEY = [REMINDER_QUERY_NAME];
+
 const useReminders = () => useQuery({
   queryKey: [REMINDER_QUERY_NAME],
   queryFn: getReminders,
@@ -48,6 +50,7 @@ const useReminderActions = () => {
 };
 
 export {
+  REMINDERS_QUERY_KEY,
   useReminders,
   useReminder,
   useCreateReminder,
