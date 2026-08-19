@@ -1,0 +1,69 @@
+import { Reminder } from '@/app/api/types';
+
+export type GroupName = 'Overdue' | 'Today' | 'Upcoming' | 'Done';
+
+export type ReminderGroup = {
+  label: GroupName;
+  items: Reminder[];
+};
+
+const GROUP_ORDER: GroupName[] = ['Overdue', 'Today', 'Upcoming', 'Done'];
+
+const MS_PER_DAY = 86400000;
+
+const startOfToday = (): Date => {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+};
+
+// Reminder dates are date-only (YYYY-MM-DD); parse in local time to avoid
+// UTC shifting the day.
+const parseDateOnly = (dateStr: string): Date => {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+};
+
+const limitDateOnly = (reminder: Reminder): string =>
+  reminder.limitDateFormatted || reminder.limitDate?.slice(0, 10) || '';
+
+const dayDiff = (dateStr: string, today: Date = startOfToday()): number =>
+  Math.round((parseDateOnly(dateStr).getTime() - today.getTime()) / MS_PER_DAY);
+
+const dateLabel = (dateStr: string, today: Date = startOfToday()): string => {
+  const diff = dayDiff(dateStr, today);
+  if (diff === 0) return 'Today';
+  if (diff === 1) return 'Tomorrow';
+  if (diff === -1) return 'Yesterday';
+  if (diff < 0) return `${Math.abs(diff)} days late`;
+  return parseDateOnly(dateStr).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
+};
+
+const isOverdue = (reminder: Reminder, today: Date = startOfToday()): boolean =>
+  !reminder.isDone && dayDiff(limitDateOnly(reminder), today) < 0;
+
+const bucketOf = (reminder: Reminder, today: Date = startOfToday()): GroupName => {
+  if (reminder.isDone) return 'Done';
+  const diff = dayDiff(limitDateOnly(reminder), today);
+  if (diff < 0) return 'Overdue';
+  if (diff === 0) return 'Today';
+  return 'Upcoming';
+};
+
+const groupReminders = (
+  reminders: Reminder[],
+  today: Date = startOfToday(),
+): ReminderGroup[] => {
+  const sorted = reminders
+    .slice()
+    .sort((a, b) => limitDateOnly(a).localeCompare(limitDateOnly(b)));
+
+  return GROUP_ORDER.map(label => ({
+    label,
+    items: sorted.filter(reminder => bucketOf(reminder, today) === label),
+  })).filter(group => group.items.length > 0);
+};
+
+export { bucketOf, dateLabel, dayDiff, groupReminders, isOverdue, limitDateOnly };

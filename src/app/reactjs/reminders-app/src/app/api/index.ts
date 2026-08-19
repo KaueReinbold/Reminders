@@ -20,11 +20,12 @@ const getErrors = async (response: Response): Promise<Errors> => {
   try {
     const apiError = (await response.json()) as APIError;
 
-    errors = apiError.errors;
+    errors = apiError.errors ?? {};
 
+    // Go/C++ APIs return { message } instead of the dotnet problem-details shape
     if (Object.keys(errors).length === 0) {
       errors = {
-        BadRequest: apiError.title,
+        BadRequest: apiError.title ?? apiError.message ?? 'Request failed',
       };
     }
   } catch (error) {
@@ -88,7 +89,7 @@ const updateReminder = async (
     body,
   });
 
-  const result = { errors: [] } as MutateResult<Reminder>;
+  const result = {} as MutateResult<Reminder>;
 
   if (response.ok) {
     result.result = await response.json();
