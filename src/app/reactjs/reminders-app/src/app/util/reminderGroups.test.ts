@@ -3,6 +3,7 @@ import {
   bucketOf,
   dateLabel,
   dayDiff,
+  filterReminders,
   groupReminders,
   isOverdue,
   limitDateOnly,
@@ -64,6 +65,57 @@ describe('bucketOf and isOverdue', () => {
     expect(bucketOf(reminder({ limitDateFormatted: '2023-01-05' }), TODAY)).toBe('Today');
     expect(bucketOf(reminder({ limitDateFormatted: '2023-01-09' }), TODAY)).toBe('Upcoming');
     expect(isOverdue(reminder({ limitDateFormatted: '2023-01-01' }), TODAY)).toBe(true);
+  });
+});
+
+describe('filterReminders', () => {
+  const reminders = [
+    reminder({ id: 'a', title: 'Pay rent', limitDateFormatted: '2023-01-01' }),
+    reminder({ id: 'b', title: 'Call mom', limitDateFormatted: '2023-01-05' }),
+    reminder({
+      id: 'c',
+      title: 'Dentist',
+      description: 'Bring insurance card',
+      limitDateFormatted: '2023-01-09',
+    }),
+    reminder({
+      id: 'd',
+      title: 'Renew card',
+      limitDateFormatted: '2023-01-09',
+      isDone: true,
+    }),
+  ];
+
+  const ids = (list: Reminder[]) => list.map(item => item.id);
+
+  it('returns everything for All with an empty query', () => {
+    expect(ids(filterReminders(reminders, 'All', '', TODAY))).toEqual([
+      'a',
+      'b',
+      'c',
+      'd',
+    ]);
+  });
+
+  it('narrows by view', () => {
+    expect(ids(filterReminders(reminders, 'Today', '', TODAY))).toEqual(['b']);
+    expect(ids(filterReminders(reminders, 'Upcoming', '', TODAY))).toEqual(['c']);
+    expect(ids(filterReminders(reminders, 'Done', '', TODAY))).toEqual(['d']);
+  });
+
+  it('matches query against title and description, case-insensitive', () => {
+    expect(ids(filterReminders(reminders, 'All', 'CARD', TODAY))).toEqual([
+      'c',
+      'd',
+    ]);
+    expect(ids(filterReminders(reminders, 'All', '  mom ', TODAY))).toEqual([
+      'b',
+    ]);
+  });
+
+  it('combines view and query', () => {
+    expect(ids(filterReminders(reminders, 'Done', 'card', TODAY))).toEqual(['d']);
+    expect(filterReminders(reminders, 'Today', 'card', TODAY)).toEqual([]);
   });
 });
 

@@ -64,6 +64,38 @@ describe('RemindersList', () => {
     );
   });
 
+  it('filters the list by the selected view', () => {
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Done 1' }));
+
+    expect(screen.getByText('Test Title 1')).toBeInTheDocument();
+    expect(screen.queryByText('Test Title 2')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'Overdue' }),
+    ).not.toBeInTheDocument();
+
+    // Sidebar counts stay unfiltered.
+    expect(screen.getByRole('button', { name: 'All 2' })).toBeInTheDocument();
+  });
+
+  it('filters the list by search query on title and description', () => {
+    render(<RemindersList />);
+
+    const search = screen.getByPlaceholderText('Search reminders');
+
+    fireEvent.change(search, { target: { value: 'title 2' } });
+    expect(screen.getByText('Test Title 2')).toBeInTheDocument();
+    expect(screen.queryByText('Test Title 1')).not.toBeInTheDocument();
+
+    fireEvent.change(search, { target: { value: 'DESCRIPTION 1' } });
+    expect(screen.getByText('Test Title 1')).toBeInTheDocument();
+    expect(screen.queryByText('Test Title 2')).not.toBeInTheDocument();
+
+    fireEvent.change(search, { target: { value: 'nothing' } });
+    expect(screen.queryByRole('article')).not.toBeInTheDocument();
+  });
+
   it('handles New reminder click', () => {
     render(<RemindersList />);
 
