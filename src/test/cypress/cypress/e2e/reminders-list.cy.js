@@ -65,6 +65,34 @@ describe('Reminders List', () => {
     cy.get('aside').contains('2 reminders are overdue').should('be.visible')
   })
 
+  it('should filter the list by view and search', { tags: '@list' }, () => {
+    cy.wait('@getReminders')
+
+    // View filter: Done shows only the completed fixture; counts stay global
+    cy.contains('aside nav button', 'Done').click()
+    cy.get('article').should('have.length', 1)
+    cy.contains('article', 'Test Reminder 2').should('be.visible')
+    cy.get('h2').contains('Overdue').should('not.exist')
+    cy.contains('aside nav button', 'All').should('contain', '3')
+
+    // Back to All, then live search on title (case-insensitive)
+    cy.contains('aside nav button', 'All').click()
+    cy.get('input[placeholder="Search reminders"]').type('reminder 3')
+    cy.get('article').should('have.length', 1)
+    cy.contains('article', 'Test Reminder 3').should('be.visible')
+
+    // Search on description
+    cy.get('input[placeholder="Search reminders"]').clear().type('another test')
+    cy.get('article').should('have.length', 1)
+    cy.contains('article', 'Test Reminder 2').should('be.visible')
+
+    // No match hides every card; clearing restores the list
+    cy.get('input[placeholder="Search reminders"]').clear().type('zzz')
+    cy.get('article').should('have.length', 0)
+    cy.get('input[placeholder="Search reminders"]').clear()
+    cy.get('article').should('have.length', 3)
+  })
+
   it('should handle loading state', { tags: '@list' }, () => {
     // Intercept with a delay to test loading state
     cy.intercept('GET', '**/api/reminders', {

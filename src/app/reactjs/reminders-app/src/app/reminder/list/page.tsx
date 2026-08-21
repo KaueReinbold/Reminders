@@ -16,6 +16,7 @@ import {
 } from '@/app/hooks';
 import {
   ViewName,
+  filterReminders,
   groupReminders,
   viewCounts,
   weekProgress,
@@ -31,8 +32,6 @@ export default function RemindersList() {
   const queryClient = useRemindersQueryClient();
   const updateReminder = useUpdateReminder();
 
-  // Search and view filtering of the list itself lands with the filters
-  // issue; the shell only renders the controls and active states.
   const [query, setQuery] = useState('');
   const [view, setView] = useState<ViewName>('All');
 
@@ -62,7 +61,7 @@ export default function RemindersList() {
   };
 
   const items = reminders ?? [];
-  const groups = groupReminders(items);
+  const groups = groupReminders(filterReminders(items, view, query));
 
   return (
     <>

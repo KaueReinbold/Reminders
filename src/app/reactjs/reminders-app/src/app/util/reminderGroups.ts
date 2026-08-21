@@ -61,6 +61,33 @@ const bucketOf = (reminder: Reminder, today: Date = startOfToday()): GroupName =
   return 'Upcoming';
 };
 
+const matchesView = (
+  reminder: Reminder,
+  view: ViewName,
+  today: Date = startOfToday(),
+): boolean => view === 'All' || bucketOf(reminder, today) === view;
+
+const matchesQuery = (reminder: Reminder, query: string): boolean => {
+  const q = query.trim().toLowerCase();
+  return (
+    !q ||
+    reminder.title.toLowerCase().includes(q) ||
+    (reminder.description || '').toLowerCase().includes(q)
+  );
+};
+
+// Live search on title + description combined with the sidebar view filter.
+// Counts and week progress stay unfiltered; only the list narrows.
+const filterReminders = (
+  reminders: Reminder[],
+  view: ViewName,
+  query: string,
+  today: Date = startOfToday(),
+): Reminder[] =>
+  reminders.filter(
+    reminder => matchesView(reminder, view, today) && matchesQuery(reminder, query),
+  );
+
 const groupReminders = (
   reminders: Reminder[],
   today: Date = startOfToday(),
@@ -108,6 +135,7 @@ export {
   bucketOf,
   dateLabel,
   dayDiff,
+  filterReminders,
   groupReminders,
   isOverdue,
   limitDateOnly,
