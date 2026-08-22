@@ -182,6 +182,7 @@ Never use em dash (—) or en dash (–) anywhere: docs, comments, commit messag
 - Squash merges always pass an explicit message so GitHub uses it verbatim and cannot inject Co-authored-by trailers: `gh pr merge N --squash --subject "<conventional title> (#N)" --body "<body>"`.
 - Agent branches follow the repo convention `<type>/<short-description>` (e.g. `chore/repo-governance`), never `claude/...` or any other auto-generated prefix. If the session assigns a `claude/...` branch, recreate the work on a convention-named branch before opening a PR.
 - Run the relevant test suite after code changes.
+- After implementing a change, before opening a PR: hand the maintainer a healthy test environment (booted stack or running app, URL, how to reset) plus a couple of manual test cases to run against it. Wait for the maintainer to confirm, then open the PR. The maintainer can skip this step by saying so.
 - Work in a git worktree off `origin/main`; never switch branches or create commits in the main checkout (see ADR-0007). Remove the worktree after merge.
 - Changes touching the React UI or the API contract update the matching Cypress specs (`src/test/cypress/cypress/e2e/`) and run them locally before the PR; new user-facing flows get a new spec.
 - Changes to compose files, Dockerfiles, or `infrastructure/` require a runtime smoke test before opening the PR: boot the affected profile (`docker compose --profile api up --build -d`), hit an endpoint, then tear down. `docker compose config -q` alone is not enough.

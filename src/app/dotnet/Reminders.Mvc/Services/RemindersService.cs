@@ -6,6 +6,12 @@ public class RemindersService : IRemindersService
     private readonly HealthCheckService healthCheckService;
     private readonly string remoteServiceBaseUrl = "/api/reminders";
 
+    // The cpp API reads camelCase keys only; PascalCase bodies 500 on update.
+    private static readonly JsonSerializerSettings jsonSettings = new()
+    {
+        ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver(),
+    };
+
     public RemindersService(
         HttpClient httpClient,
         HealthCheckService healthCheckService)
@@ -49,7 +55,7 @@ public class RemindersService : IRemindersService
         await ValidateApiHealth(cancellationToken);
 
         using StringContent jsonContent = new(
-            JsonConvert.SerializeObject(reminderViewModel),
+            JsonConvert.SerializeObject(reminderViewModel, jsonSettings),
             Encoding.UTF8,
             "application/json");
 
@@ -65,7 +71,7 @@ public class RemindersService : IRemindersService
         await ValidateApiHealth(cancellationToken);
 
         using StringContent jsonContent = new(
-            JsonConvert.SerializeObject(reminderViewModel),
+            JsonConvert.SerializeObject(reminderViewModel, jsonSettings),
             Encoding.UTF8,
             "application/json");
 

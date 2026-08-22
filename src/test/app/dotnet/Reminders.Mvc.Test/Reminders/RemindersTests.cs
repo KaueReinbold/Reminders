@@ -24,16 +24,24 @@ namespace Reminders.Mvc.Test.Reminders
             // TODO: Find a way to use development appsettings.
             Configuration = IConfigurationHelper.GetConfiguration();
 
-            applicationBaseUrl = $"{Configuration.GetSection("TestConfiguration:UrlApplicationMvc").Value}";
+            applicationBaseUrl = Environment.GetEnvironmentVariable("MVC_BASE_URL")
+                ?? Configuration.GetSection("TestConfiguration:UrlApplicationMvc").Value
+                ?? "http://localhost:5050";
         }
 
         [TestMethod]
-        [DataRow(EnumBrowsers.Chrome, PlatformType.Windows)]
-        [DataRow(EnumBrowsers.Firefox, PlatformType.Windows)]
-        public void RemindersCRUD(EnumBrowsers browsers, PlatformType platformType)
+        [DataRow(EnumBrowsers.Chrome)]
+        [DataRow(EnumBrowsers.Firefox)]
+        public void RemindersCRUD(EnumBrowsers browsers)
         {
+            // Snap-packaged Firefox hangs under geckodriver on WSL, so the Firefox row is opt-in.
+            if (browsers == EnumBrowsers.Firefox && Environment.GetEnvironmentVariable("MVC_TEST_FIREFOX") is null)
+            {
+                Assert.Inconclusive("Set MVC_TEST_FIREFOX=1 to run the Firefox row.");
+            }
+
             _enumBrowsers = browsers;
-            _webDriver = WebDriverFactory.CreateWebDriver(browsers, platformType);
+            _webDriver = WebDriverFactory.CreateWebDriver(browsers);
 
             RemindersInsert();
 
@@ -45,9 +53,8 @@ namespace Reminders.Mvc.Test.Reminders
         [TestCleanup]
         public void TestCleanup()
         {
-            _webDriver.Close();
-            _webDriver.Quit();
-            _webDriver.Dispose();
+            _webDriver?.Quit();
+            _webDriver?.Dispose();
         }
 
         public void RemindersInsert()
@@ -59,13 +66,15 @@ namespace Reminders.Mvc.Test.Reminders
 
             _webDriver.SetText(By.Id("Title"), $"{_enumBrowsers.ToString()} | {newGuid}");
             _webDriver.SetText(By.Id("Description"), $"Description - {newGuid}");
-            _webDriver.SetTextJavascript("#LimitDate", dateLimit.ToString("yyyy-MM-ddTHH:mm"));
+            _webDriver.SetTextJavascript("#LimitDate", dateLimit.ToString("yyyy-MM-dd"));
 
             _webDriver.Submit("#formCreate");
 
-            _webDriver.WaitForElement(By.Id("remindersTable"), secondsToWait);
+            _webDriver.WaitForAbsence(By.Id("formCreate"), secondsToWait);
 
-            var texts = _webDriver.GetTexts(By.CssSelector("#remindersTable > tbody > tr > td:nth-child(2)"));
+            _webDriver.WaitForElement(By.Id("remindersList"), secondsToWait);
+
+            var texts = _webDriver.GetTexts(By.CssSelector("#remindersList .reminder-title"));
 
             var hasGuid = texts.Any(text => text.Contains(newGuid));
 
@@ -76,13 +85,13 @@ namespace Reminders.Mvc.Test.Reminders
         {
             _webDriver.LoadPage(TimeSpan.FromSeconds(secondsToWait), $"{applicationBaseUrl}");
 
-            _webDriver.WaitForElement(By.Id("remindersTable"), secondsToWait);
+            _webDriver.WaitForElement(By.Id("remindersList"), secondsToWait);
 
-            var lines = _webDriver.FindElements(By.CssSelector("#remindersTable > tbody > tr"));
+            var lines = _webDriver.FindElements(By.CssSelector("#remindersList .reminder"));
 
-            var textsOld = lines.Where(line => line.FindElement(By.CssSelector("td:nth-child(2)")).Text.StartsWith(_enumBrowsers.ToString()));
+            var textsOld = lines.Where(line => line.FindElement(By.CssSelector(".reminder-title")).Text.StartsWith(_enumBrowsers.ToString()));
 
-            var link = textsOld.Select(line => line.FindElement(By.CssSelector("td:nth-child(6) > a:nth-child(1)")).GetAttribute("href"))?.FirstOrDefault();
+            var link = textsOld.Select(line => line.FindElement(By.CssSelector("a[aria-label='Edit reminder']")).GetAttribute("href"))?.FirstOrDefault();
 
             _webDriver.LoadPage(TimeSpan.FromSeconds(secondsToWait), link);
 
@@ -98,9 +107,11 @@ namespace Reminders.Mvc.Test.Reminders
 
             _webDriver.Submit("#formEdit");
 
-            _webDriver.WaitForElement(By.Id("remindersTable"), secondsToWait);
+            _webDriver.WaitForAbsence(By.Id("formEdit"), secondsToWait);
 
-            var texts = _webDriver.GetTexts(By.CssSelector("#remindersTable > tbody > tr > td:nth-child(2)"));
+            _webDriver.WaitForElement(By.Id("remindersList"), secondsToWait);
+
+            var texts = _webDriver.GetTexts(By.CssSelector("#remindersList .reminder-title"));
 
             var hasGuid = texts.Any(text => text.Contains(newGuid));
 
@@ -111,20 +122,22 @@ namespace Reminders.Mvc.Test.Reminders
         {
             _webDriver.LoadPage(TimeSpan.FromSeconds(secondsToWait), $"{applicationBaseUrl}");
 
-            var lines = _webDriver.FindElements(By.CssSelector("#remindersTable > tbody > tr"));
+            var lines = _webDriver.FindElements(By.CssSelector("#remindersList .reminder"));
 
-            var textsOld = lines.Where(line => line.FindElement(By.CssSelector("td:nth-child(2)")).Text.StartsWith(_enumBrowsers.ToString()));
+            var textsOld = lines.Where(line => line.FindElement(By.CssSelector(".reminder-title")).Text.StartsWith(_enumBrowsers.ToString()));
 
-            var links = textsOld.Select(line => line.FindElement(By.CssSelector("td:nth-child(6) > a:nth-child(3)")).GetAttribute("href")).ToList();
+            var links = textsOld.Select(line => line.FindElement(By.CssSelector("a[aria-label='Delete reminder']")).GetAttribute("href")).ToList();
 
             links.ForEach(link =>
             {
                 _webDriver.LoadPage(TimeSpan.FromSeconds(secondsToWait), link);
 
                 _webDriver.Submit("#formDelete");
+
+                _webDriver.WaitForAbsence(By.Id("formDelete"), secondsToWait);
             });
 
-            var textsNew = _webDriver.GetTexts(By.CssSelector("#remindersTable > tbody > tr > td:nth-child(2)"));
+            var textsNew = _webDriver.GetTexts(By.CssSelector("#remindersList .reminder-title"));
 
             var hasBrowser = textsNew.Any(text => text.StartsWith(_enumBrowsers.ToString()));
 

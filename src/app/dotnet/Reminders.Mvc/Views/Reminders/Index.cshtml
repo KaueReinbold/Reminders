@@ -1,72 +1,105 @@
-﻿@model IEnumerable<Reminders.Mvc.ViewModels.ReminderViewModel>
+@model Reminders.Mvc.ViewModels.RemindersIndexViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Reminders";
+    ViewData["Query"] = Model.Query;
+    ViewData["View"] = Model.RouteView;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>List of Reminders</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-@if (Model.Any())
+@if (Model.Modal is null)
 {
-    <table class="table" id="remindersTable">
-        <thead class="thead-light">
-            <tr>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.LimitDate)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.IsDone)
-                </th>
-                <th scope="col">#</th>
-            </tr>
-        </thead>
-        
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td scope="row">
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LimitDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IsDone)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div asp-validation-summary="All" class="alert-error"></div>
 }
-else 
+
+<div class="shell">
+    <aside class="sidebar">
+        <nav class="view-nav" aria-label="Views">
+            @foreach (var name in RemindersIndexViewModel.Views)
+            {
+                var active = name == Model.View;
+                <a class="view-link @(active ? "is-active" : "")"
+                   aria-current="@(active ? "page" : null)"
+                   asp-action="Index"
+                   asp-route-view="@(name == "All" ? null : name)"
+                   asp-route-q="@Model.RouteQuery">
+                    <span class="view-dot"></span>
+                    <span class="view-label">@name</span>
+                    <span class="view-count">@Model.Counts[name]</span>
+                </a>
+            }
+        </nav>
+
+        <div class="week">
+            <div class="week-label">This week</div>
+            <div class="week-stat">@Model.Progress.Percent%</div>
+            <div class="week-track">
+                <div class="week-fill" style="width: @(Model.Progress.Percent)%"></div>
+            </div>
+            <div class="week-caption">@Model.Progress.Caption</div>
+        </div>
+    </aside>
+
+    <div class="list" id="remindersList">
+        @if (!Model.Groups.Any())
+        {
+            <p class="empty">No reminders here.</p>
+        }
+
+        @foreach (var group in Model.Groups)
+        {
+            <section class="group" data-group="@group.Bucket">
+                <div class="group-header">
+                    <h2 class="group-title">@group.Bucket</h2>
+                    <span class="group-count">@group.Items.Count</span>
+                    <span class="group-rule"></span>
+                </div>
+
+                @foreach (var item in group.Items)
+                {
+                    var overdue = ReminderGroups.IsOverdue(item, Model.Today);
+                    <article class="reminder @(item.IsDone ? "is-done" : "")" data-id="@item.Id">
+                        <form method="post" asp-action="Toggle" asp-route-id="@item.Id"
+                              asp-route-view="@Model.RouteView" asp-route-q="@Model.RouteQuery">
+                            <button type="submit" class="check" aria-label="@(item.IsDone ? "Mark not done" : "Mark done")">
+                                @if (item.IsDone)
+                                {
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" aria-hidden="true">
+                                        <path d="M5 13l4.5 4.5L19 7" />
+                                    </svg>
+                                }
+                            </button>
+                        </form>
+
+                        <div class="reminder-body">
+                            <span class="reminder-title">@item.Title</span>
+                            @if (!string.IsNullOrWhiteSpace(item.Description))
+                            {
+                                <span class="reminder-desc">@item.Description</span>
+                            }
+                        </div>
+
+                        <div class="reminder-meta">
+                            <span class="date-pill @(overdue ? "is-overdue" : "")">@ReminderGroups.DateLabel(item, Model.Today)</span>
+                            <a class="icon-btn" aria-label="Edit reminder" asp-action="Edit" asp-route-id="@item.Id">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                                    <path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17v3z" />
+                                </svg>
+                            </a>
+                            <a class="icon-btn" aria-label="Delete reminder" asp-action="Delete" asp-route-id="@item.Id">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                                    <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
+                }
+            </section>
+        }
+    </div>
+</div>
+
+@if (Model.Modal is not null)
 {
-    <h4>There are currently no reminders!</h4>
+    <partial name="_ReminderModal" model="Model" />
 }
