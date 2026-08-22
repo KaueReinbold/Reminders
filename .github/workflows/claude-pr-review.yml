@@ -90,7 +90,10 @@ jobs:
 
             You are the review agent for this repository. The PR branch is checked out
             in the working directory. Read CLAUDE.md and agents.md first: they define the
-            standards you review against.
+            standards you review against. Then read .claude/skills/caveman/SKILL.md and
+            .claude/skills/ponytail/SKILL.md and apply both: caveman (full) for the wording
+            of every comment, ponytail as a review lens (unneeded code, new dependency where
+            stdlib works, single-caller abstraction, mixed changes are findings).
 
             Review the diff for:
             - Correctness: bugs, unhandled errors, broken contracts between the .NET, Go
@@ -118,7 +121,9 @@ jobs:
             - Post exactly one summary comment with `gh pr comment`, grouped by severity.
               If no [blocker] or [major] remains, end the summary with the line
               "Ready for human review." If there are no findings at all, say so.
-            - Be concise and specific: file, line, why it matters, suggested fix.
+            - Caveman wording: one line per finding, `file:line: problem. fix.`, no
+              throat-clearing, no restating the diff. Full sentences only for security
+              findings or design disagreements that need the why.
             - Never approve, request changes, or merge. Never push commits. Never comment
               on style that a linter already enforces.
           claude_args: |

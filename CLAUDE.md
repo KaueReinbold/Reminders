@@ -173,7 +173,7 @@ Never use em dash (—) or en dash (–) anywhere: docs, comments, commit messag
 
 ## Rules for Claude
 
-- **Always on, every session in this repo**: caveman (terse output: drop filler, keep all technical substance) and ponytail (minimal code: smallest change that works, prefer platform/stdlib over new dependencies, delete before adding).
+- **Always on, every session in this repo**: caveman (terse output: drop filler, keep all technical substance) and ponytail (minimal code: smallest change that works, prefer platform/stdlib over new dependencies, delete before adding). Both live in `.claude/skills/` and the PR review agent applies them too.
 - Read `agents.md` for architecture patterns before editing service code.
 - Database changes require migrations for **both** Postgres and SqlServer providers (see agents.md).
 - Do not commit, push, tag, or open PRs unless explicitly asked.
