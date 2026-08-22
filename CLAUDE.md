@@ -23,7 +23,7 @@ Five dimensions. Every issue gets exactly one type label; add scope/initiative/s
 | Type | `feature`, `task`, `bug`, `chore`, `docs`, `dependencies` | Exactly one. `feature` = parent plan or standalone idea; `task` = child of a feature |
 | Scope | `api`, `go`, `react`, `mvc`, `blockchain`, `infra`, `ci`, `flutter`, `testing` | Mirrors commit scopes; add `cpp`/`migrations` when first needed |
 | Initiative | `audit`, `redesign`, `learning` | Groups related work |
-| Status | `triage`, `hold`, `duplicate`, `invalid` | Workflow state |
+| Status | `triage`, `hold`, `duplicate`, `invalid`, `claude-review` | Workflow state; `claude-review` on a PR opts it into the review agent (ADR-0008) |
 | Phase | `phase-1`, `phase-2`, `phase-3` | Audit plan only |
 
 ### Project board
