@@ -44,7 +44,9 @@ jobs:
           SELF: ${{ github.workflow }}
         run: |
           # Workflow runs exist from trigger time, unlike check runs which register
-          # only when a job starts, so no run can slip past the first poll.
+          # only when a job starts, so no run can slip past the first poll. The short
+          # delay is a margin for API propagation across sibling runs of the same push.
+          sleep 10
           while true; do
             runs=$(gh api --paginate "repos/$REPO/actions/runs?head_sha=$SHA&per_page=100" \
               --jq '.workflow_runs[] | select(.name != env.SELF) | "\(.status) \(.conclusion // "-") \(.name)"')
