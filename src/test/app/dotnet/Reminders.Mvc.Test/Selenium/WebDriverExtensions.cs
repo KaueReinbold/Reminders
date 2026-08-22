@@ -55,5 +55,14 @@ namespace Reminders.Mvc.Test.Selenium
 
             webDriverWait.Until(c => c.FindElement(by) != null);
         }
+
+        // Forms live in a modal over the list page, so after a submit we wait
+        // for the modal to go away before reading the refreshed list.
+        public static void WaitForAbsence(this IWebDriver webDriver, By by, int secondsToWait = 5)
+        {
+            WebDriverWait webDriverWait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(secondsToWait));
+
+            webDriverWait.Until(c => c.FindElements(by).Count == 0);
+        }
     }
 }

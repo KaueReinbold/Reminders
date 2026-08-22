@@ -11,24 +11,12 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
-    <None Remove="Drivers\ChromeDriver\chromedriver.exe" />
-    <None Remove="Drivers\FirefoxDriver\geckodriver.exe" />
-    <None Remove="Drivers\EdgeDriver\MicrosoftWebDriver.exe" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Drivers\ChromeDriver\chromedriver.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Drivers\FirefoxDriver\geckodriver.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
