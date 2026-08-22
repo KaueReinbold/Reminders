@@ -13,6 +13,7 @@ Decisions that shape architecture, workflow, or tooling are recorded here so hum
 | [0005](0005-blockchain-integration.md) | Solidity contracts with a local Ganache node in the stack | accepted | 2026-07-28 |
 | [0006](0006-product-docs-and-prd-workflow.md) | Product docs and PRD workflow | accepted | 2026-07-28 |
 | [0007](0007-agent-contribution-workflow.md) | Agent contribution workflow: worktrees, quality gates, e2e upkeep | accepted | 2026-08-18 |
+| [0008](0008-pr-review-agent.md) | PR review agent via Claude Code Action | accepted | 2026-08-22 |
 
 ## Process
 
