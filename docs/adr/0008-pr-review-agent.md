@@ -24,10 +24,10 @@ Least setup, but opaque prompts, no alignment with repo rules, another vendor ac
 
 ## Decision
 
-Option 1. Workflow `.github/workflows/claude-pr-review.yml` runs on `pull_request` (opened, synchronize, reopened, ready_for_review), skips Dependabot, drafts and forks, and is limited to read the repo plus post comments (`gh pr comment`, inline comment tool). The prompt points at CLAUDE.md and agents.md and requires severity-tagged findings ([blocker], [major], [minor], [nit]). The action never approves, requests changes, pushes, or merges. Auth is the maintainer subscription: `CLAUDE_CODE_OAUTH_TOKEN` repo secret generated with `claude setup-token` (input `claude_code_oauth_token`); switching to `ANTHROPIC_API_KEY` is a one-line change.
+Option 1. Workflow `.github/workflows/claude-pr-review.yml` runs on `pull_request` (opened, synchronize, reopened, ready_for_review, labeled). It runs automatically only for PRs authored by the repository owner, whose subscription pays for it; for any other author the owner opts in per PR by adding the `claude-review` label. Drafts and forks are skipped (forks get no secrets), and is limited to read the repo plus post comments (`gh pr comment`, inline comment tool). The prompt points at CLAUDE.md and agents.md and requires severity-tagged findings ([blocker], [major], [minor], [nit]). The action never approves, requests changes, pushes, or merges. Auth is the maintainer subscription: `CLAUDE_CODE_OAUTH_TOKEN` repo secret generated with `claude setup-token` (input `claude_code_oauth_token`); switching to `ANTHROPIC_API_KEY` is a one-line change.
 
 ## Consequences
 
 - Easier: consistent first-pass review against repo rules on every PR; maintainer review starts from tagged findings.
 - Harder: subscription usage per PR push (concurrency cancels superseded runs); the OAuth token is tied to one person and expires (about a year), so it must be rotated; prompt drift if CLAUDE.md changes without revisiting the prompt.
-- Watch: noisy nits (tighten the prompt, not the severity), fork PRs get no review by design, the action version pin (`@v1`) moving under us.
+- Watch: label-triggered runs review the PR state at label time only (no re-run on later pushes unless relabeled); noisy nits (tighten the prompt, not the severity), fork PRs get no review by design, the action version pin (`@v1`) moving under us.

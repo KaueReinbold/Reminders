@@ -1,12 +1,13 @@
-# Claude Code reviews every pull request and posts findings as comments.
+# Claude Code reviews pull requests and posts findings as comments.
 # It never approves, requests changes, or merges: humans decide (ADR-0008).
 # Auth: CLAUDE_CODE_OAUTH_TOKEN repo secret from `claude setup-token` (maintainer subscription).
-# Skipped for Dependabot, drafts, and forks (forks get no secrets).
+# Runs automatically only for PRs opened by the repository owner; for anyone else the
+# owner opts in by adding the `claude-review` label. Drafts and forks are skipped.
 name: Claude PR Review
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review, labeled]
 
 permissions:
   contents: read
@@ -19,9 +20,12 @@ jobs:
   review:
     name: Review pull request
     if: >-
-      github.event.pull_request.user.login != 'dependabot[bot]' &&
       github.event.pull_request.draft == false &&
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (
+        (github.event.action != 'labeled' && github.event.pull_request.user.login == github.repository_owner) ||
+        (github.event.action == 'labeled' && github.event.label.name == 'claude-review')
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -70,4 +74,4 @@ jobs:
               on style that a linter already enforces.
           claude_args: |
             --max-turns 30
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
+            --allowedTools "Read,Glob,Grep,mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
