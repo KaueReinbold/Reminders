@@ -99,13 +99,21 @@ jobs:
               attribution in commits or PR body.
             - Tests: new behaviour covered, existing suites still meaningful.
 
+            Before reviewing, run `gh pr view --comments` and read earlier review
+            summaries on this PR. Do not repeat a finding that was already raised, and
+            check whether earlier findings were addressed. Do one complete pass over the
+            whole checklist above; do not drip findings across runs.
+
             Reporting rules:
             - Post findings only as GitHub comments. Tag each with a severity prefix:
-              [blocker], [major], [minor], or [nit].
-            - Use mcp__github_inline_comment__create_inline_comment (with confirmed: true)
-              for line-specific findings and `gh pr comment` for one short summary comment
-              listing the findings by severity. If there are no findings, post a single
-              summary comment saying so.
+              [blocker] (must fix before merge), [major] (likely bug or rule violation),
+              [minor] (worth fixing, not blocking), [nit] (style or taste).
+            - Inline comments (mcp__github_inline_comment__create_inline_comment with
+              confirmed: true) only for [blocker] and [major]. Put [minor] and [nit]
+              findings in the summary only, at most five of them.
+            - Post exactly one summary comment with `gh pr comment`, grouped by severity.
+              If no [blocker] or [major] remains, end the summary with the line
+              "Ready for human review." If there are no findings at all, say so.
             - Be concise and specific: file, line, why it matters, suggested fix.
             - Never approve, request changes, or merge. Never push commits. Never comment
               on style that a linter already enforces.
