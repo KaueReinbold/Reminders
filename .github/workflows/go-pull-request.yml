@@ -1,5 +1,5 @@
 # Triggers on PR when Go API code changes
-# Tests across multiple Go versions (matrix strategy)
+# Builds, runs unit tests and enforces a minimum coverage (#303)
 name: go - build - pull request
 
 on:
@@ -36,6 +36,18 @@ jobs:
       working-directory: src/server/api/go/reminders-api
       run: go build -v ./cmd/app/
 
-    - name: Test with the Go CLI
+    - name: Test with coverage
       working-directory: src/server/api/go/reminders-api
-      run: go test ./...
+      run: go test ./... -coverpkg=./... -coverprofile=coverage.out
+
+    - name: Enforce coverage threshold
+      working-directory: src/server/api/go/reminders-api
+      env:
+        MIN_COVERAGE: 70
+      run: |
+        total=$(go tool cover -func=coverage.out | tail -1 | awk '{print $3}' | tr -d '%')
+        echo "total coverage: ${total}% (minimum ${MIN_COVERAGE}%)"
+        if [ -z "$total" ] || awk -v t="$total" -v m="$MIN_COVERAGE" 'BEGIN { exit !(t < m) }'; then
+          echo "Coverage below threshold"
+          exit 1
+        fi

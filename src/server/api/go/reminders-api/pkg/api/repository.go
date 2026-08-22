@@ -86,7 +86,8 @@ func (repository *PostgresReminderRepository) Count() (int, error) {
 	err := row.Scan(&count)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Error counting reminders: %v", err)
+		return 0, err
 	}
 
 	return count, nil
