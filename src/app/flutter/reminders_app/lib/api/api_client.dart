@@ -120,7 +120,14 @@ class RemindersApi {
       throw _errorFrom(response);
     }
     if (response.body.isEmpty) return null;
-    return jsonDecode(response.body);
+    try {
+      return jsonDecode(response.body);
+    } on FormatException catch (e) {
+      throw ApiException(
+        response.statusCode,
+        'Invalid response body: ${e.message}',
+      );
+    }
   }
 
   static ApiException _errorFrom(http.Response response) {

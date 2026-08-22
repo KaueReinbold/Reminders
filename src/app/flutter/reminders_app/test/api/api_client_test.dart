@@ -69,6 +69,25 @@ void main() {
       );
     });
 
+    test('malformed success body becomes ApiException', () async {
+      final api = apiWith(
+        (_) async => http.Response('<html>not json</html>', 200),
+      );
+
+      await expectLater(
+        api.fetchAll,
+        throwsA(
+          isA<ApiException>()
+              .having((e) => e.statusCode, 'statusCode', 200)
+              .having(
+                (e) => e.message,
+                'message',
+                startsWith('Invalid response body'),
+              ),
+        ),
+      );
+    });
+
     test('unreachable server becomes a network ApiException', () async {
       final api = apiWith(
         (_) async => throw http.ClientException('Connection refused'),
