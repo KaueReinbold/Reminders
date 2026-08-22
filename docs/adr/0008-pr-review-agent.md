@@ -30,4 +30,4 @@ Option 1. Workflow `.github/workflows/claude-pr-review.yml` runs on `pull_reques
 
 - Easier: consistent first-pass review against repo rules on every PR; maintainer review starts from tagged findings.
 - Harder: subscription usage per PR push (concurrency cancels superseded runs); the OAuth token is tied to one person and expires (about a year), so it must be rotated; prompt drift if CLAUDE.md changes without revisiting the prompt.
-- Watch: label-triggered runs review the PR state at label time only (no re-run on later pushes unless relabeled); noisy nits (tighten the prompt, not the severity), fork PRs get no review by design, the action version pin (`@v1`) moving under us.
+- Watch: label-triggered runs review the PR state at label time only (no re-run on later pushes unless relabeled); noisy nits (tighten the prompt, not the severity), fork PRs get no review by design, the action is pinned to a commit SHA (comment `# v1`); bump it by hand until Dependabot covers `github-actions` (#310).
