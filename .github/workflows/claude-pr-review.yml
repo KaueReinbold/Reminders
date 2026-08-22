@@ -3,7 +3,7 @@
 # Auth: CLAUDE_CODE_OAUTH_TOKEN repo secret from `claude setup-token` (maintainer subscription).
 # Runs automatically only for PRs opened by the repository owner; for anyone else the
 # owner opts in by adding the `claude-review` label. Drafts and forks are skipped.
-# The review starts only after every other check on the PR head has finished green.
+# The review starts only after every other workflow run on the PR head has finished green.
 name: Claude PR Review
 
 on:
@@ -30,30 +30,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     permissions:
-      checks: read
+      actions: read
       contents: read
     outputs:
       all-green: ${{ steps.poll.outputs.all-green }}
     steps:
-      - name: Poll check runs until every other check completes
+      - name: Poll workflow runs until every other workflow completes
         id: poll
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           SHA: ${{ github.event.pull_request.head.sha }}
+          SELF: ${{ github.workflow }}
         run: |
-          sleep 30
+          # Workflow runs exist from trigger time, unlike check runs which register
+          # only when a job starts, so no run can slip past the first poll.
           while true; do
-            runs=$(gh api --paginate "repos/$REPO/commits/$SHA/check-runs?per_page=100" \
-              --jq '.check_runs[] | select(.name != "Wait for other checks" and .name != "Review pull request") | "\(.status) \(.conclusion // "-") \(.name)"')
+            runs=$(gh api --paginate "repos/$REPO/actions/runs?head_sha=$SHA&per_page=100" \
+              --jq '.workflow_runs[] | select(.name != env.SELF) | "\(.status) \(.conclusion // "-") \(.name)"')
             echo "$runs"
             if ! echo "$runs" | grep -Eq '^(queued|in_progress|waiting|pending|requested) '; then
               break
             fi
             sleep 20
           done
-          if echo "$runs" | grep -Eq '^completed (failure|cancelled|timed_out|action_required|startup_failure) '; then
-            echo "Some checks are not green; skipping the review."
+          if echo "$runs" | grep -Eq '^completed (failure|cancelled|timed_out|action_required|startup_failure|stale) '; then
+            echo "Some workflows are not green; skipping the review."
             echo "all-green=false" >> "$GITHUB_OUTPUT"
           else
             echo "all-green=true" >> "$GITHUB_OUTPUT"
