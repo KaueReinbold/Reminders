@@ -20,6 +20,9 @@ CI runs analyze + test on PRs touching this app
 - `lib/theme/tokens.dart`: design tokens (colors, radii, spacing) and
   `buildAppTheme()`. Only approved values from the design system; do not
   invent new ones.
+- `lib/api/`: `Reminder` model and `RemindersApi` REST client (nginx
+  `:9999`). Base URL via `--dart-define=API_BASE_URL=...`; default
+  `http://10.0.2.2:9999` reaches the host from the Android emulator.
 - `lib/main.dart`: app entry.
 
 ## Test on a phone (LAN install)
