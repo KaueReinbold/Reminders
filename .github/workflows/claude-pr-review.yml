@@ -3,7 +3,7 @@
 # Auth: CLAUDE_CODE_OAUTH_TOKEN repo secret from `claude setup-token` (maintainer subscription).
 # Runs automatically only for PRs opened by the repository owner; for anyone else the
 # owner opts in by adding the `claude-review` label. Drafts and forks are skipped.
-# The review starts only after every other check on the PR head has finished green.
+# The review starts only after every other workflow run on the PR head has finished green.
 name: Claude PR Review
 
 on:
@@ -30,30 +30,34 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     permissions:
-      checks: read
+      actions: read
       contents: read
     outputs:
       all-green: ${{ steps.poll.outputs.all-green }}
     steps:
-      - name: Poll check runs until every other check completes
+      - name: Poll workflow runs until every other workflow completes
         id: poll
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           SHA: ${{ github.event.pull_request.head.sha }}
+          SELF: ${{ github.workflow }}
         run: |
-          sleep 30
+          # Workflow runs exist from trigger time, unlike check runs which register
+          # only when a job starts, so no run can slip past the first poll. The short
+          # delay is a margin for API propagation across sibling runs of the same push.
+          sleep 10
           while true; do
-            runs=$(gh api --paginate "repos/$REPO/commits/$SHA/check-runs?per_page=100" \
-              --jq '.check_runs[] | select(.name != "Wait for other checks" and .name != "Review pull request") | "\(.status) \(.conclusion // "-") \(.name)"')
+            runs=$(gh api --paginate "repos/$REPO/actions/runs?head_sha=$SHA&per_page=100" \
+              --jq '.workflow_runs[] | select(.name != env.SELF) | "\(.status) \(.conclusion // "-") \(.name)"')
             echo "$runs"
             if ! echo "$runs" | grep -Eq '^(queued|in_progress|waiting|pending|requested) '; then
               break
             fi
             sleep 20
           done
-          if echo "$runs" | grep -Eq '^completed (failure|cancelled|timed_out|action_required|startup_failure) '; then
-            echo "Some checks are not green; skipping the review."
+          if echo "$runs" | grep -Eq '^completed (failure|cancelled|timed_out|action_required|startup_failure|stale) '; then
+            echo "Some workflows are not green; skipping the review."
             echo "all-green=false" >> "$GITHUB_OUTPUT"
           else
             echo "all-green=true" >> "$GITHUB_OUTPUT"
@@ -86,7 +90,10 @@ jobs:
 
             You are the review agent for this repository. The PR branch is checked out
             in the working directory. Read CLAUDE.md and agents.md first: they define the
-            standards you review against.
+            standards you review against. Then read .claude/skills/caveman/SKILL.md and
+            .claude/skills/ponytail/SKILL.md and apply both: caveman (full) for the wording
+            of every comment, ponytail as a review lens (unneeded code, new dependency where
+            stdlib works, single-caller abstraction, mixed changes are findings).
 
             Review the diff for:
             - Correctness: bugs, unhandled errors, broken contracts between the .NET, Go
@@ -114,9 +121,11 @@ jobs:
             - Post exactly one summary comment with `gh pr comment`, grouped by severity.
               If no [blocker] or [major] remains, end the summary with the line
               "Ready for human review." If there are no findings at all, say so.
-            - Be concise and specific: file, line, why it matters, suggested fix.
+            - Caveman wording: one line per finding, `file:line: problem. fix.`, no
+              throat-clearing, no restating the diff. Full sentences only for security
+              findings or design disagreements that need the why.
             - Never approve, request changes, or merge. Never push commits. Never comment
               on style that a linter already enforces.
           claude_args: |
-            --max-turns 30
-            --allowedTools "Read,Glob,Grep,mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
+            --max-turns 50
+            --allowedTools "Read,Glob,Grep,Bash(git diff:*),Bash(git log:*),Bash(git show:*),mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
