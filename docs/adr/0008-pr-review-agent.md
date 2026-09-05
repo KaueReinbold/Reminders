@@ -6,13 +6,13 @@
 
 ## Context
 
-Every PR in this repo is reviewed by the maintainer, often after an agent wrote it. A second, independent pass against the repo rules (CLAUDE.md, agents.md, ADRs) before the human review catches rule drift early: dashes, missing migrations, stale Cypress specs, missing ADRs. #356 frames agents operating inside the SDLC through GitHub automation with one guardrail: agents comment and propose, humans merge.
+Every PR in this repo is reviewed by the maintainer, often after an agent wrote it. A second, independent pass against the repo rules (CLAUDE.md, AGENTS.md, ADRs) before the human review catches rule drift early: dashes, missing migrations, stale Cypress specs, missing ADRs. #356 frames agents operating inside the SDLC through GitHub automation with one guardrail: agents comment and propose, humans merge.
 
 ## Options considered
 
 ### Option 1: Claude Code GitHub Action (`anthropics/claude-code-action@v1`)
 
-Official action, runs Claude Code in the workflow with the PR checked out, posts inline and summary comments through the GitHub API. Costs: one repo secret, a workflow to maintain, usage per PR run (billed to the maintainer subscription via an OAuth token from `claude setup-token`, or to the API when an API key is used instead). Buys: full repo context (reads CLAUDE.md and agents.md), tool allow-list, no custom code.
+Official action, runs Claude Code in the workflow with the PR checked out, posts inline and summary comments through the GitHub API. Costs: one repo secret, a workflow to maintain, usage per PR run (billed to the maintainer subscription via an OAuth token from `claude setup-token`, or to the API when an API key is used instead). Buys: full repo context (reads CLAUDE.md and AGENTS.md), tool allow-list, no custom code.
 
 ### Option 2: Custom script calling the Messages API with the diff
 
@@ -24,10 +24,10 @@ Least setup, but opaque prompts, no alignment with repo rules, another vendor ac
 
 ## Decision
 
-Option 1. Workflow `.github/workflows/claude-pr-review.yml` runs on `pull_request` (opened, synchronize, reopened, ready_for_review, labeled). It runs automatically only for PRs authored by the repository owner, whose subscription pays for it; for any other author the owner opts in per PR by adding the `claude-review` label. Drafts and forks are skipped (forks get no secrets). A first job polls the workflow runs for the PR head (they exist from trigger time, unlike check runs) and the review runs only once every other workflow has completed green, so subscription usage is not spent on PRs that still fail CI, and is limited to read the repo plus post comments (`gh pr comment`, inline comment tool). The prompt points at CLAUDE.md and agents.md, applies the repo skills in `.claude/skills/` (caveman for comment wording, ponytail as a minimal-code review lens) and requires severity-tagged findings ([blocker], [major], [minor], [nit]), one line per finding. The action never approves, requests changes, pushes, or merges. Auth is the maintainer subscription: `CLAUDE_CODE_OAUTH_TOKEN` repo secret generated with `claude setup-token` (input `claude_code_oauth_token`); switching to `ANTHROPIC_API_KEY` is a one-line change.
+Option 1. Workflow `.github/workflows/claude-pr-review.yml` runs on `pull_request` (opened, synchronize, reopened, ready_for_review, labeled). It runs automatically only for PRs authored by the repository owner, whose subscription pays for it; for any other author the owner opts in per PR by adding the `claude-review` label. Drafts and forks are skipped (forks get no secrets). A first job polls the workflow runs for the PR head (they exist from trigger time, unlike check runs) and the review runs only once every other workflow has completed green, so subscription usage is not spent on PRs that still fail CI, and is limited to read the repo plus post comments (`gh pr comment`, inline comment tool). The prompt carries only the PR context and a pointer to `.github/review-guidelines.md`, the single source for what to review and how to report: that file points at CLAUDE.md and AGENTS.md, applies the repo skills in `.claude/skills/` (caveman for comment wording, ponytail as a minimal-code review lens) and requires severity-tagged findings ([blocker], [major], [minor], [nit]), one line per finding. Keeping the criteria out of the workflow lets a local session or another agent run the same review. The action never approves, requests changes, pushes, or merges. Auth is the maintainer subscription: `CLAUDE_CODE_OAUTH_TOKEN` repo secret generated with `claude setup-token` (input `claude_code_oauth_token`); switching to `ANTHROPIC_API_KEY` is a one-line change.
 
 ## Consequences
 
 - Easier: consistent first-pass review against repo rules on every PR; maintainer review starts from tagged findings.
-- Harder: subscription usage per PR push (concurrency cancels superseded runs); the OAuth token is tied to one person and expires (about a year), so it must be rotated; prompt drift if CLAUDE.md changes without revisiting the prompt.
+- Harder: subscription usage per PR push (concurrency cancels superseded runs); the OAuth token is tied to one person and expires (about a year), so it must be rotated; review criteria drift if `.github/review-guidelines.md` is not revisited when the standards it points at change.
 - Watch: label-triggered runs review the PR state at label time only (no re-run on later pushes unless relabeled); noisy nits (tighten the prompt, not the severity), fork PRs get no review by design, the action is pinned to a commit SHA (comment `# v1`); bump it by hand until Dependabot covers `github-actions` (#310).

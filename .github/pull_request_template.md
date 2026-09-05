@@ -17,6 +17,6 @@
 ## Checklist
 
 - [ ] Relevant test suite passes locally
-- [ ] Docs updated where needed (README, CONTRIBUTING, agents.md, ADR index)
+- [ ] Docs updated where needed (README, CONTRIBUTING, AGENTS.md, ADR index)
 - [ ] Migrations added for both Postgres and SqlServer, or no schema change
 - [ ] Breaking changes flagged with `!` and a `BREAKING CHANGE:` footer, or none

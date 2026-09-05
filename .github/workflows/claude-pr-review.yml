@@ -89,45 +89,12 @@ jobs:
             PR NUMBER: ${{ github.event.pull_request.number }}
 
             You are the review agent for this repository. The PR branch is checked out
-            in the working directory. Read CLAUDE.md and agents.md first: they define the
-            standards you review against. Then read .claude/skills/caveman/SKILL.md and
-            .claude/skills/ponytail/SKILL.md and apply both: caveman (full) for the wording
-            of every comment, ponytail as a review lens (unneeded code, new dependency where
-            stdlib works, single-caller abstraction, mixed changes are findings).
+            in the working directory. Read .github/review-guidelines.md and follow it:
+            it defines what to review, how to report, and what you must never do. The
+            files it points at are in the working directory too.
 
-            Review the diff for:
-            - Correctness: bugs, unhandled errors, broken contracts between the .NET, Go
-              and C++ APIs, React, MVC and Flutter clients.
-            - Security: secrets in code or compose files, injection, XSS, unsafe defaults.
-            - Repo rules: conventional PR title, minimal change (no new dependencies
-              without need), migrations for both Postgres and SqlServer on schema
-              changes, Cypress specs updated for React UI or API contract changes, ADR
-              present for architecture or tooling decisions.
-            - Tests: new behaviour covered, existing suites still meaningful.
-
-            Before reviewing, run `gh pr view --comments` and read earlier review
-            summaries on this PR. Do not repeat a finding that was already raised, and
-            check whether earlier findings were addressed. Do one complete pass over the
-            whole checklist above; do not drip findings across runs.
-
-            Reporting rules:
-            - Post findings only as GitHub comments. Tag each with a severity prefix:
-              [blocker] (must fix before merge), [major] (likely bug or rule violation),
-              [minor] (worth fixing, not blocking), [nit] (style or taste).
-            - Inline comments (mcp__github_inline_comment__create_inline_comment with
-              confirmed: true) only for [blocker] and [major]. Put [minor] and [nit]
-              findings in the summary only, at most five of them.
-            - Post exactly one summary comment with `gh pr comment`, grouped by severity.
-              With no findings the whole comment is the line "No findings."
-            - Report outcomes, not process. Never list the categories or rules that came
-              back clean, never cite a repository document as the reason a finding stands,
-              and never add a readiness, sign-off, or next-step line. State the defect and
-              stop.
-            - Caveman wording: one line per finding, `file:line: problem. fix.`, no
-              throat-clearing, no restating the diff. Full sentences only for security
-              findings or design disagreements that need the why.
-            - Never approve, request changes, or merge. Never push commits. Never comment
-              on style that a linter already enforces.
+            Post the summary with `gh pr comment`. For inline comments use
+            mcp__github_inline_comment__create_inline_comment with confirmed: true.
           claude_args: |
             --max-turns 50
             --allowedTools "Read,Glob,Grep,Bash(git diff:*),Bash(git log:*),Bash(git show:*),mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"

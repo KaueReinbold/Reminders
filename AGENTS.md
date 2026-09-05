@@ -4,6 +4,12 @@
 > **Last Updated**: January 2026  
 > **Agent Compatibility**: GitHub Copilot, Claude, GPT-4+
 
+## Reviewing a pull request
+
+Follow [`.github/review-guidelines.md`](.github/review-guidelines.md). It is the
+single source for review criteria and comment format, shared by the CI review
+workflow and any agent reviewing locally.
+
 ## Project Overview
 
 A full-stack learning project for managing reminders with multiple client interfaces, load-balanced APIs, and blockchain integration.
@@ -122,7 +128,7 @@ All three share the same PostgreSQL database. Load balanced round-robin on port 
 ```
 feat(api): add bulk reminder import
 fix(migrations): handle connection timeout
-docs: update agents.md with blockchain guide
+docs: update AGENTS.md with blockchain guide
 refactor(repository): extract query builder
 ```
 
@@ -468,7 +474,7 @@ foreach (var reminder in reminders)
 
 1. **Small Commits**: Break work into logical, reviewable commits
 2. **Test First**: Write or update tests before implementation (TDD encouraged)
-3. **Document**: Update relevant docs (README, agents.md, API docs)
+3. **Document**: Update relevant docs (README, AGENTS.md, API docs)
 4. **Run Locally**: Test changes in Docker Compose before committing
 
 ### Error Handling
@@ -488,7 +494,7 @@ foreach (var reminder in reminders)
 - [ ] CORS configuration updated if new endpoints
 - [ ] Migration created if schema changed
 - [ ] Docker Compose services updated if new dependencies
-- [ ] Documentation updated (README, agents.md, API docs)
+- [ ] Documentation updated (README, AGENTS.md, API docs)
 
 ## Resources
 
