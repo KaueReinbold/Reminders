@@ -15,28 +15,19 @@ const formatDate = (dateString: string) => {
 };
 
 const getErrors = async (response: Response): Promise<Errors> => {
-  let errors = {} as Errors;
-
   try {
     const apiError = (await response.json()) as APIError;
+    const errors = apiError.errors ?? {};
 
-    errors = apiError.errors ?? {};
-
-    // Go/C++ APIs return { message } instead of the dotnet problem-details shape
-    if (Object.keys(errors).length === 0) {
-      errors = {
-        BadRequest: apiError.title ?? apiError.message ?? 'Request failed',
-      };
-    }
+    // A non validation failure carries no `errors` map, only `title`/`detail`.
+    return Object.keys(errors).length > 0
+      ? errors
+      : { request: [apiError.detail ?? apiError.title ?? 'Request failed'] };
   } catch (error) {
     console.error(error);
-    
-    errors = {
-      InternalServer: 'Failed to perform errors validation',
-    } as Errors;
-  }
 
-  return errors;
+    return { request: ['Failed to perform errors validation'] };
+  }
 };
 
 const mapReminder = (reminder: Reminder): Reminder =>
@@ -128,5 +119,7 @@ export {
   deleteReminder,
   getErrors,
 };
+
+export * from './errors';
 
 export * from './hooks';

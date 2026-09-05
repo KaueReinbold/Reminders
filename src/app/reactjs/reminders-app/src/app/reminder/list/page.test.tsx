@@ -280,7 +280,7 @@ describe('RemindersList', () => {
 
   it('rolls back the optimistic toggle when the update fails', async () => {
     mockUpdateMutateAsync.mockResolvedValueOnce({
-      errors: { BadRequest: 'failed' },
+      errors: { request: ['failed'] },
     });
 
     render(<RemindersList />);

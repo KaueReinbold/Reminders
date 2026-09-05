@@ -2,6 +2,7 @@ import { Box, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import type { InputHTMLAttributes } from 'react';
 import { AlertError } from '..';
+import { fieldError, unmappedError } from '@/app/api/errors';
 import { useRemindersContext } from '@/app/hooks';
 
 interface Props {
@@ -51,45 +52,38 @@ export function ReminderForm({ editing = false }: Props) {
 
     dispatch({ type: 'UPDATE_REMINDER', payload: { [key]: value } });
 
-    // Clear client-side error for the field when user edits it
-    let errorKey: string | undefined;
-    if (key === 'title') errorKey = 'Title';
-    else if (key === 'description') errorKey = 'Description';
-    else if (key === 'limitDate') errorKey = 'LimitDate.Date';
+    // Error keys are the JSON field names (ADR-0011), so the form key is the
+    // error key. Clear the field error when the user edits it.
+    if (typeof clearFieldError === 'function') clearFieldError(key);
 
-    if (errorKey && typeof clearFieldError === 'function') clearFieldError(errorKey);
     // When there is no context-provided `errors` (component used in isolation in tests),
     // apply local validation so the component remains self-contained.
     if (!errors) {
-      if (key === 'title') {
-        if (!value || String(value).trim() === '') {
-          setLocalErrors(prev => ({ ...prev, Title: 'Title cannot be empty' }));
-        } else {
-          setLocalErrors(prev => { const c = { ...prev }; delete c.Title; return c; });
-        }
-      }
+      const emptyMessages: Record<string, string> = {
+        title: 'Title cannot be empty',
+        description: 'Description cannot be empty',
+        limitDate: 'Limit Date cannot be empty',
+      };
 
-      if (key === 'description') {
-        if (!value || String(value).trim() === '') {
-          setLocalErrors(prev => ({ ...prev, Description: 'Description cannot be empty' }));
-        } else {
-          setLocalErrors(prev => { const c = { ...prev }; delete c.Description; return c; });
-        }
-      }
+      if (emptyMessages[key]) {
+        setLocalErrors(prev => {
+          const next = { ...prev };
 
-      if (key === 'limitDate') {
-        if (!value || String(value).trim() === '') {
-          setLocalErrors(prev => ({ ...prev, 'LimitDate.Date': 'Limit Date cannot be empty' }));
-        } else {
-          setLocalErrors(prev => { const c = { ...prev }; delete c['LimitDate.Date']; return c; });
-        }
+          if (!value || String(value).trim() === '') {
+            next[key] = emptyMessages[key];
+          } else {
+            delete next[key];
+          }
+
+          return next;
+        });
       }
     }
   };
 
   return (
     <>
-      <AlertError error={errors?.InternalServer ?? errors?.BadRequest} />
+      <AlertError error={unmappedError(errors)} />
 
       {editing && (
         <Box sx={{ mb: 2 }}>
@@ -112,8 +106,8 @@ export function ReminderForm({ editing = false }: Props) {
           onChange={e => handleChange('title', e.target.value)}
           required
           fullWidth
-          error={Boolean(errors?.Title ?? localErrors.Title)}
-          helperText={errors?.Title ?? localErrors.Title}
+          error={Boolean(fieldError(errors, 'title') ?? localErrors.title)}
+          helperText={fieldError(errors, 'title') ?? localErrors.title}
           InputLabelProps={{ shrink: true }}
           inputProps={{ 'data-testid': 'title' }}
         />
@@ -128,8 +122,8 @@ export function ReminderForm({ editing = false }: Props) {
           required
           fullWidth
           InputLabelProps={{ shrink: true }}
-          error={Boolean(errors?.Description ?? localErrors.Description)}
-          helperText={errors?.Description ?? localErrors.Description}
+          error={Boolean(fieldError(errors, 'description') ?? localErrors.description)}
+          helperText={fieldError(errors, 'description') ?? localErrors.description}
           inputProps={{ 'data-testid': 'description' }}
         />
       </Box>
@@ -144,8 +138,8 @@ export function ReminderForm({ editing = false }: Props) {
           type="date"
           fullWidth
           InputLabelProps={{ shrink: true }}
-          error={Boolean(errors?.['LimitDate.Date'] ?? localErrors['LimitDate.Date'])}
-          helperText={errors?.['LimitDate.Date'] ?? localErrors['LimitDate.Date']}
+          error={Boolean(fieldError(errors, 'limitDate') ?? localErrors.limitDate)}
+          helperText={fieldError(errors, 'limitDate') ?? localErrors.limitDate}
           inputProps={{ 'data-testid': 'limitDate' }}
         />
       </Box>

@@ -82,11 +82,10 @@ const TestingComponent = ({ title }: { title?: string }) => {
         Clear from Clear Context
       </button>
       <span>{result}</span>
-      <span>{mapError(errors?.['LimitDate.Date'])}</span>
-      <span>{mapError(errors?.Description)}</span>
-      <span>{mapError(errors?.Title)}</span>
-      <span>{errors?.InternalServer}</span>
-      <span>{errors?.BadRequest}</span>
+      <span>{mapError(errors?.limitDate)}</span>
+      <span>{mapError(errors?.description)}</span>
+      <span>{mapError(errors?.title)}</span>
+      <span>{mapError(errors?.request)}</span>
       <span>{reminder?.title}</span>
     </>
   );
@@ -94,11 +93,11 @@ const TestingComponent = ({ title }: { title?: string }) => {
 
 describe('RemindersContextProvider Tests', () => {
   const mockErrors = {
-    Title: ["The field Title must be a text with a maximum length of '50'."],
-    Description: [
+    title: ["The field Title must be a text with a maximum length of '50'."],
+    description: [
       "The field Description must be a text with a maximum length of '200'.",
     ],
-    'LimitDate.Date': ['The Limit Date should be later than Today.'],
+    limitDate: ['The Limit Date should be later than Today.'],
   };
 
   async function renderProvider(children: ReactNode) {
@@ -162,11 +161,9 @@ describe('RemindersContextProvider Tests', () => {
       });
 
       expect(screen.getByText(ReminderActionStatus.Fail)).toBeInTheDocument();
-      expect(screen.getByText(mockErrors.Title[0])).toBeInTheDocument();
-      expect(screen.getByText(mockErrors.Description[0])).toBeInTheDocument();
-      expect(
-        screen.getByText(mockErrors['LimitDate.Date'][0]),
-      ).toBeInTheDocument();
+      expect(screen.getByText(mockErrors.title[0])).toBeInTheDocument();
+      expect(screen.getByText(mockErrors.description[0])).toBeInTheDocument();
+      expect(screen.getByText(mockErrors.limitDate[0])).toBeInTheDocument();
     });
   });
 
@@ -221,11 +218,9 @@ describe('RemindersContextProvider Tests', () => {
       });
 
       expect(screen.getByText(ReminderActionStatus.Fail)).toBeInTheDocument();
-      expect(screen.getByText(mockErrors.Title[0])).toBeInTheDocument();
-      expect(screen.getByText(mockErrors.Description[0])).toBeInTheDocument();
-      expect(
-        screen.getByText(mockErrors['LimitDate.Date'][0]),
-      ).toBeInTheDocument();
+      expect(screen.getByText(mockErrors.title[0])).toBeInTheDocument();
+      expect(screen.getByText(mockErrors.description[0])).toBeInTheDocument();
+      expect(screen.getByText(mockErrors.limitDate[0])).toBeInTheDocument();
     });
   });
 
@@ -270,7 +265,7 @@ describe('RemindersContextProvider Tests', () => {
     it('should handle errors on deleteReminder', async () => {
       const { deleteReminder } = useReminderActions();
       const deleteError = {
-        BadRequest: 'Error',
+        request: ['Error'],
       };
 
       jest.spyOn(deleteReminder, 'mutateAsync').mockResolvedValue({
@@ -284,7 +279,7 @@ describe('RemindersContextProvider Tests', () => {
       });
 
       expect(screen.getByText(ReminderActionStatus.Fail)).toBeInTheDocument();
-      expect(screen.getByText(deleteError.BadRequest)).toBeInTheDocument();
+      expect(screen.getByText(deleteError.request[0])).toBeInTheDocument();
     });
   });
 

@@ -112,13 +112,13 @@ export function RemindersContextProvider({
       const clientErrors: Errors = {} as Errors;
 
       const titleError = ValidationService.validateTitle(payload.title);
-      if (titleError) clientErrors.Title = [titleError];
+      if (titleError) clientErrors.title = [titleError];
 
       const descError = ValidationService.validateDescription(payload.description);
-      if (descError) clientErrors.Description = [descError];
+      if (descError) clientErrors.description = [descError];
 
       const dateError = ValidationService.validateLimitDate(payload.limitDate ?? '');
-      if (dateError) clientErrors['LimitDate.Date'] = [dateError];
+      if (dateError) clientErrors.limitDate = [dateError];
 
       if (Object.keys(clientErrors).length > 0) {
         setErrors(clientErrors);
@@ -149,13 +149,13 @@ export function RemindersContextProvider({
       const clientErrors: Errors = {} as Errors;
 
       const titleError = ValidationService.validateTitle(payload.title);
-      if (titleError) clientErrors.Title = [titleError];
+      if (titleError) clientErrors.title = [titleError];
 
       const descError = ValidationService.validateDescription(payload.description);
-      if (descError) clientErrors.Description = [descError];
+      if (descError) clientErrors.description = [descError];
 
       const dateError = ValidationService.validateLimitDate(payload.limitDate ?? '');
-      if (dateError) clientErrors['LimitDate.Date'] = [dateError];
+      if (dateError) clientErrors.limitDate = [dateError];
 
       if (Object.keys(clientErrors).length > 0) {
         setErrors(clientErrors);

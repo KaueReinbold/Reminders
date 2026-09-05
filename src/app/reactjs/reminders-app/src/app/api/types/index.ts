@@ -12,18 +12,16 @@ export type APIError = {
   type: string;
   title: string;
   status: number;
-  errors: Errors;
-  traceId: string;
-  message?: string;
+  detail?: string;
+  errors?: Errors;
+  traceId?: string;
 };
 
-export type Errors = {
-  'LimitDate.Date'?: string[];
-  Description?: string[];
-  Title?: string[];
-  InternalServer?: string;
-  BadRequest?: string;
-};
+// ADR-0011: every API error is RFC 7807 problem details. `errors` is present
+// only on a validation failure, keyed by the camelCase JSON field name
+// (`title`, `description`, `limitDate`). The client adds `request` for a
+// failure the API did not attribute to a field, so nothing is swallowed.
+export type Errors = Record<string, string[]>;
 
 export type MutateResult<T> = {
   result?: T;

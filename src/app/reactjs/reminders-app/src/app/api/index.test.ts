@@ -16,11 +16,11 @@ describe('API functions', () => {
     title: 'One or more validation errors occurred.',
     status: 400,
     errors: {
-      Title: ["The field Title must be a text with a maximum length of '50'."],
-      Description: [
+      title: ["The field Title must be a text with a maximum length of '50'."],
+      description: [
         "The field Description must be a text with a maximum length of '200'.",
       ],
-      'LimitDate.Date': ['The Limit Date should be later than Today.'],
+      limitDate: ['The Limit Date should be later than Today.'],
     },
     traceId: '00-852bcb95dfb240075f3f8442bb60e22d-c4a9101dd7a52296-00',
   };
@@ -108,9 +108,9 @@ describe('API functions', () => {
       (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
 
       expect((await createReminder(mockReminder)).errors).toStrictEqual({
-        Title: mockValidationFail.errors['Title'],
-        Description: mockValidationFail.errors['Description'],
-        'LimitDate.Date': mockValidationFail.errors['LimitDate.Date'],
+        title: mockValidationFail.errors['title'],
+        description: mockValidationFail.errors['description'],
+        limitDate: mockValidationFail.errors['limitDate'],
       } as Errors);
     });
   });
@@ -147,9 +147,9 @@ describe('API functions', () => {
       (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
 
       expect((await updateReminder(mockReminder)).errors).toStrictEqual({
-        Title: mockValidationFail.errors['Title'],
-        Description: mockValidationFail.errors['Description'],
-        'LimitDate.Date': mockValidationFail.errors['LimitDate.Date'],
+        title: mockValidationFail.errors['title'],
+        description: mockValidationFail.errors['description'],
+        limitDate: mockValidationFail.errors['limitDate'],
       } as any);
     });
   });
@@ -186,7 +186,7 @@ describe('API functions', () => {
       (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
 
       expect((await deleteReminder('1')).errors).toStrictEqual({
-        BadRequest: mockValidationFail.title,
+        request: [mockValidationFail.title],
       } as Errors);
     });
   });
@@ -226,13 +226,31 @@ describe('API functions', () => {
   });
 
   describe('getErrors', () => {
-    it('should map a { message } error body to BadRequest', async () => {
+    it('should map a non validation problem details body to request', async () => {
       const mockResponse = {
-        json: jest.fn().mockResolvedValue({ message: 'Invalid body' }),
+        json: jest.fn().mockResolvedValue({
+          type: 'https://tools.ietf.org/html/rfc9110#section-15.5.1',
+          title: 'Invalid body',
+          status: 400,
+        }),
       } as any;
 
       expect(await getErrors(mockResponse)).toStrictEqual({
-        BadRequest: 'Invalid body',
+        request: ['Invalid body'],
+      } as Errors);
+    });
+
+    it('should prefer detail over title when the body carries one', async () => {
+      const mockResponse = {
+        json: jest.fn().mockResolvedValue({
+          title: 'Not Found',
+          status: 404,
+          detail: 'Reminder 1 was not found.',
+        }),
+      } as any;
+
+      expect(await getErrors(mockResponse)).toStrictEqual({
+        request: ['Reminder 1 was not found.'],
       } as Errors);
     });
 
@@ -242,7 +260,7 @@ describe('API functions', () => {
       } as any;
 
       expect(await getErrors(mockResponse)).toStrictEqual({
-        BadRequest: 'Request failed',
+        request: ['Request failed'],
       } as Errors);
     });
 
@@ -256,7 +274,7 @@ describe('API functions', () => {
       } as any;
 
       expect(await getErrors(mockResponse)).toStrictEqual({
-        InternalServer: 'Failed to perform errors validation',
+        request: ['Failed to perform errors validation'],
       } as Errors);
       expect(consoleSpy).toHaveBeenCalledWith(errorMessage);
     });

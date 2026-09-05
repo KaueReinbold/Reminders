@@ -29,12 +29,11 @@ import {
 
 import styles from './list.module.css';
 
-const errorMessage = (errors: Errors): string =>
-  Object.values(errors).flat().join(' ');
-
 // A rejected mutation is a transport failure, not a validation response, so
 // there are no field errors to show. Keep the overlay open and say so.
-const REQUEST_FAILED = 'Something went wrong. Please try again.';
+const REQUEST_FAILED: Errors = {
+  request: ['Something went wrong. Please try again.'],
+};
 
 export default function RemindersList() {
   const { data: reminders } = useReminders();
@@ -50,7 +49,7 @@ export default function RemindersList() {
   // carrying the reminder being edited (absent on create).
   const [sheet, setSheet] = useState<{ reminder?: Reminder } | null>(null);
   const [confirmTarget, setConfirmTarget] = useState<Reminder | null>(null);
-  const [sheetError, setSheetError] = useState<string>();
+  const [sheetErrors, setSheetErrors] = useState<Errors>();
 
   // Deleting from the sheet closes the sheet and the dialog and removes the
   // card that opened them, so there is no trigger left to return focus to.
@@ -65,7 +64,7 @@ export default function RemindersList() {
 
   const closeSheet = () => {
     setSheet(null);
-    setSheetError(undefined);
+    setSheetErrors(undefined);
   };
 
   // Escape and scrim clicks reach both overlays: the confirmation on top of
@@ -80,12 +79,12 @@ export default function RemindersList() {
   };
 
   const handleCreateClick = () => {
-    setSheetError(undefined);
+    setSheetErrors(undefined);
     setSheet({});
   };
 
   const handleEditClick = (id?: string) => {
-    setSheetError(undefined);
+    setSheetErrors(undefined);
     setSheet({ reminder: items.find(item => item.id === id) });
   };
 
@@ -96,11 +95,11 @@ export default function RemindersList() {
         : await createReminder.mutateAsync(draft);
 
       if (errors) {
-        setSheetError(errorMessage(errors));
+        setSheetErrors(errors);
         return;
       }
     } catch {
-      setSheetError(REQUEST_FAILED);
+      setSheetErrors(REQUEST_FAILED);
       return;
     }
 
@@ -117,12 +116,12 @@ export default function RemindersList() {
       setConfirmTarget(null);
 
       if (errors) {
-        setSheetError(errorMessage(errors));
+        setSheetErrors(errors);
         return;
       }
     } catch {
       setConfirmTarget(null);
-      setSheetError(REQUEST_FAILED);
+      setSheetErrors(REQUEST_FAILED);
       return;
     }
 
@@ -189,7 +188,7 @@ export default function RemindersList() {
       {sheet && (
         <ReminderSheet
           reminder={sheet.reminder}
-          error={sheetError}
+          errors={sheetErrors}
           onClose={dismissSheet}
           onSave={handleSave}
           onDelete={

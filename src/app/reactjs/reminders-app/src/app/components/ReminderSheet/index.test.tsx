@@ -120,16 +120,39 @@ describe('ReminderSheet', () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
-  it('shows the error message when saving fails', () => {
+  it('shows a field error next to the field it belongs to', () => {
     render(
       <ReminderSheet
-        error="The field is Required"
+        errors={{
+          title: ['The field is Required'],
+          limitDate: ['The Limit Date should be later than Today.'],
+        }}
         onClose={jest.fn()}
         onSave={jest.fn()}
       />,
     );
 
-    expect(screen.getByText('The field is Required')).toBeInTheDocument();
+    expect(screen.getByTestId('title-error')).toHaveTextContent(
+      'The field is Required',
+    );
+    expect(screen.getByTestId('limitDate-error')).toHaveTextContent(
+      'The Limit Date should be later than Today.',
+    );
+  });
+
+  it('shows an error with no field mapping in the banner', () => {
+    render(
+      <ReminderSheet
+        errors={{ request: ['Something went wrong. Please try again.'] }}
+        onClose={jest.fn()}
+        onSave={jest.fn()}
+      />,
+    );
+
+    expect(
+      screen.getByText('Something went wrong. Please try again.'),
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId('title-error')).not.toBeInTheDocument();
   });
 
   it('should focus the title field on open and return focus on close', () => {

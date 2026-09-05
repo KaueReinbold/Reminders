@@ -186,7 +186,7 @@ describe('Reminders Integration Tests', () => {
         statusCode: 400,
         body: {
           errors: {
-            Title: ["The field Title must be a text with a maximum length of '50'."]
+            title: ["The field Title must be a text with a maximum length of '50'."]
           }
         }
       }).as('createReminderInvalid')
@@ -199,7 +199,8 @@ describe('Reminders Integration Tests', () => {
       cy.saveSheet()
       cy.wait('@createReminderInvalid')
 
-      cy.contains("The field Title must be a text with a maximum length of '50'.").should('be.visible')
+      cy.get('[data-testid="title-error"]')
+        .should('contain', "The field Title must be a text with a maximum length of '50'.")
     })
 
     it('should reset the draft when the create modal is reopened', { tags: '@integration' }, () => {
