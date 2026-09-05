@@ -1,4 +1,4 @@
-# ADR-0011: In-browser mock API for the GitHub Pages demo
+# ADR-0012: In-browser mock API for the GitHub Pages demo
 
 - **Status**: accepted
 - **Date**: 2026-09-05

@@ -17,7 +17,7 @@ Decisions that shape architecture, workflow, or tooling are recorded here so hum
 | [0009](0009-flutter-http-client.md) | Flutter API client on the http package | accepted | 2026-08-22 |
 | [0010](0010-codeql-language-selection.md) | CodeQL analyzes only the languages a pull request changed | accepted | 2026-09-05 |
 | [0011](0011-api-validation-contract.md) | One validation and error contract across the .NET, Go and C++ APIs | accepted | 2026-09-05 |
-| [0011](0011-react-mock-api-for-pages-demo.md) | In-browser mock API for the GitHub Pages demo | accepted | 2026-09-05 |
+| [0012](0012-react-mock-api-for-pages-demo.md) | In-browser mock API for the GitHub Pages demo | accepted | 2026-09-05 |
 | [0013](0013-in-place-reminder-overlays.md) | In-place overlays for reminder create, edit and delete | accepted | 2026-09-05 |
 
 ## Process

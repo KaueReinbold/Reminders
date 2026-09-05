@@ -57,7 +57,7 @@ on automatically (see `next.config.js`), so the published demo at
 [kauereinbold.github.io/Reminders](https://kauereinbold.github.io/Reminders) is
 usable without a server. Every other build leaves the flag off and calls the API
 at `NEXT_PUBLIC_API_BASE_URL` as usual. See
-[ADR-0011](../../../../docs/adr/0011-react-mock-api-for-pages-demo.md).
+[ADR-0012](../../../../docs/adr/0012-react-mock-api-for-pages-demo.md).
 
 ## Local Development
 
