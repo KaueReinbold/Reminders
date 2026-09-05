@@ -15,6 +15,8 @@ export type APIError = {
   detail?: string;
   errors?: Errors;
   traceId?: string;
+  // Go and C++ still answer { message } until #426 lands. Harmless after it.
+  message?: string;
 };
 
 // ADR-0011: every API error is RFC 7807 problem details. `errors` is present

@@ -22,7 +22,14 @@ const getErrors = async (response: Response): Promise<Errors> => {
     // A non validation failure carries no `errors` map, only `title`/`detail`.
     return Object.keys(errors).length > 0
       ? errors
-      : { request: [apiError.detail ?? apiError.title ?? 'Request failed'] };
+      : {
+          request: [
+            apiError.detail ??
+              apiError.title ??
+              apiError.message ??
+              'Request failed',
+          ],
+        };
   } catch (error) {
     console.error(error);
 

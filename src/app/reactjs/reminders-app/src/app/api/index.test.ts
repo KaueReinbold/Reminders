@@ -240,6 +240,16 @@ describe('API functions', () => {
       } as Errors);
     });
 
+    it('should map a flat { message } error body to request', async () => {
+      const mockResponse = {
+        json: jest.fn().mockResolvedValue({ message: 'Invalid body' }),
+      } as any;
+
+      expect(await getErrors(mockResponse)).toStrictEqual({
+        request: ['Invalid body'],
+      } as Errors);
+    });
+
     it('should prefer detail over title when the body carries one', async () => {
       const mockResponse = {
         json: jest.fn().mockResolvedValue({

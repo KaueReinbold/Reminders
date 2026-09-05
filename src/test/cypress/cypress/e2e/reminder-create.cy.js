@@ -78,6 +78,20 @@ describe('Create Reminder', () => {
     cy.get('button').contains('New reminder').should('be.visible')
   })
 
+  it('should surface a flat { message } 400 error from the API', { tags: '@create' }, () => {
+    // Go and C++ still answer { message } until #426 lands
+    cy.intercept('POST', '**/api/reminders', {
+      statusCode: 400,
+      body: { message: 'Flat error body' }
+    }).as('createReminderFlatError')
+
+    cy.createReminder('Test Title', 'Test Description', '2024-12-31')
+    cy.wait('@createReminderFlatError')
+
+    cy.contains('Flat error body').should('be.visible')
+    cy.url().should('include', '/reminder/create')
+  })
+
   it('should surface a 400 that carries no field errors', { tags: '@create' }, () => {
     // ADR-0011: a non validation failure has no `errors` map, only `title`
     cy.intercept('POST', '**/api/reminders', {
