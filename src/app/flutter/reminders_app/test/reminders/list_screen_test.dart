@@ -159,6 +159,19 @@ void main() {
     expect(find.text('Call the notary'), findsOneWidget);
   });
 
+  testWidgets('surfaces a malformed payload instead of hanging', (tester) async {
+    await pumpScreen(
+      tester,
+      (_) async => http.Response(jsonEncode([
+        {'id': '1', 'title': 'Broken', 'description': '', 'isDone': false},
+      ]), 200),
+    );
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.textContaining('limitDate is missing'), findsOneWidget);
+    expect(find.text('Retry'), findsOneWidget);
+  });
+
   testWidgets('shows the create FAB', (tester) async {
     await pumpWith(tester, []);
     expect(find.widgetWithText(FloatingActionButton, 'New'), findsOneWidget);

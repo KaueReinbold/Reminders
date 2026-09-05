@@ -41,14 +41,19 @@ class _RemindersListScreenState extends State<RemindersListScreen> {
         _items = items;
         _loading = false;
       });
-    } on ApiException catch (e) {
+    } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = e.message;
+        _error = _messageOf(e);
         _loading = false;
       });
     }
   }
+
+  /// Any failure reaches the banner: the API can also throw on a malformed
+  /// payload, and the three backends do not have to agree byte for byte.
+  static String _messageOf(Object error) =>
+      error is ApiException ? error.message : 'Something went wrong: $error';
 
   /// Optimistic toggle: the card moves group immediately, reverted on failure.
   Future<void> _toggle(Reminder reminder) async {
@@ -58,11 +63,11 @@ class _RemindersListScreenState extends State<RemindersListScreen> {
       await widget.api.toggleDone(reminder);
       if (!mounted || _error == null) return;
       setState(() => _error = null);
-    } on ApiException catch (e) {
+    } catch (e) {
       if (!mounted) return;
       setState(() {
         _items = _replace(_items, reminder);
-        _error = e.message;
+        _error = _messageOf(e);
       });
     }
   }
