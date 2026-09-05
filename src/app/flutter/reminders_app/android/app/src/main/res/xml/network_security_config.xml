@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Cleartext HTTP is denied by default, so a Play Store build only talks HTTPS.
+  The exception is the two hosts every developer shares: the loopback name and
+  the emulator's alias for the host machine. Testing a build against an API on
+  your own LAN needs that address added here locally; do not commit that edit,
+  and never add a public host.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false"/>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>

@@ -53,6 +53,30 @@ The script detects your environment and prints any extra steps:
 - **Native Linux/macOS**: open TCP 8090 in your firewall if the phone cannot
   connect.
 
+### HTTP and the local API
+
+`android.permission.INTERNET` is declared in
+`android/app/src/main/AndroidManifest.xml`, so every build type can reach the
+API. Plain HTTP is a separate switch: Android denies cleartext since API 28,
+and `android/app/src/main/res/xml/network_security_config.xml` keeps that deny
+as the default. Only `localhost` and `10.0.2.2` (the emulator's alias for the
+host machine) are allowed, so the committed config carries no one's address and
+a store build stays HTTPS-only. See [ADR-0014](../../../../docs/adr/0014-android-cleartext-policy.md).
+
+Testing a build against an API on your own LAN needs a temporary local edit:
+add your machine's address to that `domain-config` block, build, then revert
+the file. Do not commit it.
+
+```xml
+<domain includeSubdomains="false">192.168.1.10</domain>
+```
+
+```bash
+flutter build apk --release --target-platform android-arm64 \
+  --dart-define=API_BASE_URL=http://192.168.1.10:9999
+git checkout android/app/src/main/res/xml/network_security_config.xml
+```
+
 Requirements: Flutter with the Android toolchain (`flutter doctor`) and
 `python3`. If the Gradle build fails with a `javaCompiler`/toolchain error,
 point Flutter at a full JDK: `flutter config --jdk-dir <path-to-jdk>`.
