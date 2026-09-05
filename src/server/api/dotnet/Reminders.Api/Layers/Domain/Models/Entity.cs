@@ -20,14 +20,10 @@ public abstract class Entity<TId>
     protected Entity() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    public override bool Equals(object? obj)
-    {
-        var entity = obj as Entity<TId>;
-
-        if (entity is not null) Equals(entity);
-
-        return base.Equals(obj);
-    }
+    public override bool Equals(object? obj) =>
+        obj is Entity<TId> entity
+        && entity.GetType() == GetType()
+        && Equals(Id, entity.Id);
 
     public static bool operator ==(Entity<TId> a, Entity<TId> b)
     {
