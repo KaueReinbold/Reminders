@@ -32,6 +32,18 @@
   color: var(--faint);
 }
 
+.demoBadge {
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border: 1px solid var(--border-page);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  cursor: default;
+}
+
 .searchPill {
   display: flex;
   align-items: center;

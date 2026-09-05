@@ -19,6 +19,7 @@ describe('AppHeader', () => {
     expect(screen.getByText(todayLabel)).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Search reminders')).toBeInTheDocument();
     expect(screen.getByText('New reminder')).toBeInTheDocument();
+    expect(screen.queryByText('Demo data')).not.toBeInTheDocument();
   });
 
   it('reports search input changes', () => {
