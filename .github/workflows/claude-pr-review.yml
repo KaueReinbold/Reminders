@@ -121,6 +121,10 @@ jobs:
             - Post exactly one summary comment with `gh pr comment`, grouped by severity.
               If no [blocker] or [major] remains, end the summary with the line
               "Ready for human review." If there are no findings at all, say so.
+            - Report outcomes, not process. Never list the categories or rules that
+              came back clean, and never cite a repository document as the reason a
+              finding stands: state the defect on its own terms. A review with no
+              findings is one line saying so plus the readiness line, nothing more.
             - Caveman wording: one line per finding, `file:line: problem. fix.`, no
               throat-clearing, no restating the diff. Full sentences only for security
               findings or design disagreements that need the why.
