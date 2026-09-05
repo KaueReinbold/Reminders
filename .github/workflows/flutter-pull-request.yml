@@ -9,6 +9,7 @@ on:
     paths:
       - 'src/app/flutter/reminders_app/**'
       - '!src/app/flutter/reminders_app/**/*.md'
+      - '.github/workflows/flutter-pull-request.yml'
 
 permissions:
   contents: read
