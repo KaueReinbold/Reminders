@@ -40,7 +40,7 @@ export function ReminderDeleteModal({
         className={styles.dialog}
         onClick={event => event.stopPropagation()}
       >
-        <span className={styles.title}>Delete this reminder?</span>
+        <h2 className={styles.title}>Delete this reminder?</h2>
         <span className={styles.body}>
           {reminderTitle
             ? `“${reminderTitle}” will be removed permanently.`

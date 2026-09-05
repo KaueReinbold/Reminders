@@ -32,6 +32,10 @@ import styles from './list.module.css';
 const errorMessage = (errors: Errors): string =>
   Object.values(errors).flat().join(' ');
 
+// A rejected mutation is a transport failure, not a validation response, so
+// there are no field errors to show. Keep the overlay open and say so.
+const REQUEST_FAILED = 'Something went wrong. Please try again.';
+
 export default function RemindersList() {
   const { data: reminders } = useReminders();
   const queryClient = useRemindersQueryClient();
@@ -81,12 +85,17 @@ export default function RemindersList() {
   };
 
   const handleSave = async (draft: Reminder) => {
-    const { errors } = draft.id
-      ? await updateReminder.mutateAsync(draft)
-      : await createReminder.mutateAsync(draft);
+    try {
+      const { errors } = draft.id
+        ? await updateReminder.mutateAsync(draft)
+        : await createReminder.mutateAsync(draft);
 
-    if (errors) {
-      setSheetError(errorMessage(errors));
+      if (errors) {
+        setSheetError(errorMessage(errors));
+        return;
+      }
+    } catch {
+      setSheetError(REQUEST_FAILED);
       return;
     }
 
@@ -97,12 +106,18 @@ export default function RemindersList() {
   const handleConfirmDelete = async () => {
     if (!confirmTarget?.id) return;
 
-    const { errors } = await deleteReminder.mutateAsync(confirmTarget.id);
+    try {
+      const { errors } = await deleteReminder.mutateAsync(confirmTarget.id);
 
-    setConfirmTarget(null);
+      setConfirmTarget(null);
 
-    if (errors) {
-      setSheetError(errorMessage(errors));
+      if (errors) {
+        setSheetError(errorMessage(errors));
+        return;
+      }
+    } catch {
+      setConfirmTarget(null);
+      setSheetError(REQUEST_FAILED);
       return;
     }
 

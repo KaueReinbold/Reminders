@@ -63,9 +63,9 @@ export function ReminderSheet({
         onClick={event => event.stopPropagation()}
       >
         <div className={styles.header}>
-          <span className={styles.title}>
+          <h2 className={styles.title}>
             {editing ? 'Edit reminder' : 'New reminder'}
-          </span>
+          </h2>
           <button
             type="button"
             className={styles.closeButton}

@@ -149,6 +149,23 @@ describe('RemindersList', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
+  it('keeps the sheet open and reports a rejected save', async () => {
+    mockCreateMutateAsync.mockRejectedValueOnce(new Error('Network error'));
+
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getByText('New reminder'));
+    fireEvent.change(screen.getByTestId('title'), {
+      target: { value: 'Buy milk' },
+    });
+    fireEvent.click(screen.getByTestId('save-button'));
+
+    expect(
+      await screen.findByText('Something went wrong. Please try again.'),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
   it('opens the edit sheet prefilled from a card', () => {
     render(<RemindersList />);
 
@@ -176,6 +193,21 @@ describe('RemindersList', () => {
         expect.objectContaining({ id: 2, title: 'Renamed' }),
       );
     });
+  });
+
+  it('keeps the sheet open and reports a rejected delete', async () => {
+    mockDeleteMutateAsync.mockRejectedValueOnce(new Error('Network error'));
+
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getAllByLabelText('Edit reminder')[0]);
+    fireEvent.click(screen.getByText('Delete reminder'));
+    fireEvent.click(screen.getByTestId('delete-button'));
+
+    expect(
+      await screen.findByText('Something went wrong. Please try again.'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Delete this reminder?')).not.toBeInTheDocument();
   });
 
   it('deletes a reminder after the confirmation dialog', async () => {

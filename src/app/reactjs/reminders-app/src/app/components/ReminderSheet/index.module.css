@@ -52,6 +52,8 @@
 .title {
   font-family: var(--font-display);
   font-size: 27px;
+  font-weight: inherit;
+  margin: 0;
 }
 
 .closeButton {
