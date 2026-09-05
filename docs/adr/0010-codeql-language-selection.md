@@ -46,7 +46,8 @@ languages.
 
 Option 3. The `languages` job maps changed files to languages
 (`.github/workflows|actions/` to `actions`; `.cs .csproj .sln .props .targets` to
-`csharp`; `.js .jsx .ts .tsx .mjs .cjs .json` to `javascript-typescript`) and the
+`csharp`; `.js .jsx .ts .tsx .mjs .cjs` plus `package.json`, `package-lock.json`
+and `tsconfig*.json` to `javascript-typescript`) and the
 `analyze` job consumes that list. No new dependency: `gh` is preinstalled on the
 runner.
 

@@ -58,7 +58,7 @@ jobs:
             if grep -Eq '\.(cs|csproj|sln|props|targets)$' <<<"$files"; then
               selected+=('"csharp"')
             fi
-            if grep -Eq '\.(js|jsx|ts|tsx|mjs|cjs|json)$' <<<"$files"; then
+            if grep -Eq '\.(js|jsx|ts|tsx|mjs|cjs)$|(^|/)(package|package-lock|tsconfig)[^/]*\.json$' <<<"$files"; then
               selected+=('"javascript-typescript"')
             fi
             langs=$(IFS=,; echo "${selected[*]}")
