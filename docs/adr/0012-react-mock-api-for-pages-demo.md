@@ -48,8 +48,10 @@ everywhere else. The header shows a "Demo data" badge whenever the flag is on.
 - The Pages demo is fully usable with no backend and no hosting cost.
 - Live builds are untouched: the flag resolves to `false` and the API client
   behaves exactly as before.
-- The mock reuses `ValidationService`, so demo validation errors match the
-  server messages; API contract changes must be mirrored in the mock.
+- The mock reuses `ValidationService` for the field messages and follows the
+  error contract in ADR-0011: RFC 7807 field errors keyed by the camelCase JSON
+  name (`title`, `description`, `limitDate`), a past limit date rejected on
+  create and accepted on update. API contract changes must be mirrored here.
 - Mock state is in memory only: a page reload restores the seed data.
 - The mock module still ships in the live bundle as unreachable code, a few
   hundred bytes; not worth a bundler `sideEffects` change to strip.

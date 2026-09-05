@@ -50,8 +50,25 @@ const seed = (): Reminder[] =>
 let reminders = seed();
 let nextId = reminders.length + 1;
 
-// Mirrors the server-side validation so the demo shows the same error states.
-const validate = (reminder: Reminder): Errors | null => {
+// The message every API returns for a limit date that is not in the future.
+const INVALID_LIMIT_DATE = 'The Limit Date should be later than Today.';
+
+// Whole-day comparison in UTC, matching the server rule: a later day, not a
+// later instant. A missing date is the zero date on the server, so it fails too.
+const isFutureDay = (limitDate: string): boolean => {
+  const parsed = Date.parse(limitDate);
+
+  if (Number.isNaN(parsed)) return false;
+
+  const day = (ms: number) => Math.floor(ms / MS_PER_DAY);
+
+  return day(parsed) > day(Date.now());
+};
+
+// Mirrors the API validation contract (ADR-0011) so the demo fails the same way
+// the live APIs do: an errors map keyed by the camelCase JSON field name. The
+// past date rule runs on create only, so an overdue reminder stays editable.
+const validate = (reminder: Reminder, creating: boolean): Errors | null => {
   const errors = {} as Errors;
   const title = ValidationService.validateTitle(reminder.title);
   const description = ValidationService.validateDescription(
@@ -59,15 +76,19 @@ const validate = (reminder: Reminder): Errors | null => {
   );
   const limitDate = ValidationService.validateLimitDate(reminder.limitDate);
 
-  if (title) errors.Title = [title];
-  if (description) errors.Description = [description];
-  if (limitDate) errors['LimitDate.Date'] = [limitDate];
+  if (title) errors.title = [title];
+  if (description) errors.description = [description];
+  if (limitDate) errors.limitDate = [limitDate];
+  else if (creating && !isFutureDay(reminder.limitDate))
+    errors.limitDate = [INVALID_LIMIT_DATE];
 
   return Object.keys(errors).length > 0 ? errors : null;
 };
 
+// A 404 carries no `errors` map, so the live client files its message under
+// `request`. The mock does the same.
 const notFound = (id?: string): Errors => ({
-  BadRequest: `Reminder ${id} was not found`,
+  request: [`Reminder ${id} was not found`],
 });
 
 const getReminders = (): Promise<Reminder[]> =>
@@ -81,7 +102,7 @@ const getReminder = (id: string): Promise<Reminder> => {
 const createReminder = (
   reminder: Reminder,
 ): Promise<MutateResult<Reminder>> => {
-  const errors = validate(reminder);
+  const errors = validate(reminder, true);
 
   if (errors) return Promise.resolve({ errors });
 
@@ -94,7 +115,7 @@ const createReminder = (
 const updateReminder = (
   reminder: Reminder,
 ): Promise<MutateResult<Reminder>> => {
-  const errors = validate(reminder);
+  const errors = validate(reminder, false);
 
   if (errors) return Promise.resolve({ errors });
 

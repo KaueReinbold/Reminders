@@ -52,9 +52,50 @@ describe('mock API', () => {
     });
 
     expect(result).toBeUndefined();
-    expect(errors?.Title).toEqual(['The field is Required']);
-    expect(errors?.Description).toEqual(['The field is Required']);
+    expect(errors?.title).toEqual(['The field is Required']);
+    expect(errors?.description).toEqual(['The field is Required']);
     expect(await getReminders()).toHaveLength(5);
+  });
+
+  it('rejects a create with a limit date that is not in the future', async () => {
+    const { result, errors } = await createReminder({
+      ...valid,
+      limitDate: '2020-01-01',
+    });
+
+    expect(result).toBeUndefined();
+    expect(errors?.limitDate).toEqual([
+      'The Limit Date should be later than Today.',
+    ]);
+    expect(await getReminders()).toHaveLength(5);
+  });
+
+  it('rejects a create with no limit date', async () => {
+    const { errors } = await createReminder({ ...valid, limitDate: '' });
+
+    expect(errors?.limitDate).toEqual([
+      'The Limit Date should be later than Today.',
+    ]);
+  });
+
+  it('rejects a create dated today', async () => {
+    const today = new Date().toISOString().slice(0, 10);
+    const { errors } = await createReminder({ ...valid, limitDate: today });
+
+    expect(errors?.limitDate).toEqual([
+      'The Limit Date should be later than Today.',
+    ]);
+  });
+
+  it('accepts an update with a past limit date', async () => {
+    const { result, errors } = await updateReminder({
+      ...valid,
+      id: '1',
+      limitDate: '2020-01-01',
+    });
+
+    expect(errors).toBeUndefined();
+    expect(result?.limitDateFormatted).toBe('2020-01-01');
   });
 
   it('updates an existing reminder', async () => {
@@ -68,7 +109,7 @@ describe('mock API', () => {
   it('reports an update for an unknown reminder', async () => {
     const { errors } = await updateReminder({ ...valid, id: 'nope' });
 
-    expect(errors?.BadRequest).toContain('nope');
+    expect(errors?.request?.[0]).toContain('nope');
   });
 
   it('deletes a reminder', async () => {
@@ -79,7 +120,7 @@ describe('mock API', () => {
   it('reports a delete for an unknown reminder', async () => {
     const { errors } = await deleteReminder('nope');
 
-    expect(errors?.BadRequest).toContain('nope');
+    expect(errors?.request?.[0]).toContain('nope');
   });
 
   it('starts from the seed data again after a reset', async () => {
