@@ -2,7 +2,7 @@
 
 Guidance for Claude Code when working in this repository.
 
-> Architecture, service layout, and coding standards live in [agents.md](agents.md). Read it before making structural changes. This file covers **workflow rules only**.
+> Architecture, service layout, and coding standards live in [AGENTS.md](AGENTS.md). Read it before making structural changes. This file covers **workflow rules only**.
 
 ## Project Context
 
@@ -170,10 +170,10 @@ docker compose config -q
 ## Rules for Claude
 
 - **Always on, every session in this repo**: caveman (terse output: drop filler, keep all technical substance) and ponytail (minimal code: smallest change that works, prefer platform/stdlib over new dependencies, delete before adding). Both live in `.claude/skills/` and the PR review agent applies them too.
-- Read `agents.md` for architecture patterns before editing service code.
+- Read `AGENTS.md` for architecture patterns before editing service code.
 - Reviewing a pull request, in CI or locally: follow `.github/review-guidelines.md`. It is the single source for review criteria and comment format.
 - Read `CLAUDE.local.md` when present: it holds maintainer preferences kept out of version control, and they take precedence.
-- Database changes require migrations for **both** Postgres and SqlServer providers (see agents.md).
+- Database changes require migrations for **both** Postgres and SqlServer providers (see AGENTS.md).
 - Do not commit, push, tag, or open PRs unless explicitly asked.
 - Never merge a PR without explicit human approval of that specific PR, given as a PR review/approval or in chat. After opening a PR, share the URL and wait.
 - Agent branches follow the repo convention `<type>/<short-description>` (e.g. `chore/repo-governance`), never `claude/...` or any other auto-generated prefix. If the session assigns a `claude/...` branch, recreate the work on a convention-named branch before opening a PR.

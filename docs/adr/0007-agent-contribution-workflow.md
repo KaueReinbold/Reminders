@@ -19,7 +19,7 @@ Every change follows this loop:
    git worktree add ../wt-<short-description> -b <type>/<short-description> origin/main
    ```
 
-3. **Implement**: follow `agents.md` standards and the design system; minimal change (ponytail); migrations for both Postgres and SqlServer when schema changes.
+3. **Implement**: follow `AGENTS.md` standards and the design system; minimal change (ponytail); migrations for both Postgres and SqlServer when schema changes.
 4. **Quality gates before PR**:
    - Relevant unit suite green (.NET, React/Jest, Flutter, Hardhat per scope).
    - Lint clean (ESLint, `flutter analyze`, actionlint via CI).

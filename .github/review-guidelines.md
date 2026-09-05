@@ -10,7 +10,7 @@ it directly.
 
 ## Before reviewing
 
-1. Read `CLAUDE.md` and `agents.md`. They define the standards reviewed against.
+1. Read `CLAUDE.md` and `AGENTS.md`. They define the standards reviewed against.
 2. Read the earlier review comments on the pull request. Do not repeat a finding
    already raised; do check whether earlier findings were addressed.
 3. Apply the repository skills in `.claude/skills/`: caveman for the wording of
