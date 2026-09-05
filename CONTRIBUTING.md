@@ -44,6 +44,13 @@ Small fixes can skip steps 1-3 and start at the issue. See [ADR-0001](docs/adr/0
 
 ## Development Setup
 
+> **Pulling across the AGENTS.md rename**: `agents.md` was renamed to
+> `AGENTS.md`, a case-only change. On macOS and Windows, whose filesystems are
+> case insensitive by default, an existing checkout can keep the old casing or
+> show a `git status` that will not settle. Fix it once with
+> `git rm --cached agents.md` followed by `git checkout AGENTS.md`, or reclone.
+> Linux checkouts and CI are unaffected.
+
 ### Prerequisites
 
 - Docker & Docker Compose
