@@ -19,6 +19,7 @@ Decisions that shape architecture, workflow, or tooling are recorded here so hum
 | [0011](0011-api-validation-contract.md) | One validation and error contract across the .NET, Go and C++ APIs | accepted | 2026-09-05 |
 | [0012](0012-react-mock-api-for-pages-demo.md) | In-browser mock API for the GitHub Pages demo | accepted | 2026-09-05 |
 | [0013](0013-in-place-reminder-overlays.md) | In-place overlays for reminder create, edit and delete | accepted | 2026-09-05 |
+| [0014](0014-android-cleartext-policy.md) | Android network security config with a loopback-only cleartext allow-list | accepted | 2026-09-05 |
 
 ## Process
 
