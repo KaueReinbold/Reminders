@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import {
   Errors,
@@ -51,6 +51,11 @@ export default function RemindersList() {
   const [sheet, setSheet] = useState<{ reminder?: Reminder } | null>(null);
   const [confirmTarget, setConfirmTarget] = useState<Reminder | null>(null);
   const [sheetError, setSheetError] = useState<string>();
+
+  // Deleting from the sheet closes the sheet and the dialog and removes the
+  // card that opened them, so there is no trigger left to return focus to.
+  // The list itself is the nearest thing still on screen.
+  const listRef = useRef<HTMLElement>(null);
 
   const items = reminders ?? [];
   const groups = groupReminders(filterReminders(items, view, query));
@@ -123,6 +128,7 @@ export default function RemindersList() {
 
     closeSheet();
     refresh();
+    listRef.current?.focus();
   };
 
   const handleToggle = async (reminder: Reminder) => {
@@ -156,7 +162,7 @@ export default function RemindersList() {
           progress={weekProgress(items)}
         />
 
-        <main className={styles.list}>
+        <main className={styles.list} ref={listRef} tabIndex={-1}>
           {groups.map(group => (
             <section key={group.label} className={styles.section}>
               <div className={styles.sectionHeader}>

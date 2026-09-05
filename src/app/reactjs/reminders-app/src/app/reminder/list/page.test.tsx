@@ -195,6 +195,20 @@ describe('RemindersList', () => {
     });
   });
 
+  it('leaves focus on the page after deleting from the sheet', async () => {
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getAllByLabelText('Edit reminder')[0]);
+    fireEvent.click(screen.getByText('Delete reminder'));
+    fireEvent.click(screen.getByTestId('delete-button'));
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+
+    expect(document.activeElement).not.toBe(document.body);
+  });
+
   it('keeps the sheet open and reports a rejected delete', async () => {
     mockDeleteMutateAsync.mockRejectedValueOnce(new Error('Network error'));
 
