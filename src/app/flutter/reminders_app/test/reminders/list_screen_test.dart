@@ -168,7 +168,7 @@ void main() {
     );
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
-    expect(find.textContaining('limitDate is missing'), findsOneWidget);
+    expect(find.text('Something went wrong.'), findsOneWidget);
     expect(find.text('Retry'), findsOneWidget);
   });
 

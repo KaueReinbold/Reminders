@@ -52,8 +52,9 @@ class _RemindersListScreenState extends State<RemindersListScreen> {
 
   /// Any failure reaches the banner: the API can also throw on a malformed
   /// payload, and the three backends do not have to agree byte for byte.
+  /// Unknown errors get a fixed message so internals stay out of the UI.
   static String _messageOf(Object error) =>
-      error is ApiException ? error.message : 'Something went wrong: $error';
+      error is ApiException ? error.message : 'Something went wrong.';
 
   /// Optimistic toggle: the card moves group immediately, reverted on failure.
   Future<void> _toggle(Reminder reminder) async {
