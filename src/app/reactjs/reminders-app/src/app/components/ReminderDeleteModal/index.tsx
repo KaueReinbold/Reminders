@@ -19,7 +19,7 @@ export function ReminderDeleteModal({
   toggleOpenDelete,
   onDelete,
 }: Props): React.ReactElement | null {
-  useEscapeKey(toggleOpenDelete);
+  useEscapeKey(toggleOpenDelete, openDelete);
 
   if (!openDelete) {
     return null;

@@ -78,6 +78,22 @@ describe('ReminderDeleteModal', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
+  it('should ignore Escape while closed so a toggle cannot reopen it', () => {
+    const toggleOpenDelete = jest.fn();
+
+    render(
+      <ReminderDeleteModal
+        openDelete={false}
+        toggleOpenDelete={toggleOpenDelete}
+        onDelete={jest.fn}
+      />,
+    );
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+
+    expect(toggleOpenDelete).not.toHaveBeenCalled();
+  });
+
   it('should close on Escape and on scrim click', () => {
     const toggleOpenDelete = jest.fn();
 
