@@ -1,18 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Reminders.Api.Extensions;
 using Reminders.Application.Validators.Reminders.Exceptions;
 using Reminders.Application.Validators.Reminders.Exceptions.Enumerables;
@@ -22,158 +14,83 @@ namespace Reminders.Application.Test.Extensions
     [TestClass]
     public class ExceptionMiddlewareExtensionsUnitTest
     {
-        #region UseRemindersExceptionHandler Tests
+        #region RemindersProblemDetailsFactory Tests
 
         [TestMethod]
-        public async Task Should_HandleRemindersApplicationException_With_NotFound()
+        public void Should_MapRemindersApplicationException_To_NotFound()
         {
             // arrange
-            var context = CreateMockHttpContext();
             var exception = new RemindersApplicationException(ValidationStatus.NotFound, "Not found");
-            var exceptionFeature = new Mock<IExceptionHandlerFeature>();
-            exceptionFeature.Setup(f => f.Error).Returns(exception);
-            
-            context.Features.Set(exceptionFeature.Object);
 
             // act
-            await InvokeExceptionHandler(context, exception);
+            var problemDetails = RemindersProblemDetailsFactory.Create(exception);
 
             // assert
-            Assert.AreEqual((int)HttpStatusCode.NotFound, context.Response.StatusCode);
-            Assert.AreEqual("application/json", context.Response.ContentType);
-            
-            context.Response.Body.Seek(0, SeekOrigin.Begin);
-            var responseBody = await new StreamReader(context.Response.Body).ReadToEndAsync();
-            Assert.IsTrue(responseBody.Contains("Not found"));
-            Assert.IsTrue(responseBody.Contains("404"));
+            Assert.AreEqual((int)HttpStatusCode.NotFound, problemDetails.Status);
+            Assert.AreEqual("Not found", problemDetails.Title);
+            Assert.AreEqual(RemindersProblemDetailsFactory.ClientErrorType, problemDetails.Type);
         }
 
         [TestMethod]
-        public async Task Should_HandleRemindersApplicationException_With_IdsDoNotMatch()
+        public void Should_MapRemindersApplicationException_To_Conflict()
         {
             // arrange
-            var context = CreateMockHttpContext();
             var exception = new RemindersApplicationException(ValidationStatus.IdsDoNotMatch, "IDs do not match");
-            var exceptionFeature = new Mock<IExceptionHandlerFeature>();
-            exceptionFeature.Setup(f => f.Error).Returns(exception);
-            
-            context.Features.Set(exceptionFeature.Object);
 
             // act
-            await InvokeExceptionHandler(context, exception);
+            var problemDetails = RemindersProblemDetailsFactory.Create(exception);
 
             // assert
-            Assert.AreEqual((int)HttpStatusCode.Conflict, context.Response.StatusCode);
-            Assert.AreEqual("application/json", context.Response.ContentType);
-            
-            context.Response.Body.Seek(0, SeekOrigin.Begin);
-            var responseBody = await new StreamReader(context.Response.Body).ReadToEndAsync();
-            Assert.IsTrue(responseBody.Contains("IDs do not match"));
-            Assert.IsTrue(responseBody.Contains("409"));
+            Assert.AreEqual((int)HttpStatusCode.Conflict, problemDetails.Status);
+            Assert.AreEqual("IDs do not match", problemDetails.Title);
         }
 
         [TestMethod]
-        public async Task Should_HandleValidationException_With_ValidationErrors()
+        public void Should_MapValidationException_To_BadRequest_With_FieldErrors()
         {
             // arrange
-            var context = CreateMockHttpContext();
-            var validationFailures = new List<ValidationFailure>
+            var exception = new ValidationException(new List<ValidationFailure>
             {
-                new ValidationFailure("Title", "Title is required"),
-                new ValidationFailure("LimitDate", "LimitDate must be in the future")
-            };
-            var exception = new ValidationException(validationFailures);
-            var exceptionFeature = new Mock<IExceptionHandlerFeature>();
-            exceptionFeature.Setup(f => f.Error).Returns(exception);
-            
-            context.Features.Set(exceptionFeature.Object);
+                new ValidationFailure("title", "Title is required"),
+                new ValidationFailure("limitDate", "The limit date must be later than today."),
+                new ValidationFailure("limitDate", "Second failure on the same field")
+            });
 
             // act
-            await InvokeExceptionHandler(context, exception);
+            var problemDetails = RemindersProblemDetailsFactory.Create(exception);
 
             // assert
-            Assert.AreEqual((int)HttpStatusCode.UnprocessableEntity, context.Response.StatusCode);
-            Assert.AreEqual("application/json", context.Response.ContentType);
-            
-            context.Response.Body.Seek(0, SeekOrigin.Begin);
-            var responseBody = await new StreamReader(context.Response.Body).ReadToEndAsync();
-            Assert.IsTrue(responseBody.Contains("422"));
-            Assert.IsTrue(responseBody.Contains("Title"));
-            Assert.IsTrue(responseBody.Contains("LimitDate"));
+            Assert.AreEqual((int)HttpStatusCode.BadRequest, problemDetails.Status);
+            Assert.AreEqual("One or more validation errors occurred.", problemDetails.Title);
+
+            var validationProblemDetails = problemDetails as ValidationProblemDetails;
+            Assert.IsNotNull(validationProblemDetails);
+            Assert.AreEqual(2, validationProblemDetails.Errors.Count);
+            Assert.AreEqual(1, validationProblemDetails.Errors["title"].Length);
+            Assert.AreEqual(2, validationProblemDetails.Errors["limitDate"].Length);
         }
 
         [TestMethod]
-        public async Task Should_HandleGenericException_With_InternalServerError()
+        public void Should_MapUnknownException_To_InternalServerError()
         {
             // arrange
-            var context = CreateMockHttpContext();
             var exception = new Exception("Unexpected error");
-            var exceptionFeature = new Mock<IExceptionHandlerFeature>();
-            exceptionFeature.Setup(f => f.Error).Returns(exception);
-            
-            context.Features.Set(exceptionFeature.Object);
 
             // act
-            await InvokeExceptionHandler(context, exception);
+            var problemDetails = RemindersProblemDetailsFactory.Create(exception);
 
             // assert
-            Assert.AreEqual((int)HttpStatusCode.InternalServerError, context.Response.StatusCode);
-            Assert.AreEqual("application/json", context.Response.ContentType);
-            
-            context.Response.Body.Seek(0, SeekOrigin.Begin);
-            var responseBody = await new StreamReader(context.Response.Body).ReadToEndAsync();
-            Assert.IsTrue(responseBody.Contains("Internal Server Error"));
-            Assert.IsTrue(responseBody.Contains("500"));
+            Assert.AreEqual((int)HttpStatusCode.InternalServerError, problemDetails.Status);
+            Assert.AreEqual("Internal Server Error.", problemDetails.Title);
+            Assert.AreEqual(RemindersProblemDetailsFactory.ServerErrorType, problemDetails.Type);
+            Assert.IsNull(problemDetails as ValidationProblemDetails);
         }
 
-        #endregion
-
-        #region Helper Methods
-
-        private static HttpContext CreateMockHttpContext()
+        [TestMethod]
+        public void Should_ExposeProblemDetailsContentType()
         {
-            var context = new DefaultHttpContext();
-            context.Response.Body = new MemoryStream();
-            return context;
-        }
-
-        private static async Task InvokeExceptionHandler(HttpContext context, Exception exception)
-        {
-            // This simulates what the UseRemindersExceptionHandler would do
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            context.Response.ContentType = "application/json";
-
-            var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-
-            if (contextFeature != null)
-            {
-                var statusCode = (int)HttpStatusCode.InternalServerError;
-                var message = "Internal Server Error.";
-                Dictionary<string, string> properties = null;
-
-                if (contextFeature.Error is RemindersApplicationException remindersApplicationException)
-                {
-                    statusCode = (int)remindersApplicationException.ToHttpStatusCode();
-                    message = remindersApplicationException.Message;
-                }
-                else if (contextFeature.Error is ValidationException validationException)
-                {
-                    statusCode = (int)HttpStatusCode.UnprocessableEntity;
-                    message = validationException.Message;
-                    properties = validationException.Errors.ToDictionary(
-                        error => error.PropertyName,
-                        error => error.ErrorMessage);
-                }
-
-                context.Response.StatusCode = statusCode;
-
-                await context.Response.WriteAsync(new Reminders.Api.Models.ErrorDetails()
-                {
-                    StatusCode = statusCode,
-                    Message = message,
-                    Properties = properties
-                }.ToString());
-            }
+            // assert
+            Assert.AreEqual("application/problem+json", ExceptionMiddlewareExtensions.ProblemDetailsContentType);
         }
 
         #endregion

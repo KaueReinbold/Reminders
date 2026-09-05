@@ -1,0 +1,83 @@
+# Boots the api profile and checks the shared validation and error contract
+# (ADR-0011) against the three live backends. Separate from cypress-e2e.yml:
+# that workflow runs the browser specs with no backend and must keep skipping
+# the @api specs, and its path filter is the Cypress tree only.
+name: API Contract
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/server/api/**'
+      - 'docker-compose*.yml'
+      - 'infrastructure/**'
+      - 'src/test/cypress/cypress/e2e/api-*.cy.js'
+      - 'src/test/cypress/cypress.config.js'
+      - '.github/workflows/api-contract.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/server/api/**'
+      - 'docker-compose*.yml'
+      - 'infrastructure/**'
+      - 'src/test/cypress/cypress/e2e/api-*.cy.js'
+      - 'src/test/cypress/cypress.config.js'
+      - '.github/workflows/api-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  api-contract:
+    name: API contract against live backends
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: src/test/cypress/package-lock.json
+
+      - name: Start the api profile
+        run: docker compose --profile api up -d --build
+
+      # The three APIs are published on 5000, 5001 and 5002 by
+      # docker-compose.override.yml, which is the same mapping the spec expects.
+      - name: Wait for the backends to answer
+        run: |
+          deadline=$((SECONDS + 300))
+          for port in 5000 5001 5002; do
+            until curl -fsS "http://localhost:${port}/health" >/dev/null 2>&1; do
+              if [ "$SECONDS" -ge "$deadline" ]; then
+                echo "::error::API on port ${port} did not answer /health within 300s"
+                exit 1
+              fi
+              sleep 5
+            done
+            echo "port ${port} healthy"
+          done
+
+      # Unlike the browser job, this one includes @api: the backends are up.
+      - name: Cypress run (api specs)
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: src/test/cypress
+          spec: cypress/e2e/api-contract.cy.js,cypress/e2e/api-dotnet.cy.js
+        env:
+          CYPRESS_grepTags: '@api'
+
+      - name: Dump container logs
+        if: failure()
+        run: docker compose --profile api logs --no-color --tail=200
+
+      - name: Tear down
+        if: always()
+        run: docker compose --profile api down -v

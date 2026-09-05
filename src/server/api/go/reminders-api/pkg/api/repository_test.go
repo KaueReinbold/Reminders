@@ -115,13 +115,14 @@ func TestRepositoryGetByID(t *testing.T) {
 		}
 	})
 
-	t.Run("other errors also map to ErrorReminderNotFound (current behaviour)", func(t *testing.T) {
+	t.Run("a real failure propagates instead of masquerading as not found", func(t *testing.T) {
 		repo, mock := newMockRepo(t)
-		mock.ExpectQuery(`SELECT`).WithArgs("x").WillReturnError(errors.New("down"))
+		down := errors.New("down")
+		mock.ExpectQuery(`SELECT`).WithArgs("x").WillReturnError(down)
 
 		_, err := repo.GetByID("x")
-		if !errors.Is(err, ErrorReminderNotFound) {
-			t.Fatalf("err = %v", err)
+		if !errors.Is(err, down) || errors.Is(err, ErrorReminderNotFound) {
+			t.Fatalf("err = %v, want the database error", err)
 		}
 	})
 }

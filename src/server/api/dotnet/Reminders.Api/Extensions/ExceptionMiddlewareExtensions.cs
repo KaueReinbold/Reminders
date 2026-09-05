@@ -1,14 +1,21 @@
-﻿using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
-using Reminders.Api.Models;
-using Reminders.Application.Validators.Reminders.Exceptions;
 using System.Net;
-using ValidationException = FluentValidation.ValidationException;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using JsonSerializerDefaults = System.Text.Json.JsonSerializerDefaults;
+using JsonSerializerOptions = System.Text.Json.JsonSerializerOptions;
+using JsonIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition;
 
 namespace Reminders.Api.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {
+        public const string ProblemDetailsContentType = "application/problem+json";
+
+        // Null members stay out of the body so the three implementations emit the
+        // same problem details for the same failure (ADR-0011).
+        private static readonly JsonSerializerOptions SerializerOptions =
+            new(JsonSerializerDefaults.Web) { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
+
         public static IApplicationBuilder UseRemindersExceptionHandler(
             this IApplicationBuilder app)
         {
@@ -16,40 +23,18 @@ namespace Reminders.Api.Extensions
             {
                 appError.Run(async context =>
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
-
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
 
-                    if (contextFeature != null)
-                    {
-                        var statusCode = (int)HttpStatusCode.InternalServerError;
-                        var message = "Internal Server Error.";
-                        Dictionary<string, string>? properties = null;
+                    if (contextFeature == null)
+                        return;
 
-                        if (contextFeature.Error is RemindersApplicationException remindersApplicationException)
-                        {
-                            statusCode = (int)remindersApplicationException.ToHttpStatusCode();
-                            message = remindersApplicationException.Message;
-                        }
-                        else if (contextFeature.Error is ValidationException validationException)
-                        {
-                            statusCode = (int)HttpStatusCode.UnprocessableEntity;
-                            message = validationException.Message;
-                            properties = validationException.Errors.ToDictionary(
-                                error => error.PropertyName,
-                                error => error.ErrorMessage);
-                        }
+                    var problemDetails = RemindersProblemDetailsFactory.Create(contextFeature.Error);
 
-                        context.Response.StatusCode = statusCode;
+                    context.Response.StatusCode = problemDetails.Status ?? (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = ProblemDetailsContentType;
 
-                        await context.Response.WriteAsync(new ErrorDetails()
-                        {
-                            StatusCode = statusCode,
-                            Message = message,
-                            Properties = properties
-                        }.ToString());
-                    }
+                    await context.Response.WriteAsync(
+                        JsonSerializer.Serialize(problemDetails, problemDetails.GetType(), SerializerOptions));
                 });
             });
 

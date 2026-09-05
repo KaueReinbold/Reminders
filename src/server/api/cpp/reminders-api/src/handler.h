@@ -19,5 +19,6 @@ private:
     PostgresRepository& repo_;
 
     static crow::response jsonResponse(int status, const nlohmann::json& body);
-    static crow::response errorResponse(int status, const std::string& message);
+    static crow::response problemResponse(int status, const std::string& title);
+    static crow::response validationProblemResponse(const std::string& field, const std::string& message);
 };

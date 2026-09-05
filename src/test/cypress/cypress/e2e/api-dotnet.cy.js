@@ -90,7 +90,7 @@ describe('.NET API', { tags: '@api' }, () => {
         failOnStatusCode: false,
       }).then((response) => {
         expect(response.status).to.eq(400)
-        expect(response.body.errors).to.have.property('LimitDate.Date')
+        expect(response.body.errors).to.have.property('limitDate')
       })
     })
 

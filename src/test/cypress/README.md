@@ -234,7 +234,9 @@ For local development testing against a development server:
 Configure tests using environment variables:
 
 - `CYPRESS_baseUrl`: Override base URL
-- `CYPRESS_apiUrl`: Override API URL
+- `CYPRESS_apiUrl`: Override API URL (the .NET API, default `http://localhost:5000`)
+- `CYPRESS_goApiUrl`: Override the Go API URL (default `http://localhost:5001`)
+- `CYPRESS_cppApiUrl`: Override the C++ API URL (default `http://localhost:5002`)
 - `CYPRESS_viewportWidth`: Override viewport width
 - `CYPRESS_viewportHeight`: Override viewport height
 

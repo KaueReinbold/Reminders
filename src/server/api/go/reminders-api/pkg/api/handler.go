@@ -4,9 +4,20 @@ import (
 	"errors"
 	"net/http"
 	"reminders-go-api/pkg/models"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
+
+// InvalidLimitDate is the message the .NET API already returns, kept identical so
+// a client cannot tell which backend answered (ADR-0011).
+const InvalidLimitDate = "The Limit Date should be later than Today."
+
+// ReminderNotFound is the .NET message for a missing reminder, kept identical too.
+const ReminderNotFound = "Reminder does not exist."
+
+// day is the granularity of the limit date rule: a later day, not a later instant.
+const day = 24 * time.Hour
 
 type ReminderHandler struct {
 	repository ReminderRepository
@@ -16,11 +27,31 @@ func NewReminderHandler(repo ReminderRepository) *ReminderHandler {
 	return &ReminderHandler{repository: repo}
 }
 
+// bindReminder reads the body and reports a binding failure as problem details,
+// attributing an unparseable date to the limitDate field.
+func bindReminder(c *gin.Context) (models.Reminder, bool) {
+	reminder := models.Reminder{}
+
+	err := c.ShouldBindJSON(&reminder)
+
+	if err == nil {
+		return reminder, true
+	}
+
+	if errors.Is(err, models.ErrInvalidLimitDate) {
+		validationProblem(c, map[string][]string{"limitDate": {models.ErrInvalidLimitDate.Error()}})
+	} else {
+		problem(c, http.StatusBadRequest, "Invalid body")
+	}
+
+	return reminder, false
+}
+
 func (handler *ReminderHandler) GetReminders(c *gin.Context) {
 	reminders, err := handler.repository.GetAll()
 
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Could not get reminders"})
+		problem(c, http.StatusInternalServerError, "Could not get reminders")
 		return
 	}
 
@@ -35,7 +66,7 @@ func (handler *ReminderHandler) GetCount(c *gin.Context) {
 	count, err := handler.repository.Count()
 
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Could not the count of reminders"})
+		problem(c, http.StatusInternalServerError, "Could not the count of reminders")
 		return
 	}
 
@@ -48,10 +79,10 @@ func (handler *ReminderHandler) GetReminder(c *gin.Context) {
 	reminder, err := handler.repository.GetByID(id)
 
 	if errors.Is(err, ErrorReminderNotFound) {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Reminder not found"})
+		problem(c, http.StatusNotFound, ReminderNotFound)
 		return
 	} else if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Failed to get the reminder"})
+		problem(c, http.StatusInternalServerError, "Failed to get the reminder")
 		return
 	}
 
@@ -59,17 +90,23 @@ func (handler *ReminderHandler) GetReminder(c *gin.Context) {
 }
 
 func (handler *ReminderHandler) PostReminder(c *gin.Context) {
-	newReminder := models.Reminder{}
+	newReminder, ok := bindReminder(c)
 
-	if err := c.BindJSON(&newReminder); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Invalid body"})
+	if !ok {
+		return
+	}
+
+	// Create only: an overdue reminder must stay editable, so the update path
+	// does not revalidate a date that is already stored (ADR-0011).
+	if !newReminder.LimitDate.UTC().Truncate(day).After(time.Now().UTC().Truncate(day)) {
+		validationProblem(c, map[string][]string{"limitDate": {InvalidLimitDate}})
 		return
 	}
 
 	newReminder, err := handler.repository.Create(newReminder)
 
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Failed to create the reminder"})
+		problem(c, http.StatusInternalServerError, "Failed to create the reminder")
 		return
 	}
 
@@ -79,20 +116,19 @@ func (handler *ReminderHandler) PostReminder(c *gin.Context) {
 func (handler *ReminderHandler) PutReminder(c *gin.Context) {
 	id := c.Param("id")
 
-	updateReminder := models.Reminder{}
+	updateReminder, ok := bindReminder(c)
 
-	if err := c.BindJSON(&updateReminder); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Invalid body"})
+	if !ok {
 		return
 	}
 
 	reminder, err := handler.repository.Update(id, updateReminder)
 
 	if errors.Is(err, ErrorReminderNotFound) {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Reminder not found"})
+		problem(c, http.StatusNotFound, ReminderNotFound)
 		return
 	} else if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Failed to update the reminder"})
+		problem(c, http.StatusInternalServerError, "Failed to update the reminder")
 		return
 	}
 
@@ -105,7 +141,7 @@ func (handler *ReminderHandler) DeleteReminder(c *gin.Context) {
 	err := handler.repository.Delete(id)
 
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Failed to delete the reminder"})
+		problem(c, http.StatusInternalServerError, "Failed to delete the reminder")
 		return
 	}
 

@@ -17,7 +17,13 @@ builder.Services
         builder.Configuration.GetConnectionString("DefaultConnection"),
         builder.Configuration.GetValue<SupportedDatabases?>("DatabaseProvider") ?? SupportedDatabases.SqlServer)
     .AddApplicationValidations()
-    .AddControllers();
+    .AddControllers()
+    // Validation error keys travel as camel case JSON field names (ADR-0011).
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.DictionaryKeyPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.Converters.Add(new UtcDateTimeOffsetConverter());
+    });
 builder.Services.Configure<BlockchainSettings>(
     builder.Configuration.GetSection("Blockchain"));
 
