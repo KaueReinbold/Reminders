@@ -18,7 +18,11 @@ export function useReturnFocus(enabled = true): void {
     if (!enabled) return;
 
     return () => {
-      trigger.current?.focus?.();
+      // The trigger can unmount alongside the overlay: deleting from the sheet
+      // closes both, and the deleted reminder's card goes with them. Focusing a
+      // detached node silently drops focus, so leave it where it is instead.
+      if (trigger.current?.isConnected) trigger.current.focus?.();
+
       trigger.current = null;
     };
   }, [enabled]);

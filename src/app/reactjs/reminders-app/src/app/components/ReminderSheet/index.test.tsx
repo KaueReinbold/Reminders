@@ -145,4 +145,20 @@ describe('ReminderSheet', () => {
 
     expect(trigger).toHaveFocus();
   });
+
+  it('should not steal focus back to a trigger that unmounted with it', () => {
+    const trigger = document.createElement('button');
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    const { unmount } = render(<ReminderSheet onClose={jest.fn} onSave={jest.fn} />);
+
+    // The trigger goes away while the sheet is open, as it does when the
+    // reminder is deleted from inside the sheet.
+    trigger.remove();
+
+    unmount();
+
+    expect(document.activeElement).not.toBe(trigger);
+  });
 });
