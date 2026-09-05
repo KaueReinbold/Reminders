@@ -24,5 +24,7 @@ module.exports = defineConfig({
   },
   env: {
     apiUrl: process.env.CYPRESS_apiUrl || 'http://localhost:5000',
+    goApiUrl: process.env.CYPRESS_goApiUrl || 'http://localhost:5001',
+    cppApiUrl: process.env.CYPRESS_cppApiUrl || 'http://localhost:5002',
   },
 })
