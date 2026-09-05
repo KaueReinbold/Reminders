@@ -158,6 +158,10 @@ public class RemindersService
             .Get()
             .FirstOrDefault(reminder => reminder.Id == id && !reminder.IsDeleted);
 
+        // A missing reminder is a 404, not an empty 204 (ADR-0011).
+        if (reminder is null)
+            throw new RemindersApplicationException(ValidationStatus.NotFound, RemindersResources.NotFound);
+
         try
         {
             var chainId = blockchainSettings.ChainId;

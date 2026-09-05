@@ -203,9 +203,9 @@ namespace Reminders.Application.Test
 
         [Timeout(1000)]
         [TestMethod]
-        public async Task Should_LimitDateAfterTodayOnEdit()
+        public async Task Should_EditWithPastLimitDate()
         {
-            // arrange
+            // arrange: an overdue reminder must stay editable (ADR-0011)
             var reminder = new ReminderViewModel()
             {
                 Id = Guid.NewGuid(),
@@ -214,13 +214,21 @@ namespace Reminders.Application.Test
                 LimitDate = DateTime.UtcNow.AddDays(-1)
             };
 
+            repositoryMock
+                .Setup(repository => repository.Exists(It.IsAny<Guid>()))
+                .Returns(true);
+
             // act
             var service = GetRemindersService();
 
-            var exception = await Assert.ThrowsExceptionAsync<ValidationException>(() => service.EditAsync(reminder.Id.Value, reminder));
+            await service.EditAsync(reminder.Id.Value, reminder);
 
             // assert
-            Assert.IsTrue(exception.Message.Contains(RemindersResources.InvalidLimitDate));
+            repositoryMock.Verify(repository =>
+                repository.Update(It.Is<Reminder>(r =>
+                    r.Title == reminder.Title &&
+                    r.LimitDate == reminder.LimitDate)), Times.Once);
+            unitOfWorkMock.Verify(unitOfWork => unitOfWork.Commit(), Times.Once);
         }
 
         [Timeout(1000)]
@@ -435,10 +443,12 @@ namespace Reminders.Application.Test
             var service = GetRemindersService();
 
             // act
-            var result = await service.GetAsync(reminder.Id);
+            var exception = await Assert.ThrowsExceptionAsync<RemindersApplicationException>(() =>
+                service.GetAsync(reminder.Id));
 
             // assert
-            Assert.IsNull(result);
+            Assert.IsTrue(exception.StatusCode == ValidationStatus.NotFound);
+            Assert.IsTrue(exception.Message.Contains(RemindersResources.NotFound));
         }
 
         #endregion
