@@ -60,7 +60,8 @@ implementations:
 camel case, never by an internal property path. Non validation errors carry
 `type`, `title`, `status` and, where useful, `detail`. Messages are the strings
 the .NET API already returned, so a client cannot tell which backend answered:
-the same failure gives a byte identical body from all three.
+the same failure gives an identical parsed body from all three. The bytes differ
+(Go pretty prints, C++ sorts keys), which no JSON client can see.
 
 Status codes: 400 for a malformed body or a failed validation rule, 404 for a
 missing reminder, 500 for anything unexpected.
@@ -101,4 +102,6 @@ binding failure carries its parser message and a `traceId`.
   host time zone, so a date only value is midnight UTC everywhere.
 - Any new API implementation has one document to conform to, and the Cypress
   `api-contract.cy.js` spec checks it against every backend, including that the
-  error bodies are identical.
+  parsed error bodies are identical. The API Contract workflow boots the api
+  profile and runs that spec on every change to an API, the compose files or the
+  spec itself, so a regression fails CI.
