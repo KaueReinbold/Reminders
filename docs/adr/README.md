@@ -15,6 +15,7 @@ Decisions that shape architecture, workflow, or tooling are recorded here so hum
 | [0007](0007-agent-contribution-workflow.md) | Agent contribution workflow: worktrees, quality gates, e2e upkeep | accepted | 2026-08-18 |
 | [0008](0008-pr-review-agent.md) | PR review agent via Claude Code Action | accepted | 2026-08-22 |
 | [0009](0009-flutter-http-client.md) | Flutter API client on the http package | accepted | 2026-08-22 |
+| [0010](0010-codeql-language-selection.md) | CodeQL analyzes only the languages a pull request changed | accepted | 2026-09-05 |
 
 ## Process
 

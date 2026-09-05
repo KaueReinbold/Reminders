@@ -9,6 +9,7 @@ on:
     paths:
       - 'src/app/flutter/reminders_app/**'
       - '!src/app/flutter/reminders_app/**/*.md'
+      - '.github/workflows/flutter-pull-request.yml'
 
 permissions:
   contents: read
@@ -24,7 +25,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.0'
+          flutter-version: '3.41.2'
           channel: stable
           cache: true
 

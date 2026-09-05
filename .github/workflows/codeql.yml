@@ -1,4 +1,7 @@
 # CodeQL advanced setup, replaces default setup so docs-only changes skip analysis
+# On a pull request only the languages whose files changed are analyzed; pushes to
+# main and the weekly schedule always analyze everything, so each language keeps a
+# full baseline.
 name: CodeQL
 
 on:
@@ -26,19 +29,57 @@ permissions:
   actions: read
 
 jobs:
+  languages:
+    name: Select languages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      matrix: ${{ steps.pick.outputs.matrix }}
+      any: ${{ steps.pick.outputs.any }}
+    steps:
+      - name: Pick the languages to analyze
+        id: pick
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          if [ -z "$PR" ]; then
+            langs='"actions","csharp","javascript-typescript"'
+          else
+            files=$(gh api --paginate "repos/$REPO/pulls/$PR/files" --jq '.[].filename')
+            echo "$files"
+            selected=()
+            if grep -Eq '^\.github/(workflows|actions)/' <<<"$files"; then
+              selected+=('"actions"')
+            fi
+            if grep -Eq '\.(cs|csproj|sln|props|targets)$' <<<"$files"; then
+              selected+=('"csharp"')
+            fi
+            if grep -Eq '\.(js|jsx|ts|tsx|mjs|cjs)$|(^|/)(package|package-lock|tsconfig)[^/]*\.json$' <<<"$files"; then
+              selected+=('"javascript-typescript"')
+            fi
+            langs=$(IFS=,; echo "${selected[*]}")
+          fi
+          echo "selected: [$langs]"
+          echo "matrix=[$langs]" >> "$GITHUB_OUTPUT"
+          if [ -n "$langs" ]; then
+            echo "any=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "any=false" >> "$GITHUB_OUTPUT"
+          fi
+
   analyze:
     name: Analyze (${{ matrix.language }})
+    needs: languages
+    if: needs.languages.outputs.any == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - language: actions
-            build-mode: none
-          - language: csharp
-            build-mode: none
-          - language: javascript-typescript
-            build-mode: none
+        language: ${{ fromJSON(needs.languages.outputs.matrix) }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -47,7 +88,7 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
+          build-mode: none
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3

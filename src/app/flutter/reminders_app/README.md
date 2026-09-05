@@ -15,6 +15,11 @@ flutter test
 CI runs analyze + test on PRs touching this app
 (`.github/workflows/flutter-pull-request.yml`).
 
+Flutter version: **3.41.2** (stable). CI pins the same version so
+`pubspec.lock` is resolved and tested with the toolchain used locally. When
+upgrading Flutter, bump `flutter-version` in the workflow and regenerate
+`pubspec.lock` in the same PR.
+
 ## Structure
 
 - `lib/theme/tokens.dart`: design tokens (colors, radii, spacing) and
