@@ -290,3 +290,7 @@ local.env
 # Database 
 Reminders.db*
 .env
+
+# Local, machine-scoped agent configuration
+CLAUDE.local.md
+.claude/settings.local.json

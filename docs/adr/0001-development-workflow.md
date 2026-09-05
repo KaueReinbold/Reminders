@@ -15,7 +15,6 @@ Portfolio project maintained by one developer plus multiple AI agents working in
 - SemVer git tags (`vX.Y.Z`) on `main`; Docker image tags mirror git tags, version tags immutable, only `latest` moves.
 - Decisions recorded as ADRs in `docs/adr/` so agents and humans share persistent memory.
 - Multi-agent rule: claim issue before starting, one issue = one branch = one PR.
-- Writing style: no em/en dashes anywhere.
 - AI agents run caveman (terse output) and ponytail (minimal code) always on in this repo.
 
 ## Consequences
