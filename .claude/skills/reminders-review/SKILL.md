@@ -1,5 +1,5 @@
 ---
-name: code-review
+name: reminders-review
 description: Review a pull request or a working-tree diff in this repository. Use when asked to review a PR, review the diff, or check changes before opening a PR.
 ---
 
