@@ -44,6 +44,11 @@ export function ReminderSheet({
     isDone: reminder?.isDone ?? false,
   });
 
+  const titleError = fieldError(errors, 'title');
+  const descriptionError = fieldError(errors, 'description');
+  const limitDateError = fieldError(errors, 'limitDate');
+  const bannerError = unmappedError(errors);
+
   useEscapeKey(onClose);
   useReturnFocus();
 
@@ -88,9 +93,9 @@ export function ReminderSheet({
               data-testid="title"
               autoFocus
             />
-            {fieldError(errors, 'title') && (
+            {titleError && (
               <span className={styles.fieldError} data-testid="title-error">
-                {fieldError(errors, 'title')}
+                {titleError}
               </span>
             )}
           </label>
@@ -105,9 +110,9 @@ export function ReminderSheet({
               onChange={event => update({ description: event.target.value })}
               data-testid="description"
             />
-            {fieldError(errors, 'description') && (
+            {descriptionError && (
               <span className={styles.fieldError} data-testid="description-error">
-                {fieldError(errors, 'description')}
+                {descriptionError}
               </span>
             )}
           </label>
@@ -122,9 +127,9 @@ export function ReminderSheet({
                 onChange={event => update({ limitDate: event.target.value })}
                 data-testid="limitDate"
               />
-              {fieldError(errors, 'limitDate') && (
+              {limitDateError && (
                 <span className={styles.fieldError} data-testid="limitDate-error">
-                  {fieldError(errors, 'limitDate')}
+                  {limitDateError}
                 </span>
               )}
             </label>
@@ -158,9 +163,7 @@ export function ReminderSheet({
           </div>
         </div>
 
-        {unmappedError(errors) && (
-          <p className={styles.error}>{unmappedError(errors)}</p>
-        )}
+        {bannerError && <p className={styles.error}>{bannerError}</p>}
 
         <div className={styles.footer}>
           <button
