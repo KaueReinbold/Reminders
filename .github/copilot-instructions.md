@@ -1,5 +1,7 @@
 # Reminders Project - AI Agent Instructions
 
+> Reviewing a pull request: follow [`.github/review-guidelines.md`](review-guidelines.md). It is the single source for review criteria and comment format.
+
 ## Architecture Overview
 
 This is a **full-stack learning project** for managing reminders with multiple client interfaces (React, ASP.NET MVC), three load-balanced API backends (.NET, Go, C++), and blockchain integration.

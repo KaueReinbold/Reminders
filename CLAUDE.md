@@ -171,6 +171,7 @@ docker compose config -q
 
 - **Always on, every session in this repo**: caveman (terse output: drop filler, keep all technical substance) and ponytail (minimal code: smallest change that works, prefer platform/stdlib over new dependencies, delete before adding). Both live in `.claude/skills/` and the PR review agent applies them too.
 - Read `agents.md` for architecture patterns before editing service code.
+- Reviewing a pull request, in CI or locally: follow `.github/review-guidelines.md`. It is the single source for review criteria and comment format.
 - Read `CLAUDE.local.md` when present: it holds maintainer preferences kept out of version control, and they take precedence.
 - Database changes require migrations for **both** Postgres and SqlServer providers (see agents.md).
 - Do not commit, push, tag, or open PRs unless explicitly asked.

@@ -4,6 +4,12 @@
 > **Last Updated**: January 2026  
 > **Agent Compatibility**: GitHub Copilot, Claude, GPT-4+
 
+## Reviewing a pull request
+
+Follow [`.github/review-guidelines.md`](.github/review-guidelines.md). It is the
+single source for review criteria and comment format, shared by the CI review
+workflow and any agent reviewing locally.
+
 ## Project Overview
 
 A full-stack learning project for managing reminders with multiple client interfaces, load-balanced APIs, and blockchain integration.
