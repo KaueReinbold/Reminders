@@ -16,6 +16,7 @@ Decisions that shape architecture, workflow, or tooling are recorded here so hum
 | [0008](0008-pr-review-agent.md) | PR review agent via Claude Code Action | accepted | 2026-08-22 |
 | [0009](0009-flutter-http-client.md) | Flutter API client on the http package | accepted | 2026-08-22 |
 | [0010](0010-codeql-language-selection.md) | CodeQL analyzes only the languages a pull request changed | accepted | 2026-09-05 |
+| [0011](0011-in-place-reminder-overlays.md) | In-place overlays for reminder create, edit and delete | accepted | 2026-09-05 |
 
 ## Process
 

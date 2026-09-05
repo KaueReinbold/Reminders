@@ -110,4 +110,38 @@ describe('ReminderDeleteModal', () => {
 
     expect(toggleOpenDelete).toHaveBeenCalledTimes(2);
   });
+
+  it('should focus Keep it on open and return focus to the trigger on close', () => {
+    const trigger = document.createElement('button');
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    const { rerender } = render(
+      <ReminderDeleteModal
+        openDelete={false}
+        toggleOpenDelete={jest.fn}
+        onDelete={jest.fn}
+      />,
+    );
+
+    rerender(
+      <ReminderDeleteModal
+        openDelete={true}
+        toggleOpenDelete={jest.fn}
+        onDelete={jest.fn}
+      />,
+    );
+
+    expect(screen.getByTestId('close-button')).toHaveFocus();
+
+    rerender(
+      <ReminderDeleteModal
+        openDelete={false}
+        toggleOpenDelete={jest.fn}
+        onDelete={jest.fn}
+      />,
+    );
+
+    expect(trigger).toHaveFocus();
+  });
 });

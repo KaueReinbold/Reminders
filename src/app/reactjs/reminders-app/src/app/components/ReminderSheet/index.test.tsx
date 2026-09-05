@@ -131,4 +131,18 @@ describe('ReminderSheet', () => {
 
     expect(screen.getByText('The field is Required')).toBeInTheDocument();
   });
+
+  it('should focus the title field on open and return focus on close', () => {
+    const trigger = document.createElement('button');
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    const { unmount } = render(<ReminderSheet onClose={jest.fn} onSave={jest.fn} />);
+
+    expect(screen.getByTestId('title')).toHaveFocus();
+
+    unmount();
+
+    expect(trigger).toHaveFocus();
+  });
 });

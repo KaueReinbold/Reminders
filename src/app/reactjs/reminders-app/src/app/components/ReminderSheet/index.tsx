@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 import { Reminder } from '@/app/api/types';
 import { useEscapeKey } from '@/app/hooks/useEscapeKey';
+import { useReturnFocus } from '@/app/hooks/useReturnFocus';
 import { limitDateOnly } from '@/app/util/reminderGroups';
 
 import styles from './index.module.css';
@@ -43,6 +44,7 @@ export function ReminderSheet({
   });
 
   useEscapeKey(onClose);
+  useReturnFocus();
 
   const update = (values: Partial<Reminder>) =>
     setDraft(current => ({ ...current, ...values }));
@@ -83,6 +85,7 @@ export function ReminderSheet({
               value={draft.title}
               onChange={event => update({ title: event.target.value })}
               data-testid="title"
+              autoFocus
             />
           </label>
 

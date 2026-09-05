@@ -3,6 +3,7 @@
 import React from 'react';
 
 import { useEscapeKey } from '@/app/hooks/useEscapeKey';
+import { useReturnFocus } from '@/app/hooks/useReturnFocus';
 
 import styles from './index.module.css';
 
@@ -20,6 +21,7 @@ export function ReminderDeleteModal({
   onDelete,
 }: Props): React.ReactElement | null {
   useEscapeKey(toggleOpenDelete, openDelete);
+  useReturnFocus(openDelete);
 
   if (!openDelete) {
     return null;
@@ -59,6 +61,7 @@ export function ReminderDeleteModal({
             className={styles.keepButton}
             onClick={toggleOpenDelete}
             data-testid="close-button"
+            autoFocus
           >
             Keep it
           </button>
