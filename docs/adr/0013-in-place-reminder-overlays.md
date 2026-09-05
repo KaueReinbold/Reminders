@@ -1,4 +1,4 @@
-# ADR-0011: In-place overlays for reminder create, edit and delete
+# ADR-0013: In-place overlays for reminder create, edit and delete
 
 - **Status**: accepted
 - **Date**: 2026-09-05
