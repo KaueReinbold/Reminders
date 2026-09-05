@@ -56,6 +56,8 @@ class _RemindersListScreenState extends State<RemindersListScreen> {
     setState(() => _items = _replace(_items, toggled));
     try {
       await widget.api.toggleDone(reminder);
+      if (!mounted || _error == null) return;
+      setState(() => _error = null);
     } on ApiException catch (e) {
       if (!mounted) return;
       setState(() {
