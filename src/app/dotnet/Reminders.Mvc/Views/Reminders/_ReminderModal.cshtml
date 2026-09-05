@@ -4,7 +4,7 @@
     var reminder = modal.Reminder;
     var isDelete = modal.Mode == ModalMode.Delete;
     var isEdit = modal.Mode == ModalMode.Edit;
-    var title = modal.Mode switch { ModalMode.Create => "New reminder", ModalMode.Edit => "Edit reminder", _ => "Delete reminder?" };
+    var title = modal.Mode switch { ModalMode.Create => "New reminder", ModalMode.Edit => "Edit reminder", _ => "Delete this reminder?" };
 }
 
 <div class="scrim">
@@ -25,8 +25,8 @@
             </p>
             <form method="post" id="formDelete" class="modal-actions"
                   asp-action="Delete" asp-route-id="@reminder.Id" asp-route-view="@Model.RouteView" asp-route-q="@Model.RouteQuery">
-                <a class="btn-secondary" asp-action="Index" asp-route-view="@Model.RouteView" asp-route-q="@Model.RouteQuery">Cancel</a>
                 <button type="submit" class="btn-danger">Delete</button>
+                <a class="btn-secondary" asp-action="Index" asp-route-view="@Model.RouteView" asp-route-q="@Model.RouteQuery">Keep it</a>
             </form>
         }
         else
@@ -34,31 +34,40 @@
             <form method="post" id="@(isEdit ? "formEdit" : "formCreate")" class="modal-form"
                   asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@reminder.Id" asp-route-view="@Model.RouteView" asp-route-q="@Model.RouteQuery">
                 <div class="field">
-                    <label for="Title">Title</label>
+                    <label class="field-label" for="Title">Title</label>
                     <input id="Title" name="Title" value="@reminder.Title" maxlength="50" autofocus placeholder="What needs doing?" />
                     @Html.ValidationMessage("Title", null, new { @class = "field-error" })
                 </div>
                 <div class="field">
-                    <label for="Description">Description</label>
+                    <label class="field-label" for="Description">Description</label>
                     <textarea id="Description" name="Description" rows="3" maxlength="200" placeholder="Optional details">@reminder.Description</textarea>
                     @Html.ValidationMessage("Description", null, new { @class = "field-error" })
                 </div>
-                <div class="field">
-                    <label for="LimitDate">Due date</label>
-                    <input type="date" id="LimitDate" name="LimitDate" value="@reminder.LimitDate.ToString("yyyy-MM-dd")" />
-                    @Html.ValidationMessage("LimitDate", null, new { @class = "field-error" })
+                <div class="field-row">
+                    <div class="field">
+                        <label class="field-label" for="LimitDate">Limit date</label>
+                        <input type="date" id="LimitDate" name="LimitDate" value="@reminder.LimitDate.ToString("yyyy-MM-dd")" />
+                        @Html.ValidationMessage("LimitDate", null, new { @class = "field-error" })
+                    </div>
+                    @if (isEdit)
+                    {
+                        <div class="field">
+                            <span class="field-label">Status</span>
+                            <label class="field-check" for="IsDone">
+                                <input type="checkbox" id="IsDone" name="IsDone" value="true" checked="@reminder.IsDone" />
+                                <input type="hidden" name="IsDone" value="false" />
+                                <span>Done</span>
+                            </label>
+                        </div>
+                    }
                 </div>
-                @if (isEdit)
-                {
-                    <label class="field-check">
-                        <input type="checkbox" id="IsDone" name="IsDone" value="true" checked="@reminder.IsDone" />
-                        <input type="hidden" name="IsDone" value="false" />
-                        Done
-                    </label>
-                }
                 <div class="modal-actions">
+                    <button type="submit" class="btn-new">@(isEdit ? "Save changes" : "Create reminder")</button>
                     <a class="btn-secondary" asp-action="Index" asp-route-view="@Model.RouteView" asp-route-q="@Model.RouteQuery">Cancel</a>
-                    <button type="submit" class="btn-new">@(isEdit ? "Save changes" : "Add reminder")</button>
+                    @if (isEdit)
+                    {
+                        <a class="btn-danger-text" asp-action="Delete" asp-route-id="@reminder.Id" asp-route-view="@Model.RouteView" asp-route-q="@Model.RouteQuery">Delete reminder</a>
+                    }
                 </div>
             </form>
         }
