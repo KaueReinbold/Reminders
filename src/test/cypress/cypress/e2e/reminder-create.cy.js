@@ -79,14 +79,32 @@ describe('Create Reminder', () => {
   })
 
   it('should surface a flat { message } 400 error from the API', { tags: '@create' }, () => {
-    // Go/C++ APIs reject with { message } instead of dotnet problem details
+    // Go and C++ still answer { message } until #426 lands
     cy.intercept('POST', '**/api/reminders', {
       statusCode: 400,
-      body: { message: 'Invalid body' }
+      body: { message: 'Flat error body' }
     }).as('createReminderFlatError')
 
     cy.createReminder('Test Title', 'Test Description', '2024-12-31')
     cy.wait('@createReminderFlatError')
+
+    cy.contains('Flat error body').should('be.visible')
+    cy.url().should('include', '/reminder/create')
+  })
+
+  it('should surface a 400 that carries no field errors', { tags: '@create' }, () => {
+    // ADR-0011: a non validation failure has no `errors` map, only `title`
+    cy.intercept('POST', '**/api/reminders', {
+      statusCode: 400,
+      body: {
+        type: 'https://tools.ietf.org/html/rfc9110#section-15.5.1',
+        title: 'Invalid body',
+        status: 400
+      }
+    }).as('createReminderNoFieldErrors')
+
+    cy.createReminder('Test Title', 'Test Description', '2024-12-31')
+    cy.wait('@createReminderNoFieldErrors')
 
     // Error message is shown and we stay on the create page
     cy.contains('Invalid body').should('be.visible')

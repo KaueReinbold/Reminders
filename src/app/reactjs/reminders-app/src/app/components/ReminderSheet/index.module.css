@@ -173,6 +173,13 @@
   justify-content: center;
 }
 
+.fieldError {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--accent);
+  line-height: 1.45;
+}
+
 .error {
   margin-top: 18px;
   font-size: 14.5px;

@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 
-import { Reminder } from '@/app/api/types';
+import { fieldError, unmappedError } from '@/app/api/errors';
+import { Errors, Reminder } from '@/app/api/types';
 import { useEscapeKey } from '@/app/hooks/useEscapeKey';
 import { useReturnFocus } from '@/app/hooks/useReturnFocus';
 import { limitDateOnly } from '@/app/util/reminderGroups';
@@ -11,7 +12,7 @@ import styles from './index.module.css';
 
 interface Props {
   reminder?: Reminder;
-  error?: string;
+  errors?: Errors;
   onClose: () => void;
   onSave: (reminder: Reminder) => void;
   onDelete?: () => void;
@@ -28,7 +29,7 @@ const tomorrow = (): string => {
 
 export function ReminderSheet({
   reminder,
-  error,
+  errors,
   onClose,
   onSave,
   onDelete,
@@ -42,6 +43,11 @@ export function ReminderSheet({
     limitDate: reminder ? limitDateOnly(reminder) : tomorrow(),
     isDone: reminder?.isDone ?? false,
   });
+
+  const titleError = fieldError(errors, 'title');
+  const descriptionError = fieldError(errors, 'description');
+  const limitDateError = fieldError(errors, 'limitDate');
+  const bannerError = unmappedError(errors);
 
   useEscapeKey(onClose);
   useReturnFocus();
@@ -87,6 +93,11 @@ export function ReminderSheet({
               data-testid="title"
               autoFocus
             />
+            {titleError && (
+              <span className={styles.fieldError} data-testid="title-error">
+                {titleError}
+              </span>
+            )}
           </label>
 
           <label className={styles.field}>
@@ -99,6 +110,11 @@ export function ReminderSheet({
               onChange={event => update({ description: event.target.value })}
               data-testid="description"
             />
+            {descriptionError && (
+              <span className={styles.fieldError} data-testid="description-error">
+                {descriptionError}
+              </span>
+            )}
           </label>
 
           <div className={styles.row}>
@@ -111,6 +127,11 @@ export function ReminderSheet({
                 onChange={event => update({ limitDate: event.target.value })}
                 data-testid="limitDate"
               />
+              {limitDateError && (
+                <span className={styles.fieldError} data-testid="limitDate-error">
+                  {limitDateError}
+                </span>
+              )}
             </label>
 
             <div className={styles.rowField}>
@@ -142,7 +163,7 @@ export function ReminderSheet({
           </div>
         </div>
 
-        {error && <p className={styles.error}>{error}</p>}
+        {bannerError && <p className={styles.error}>{bannerError}</p>}
 
         <div className={styles.footer}>
           <button

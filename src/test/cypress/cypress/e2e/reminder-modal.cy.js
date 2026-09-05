@@ -54,9 +54,14 @@ describe('Reminder Modal', () => {
     })
 
     it('should keep the modal open and show the API error', { tags: '@modal' }, () => {
+      // ADR-0011: a non validation failure has no `errors` map, only `title`
       cy.intercept('POST', '**/api/reminders', {
         statusCode: 400,
-        body: { message: 'Invalid body' }
+        body: {
+          type: 'https://tools.ietf.org/html/rfc9110#section-15.5.1',
+          title: 'Invalid body',
+          status: 400
+        }
       }).as('createReminderError')
 
       cy.openCreateSheet()
@@ -67,6 +72,29 @@ describe('Reminder Modal', () => {
       cy.contains('Invalid body').should('be.visible')
       cy.get('[role="dialog"]').should('be.visible')
       cy.get('[data-testid="title"]').should('have.value', 'Modal Reminder')
+    })
+
+    it('should show a field error next to the field it belongs to', { tags: '@modal' }, () => {
+      cy.intercept('POST', '**/api/reminders', {
+        statusCode: 400,
+        body: {
+          type: 'https://tools.ietf.org/html/rfc9110#section-15.5.1',
+          title: 'One or more validation errors occurred.',
+          status: 400,
+          errors: {
+            limitDate: ['The Limit Date should be later than Today.']
+          }
+        }
+      }).as('createReminderInvalidDate')
+
+      cy.openCreateSheet()
+      cy.fillSheet('Modal Reminder', 'Created from the modal', '2020-01-01')
+      cy.saveSheet()
+      cy.wait('@createReminderInvalidDate')
+
+      cy.get('[data-testid="limitDate-error"]')
+        .should('contain', 'The Limit Date should be later than Today.')
+      cy.get('[role="dialog"]').should('be.visible')
     })
   })
 
