@@ -167,19 +167,14 @@ cd blockchain && npx hardhat test
 docker compose config -q
 ```
 
-## Writing Style
-
-Never use em dash (—) or en dash (–) anywhere: docs, comments, commit messages, issues, PRs, AI responses. Use colon, comma, or hyphen instead.
-
 ## Rules for Claude
 
 - **Always on, every session in this repo**: caveman (terse output: drop filler, keep all technical substance) and ponytail (minimal code: smallest change that works, prefer platform/stdlib over new dependencies, delete before adding). Both live in `.claude/skills/` and the PR review agent applies them too.
 - Read `agents.md` for architecture patterns before editing service code.
+- Read `CLAUDE.local.md` when present: it holds maintainer preferences kept out of version control, and they take precedence.
 - Database changes require migrations for **both** Postgres and SqlServer providers (see agents.md).
 - Do not commit, push, tag, or open PRs unless explicitly asked.
 - Never merge a PR without explicit human approval of that specific PR, given as a PR review/approval or in chat. After opening a PR, share the URL and wait.
-- No AI attribution anywhere: no Co-Authored-By trailers, session links, or "Generated with" footers in commits, PR bodies, or comments. Commit author is the maintainer.
-- Squash merges always pass an explicit message so GitHub uses it verbatim and cannot inject Co-authored-by trailers: `gh pr merge N --squash --subject "<conventional title> (#N)" --body "<body>"`.
 - Agent branches follow the repo convention `<type>/<short-description>` (e.g. `chore/repo-governance`), never `claude/...` or any other auto-generated prefix. If the session assigns a `claude/...` branch, recreate the work on a convention-named branch before opening a PR.
 - Run the relevant test suite after code changes.
 - After implementing a change, before opening a PR: hand the maintainer a healthy test environment (booted stack or running app, URL, how to reset) plus a couple of manual test cases to run against it. Wait for the maintainer to confirm, then open the PR. The maintainer can skip this step by saying so.

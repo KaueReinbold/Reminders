@@ -10,8 +10,6 @@ Repo: `kauereinbold/Reminders`. Backlog lives in GitHub Issues, execution view i
 ## Ground rules
 
 - Use gh's built-in `--jq` flag for JSON filtering; do not assume `jq` is installed on the machine.
-- Never add AI attribution to commits, PRs, or comments.
-- No em/en dashes anywhere.
 - Never merge a PR yourself: open it, share the URL, wait for the maintainer's review and approval.
 
 ## Finding something to work on

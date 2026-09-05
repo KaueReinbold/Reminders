@@ -99,11 +99,10 @@ jobs:
             - Correctness: bugs, unhandled errors, broken contracts between the .NET, Go
               and C++ APIs, React, MVC and Flutter clients.
             - Security: secrets in code or compose files, injection, XSS, unsafe defaults.
-            - Repo rules: conventional PR title, no em or en dashes anywhere, minimal
-              change (no new dependencies without need), migrations for both Postgres and
-              SqlServer on schema changes, Cypress specs updated for React UI or API
-              contract changes, ADR present for architecture or tooling decisions, no AI
-              attribution in commits or PR body.
+            - Repo rules: conventional PR title, minimal change (no new dependencies
+              without need), migrations for both Postgres and SqlServer on schema
+              changes, Cypress specs updated for React UI or API contract changes, ADR
+              present for architecture or tooling decisions.
             - Tests: new behaviour covered, existing suites still meaningful.
 
             Before reviewing, run `gh pr view --comments` and read earlier review
@@ -119,8 +118,11 @@ jobs:
               confirmed: true) only for [blocker] and [major]. Put [minor] and [nit]
               findings in the summary only, at most five of them.
             - Post exactly one summary comment with `gh pr comment`, grouped by severity.
-              If no [blocker] or [major] remains, end the summary with the line
-              "Ready for human review." If there are no findings at all, say so.
+              With no findings the whole comment is the line "No findings."
+            - Report outcomes, not process. Never list the categories or rules that came
+              back clean, never cite a repository document as the reason a finding stands,
+              and never add a readiness, sign-off, or next-step line. State the defect and
+              stop.
             - Caveman wording: one line per finding, `file:line: problem. fix.`, no
               throat-clearing, no restating the diff. Full sentences only for security
               findings or design disagreements that need the why.
