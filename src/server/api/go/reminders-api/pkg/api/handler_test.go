@@ -34,11 +34,14 @@ func (f *fakeRepository) Update(id string, r models.Reminder) (models.Reminder, 
 }
 func (f *fakeRepository) Delete(id string) error { return f.delete(id) }
 
+// The limit date rule is relative to today, so the fixture is too.
+var futureDate = time.Now().UTC().Truncate(24*time.Hour).AddDate(0, 0, 7)
+
 var sample = models.Reminder{
 	Id:          "6f1d2c3e-0000-4000-8000-000000000001",
 	Title:       "Pay rent",
 	Description: "Transfer before noon",
-	LimitDate:   time.Date(2026, 9, 1, 0, 0, 0, 0, time.UTC),
+	LimitDate:   futureDate,
 	IsDone:      false,
 }
 
@@ -177,7 +180,7 @@ func TestPostReminder(t *testing.T) {
 			return r, nil
 		}})
 		rec := do(t, router, http.MethodPost, "/api/reminders", map[string]any{
-			"title": "Pay rent", "description": "Transfer", "limitDate": "2026-09-01T00:00:00Z", "isDone": false,
+			"title": "Pay rent", "description": "Transfer", "limitDate": futureDate.Format(time.RFC3339), "isDone": false,
 		})
 		if rec.Code != http.StatusCreated {
 			t.Fatalf("status = %d body = %q, want 201", rec.Code, rec.Body.String())
@@ -205,6 +208,76 @@ func TestPostReminder(t *testing.T) {
 		rec := do(t, router, http.MethodPost, "/api/reminders", sample)
 		if rec.Code != http.StatusInternalServerError {
 			t.Fatalf("status = %d, want 500", rec.Code)
+		}
+	})
+
+	// ADR-0011: the shared validation and error contract.
+	t.Run("accepts a date only limitDate as midnight UTC", func(t *testing.T) {
+		var received models.Reminder
+		router := newRouter(&fakeRepository{create: func(r models.Reminder) (models.Reminder, error) {
+			received = r
+			return r, nil
+		}})
+		rec := do(t, router, http.MethodPost, "/api/reminders", map[string]any{
+			"title": "Pay rent", "limitDate": futureDate.Format(time.DateOnly), "isDone": false,
+		})
+		if rec.Code != http.StatusCreated {
+			t.Fatalf("status = %d body = %q, want 201", rec.Code, rec.Body.String())
+		}
+		if !received.LimitDate.Equal(futureDate) {
+			t.Fatalf("limitDate = %v, want %v", received.LimitDate, futureDate)
+		}
+	})
+
+	t.Run("rejects a past limitDate with problem details", func(t *testing.T) {
+		router := newRouter(&fakeRepository{})
+		rec := do(t, router, http.MethodPost, "/api/reminders", map[string]any{
+			"title": "Pay rent", "limitDate": "2020-01-01", "isDone": false,
+		})
+		if rec.Code != http.StatusBadRequest {
+			t.Fatalf("status = %d, want 400", rec.Code)
+		}
+		if got := rec.Header().Get("Content-Type"); got != ProblemContentType {
+			t.Fatalf("content type = %q, want %q", got, ProblemContentType)
+		}
+		problem := decode[ProblemDetails](t, rec)
+		if problem.Status != http.StatusBadRequest || problem.Type != ClientErrorType {
+			t.Fatalf("problem = %+v", problem)
+		}
+		if messages := problem.Errors["limitDate"]; len(messages) != 1 || messages[0] != InvalidLimitDate {
+			t.Fatalf("errors = %+v", problem.Errors)
+		}
+	})
+
+	t.Run("rejects today as a limitDate", func(t *testing.T) {
+		router := newRouter(&fakeRepository{})
+		rec := do(t, router, http.MethodPost, "/api/reminders", map[string]any{
+			"title": "Pay rent", "limitDate": time.Now().UTC().Format(time.DateOnly), "isDone": false,
+		})
+		if rec.Code != http.StatusBadRequest {
+			t.Fatalf("status = %d, want 400", rec.Code)
+		}
+	})
+
+	t.Run("an unparseable limitDate is a limitDate validation error", func(t *testing.T) {
+		router := newRouter(&fakeRepository{})
+		rec := do(t, router, http.MethodPost, "/api/reminders", map[string]any{
+			"title": "Pay rent", "limitDate": "31/12/2030", "isDone": false,
+		})
+		if rec.Code != http.StatusBadRequest {
+			t.Fatalf("status = %d, want 400", rec.Code)
+		}
+		if problem := decode[ProblemDetails](t, rec); len(problem.Errors["limitDate"]) != 1 {
+			t.Fatalf("errors = %+v", problem.Errors)
+		}
+	})
+
+	t.Run("a malformed body is problem details without field errors", func(t *testing.T) {
+		router := newRouter(&fakeRepository{})
+		rec := do(t, router, http.MethodPost, "/api/reminders", "{not json")
+		problem := decode[ProblemDetails](t, rec)
+		if problem.Status != http.StatusBadRequest || problem.Title == "" || problem.Errors != nil {
+			t.Fatalf("problem = %+v", problem)
 		}
 	})
 }
@@ -253,6 +326,20 @@ func TestPutReminder(t *testing.T) {
 		rec := do(t, router, http.MethodPut, "/api/reminders/"+sample.Id, sample)
 		if rec.Code != http.StatusInternalServerError {
 			t.Fatalf("status = %d, want 500", rec.Code)
+		}
+	})
+
+	// ADR-0011: an overdue reminder must stay editable.
+	t.Run("accepts a past limitDate", func(t *testing.T) {
+		router := newRouter(&fakeRepository{update: func(id string, r models.Reminder) (models.Reminder, error) {
+			r.Id = id
+			return r, nil
+		}})
+		rec := do(t, router, http.MethodPut, "/api/reminders/"+sample.Id, map[string]any{
+			"title": "Pay rent", "limitDate": "2020-01-01", "isDone": true,
+		})
+		if rec.Code != http.StatusOK {
+			t.Fatalf("status = %d body = %q, want 200", rec.Code, rec.Body.String())
 		}
 	})
 }

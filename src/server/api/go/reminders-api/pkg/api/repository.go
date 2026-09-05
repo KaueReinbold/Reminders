@@ -113,14 +113,15 @@ func (repository *PostgresReminderRepository) GetByID(id string) (models.Reminde
 
 	if err != nil {
 
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			log.Printf("Error scanning row not found: %v", err)
 			return models.Reminder{}, ErrorReminderNotFound
 		}
 
+		// A real database failure is a 500, not a 404 (ADR-0011).
 		log.Printf("Error scanning row: %v", err)
 
-		return models.Reminder{}, ErrorReminderNotFound
+		return models.Reminder{}, err
 	}
 
 	return reminder, nil
