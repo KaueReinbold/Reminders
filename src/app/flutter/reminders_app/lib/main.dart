@@ -1,36 +1,24 @@
 import 'package:flutter/material.dart';
 
+import 'api/api_client.dart';
+import 'reminders/list_screen.dart';
 import 'theme/tokens.dart';
 
 void main() {
-  runApp(const RemindersApp());
+  runApp(RemindersApp(api: RemindersApi()));
 }
 
 class RemindersApp extends StatelessWidget {
-  const RemindersApp({super.key});
+  const RemindersApp({super.key, required this.api});
+
+  final RemindersApi api;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Reminders',
       theme: buildAppTheme(),
-      home: const _Placeholder(),
-    );
-  }
-}
-
-class _Placeholder extends StatelessWidget {
-  const _Placeholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          'Reminders',
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
-      ),
+      home: RemindersListScreen(api: api),
     );
   }
 }

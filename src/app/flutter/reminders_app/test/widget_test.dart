@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
+import 'package:reminders_app/api/api_client.dart';
 import 'package:reminders_app/main.dart';
 import 'package:reminders_app/theme/tokens.dart';
 
 void main() {
-  testWidgets('renders placeholder with design theme', (tester) async {
-    await tester.pumpWidget(const RemindersApp());
+  testWidgets('boots into the list screen with the design theme', (
+    tester,
+  ) async {
+    final api = RemindersApi(
+      client: MockClient((_) async => http.Response('[]', 200)),
+    );
+
+    await tester.pumpWidget(RemindersApp(api: api));
+    await tester.pumpAndSettle();
 
     expect(find.text('Reminders'), findsOneWidget);
 
