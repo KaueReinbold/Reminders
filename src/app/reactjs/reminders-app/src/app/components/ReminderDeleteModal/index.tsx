@@ -1,60 +1,69 @@
-import React from 'react';
-import { Box, Button, Modal, Typography } from '@mui/material';
+'use client';
 
-const style = {
-  modalContent: {
-    position: 'absolute',
-    top: '20%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    pt: 2,
-    px: 4,
-    pb: 3,
-  },
-  modalElement: {
-    marginBottom: '2rem',
-  },
-};
+import React from 'react';
+
+import { useEscapeKey } from '@/app/hooks/useEscapeKey';
+
+import styles from './index.module.css';
 
 interface Props {
   openDelete: boolean;
+  reminderTitle?: string;
   toggleOpenDelete: () => void;
-  onDelete: (e: React.FormEvent) => void;
+  onDelete: () => void;
 }
 
 export function ReminderDeleteModal({
   openDelete,
+  reminderTitle,
   toggleOpenDelete,
   onDelete,
-}: Props): React.ReactElement {
+}: Props): React.ReactElement | null {
+  useEscapeKey(toggleOpenDelete);
+
+  if (!openDelete) {
+    return null;
+  }
+
   return (
-    <Modal
-      open={openDelete}
-      onClose={toggleOpenDelete}
-      aria-labelledby="child-modal-title"
-      aria-describedby="child-modal-description"
+    <div
+      className={styles.scrim}
+      onClick={toggleOpenDelete}
+      data-testid="delete-modal-scrim"
     >
-      <Box sx={{ ...style.modalContent }}>
-        <Box sx={{ ...style.modalElement }}>
-          <Typography variant="h4">Delete reminder</Typography>
-        </Box>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Delete this reminder?"
+        className={styles.dialog}
+        onClick={event => event.stopPropagation()}
+      >
+        <span className={styles.title}>Delete this reminder?</span>
+        <span className={styles.body}>
+          {reminderTitle
+            ? `“${reminderTitle}” will be removed permanently.`
+            : 'This reminder will be removed permanently.'}
+        </span>
 
-        <Box sx={{ ...style.modalElement }}>
-          <Typography variant="body1">
-            Are you sure you want to delete this reminder?
-          </Typography>
-        </Box>
-
-        <Button variant="contained" color="error" onClick={onDelete} data-testid="delete-button">
-          Delete
-        </Button>
-
-        <Button variant="contained" color="info" onClick={toggleOpenDelete} data-testid="close-button">
-          Close
-        </Button>
-      </Box>
-    </Modal>
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={styles.deleteButton}
+            onClick={onDelete}
+            data-testid="delete-button"
+          >
+            Delete
+          </button>
+          <button
+            type="button"
+            className={styles.keepButton}
+            onClick={toggleOpenDelete}
+            data-testid="close-button"
+          >
+            Keep it
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

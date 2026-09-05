@@ -1,0 +1,241 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sheetIn {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--scrim-sheet);
+  animation: fadeIn 0.16s ease;
+}
+
+.sheet {
+  width: 100%;
+  max-width: 560px;
+  max-height: 92vh;
+  overflow: auto;
+  background: var(--surface);
+  border-radius: var(--radius-sheet);
+  padding: var(--pad-modal) clamp(20px, 4vw, 34px) 26px;
+  box-shadow: 0 18px 50px rgba(27, 26, 23, 0.22);
+  animation: sheetIn 0.22s cubic-bezier(0.22, 0.9, 0.25, 1);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 27px;
+}
+
+.closeButton {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--faint);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.closeButton:hover {
+  color: var(--ink);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-fields);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.rowField {
+  composes: field;
+  flex: 1 1 190px;
+}
+
+.label {
+  font-size: 11.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.input {
+  border: 1px solid var(--border-input);
+  background: var(--input-fill);
+  border-radius: var(--radius-input);
+  padding: 0 14px;
+  height: 48px;
+  font-family: inherit;
+  font-size: 15.5px;
+  color: inherit;
+}
+
+.textarea {
+  border: 1px solid var(--border-input);
+  background: var(--input-fill);
+  border-radius: var(--radius-input);
+  padding: 13px 14px;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+  color: inherit;
+  resize: vertical;
+}
+
+.dateInput {
+  composes: input;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.dateInput::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.statusButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--border-input);
+  background: var(--input-fill);
+  border-radius: var(--radius-input);
+  padding: 0 14px;
+  height: 48px;
+  font-family: inherit;
+  font-size: 15px;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.statusButton:hover {
+  border-color: var(--border-hover-strong);
+}
+
+.statusCheck {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.6px solid var(--border-hover-strong);
+  background: var(--surface);
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error {
+  margin-top: 18px;
+  font-size: 14.5px;
+  color: var(--accent);
+  line-height: 1.55;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+  flex-wrap: wrap;
+}
+
+.saveButton {
+  background: var(--ink);
+  color: var(--input-fill);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 13px 26px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 46px;
+}
+
+.saveButton:hover:enabled {
+  background: var(--accent);
+}
+
+.saveButton:disabled {
+  background: var(--disabled);
+  cursor: not-allowed;
+}
+
+.cancelButton {
+  background: transparent;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-pill);
+  padding: 13px 22px;
+  font-family: inherit;
+  font-size: 15px;
+  color: inherit;
+  cursor: pointer;
+  min-height: 46px;
+}
+
+.cancelButton:hover {
+  border-color: var(--ink);
+}
+
+.deleteButton {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 14.5px;
+  cursor: pointer;
+  padding: 12px;
+  min-height: 46px;
+}
+
+.deleteButton:hover {
+  text-decoration: underline;
+}

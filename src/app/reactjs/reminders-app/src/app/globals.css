@@ -18,7 +18,8 @@
   --accent-tint: #f6e4dc;
   --success: #4c6b4f;
   --success-tint: #edf1ec;
-  --scrim: rgba(27, 26, 23, 0.38);
+  --scrim-sheet: rgba(27, 26, 23, 0.34);
+  --scrim-dialog: rgba(27, 26, 23, 0.42);
   --pill-neutral-bg: #f0ede4;
   --nav-active-bg: #e7e2d6;
   --nav-hover-bg: #ebe7dc;
@@ -31,7 +32,8 @@
   /* Shape */
   --radius-pill: 999px;
   --radius-card: 14px;
-  --radius-modal: 18px;
+  --radius-sheet: 20px;
+  --radius-dialog: 16px;
   --radius-input: 10px;
   --radius-nav: 10px;
 

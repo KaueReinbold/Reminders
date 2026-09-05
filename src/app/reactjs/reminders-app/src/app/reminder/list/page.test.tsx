@@ -2,6 +2,8 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import RemindersList from './page';
 import {
+  mockCreateMutateAsync,
+  mockDeleteMutateAsync,
   mockQueryClient,
   mockReminders,
   mockUpdateMutateAsync,
@@ -96,27 +98,120 @@ describe('RemindersList', () => {
     expect(screen.queryByRole('article')).not.toBeInTheDocument();
   });
 
-  it('handles New reminder click', () => {
+  it('opens the create sheet from the New reminder button', () => {
     render(<RemindersList />);
 
     fireEvent.click(screen.getByText('New reminder'));
 
-    expect(require('@/app/hooks').useRemindersClearContext).toHaveBeenCalled();
-    expect(require('next/navigation').useRouter().push).toHaveBeenCalledWith(
-      '/reminder/create',
-    );
+    expect(screen.getByRole('dialog', { name: 'New reminder' })).toBeInTheDocument();
+    expect(screen.getByTestId('title')).toHaveValue('');
   });
 
-  it('handles edit click on a card', () => {
+  it('creates a reminder from the sheet and refreshes the list', async () => {
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getByText('New reminder'));
+    fireEvent.change(screen.getByTestId('title'), {
+      target: { value: 'Buy milk' },
+    });
+    fireEvent.click(screen.getByTestId('save-button'));
+
+    await waitFor(() => {
+      expect(mockCreateMutateAsync).toHaveBeenCalledWith(
+        expect.objectContaining({ title: 'Buy milk' }),
+      );
+    });
+
+    expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({
+      queryKey: ['reminders'],
+    });
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+  });
+
+  it('keeps the sheet open and shows the error when saving fails', async () => {
+    mockCreateMutateAsync.mockResolvedValueOnce({
+      errors: { Title: ['The field is Required'] },
+    });
+
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getByText('New reminder'));
+    fireEvent.change(screen.getByTestId('title'), {
+      target: { value: 'Buy milk' },
+    });
+    fireEvent.click(screen.getByTestId('save-button'));
+
+    expect(
+      await screen.findByText('The field is Required'),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  it('opens the edit sheet prefilled from a card', () => {
     render(<RemindersList />);
 
     // First card is the open reminder (Overdue group renders before Done).
     fireEvent.click(screen.getAllByLabelText('Edit reminder')[0]);
 
-    expect(require('@/app/hooks').useRemindersClearContext).toHaveBeenCalled();
-    expect(require('next/navigation').useRouter().push).toHaveBeenCalledWith(
-      '/reminder/edit?id=2',
-    );
+    expect(
+      screen.getByRole('dialog', { name: 'Edit reminder' }),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('title')).toHaveValue('Test Title 2');
+    expect(screen.getByText('Save changes')).toBeInTheDocument();
+  });
+
+  it('updates a reminder from the edit sheet', async () => {
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getAllByLabelText('Edit reminder')[0]);
+    fireEvent.change(screen.getByTestId('title'), {
+      target: { value: 'Renamed' },
+    });
+    fireEvent.click(screen.getByTestId('save-button'));
+
+    await waitFor(() => {
+      expect(mockUpdateMutateAsync).toHaveBeenCalledWith(
+        expect.objectContaining({ id: 2, title: 'Renamed' }),
+      );
+    });
+  });
+
+  it('deletes a reminder after the confirmation dialog', async () => {
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getAllByLabelText('Edit reminder')[0]);
+    fireEvent.click(screen.getByText('Delete reminder'));
+
+    expect(screen.getByText('Delete this reminder?')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('delete-button'));
+
+    await waitFor(() => {
+      expect(mockDeleteMutateAsync).toHaveBeenCalledWith(2);
+    });
+
+    expect(mockQueryClient.invalidateQueries).toHaveBeenCalledWith({
+      queryKey: ['reminders'],
+    });
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+  });
+
+  it('keeps the reminder when the confirmation is dismissed', () => {
+    render(<RemindersList />);
+
+    fireEvent.click(screen.getAllByLabelText('Edit reminder')[0]);
+    fireEvent.click(screen.getByText('Delete reminder'));
+    fireEvent.click(screen.getByTestId('close-button'));
+
+    expect(mockDeleteMutateAsync).not.toHaveBeenCalled();
+    expect(screen.queryByText('Delete this reminder?')).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('dialog', { name: 'Edit reminder' }),
+    ).toBeInTheDocument();
   });
 
   it('toggles a reminder optimistically', async () => {

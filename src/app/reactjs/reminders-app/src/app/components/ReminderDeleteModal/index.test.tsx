@@ -48,4 +48,50 @@ describe('ReminderDeleteModal', () => {
 
     expect(toggleOpenDelete).toHaveBeenCalled();
   });
+
+  it('should quote the reminder title in the confirmation body', () => {
+    render(
+      <ReminderDeleteModal
+        openDelete={true}
+        reminderTitle="Call the notary"
+        toggleOpenDelete={jest.fn}
+        onDelete={jest.fn}
+      />,
+    );
+
+    expect(screen.getByText('Delete this reminder?')).toBeInTheDocument();
+    expect(
+      screen.getByText('\u201CCall the notary\u201D will be removed permanently.'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Keep it')).toBeInTheDocument();
+  });
+
+  it('should render nothing when closed', () => {
+    render(
+      <ReminderDeleteModal
+        openDelete={false}
+        toggleOpenDelete={jest.fn}
+        onDelete={jest.fn}
+      />,
+    );
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('should close on Escape and on scrim click', () => {
+    const toggleOpenDelete = jest.fn();
+
+    render(
+      <ReminderDeleteModal
+        openDelete={true}
+        toggleOpenDelete={toggleOpenDelete}
+        onDelete={jest.fn}
+      />,
+    );
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    fireEvent.click(screen.getByTestId('delete-modal-scrim'));
+
+    expect(toggleOpenDelete).toHaveBeenCalledTimes(2);
+  });
 });

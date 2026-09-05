@@ -11,7 +11,7 @@ import { ReminderActionStatus, useRemindersContext } from '@/app/hooks';
 export default function EditClient() {
   const router = useRouter();
 
-  const { onUpdateReminder, onDeleteReminder } = useRemindersContext();
+  const { reminder, onUpdateReminder, onDeleteReminder } = useRemindersContext();
 
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -25,9 +25,7 @@ export default function EditClient() {
     }
   };
 
-  const handleDelete = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleDelete = async () => {
     const status = await onDeleteReminder();
 
     if (status === ReminderActionStatus.Success) {
@@ -70,6 +68,7 @@ export default function EditClient() {
 
         <ReminderDeleteModal
           openDelete={openDelete}
+          reminderTitle={reminder?.title}
           toggleOpenDelete={toggleOpenDelete}
           onDelete={handleDelete}
         />

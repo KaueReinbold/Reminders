@@ -135,27 +135,31 @@ describe('Reminders List', () => {
     cy.get('button[aria-label="Mark done"]').should('have.length', 1)
   })
 
-  it('should navigate to create reminder page', { tags: '@list' }, () => {
-    // Click New reminder button
-    cy.goToCreateReminder()
+  it('should open the create modal from the list', { tags: '@list' }, () => {
+    cy.openCreateSheet()
 
-    // Verify we're on the create page
-    cy.url().should('include', '/reminder/create')
-    cy.get('button').contains('Create').should('be.visible')
-    cy.get('button').contains('Back').should('be.visible')
+    cy.get('[role="dialog"]').within(() => {
+      cy.contains('New reminder').should('be.visible')
+      cy.get('[data-testid="title"]').should('have.value', '')
+      cy.contains('Create reminder').should('be.visible')
+    })
+
+    // The list stays on the same route: no navigation happens
+    cy.url().should('eq', Cypress.config().baseUrl + '/')
   })
 
-  it('should navigate to edit reminder page', { tags: '@list' }, () => {
-    // Wait for list to load
+  it('should open the edit modal from a card', { tags: '@list' }, () => {
     cy.wait('@getReminders')
 
-    // Click edit button on the first reminder's card
-    cy.goToEditReminder('1', 'Test Reminder 1')
+    cy.openEditSheet('Test Reminder 1')
 
-    // Verify we're on the edit page
-    cy.url().should('include', '/reminder/edit/?id=1')
-    cy.get('button').contains('Edit').should('be.visible')
-    cy.get('button').contains('Delete').should('be.visible')
-    cy.get('button').contains('Back').should('be.visible')
+    cy.get('[role="dialog"]').within(() => {
+      cy.contains('Edit reminder').should('be.visible')
+      cy.get('[data-testid="title"]').should('have.value', 'Test Reminder 1')
+      cy.contains('Save changes').should('be.visible')
+      cy.contains('Delete reminder').should('be.visible')
+    })
+
+    cy.url().should('eq', Cypress.config().baseUrl + '/')
   })
 })

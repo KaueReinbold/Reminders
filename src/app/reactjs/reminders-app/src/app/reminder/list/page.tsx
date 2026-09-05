@@ -1,19 +1,24 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 import {
+  Errors,
   REMINDERS_QUERY_KEY,
   Reminder,
+  useCreateReminder,
+  useDeleteReminder,
   useReminders,
   useUpdateReminder,
 } from '@/app/api';
-import { AppHeader, ReminderCard, Sidebar } from '@/app/components';
 import {
-  useRemindersClearContext,
-  useRemindersQueryClient,
-} from '@/app/hooks';
+  AppHeader,
+  ReminderCard,
+  ReminderDeleteModal,
+  ReminderSheet,
+  Sidebar,
+} from '@/app/components';
+import { useRemindersQueryClient } from '@/app/hooks';
 import {
   ViewName,
   filterReminders,
@@ -24,25 +29,85 @@ import {
 
 import styles from './list.module.css';
 
-export default function RemindersList() {
-  const router = useRouter();
+const errorMessage = (errors: Errors): string =>
+  Object.values(errors).flat().join(' ');
 
+export default function RemindersList() {
   const { data: reminders } = useReminders();
-  const clearReminder = useRemindersClearContext();
   const queryClient = useRemindersQueryClient();
+  const createReminder = useCreateReminder();
   const updateReminder = useUpdateReminder();
+  const deleteReminder = useDeleteReminder();
 
   const [query, setQuery] = useState('');
   const [view, setView] = useState<ViewName>('All');
 
+  // `sheet` holds the create/edit modal state: null when closed, an object
+  // carrying the reminder being edited (absent on create).
+  const [sheet, setSheet] = useState<{ reminder?: Reminder } | null>(null);
+  const [confirmTarget, setConfirmTarget] = useState<Reminder | null>(null);
+  const [sheetError, setSheetError] = useState<string>();
+
+  const items = reminders ?? [];
+  const groups = groupReminders(filterReminders(items, view, query));
+
+  const refresh = () =>
+    queryClient.invalidateQueries({ queryKey: REMINDERS_QUERY_KEY });
+
+  const closeSheet = () => {
+    setSheet(null);
+    setSheetError(undefined);
+  };
+
+  // Escape and scrim clicks reach both overlays: the confirmation on top of
+  // the sheet closes first.
+  const dismissSheet = () => {
+    if (confirmTarget) {
+      setConfirmTarget(null);
+      return;
+    }
+
+    closeSheet();
+  };
+
   const handleCreateClick = () => {
-    clearReminder();
-    router.push('/reminder/create');
+    setSheetError(undefined);
+    setSheet({});
   };
 
   const handleEditClick = (id?: string) => {
-    clearReminder();
-    router.push(`/reminder/edit?id=${id}`);
+    setSheetError(undefined);
+    setSheet({ reminder: items.find(item => item.id === id) });
+  };
+
+  const handleSave = async (draft: Reminder) => {
+    const { errors } = draft.id
+      ? await updateReminder.mutateAsync(draft)
+      : await createReminder.mutateAsync(draft);
+
+    if (errors) {
+      setSheetError(errorMessage(errors));
+      return;
+    }
+
+    closeSheet();
+    refresh();
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!confirmTarget?.id) return;
+
+    const { errors } = await deleteReminder.mutateAsync(confirmTarget.id);
+
+    setConfirmTarget(null);
+
+    if (errors) {
+      setSheetError(errorMessage(errors));
+      return;
+    }
+
+    closeSheet();
+    refresh();
   };
 
   const handleToggle = async (reminder: Reminder) => {
@@ -59,9 +124,6 @@ export default function RemindersList() {
       queryClient.setQueryData(REMINDERS_QUERY_KEY, previous);
     }
   };
-
-  const items = reminders ?? [];
-  const groups = groupReminders(filterReminders(items, view, query));
 
   return (
     <>
@@ -102,6 +164,27 @@ export default function RemindersList() {
           ))}
         </main>
       </div>
+
+      {sheet && (
+        <ReminderSheet
+          reminder={sheet.reminder}
+          error={sheetError}
+          onClose={dismissSheet}
+          onSave={handleSave}
+          onDelete={
+            sheet.reminder
+              ? () => setConfirmTarget(sheet.reminder ?? null)
+              : undefined
+          }
+        />
+      )}
+
+      <ReminderDeleteModal
+        openDelete={Boolean(confirmTarget)}
+        reminderTitle={confirmTarget?.title}
+        toggleOpenDelete={() => setConfirmTarget(null)}
+        onDelete={handleConfirmDelete}
+      />
     </>
   );
 }
