@@ -35,6 +35,30 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:9999
 - For local development against the full Docker Compose stack, use the Nginx load balancer URL (`http://localhost:9999`).
 - For a GitHub Pages / production deployment, point this at your deployed API's public URL.
 
+## Demo Mode (mock API)
+
+The app can run with no backend: `src/app/api/mock.ts` serves seeded reminders
+from memory and implements the full CRUD contract, including the server-side
+validation messages. A "Demo data" badge appears in the header while it is on,
+and reloading the page restores the seed data.
+
+`NEXT_PUBLIC_MOCK_API` switches it:
+
+```bash
+# Try the demo locally
+NEXT_PUBLIC_MOCK_API=true npm run dev
+
+# Or a static demo build, the same one GitHub Pages serves
+NODE_ENV=production GITHUB_PAGES=true npm run build && npm run export
+```
+
+The GitHub Pages workflow builds with `GITHUB_PAGES=true`, which turns the flag
+on automatically (see `next.config.js`), so the published demo at
+[kauereinbold.github.io/Reminders](https://kauereinbold.github.io/Reminders) is
+usable without a server. Every other build leaves the flag off and calls the API
+at `NEXT_PUBLIC_API_BASE_URL` as usual. See
+[ADR-0011](../../../../docs/adr/0011-react-mock-api-for-pages-demo.md).
+
 ## Local Development
 
 ```bash
@@ -90,7 +114,7 @@ npm run lint
 
 ```text
 src/app/
-├── api/            # API client, hooks, and types
+├── api/            # API client, in-browser mock, hooks, and types
 ├── components/     # Reusable UI components (AlertError, ReminderForm, ReminderDeleteModal)
 ├── constants/       # Shared constants
 ├── hooks/          # Custom React hooks (context, query client)

@@ -1,17 +1,15 @@
+import { mapReminder } from './mapReminder';
+import * as mock from './mock';
 import { APIError, Errors, MutateResult, Reminder } from './types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+// Demo mode: serve reminders from an in-browser store instead of the API.
+// Enabled by the GitHub Pages build, off everywhere else.
+const IS_MOCK_API = process.env.NEXT_PUBLIC_MOCK_API === 'true';
+
 const headers = {
   'Content-Type': 'application/json',
-};
-
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  const year = date.getUTCFullYear();
-  const month = ('0' + (date.getUTCMonth() + 1)).slice(-2);
-  const day = ('0' + date.getUTCDate()).slice(-2);
-  return `${year}-${month}-${day}`;
 };
 
 const getErrors = async (response: Response): Promise<Errors> => {
@@ -37,26 +35,17 @@ const getErrors = async (response: Response): Promise<Errors> => {
   }
 };
 
-const mapReminder = (reminder: Reminder): Reminder =>
-  ({
-    ...reminder,
-    limitDateFormatted: reminder.limitDate
-      ? formatDate(reminder.limitDate)
-      : '',
-    isDoneFormatted: reminder.isDone ? 'Yes' : 'No',
-  }) as Reminder;
-
-const getReminders = (): Promise<Reminder[]> =>
+const liveGetReminders = (): Promise<Reminder[]> =>
   fetch(`${API_BASE_URL}/api/reminders`)
     .then(response => response.json())
     .then(data => data?.map(mapReminder));
 
-const getReminder = (id: string): Promise<Reminder> =>
+const liveGetReminder = (id: string): Promise<Reminder> =>
   fetch(`${API_BASE_URL}/api/reminders/${id}`)
     .then(response => response.json())
     .then(mapReminder);
 
-const createReminder = async (
+const liveCreateReminder = async (
   reminder: Reminder,
 ): Promise<MutateResult<Reminder>> => {
   const body = JSON.stringify(reminder);
@@ -77,7 +66,7 @@ const createReminder = async (
   return result;
 };
 
-const updateReminder = async (
+const liveUpdateReminder = async (
   reminder: Reminder,
 ): Promise<MutateResult<Reminder>> => {
   const body = JSON.stringify(reminder);
@@ -98,7 +87,9 @@ const updateReminder = async (
   return result;
 };
 
-const deleteReminder = async (id: string): Promise<MutateResult<string>> => {
+const liveDeleteReminder = async (
+  id: string,
+): Promise<MutateResult<string>> => {
   const response = await fetch(`${API_BASE_URL}/api/reminders/${id}`, {
     method: 'DELETE',
     headers,
@@ -115,10 +106,17 @@ const deleteReminder = async (id: string): Promise<MutateResult<string>> => {
   return result;
 };
 
+const getReminders = IS_MOCK_API ? mock.getReminders : liveGetReminders;
+const getReminder = IS_MOCK_API ? mock.getReminder : liveGetReminder;
+const createReminder = IS_MOCK_API ? mock.createReminder : liveCreateReminder;
+const updateReminder = IS_MOCK_API ? mock.updateReminder : liveUpdateReminder;
+const deleteReminder = IS_MOCK_API ? mock.deleteReminder : liveDeleteReminder;
+
 export type { Reminder, Errors };
 
 export {
   API_BASE_URL,
+  IS_MOCK_API,
   getReminders,
   getReminder,
   createReminder,

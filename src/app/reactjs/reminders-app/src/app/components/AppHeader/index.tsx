@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { IS_MOCK_API } from '@/app/api';
+
 import styles from './index.module.css';
 
 interface Props {
@@ -25,6 +27,14 @@ export function AppHeader({
       <div className={styles.titleGroup}>
         <span className={styles.title}>Reminders</span>
         <span className={styles.date}>{todayLabel()}</span>
+        {IS_MOCK_API && (
+          <span
+            className={styles.demoBadge}
+            title="No backend: data lives in your browser and resets on reload"
+          >
+            Demo data
+          </span>
+        )}
       </div>
 
       <div className={styles.searchPill}>
