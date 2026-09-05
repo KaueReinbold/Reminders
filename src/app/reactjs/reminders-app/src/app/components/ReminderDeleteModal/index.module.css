@@ -1,0 +1,84 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--scrim-dialog);
+  animation: fadeIn 0.14s ease;
+}
+
+.dialog {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--surface);
+  border-radius: var(--radius-dialog);
+  padding: var(--pad-modal);
+  box-shadow: 0 20px 50px rgba(27, 26, 23, 0.24);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: inherit;
+  margin: 0;
+}
+
+.body {
+  font-size: 14.5px;
+  color: var(--body-muted);
+  line-height: 1.55;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.deleteButton {
+  background: var(--accent);
+  color: var(--surface);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 12px 22px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.deleteButton:hover {
+  background: var(--accent-hover);
+}
+
+.keepButton {
+  background: transparent;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-pill);
+  padding: 12px 20px;
+  font-family: inherit;
+  font-size: 14.5px;
+  color: inherit;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.keepButton:hover {
+  border-color: var(--ink);
+}

@@ -1,19 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
 
 import {
+  Errors,
   REMINDERS_QUERY_KEY,
   Reminder,
+  useCreateReminder,
+  useDeleteReminder,
   useReminders,
   useUpdateReminder,
 } from '@/app/api';
-import { AppHeader, ReminderCard, Sidebar } from '@/app/components';
 import {
-  useRemindersClearContext,
-  useRemindersQueryClient,
-} from '@/app/hooks';
+  AppHeader,
+  ReminderCard,
+  ReminderDeleteModal,
+  ReminderSheet,
+  Sidebar,
+} from '@/app/components';
+import { useRemindersQueryClient } from '@/app/hooks';
 import {
   ViewName,
   filterReminders,
@@ -24,25 +29,106 @@ import {
 
 import styles from './list.module.css';
 
-export default function RemindersList() {
-  const router = useRouter();
+const errorMessage = (errors: Errors): string =>
+  Object.values(errors).flat().join(' ');
 
+// A rejected mutation is a transport failure, not a validation response, so
+// there are no field errors to show. Keep the overlay open and say so.
+const REQUEST_FAILED = 'Something went wrong. Please try again.';
+
+export default function RemindersList() {
   const { data: reminders } = useReminders();
-  const clearReminder = useRemindersClearContext();
   const queryClient = useRemindersQueryClient();
+  const createReminder = useCreateReminder();
   const updateReminder = useUpdateReminder();
+  const deleteReminder = useDeleteReminder();
 
   const [query, setQuery] = useState('');
   const [view, setView] = useState<ViewName>('All');
 
+  // `sheet` holds the create/edit modal state: null when closed, an object
+  // carrying the reminder being edited (absent on create).
+  const [sheet, setSheet] = useState<{ reminder?: Reminder } | null>(null);
+  const [confirmTarget, setConfirmTarget] = useState<Reminder | null>(null);
+  const [sheetError, setSheetError] = useState<string>();
+
+  // Deleting from the sheet closes the sheet and the dialog and removes the
+  // card that opened them, so there is no trigger left to return focus to.
+  // The list itself is the nearest thing still on screen.
+  const listRef = useRef<HTMLElement>(null);
+
+  const items = reminders ?? [];
+  const groups = groupReminders(filterReminders(items, view, query));
+
+  const refresh = () =>
+    queryClient.invalidateQueries({ queryKey: REMINDERS_QUERY_KEY });
+
+  const closeSheet = () => {
+    setSheet(null);
+    setSheetError(undefined);
+  };
+
+  // Escape and scrim clicks reach both overlays: the confirmation on top of
+  // the sheet closes first.
+  const dismissSheet = () => {
+    if (confirmTarget) {
+      setConfirmTarget(null);
+      return;
+    }
+
+    closeSheet();
+  };
+
   const handleCreateClick = () => {
-    clearReminder();
-    router.push('/reminder/create');
+    setSheetError(undefined);
+    setSheet({});
   };
 
   const handleEditClick = (id?: string) => {
-    clearReminder();
-    router.push(`/reminder/edit?id=${id}`);
+    setSheetError(undefined);
+    setSheet({ reminder: items.find(item => item.id === id) });
+  };
+
+  const handleSave = async (draft: Reminder) => {
+    try {
+      const { errors } = draft.id
+        ? await updateReminder.mutateAsync(draft)
+        : await createReminder.mutateAsync(draft);
+
+      if (errors) {
+        setSheetError(errorMessage(errors));
+        return;
+      }
+    } catch {
+      setSheetError(REQUEST_FAILED);
+      return;
+    }
+
+    closeSheet();
+    refresh();
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!confirmTarget?.id) return;
+
+    try {
+      const { errors } = await deleteReminder.mutateAsync(confirmTarget.id);
+
+      setConfirmTarget(null);
+
+      if (errors) {
+        setSheetError(errorMessage(errors));
+        return;
+      }
+    } catch {
+      setConfirmTarget(null);
+      setSheetError(REQUEST_FAILED);
+      return;
+    }
+
+    closeSheet();
+    refresh();
+    listRef.current?.focus();
   };
 
   const handleToggle = async (reminder: Reminder) => {
@@ -60,9 +146,6 @@ export default function RemindersList() {
     }
   };
 
-  const items = reminders ?? [];
-  const groups = groupReminders(filterReminders(items, view, query));
-
   return (
     <>
       <AppHeader
@@ -79,7 +162,7 @@ export default function RemindersList() {
           progress={weekProgress(items)}
         />
 
-        <main className={styles.list}>
+        <main className={styles.list} ref={listRef} tabIndex={-1}>
           {groups.map(group => (
             <section key={group.label} className={styles.section}>
               <div className={styles.sectionHeader}>
@@ -102,6 +185,27 @@ export default function RemindersList() {
           ))}
         </main>
       </div>
+
+      {sheet && (
+        <ReminderSheet
+          reminder={sheet.reminder}
+          error={sheetError}
+          onClose={dismissSheet}
+          onSave={handleSave}
+          onDelete={
+            sheet.reminder
+              ? () => setConfirmTarget(sheet.reminder ?? null)
+              : undefined
+          }
+        />
+      )}
+
+      <ReminderDeleteModal
+        openDelete={Boolean(confirmTarget)}
+        reminderTitle={confirmTarget?.title}
+        toggleOpenDelete={() => setConfirmTarget(null)}
+        onDelete={handleConfirmDelete}
+      />
     </>
   );
 }

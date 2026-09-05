@@ -28,9 +28,9 @@ describe('Delete Reminder', () => {
     cy.get('button').contains('Delete').click()
     
     // Verify modal is displayed
-    cy.get('[role="presentation"]').should('be.visible')
-    cy.contains('Delete reminder').should('be.visible')
-    cy.contains('Are you sure you want to delete this reminder?').should('be.visible')
+    cy.get('[role="dialog"]').should('be.visible')
+    cy.contains('Delete this reminder?').should('be.visible')
+    cy.contains('will be removed permanently.').should('be.visible')
     
     // Verify modal buttons
     cy.get('button[data-testid="delete-button"]').should('be.visible')
@@ -42,13 +42,13 @@ describe('Delete Reminder', () => {
     cy.get('button').contains('Delete').click()
     
     // Verify modal is open
-    cy.contains('Are you sure you want to delete this reminder?').should('be.visible')
+    cy.contains('will be removed permanently.').should('be.visible')
     
     // Click Close button to cancel
     cy.get('button[data-testid="close-button"]').click()
     
     // Verify modal is closed
-    cy.get('[role="presentation"]').should('not.exist')
+    cy.get('[role="dialog"]').should('not.exist')
     
     // Should still be on edit page
     cy.url().should('include', '/reminder/edit/?id=1')
@@ -74,9 +74,9 @@ describe('Delete Reminder', () => {
     cy.get('button').contains('Delete').should('be.visible').click()
     
     // Step 2: Verify modal appears
-    cy.get('[role="presentation"]').should('be.visible')
-    cy.contains('Delete reminder').should('be.visible')
-    cy.contains('Are you sure you want to delete this reminder?').should('be.visible')
+    cy.get('[role="dialog"]').should('be.visible')
+    cy.contains('Delete this reminder?').should('be.visible')
+    cy.contains('will be removed permanently.').should('be.visible')
     
     // Step 3: Confirm deletion
     cy.get('button[data-testid="delete-button"]').should('be.visible').click()
@@ -138,19 +138,19 @@ describe('Delete Reminder', () => {
   it('should allow multiple modal open/close cycles', { tags: '@delete' }, () => {
     // Open modal
     cy.get('button').contains('Delete').click()
-    cy.contains('Are you sure you want to delete this reminder?').should('be.visible')
+    cy.contains('will be removed permanently.').should('be.visible')
     
     // Close modal
     cy.get('button[data-testid="close-button"]').click()
-    cy.get('[role="presentation"]').should('not.exist')
+    cy.get('[role="dialog"]').should('not.exist')
     
     // Open modal again
     cy.get('button').contains('Delete').click()
-    cy.contains('Are you sure you want to delete this reminder?').should('be.visible')
+    cy.contains('will be removed permanently.').should('be.visible')
     
     // Close modal again
     cy.get('button[data-testid="close-button"]').click()
-    cy.get('[role="presentation"]').should('not.exist')
+    cy.get('[role="dialog"]').should('not.exist')
     
     // Should still be on edit page
     cy.url().should('include', '/reminder/edit/?id=1')
@@ -161,11 +161,11 @@ describe('Delete Reminder', () => {
     cy.get('button').contains('Delete').click()
     
     // Verify modal has proper ARIA attributes
-    cy.get('[role="presentation"]').should('have.attr', 'aria-labelledby', 'child-modal-title')
-    cy.get('[role="presentation"]').should('have.attr', 'aria-describedby', 'child-modal-description')
+    cy.get('[role="dialog"]').should('have.attr', 'aria-modal', 'true')
+    cy.get('[role="dialog"]').should('have.attr', 'aria-label', 'Delete this reminder?')
     
     // Verify modal can be closed with Escape key
     cy.get('body').type('{esc}')
-    cy.get('[role="presentation"]').should('not.exist')
+    cy.get('[role="dialog"]').should('not.exist')
   })
 })

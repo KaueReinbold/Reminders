@@ -24,9 +24,14 @@ const mockReminders = [
 
 const mockUpdateMutateAsync = jest.fn().mockResolvedValue({});
 
+const mockCreateMutateAsync = jest.fn().mockResolvedValue({});
+
+const mockDeleteMutateAsync = jest.fn().mockResolvedValue({});
+
 const mockQueryClient = {
   getQueryData: jest.fn().mockReturnValue(mockReminders),
   setQueryData: jest.fn(),
+  invalidateQueries: jest.fn(),
 };
 
 const jestObjectsMock = {
@@ -48,6 +53,12 @@ const jestObjectsMock = {
     REMINDERS_QUERY_KEY: ['reminders'],
     useUpdateReminder: jest.fn().mockReturnValue({
       mutateAsync: mockUpdateMutateAsync,
+    }),
+    useCreateReminder: jest.fn().mockReturnValue({
+      mutateAsync: mockCreateMutateAsync,
+    }),
+    useDeleteReminder: jest.fn().mockReturnValue({
+      mutateAsync: mockDeleteMutateAsync,
     }),
     createReminder: jest.fn(),
     deleteReminder: jest.fn(),
@@ -94,4 +105,6 @@ export {
   mockReminder,
   mockQueryClient,
   mockUpdateMutateAsync,
+  mockCreateMutateAsync,
+  mockDeleteMutateAsync,
 };

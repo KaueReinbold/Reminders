@@ -36,17 +36,35 @@ Cypress.Commands.add('deleteReminder', () => {
   cy.get('button[data-testid="delete-button"]').should('be.visible').click()
 })
 
-// Navigation helpers
-Cypress.Commands.add('goToCreateReminder', () => {
+// Create/edit modal helpers (the list opens a modal, it does not navigate)
+Cypress.Commands.add('openCreateSheet', () => {
   cy.get('button').contains('New reminder').should('be.visible').click()
-  cy.url().should('include', '/reminder/create')
+  cy.get('[role="dialog"]').should('be.visible')
 })
 
-Cypress.Commands.add('goToEditReminder', (reminderId, title) => {
+Cypress.Commands.add('openEditSheet', title => {
   cy.get('article').contains(title).parents('article').within(() => {
     cy.get('button[aria-label="Edit reminder"]').click()
   })
-  cy.url().should('include', `/reminder/edit/?id=${reminderId}`)
+  cy.get('[role="dialog"]').should('be.visible')
+})
+
+Cypress.Commands.add('fillSheet', (title, description, limitDate) => {
+  cy.get('[role="dialog"]').within(() => {
+    cy.get('[data-testid="title"]').clear().type(title)
+    cy.get('[data-testid="description"]').clear().type(description)
+    cy.get('[data-testid="limitDate"]').clear().type(limitDate)
+  })
+})
+
+Cypress.Commands.add('saveSheet', () => {
+  cy.get('[data-testid="save-button"]').should('be.enabled').click()
+})
+
+Cypress.Commands.add('deleteFromSheet', () => {
+  cy.get('button').contains('Delete reminder').click()
+  cy.contains('Delete this reminder?').should('be.visible')
+  cy.get('[data-testid="delete-button"]').click()
 })
 
 Cypress.Commands.add('goBack', () => {

@@ -61,7 +61,7 @@ describe('Edit Component', () => {
 
     fireEvent.click(screen.getByText('Delete'));
 
-    await screen.findByText('Are you sure you want to delete this reminder?');
+    await screen.findByText('Delete this reminder?');
 
     const deleteButton = screen.getByTestId('delete-button');
     fireEvent.click(deleteButton);
@@ -85,7 +85,7 @@ describe('Edit Component', () => {
 
     fireEvent.click(screen.getByText('Delete'));
 
-    await screen.findByText('Are you sure you want to delete this reminder?');
+    await screen.findByText('Delete this reminder?');
 
     const deleteButton = screen.getByTestId('delete-button');
     fireEvent.click(deleteButton);

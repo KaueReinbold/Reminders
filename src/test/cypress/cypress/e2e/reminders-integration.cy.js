@@ -47,12 +47,14 @@ describe('Reminders Integration Tests', () => {
       // Verify initial list
       cy.get('article').should('have.length', 3)
       
-      // Step 1: CREATE - Navigate to create page and create reminder
-      cy.goToCreateReminder()
-      cy.createReminder('Integration Test Reminder', 'Created via integration test', '2024-12-25')
+      // Step 1: CREATE - Open the modal and create a reminder
+      cy.openCreateSheet()
+      cy.fillSheet('Integration Test Reminder', 'Created via integration test', '2024-12-25')
+      cy.saveSheet()
       cy.wait('@createReminder')
-      
-      // Should be back on homepage
+
+      // Modal closes and the list stays on the same route
+      cy.get('[role="dialog"]').should('not.exist')
       cy.url().should('eq', Cypress.config().baseUrl + '/')
       
       // Step 2: READ - Verify reminder appears in list (mock the updated list)
@@ -102,27 +104,21 @@ describe('Reminders Integration Tests', () => {
       cy.get('article').contains('Integration Test Reminder').should('be.visible')
       // Skip checking the exact date for now to focus on the main functionality
       
-      // Step 3: UPDATE - Edit the reminder
-      cy.goToEditReminder('4', 'Integration Test Reminder')
-      cy.wait('@getReminder')
-      cy.editReminder('Updated Integration Test Reminder', 'Updated via integration test', '2024-12-30', true)
+      // Step 3: UPDATE - Edit the reminder in the modal
+      cy.openEditSheet('Integration Test Reminder')
+      cy.fillSheet('Updated Integration Test Reminder', 'Updated via integration test', '2024-12-30')
+      cy.get('[data-testid="isDone"]').click()
+      cy.saveSheet()
       cy.wait('@updateReminder')
-      
-      // Check that we're either on home or edit page (depends on app behavior)
-      cy.url().should('match', /(\/reminder\/4|\/?)$/)
-      
-      // Step 4: DELETE - Delete the reminder (if we're not on the edit page, go there)
-      cy.url().then((url) => {
-        if (!url.includes('/reminder/edit/?id=4')) {
-          cy.goToEditReminder('4', 'Integration Test Reminder')
-          cy.wait('@getReminder')
-        }
-      })
-      
-      cy.deleteReminder()
+      cy.get('[role="dialog"]').should('not.exist')
+
+      // Step 4: DELETE - Delete the reminder from the edit modal
+      cy.openEditSheet('Integration Test Reminder')
+      cy.deleteFromSheet()
       cy.wait('@deleteReminder')
-      
-      // Should be back on homepage after deletion
+
+      // Both overlays close and we stay on the list
+      cy.get('[role="dialog"]').should('not.exist')
       cy.url().should('eq', Cypress.config().baseUrl + '/')
     })
   })
@@ -142,42 +138,39 @@ describe('Reminders Integration Tests', () => {
       cy.get('header').contains('New reminder').should('be.visible')
       cy.get('aside').should('be.visible')
       
-      // Try to create reminder
-      cy.visit('/reminder/create')
-      cy.createReminder('Test Title', 'Test Description', '2024-12-31')
+      // Try to create a reminder from the modal
+      cy.openCreateSheet()
+      cy.fillSheet('Test Title', 'Test Description', '2024-12-31')
+      cy.saveSheet()
       cy.wait('@createReminderError')
-      
-      // Should stay on create page
-      cy.url().should('include', '/reminder/create')
+
+      // Modal stays open so the draft is not lost
+      cy.get('[role="dialog"]').should('be.visible')
     })
   })
 
-  context('Cross-Page Navigation', () => {
+  context('Modal Flow', () => {
     beforeEach(() => {
       cy.mockRemindersAPI()
     })
 
-    it('should maintain navigation flow between pages', { tags: '@integration' }, () => {
+    it('should open and dismiss both modals without leaving the list', { tags: '@integration' }, () => {
       // Start at homepage
       cy.visit('/')
       cy.waitForAppReady()
       cy.wait('@getReminders')
-      
-      // Navigate to create page
-      cy.goToCreateReminder()
-      
-      // Navigate back from create page
-      cy.goBack()
-      cy.wait('@getReminders')
-      
-      // Navigate to edit page
-      cy.goToEditReminder('1', 'Test Reminder 1')
-      
-      // Navigate back from edit page
-      cy.goBack()
-      cy.wait('@getReminders')
-      
-      // Verify we're back on homepage with all elements
+
+      // Open and dismiss the create modal
+      cy.openCreateSheet()
+      cy.get('button').contains('Cancel').click()
+      cy.get('[role="dialog"]').should('not.exist')
+
+      // Open and dismiss the edit modal
+      cy.openEditSheet('Test Reminder 1')
+      cy.get('button').contains('Close').click()
+      cy.get('[role="dialog"]').should('not.exist')
+
+      // The list is untouched
       cy.get('button').contains('New reminder').should('be.visible')
       cy.get('article').should('have.length', 3)
     })
@@ -188,39 +181,41 @@ describe('Reminders Integration Tests', () => {
       cy.mockRemindersAPI()
     })
 
-    it('should validate form data correctly', { tags: '@integration' }, () => {
-      // Test create form validation
-      cy.visit('/reminder/create')
-      
-      // Client-side validation blocks the submit before any API call,
-      // mirroring the server-side messages (see ValidationService).
-      cy.get('input[data-testid="title"]').type('a'.repeat(60)) // Too long
-      cy.get('input[data-testid="description"]').type('b'.repeat(250)) // Too long
-      cy.get('input[data-testid="limitDate"]').type('2020-01-01') // Past date
+    it('should surface server validation errors in the modal', { tags: '@integration' }, () => {
+      cy.intercept('POST', '**/api/reminders', {
+        statusCode: 400,
+        body: {
+          errors: {
+            Title: ["The field Title must be a text with a maximum length of '50'."]
+          }
+        }
+      }).as('createReminderInvalid')
 
-      // Submit form
-      cy.get('button').contains('Create').click()
+      cy.visit('/')
+      cy.waitForAppReady()
 
-      // Verify validation errors are displayed
+      cy.openCreateSheet()
+      cy.fillSheet('a'.repeat(60), 'b'.repeat(250), '2020-01-01')
+      cy.saveSheet()
+      cy.wait('@createReminderInvalid')
+
       cy.contains("The field Title must be a text with a maximum length of '50'.").should('be.visible')
     })
 
-    it('should maintain form state during navigation', { tags: '@integration' }, () => {
-      // Visit create page
-      cy.visit('/reminder/create')
-      
-      // Fill partial form
-      cy.get('input[data-testid="title"]').type('Partial Title')
-      cy.get('input[data-testid="description"]').type('Partial Description')
-      
-      // Navigate away and back
+    it('should reset the draft when the create modal is reopened', { tags: '@integration' }, () => {
       cy.visit('/')
       cy.waitForAppReady()
-      cy.goToCreateReminder()
-      
-      // Form should be reset (this is expected behavior for new form)
-      cy.get('input[data-testid="title"]').should('have.value', '')
-      cy.get('input[data-testid="description"]').should('have.value', '')
+
+      // Fill a partial draft, then dismiss the modal
+      cy.openCreateSheet()
+      cy.get('[data-testid="title"]').type('Partial Title')
+      cy.get('[data-testid="description"]').type('Partial Description')
+      cy.get('button').contains('Cancel').click()
+
+      // Reopening starts from a blank draft
+      cy.openCreateSheet()
+      cy.get('[data-testid="title"]').should('have.value', '')
+      cy.get('[data-testid="description"]').should('have.value', '')
     })
   })
 
@@ -241,10 +236,10 @@ describe('Reminders Integration Tests', () => {
       cy.get('button').contains('New reminder').should('be.visible')
       cy.get('article').should('have.length', 3)
       
-      // Test navigation on mobile
-      cy.goToCreateReminder()
-      cy.get('form').should('be.visible')
-      cy.goBack()
+      // The create modal is reachable on mobile too
+      cy.openCreateSheet()
+      cy.get('button').contains('Cancel').click()
+      cy.get('[role="dialog"]').should('not.exist')
     })
 
     it('should work on tablet viewport', { tags: '@integration' }, () => {
